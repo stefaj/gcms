@@ -8,6 +8,7 @@
 /**     To Date:        2015/10/01                                          **/
 /** **********************************************************************  **/
 /** *********************************************************************** **/
+
 #include "VCCMUI/BackBone.h"
 #include <QtQuick/qquickwindow.h>
 #include <QtGui/QOpenGLShaderProgram>
@@ -15,7 +16,7 @@
 
 BackBone::BackBone() : m_t(0) , m_renderer(0)
 {
-    // connect the window changed signal to the quickwindows handler
+   // connect the window changed signal to the quickwindows handler
   connect(this, SIGNAL(windowChanged(QQuickWindow*)), this, SLOT(handleWindowChanged(QQuickWindow*)));
 }
 

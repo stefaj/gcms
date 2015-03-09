@@ -18,7 +18,9 @@
 #include <QGLWidget>
 #include <QtOpenGL>
 #include "VCCMObjects/NodeHandler.h"
+
 class QGLContext;
+
 class RenderState : public QObject, protected QOpenGLFunctions
 {
      Q_OBJECT
