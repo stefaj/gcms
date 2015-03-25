@@ -4,8 +4,8 @@ import QMLOpenGL 1.0
 import QtGraphicalEffects 1.0
 Item {
     id:tree
-    width: 640
-    height: 480
+    width: 450
+    height: 800
     Loader {id:gamestate;focus: true;width: tree.width; height: tree.height}
 
 Loader {
@@ -17,19 +17,21 @@ Loader {
          anchors.fill: parent
 
          source: "BackGround"
-         fillMode: Image.Tile
+         fillMode: Image.Stretch
          opacity: 1
      }
+
     Rectangle {
 
         anchors.centerIn: parent
         width: 100;
         height: 110;
         color: Qt.rgba(0.0, 0.0, 0.0, 0.0)
+
         Rectangle {
             id: playbutton
-            property color onHoverColor: Qt.rgba(1.0, 1.0, 1.0, 0.5)
-            property color defaultColor: Qt.rgba(1.0, 1.0, 1.0, 0.1)
+            property color onHoverColor: Qt.rgba(1.0, 1.0, 1.0, 0.9)
+            property color defaultColor: Qt.rgba(1.0, 1.0, 1.0, 0.5)
             anchors.top: parent.top
             width: 100;
             height: 50;
@@ -59,8 +61,8 @@ Loader {
         }
         Rectangle {
             id:exitbutton
-            property color onHoverColor: Qt.rgba(1.0, 1.0, 1.0, 0.5)
-            property color defaultColor: Qt.rgba(1.0, 1.0, 1.0, 0.1)
+            property color onHoverColor: Qt.rgba(1.0, 1.0, 1.0, 0.9)
+            property color defaultColor: Qt.rgba(1.0, 1.0, 1.0, 0.5)
             anchors.bottom: parent.bottom
             width: 100;
             height: 50;

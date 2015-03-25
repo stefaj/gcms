@@ -17,25 +17,57 @@
 Node::Node()
 {
     m_position = new QVector3D(0,0,0);
+    m_color = new QVector3D(0,0,0);
     m_name = new QString();
     m_connected.clear();
+    m_connectedindex.clear();
+    m_shortest.clear();
     m_links = false;
 }
 
 Node::Node(QVector3D * Position)
 {
     m_position = Position;
+    m_color = new QVector3D(0,0,0);
+    m_name = new QString();
+    m_connected.clear();
+    m_connectedindex.clear();
+    m_shortest.clear();
+    m_links = false;
+}
+
+QVector3D Node::getColor()
+{
+    return *m_color;
+}
+
+void Node::setColor(QVector3D *color)
+{
+    m_color = color;
 }
 
 Node::Node(QVector3D *Position, QString *Name)
 {
     m_position = Position;
     m_name = Name;
+    m_color = new QVector3D(0,0,0);
+    m_connected.clear();
+    m_connectedindex.clear();
+    m_shortest.clear();
+    m_links = false;
 }
 
-void Node::AddLink(QString *Name)
+void Node::setSourceNode()
+{
+    m_color->setX(0.0f);
+    m_color->setY(0.0f);
+    m_color->setZ(1.0f);
+}
+
+void Node::AddLink(QString *Name, int index)
 {
     m_connected.push_back(Name);
+    m_connectedindex.push_back(index);
     m_links = true;
 }
 
@@ -54,7 +86,32 @@ QString Node::getLinkedName(int index)
     return *m_connected.value(index);
 }
 
+int Node::getConnectedIndex(int index)
+{
+    return m_connectedindex.value(index);
+}
+
 QString Node::getName()
 {
     return *m_name;
+}
+
+void Node::clearPath()
+{
+    m_shortest.clear();
+}
+
+void Node::addShortest(int index)
+{
+    m_shortest.push_back(index);
+}
+
+void Node::setG(float g)
+{
+    m_g = g;
+}
+
+float Node::getG()
+{
+    return m_g;
 }

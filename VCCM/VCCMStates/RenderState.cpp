@@ -15,11 +15,24 @@
 RenderState::RenderState(): m_program(0), m_t(0) {
     m_position = new QVector3D(0,0,0);
     m_handler = new NodeHandler();
-    m_handler->AddNode(new Node(new QVector3D(0,0,0),new QString("Node 1")));
-    m_handler->AddNode(new Node(new QVector3D(5,0,5),new QString("Node 2")));
-    m_handler->AddNode(new Node(new QVector3D(-5,0,-5),new QString("Node 3")));
-    m_handler->AddNodeLink(0,new QString("Node 2"));
-    m_handler->AddNodeLink(1,new QString("Node 1"));
+    //int nodes = 0;
+    for(int k = -2;k<3;k++)
+        for(int p = -2;p<3;p++)
+        {
+         QString *nodename =new QString("Node:");
+         nodename->append(QString::number(k));
+         nodename->append(QString::number(p));
+         m_handler->AddNode(new Node(new QVector3D(k*5,0,p*5),nodename));
+        }
+    for(int z = 0; z<m_handler->count();z++)
+    {
+     m_handler->AddNodeLinkbyIndex(z,0);
+    }
+   // m_handler->AddNode(new Node(new QVector3D(5,0,5),new QString("Node 2")));
+   // m_handler->AddNode(new Node(new QVector3D(-5,0,-5),new QString("Node 3")));
+   // m_handler->AddNodeLink(0,new QString("Node 2"));
+   // m_handler->AddNodeLink(1,new QString("Node 1"));
+    m_handler->NodeFromIndex(0).setSourceNode();
 }
 
 void RenderState::paint()
@@ -54,30 +67,27 @@ void RenderState::paint()
     // rotation in the x - axis
     cameraTransformation.rotate(-90, 1, 0, 0);
     // transform the camera's position with respect to the rotation matrix
-    QVector3D cameraPosition = cameraTransformation * QVector3D(m_position->x(), 0, 16.5);
+    QVector3D cameraPosition = cameraTransformation * QVector3D(m_position->x(), 0, 60.0f);
     // define the direction of the camera's up vector
     QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
     // implement and transform the camera
     vMatrix.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
     /// This is test code for drawing a line
-    DrawLine(QVector3D(0,0,0),QVector3D(5,0,5),vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0));
+    //DrawLine(QVector3D(0,0,0),QVector3D(5,0,5),vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0));
     /// This is test code for drawing another line
     DrawLine(QVector3D(0,0,0),QVector3D(-5,0,-5),vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0));
 
     // draw each node to the scene
     for(int x = 0; x<m_handler->count();x++)
     {
+        for(int l = 0;l<m_handler->NodeFromIndex(x).countConnected();l++)
+        DrawLine(m_handler->NodeFromIndex(x).Position(),m_handler->NodeFromIndex(m_handler->NodeFromIndex(x).getConnectedIndex(l)).Position(),vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0));
       // this is for the model transformation
       QMatrix4x4 mMatrix;
       // transform the position locally
       mMatrix.translate(m_handler->NodeFromIndex(x).Position());
-      // draw different types of nodes, (connected & unconnected nodes)
-      if(m_handler->NodeFromIndex(x).countConnected() >0)
-          // connected node
-            DrawModel(node,vMatrix,mMatrix,QMatrix4x4()/*,0*/,QVector3D(0,1,0));
-            else
-          // unconnected node
-            DrawModel(node,vMatrix,mMatrix,QMatrix4x4()/*,0*/,QVector3D(1,0,0));
+      // draw different types of nodes, (connected & unconnected nodes & best path)
+      DrawModel(node,vMatrix,mMatrix,QMatrix4x4()/*,0*/,m_handler->NodeFromIndex(x).getColor());
     }
     // release the program for this frame
     m_program->release();
