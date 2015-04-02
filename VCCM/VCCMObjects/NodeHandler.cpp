@@ -1,4 +1,4 @@
-#include "NodeHandler.h"
+#include "VCCMObjects/NodeHandler.h"
 
 NodeHandler::NodeHandler()
 {
@@ -22,13 +22,13 @@ int NodeHandler::count()
 
 void NodeHandler::AddNodeLink(int index,QString* Name)
 {
-   m_premises.value(index)->AddLink(Name);
+   m_premises.value(index)->AddLink(Name,index);
 }
 
 void NodeHandler::AddNodeLinkbyIndex(int index1,int index2)
 {
     if(index1!=index2)
-        m_premises.value(index1)->AddLink( new QString(m_premises.value(index2)->getName()));
+        m_premises.value(index1)->AddLink( new QString(m_premises.value(index2)->getName()),index1);
     else
         qDebug()<< "Node can't be linked to itself";
 }
