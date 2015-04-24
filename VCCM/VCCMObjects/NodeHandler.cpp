@@ -36,9 +36,14 @@ void NodeHandler::AddNodeLinkbyIndex(int index1,int index2)
 }
 void NodeHandler::CalculateShortest(int start, int goal)
 {
+  /* this is the main implementation of Dijkstra's Algorithm for shortest paths from one node to another */
+  /* for more details on the algorithm see the final report @ https://github.com/Baggins800/Final-Report */
+  /* or contact Baggins: omega@live.co.za */
+
   //set nodes's colors
   m_premises.value(start)->setSourceNode();
   m_premises.value(goal)->setDestinationNode();
+
   // clear shortest path
   m_shortest.clear();
 
@@ -62,12 +67,15 @@ void NodeHandler::CalculateShortest(int start, int goal)
  for(int k = 0; k< m_premises.count();k++)
   que.push_back(k);
 
-
+// wait while the whole que is empty ( this may be ineffective )
  while(que.count()>0)
  {
+     // initialize the curren index, the index to be removed and the current min G value
   int current_index = 0;
   int remove_index = 0;
   double current_min = inf;
+
+  // select the next value with the lowest G value
   for(int l = 0; l < que.count();l++)
   {
       if(m_premises.value(l)->getG()<current_min)
@@ -77,20 +85,28 @@ void NodeHandler::CalculateShortest(int start, int goal)
           remove_index = l;
       }
   }
+  // remove current checked
   que.remove(remove_index);
+
+  // mark node as checked
   checked.push_back(current_index);
+
+  // check all the neighbor nodes
   for(int p = 0; p<m_premises.value(current_index)->countConnected();p++)
   {
-
+       // calculate the distance between current node and the current active neigbor node
       double nodedist = m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->Position().distanceToPoint(m_premises.value(current_index)->Position());
-      qDebug()<<"distance between:"<<current_index<<" and "<<m_premises.value(current_index)->getConnectedIndex(p)<<" equals "<< nodedist;
+      // test
+      //qDebug()<<"distance between:"<<current_index<<" and "<<m_premises.value(current_index)->getConnectedIndex(p)<<" equals "<< nodedist;
+
+      // replace the node's shortest current path if needed. (dist(v,u) + g(v)< g(u))
       if(nodedist +m_premises.value(current_index)->getG()< m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->getG())
       {
+          // update the g value and shortest path of the neighbor
           m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->setG(nodedist+m_premises.value(current_index)->getG());
           m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->setShortest(current_index);
       }
   }
-
  }
 
  // test results
@@ -104,17 +120,14 @@ void NodeHandler::CalculateShortest(int start, int goal)
   m_shortest.push_back(_back_node);
   while(_back_node != start)
   {
+      // backwards trace the shortest path
       _back_node = m_premises.value(_back_node)->getShortestIndex();
       m_shortest.push_back(_back_node);
   }
 
-  //temp test (checked)
-  /*for(int k = 0; k< m_premises.count();k++)
-      Debug()<<m_premises.value(k)->getG();*/
-
   // test shortest path
-  for(int k = 0; k< m_shortest.count();k++)
-      qDebug()<<m_shortest.value(k);
+  //for(int k = 0; k< m_shortest.count();k++)
+  //    qDebug()<<m_shortest.value(k);
 
 }
 int NodeHandler::pathcount()
