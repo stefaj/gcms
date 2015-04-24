@@ -35,3 +35,6 @@ FORMS += \
     Menu.qml
 
 FORMS +=
+
+DISTFILES += \
+    VCCMContent/Premises.pvc

@@ -15,44 +15,8 @@
 RenderState::RenderState(): m_program(0), m_t(0) {
     m_position = new QVector3D(0,0,0);
     m_handler = new NodeHandler();
-
-    m_handler->AddNode(new Node(new QVector3D(-4,0,-5),new QString("A")));//0
-    m_handler->AddNode(new Node(new QVector3D(6.8,0,2),new QString("B")));//1
-    m_handler->AddNode(new Node(new QVector3D(7.8,0,-5.8),new QString("C")));//2
-    m_handler->AddNode(new Node(new QVector3D(6.0,0,-14.5),new QString("D")));//3
-    m_handler->AddNode(new Node(new QVector3D(7.0,0,-20.5),new QString("E")));//4
-    m_handler->AddNode(new Node(new QVector3D(0.0,0,-16.5),new QString("F")));//5
-
-     m_handler->AddNodeLinkbyIndex(0,1);
-     m_handler->AddNodeLinkbyIndex(1,2);
-     m_handler->AddNodeLinkbyIndex(0,2);
-     m_handler->AddNodeLinkbyIndex(2,3);
-     m_handler->AddNodeLinkbyIndex(3,4);
-     m_handler->AddNodeLinkbyIndex(3,5);
-     m_handler->AddNodeLinkbyIndex(2,5);
-     m_handler->AddNodeLinkbyIndex(5,2);
-     m_handler->AddNodeLinkbyIndex(5,4);
-     m_handler->AddNodeLinkbyIndex(0,5);
-     m_handler->CalculateShortest(3,5);
-
-    /* qDebug()<<"node position: "<<m_handler->NodeFromIndex(0).Position();
-     qDebug()<<"Linked:";
-     for(int z = 0;z<m_handler->NodeFromIndex(0).countConnected();z++)
-     {
-
-     qDebug()<<m_handler->NodeFromIndex(0).getLinkedName(z);
-     qDebug()<<m_handler->NodeFromIndex(0).getConnectedIndex(z);
-     qDebug()<<"linked position:"<<m_handler->NodeFromIndex(m_handler->NodeFromIndex(0).getConnectedIndex(z)).Position();
-
-     }*/
-     //m_handler->AddNodeLinkbyIndex(1,5);
-   // }
-
-   // m_handler->AddNode(new Node(new QVector3D(5,0,5),new QString("Node 2")));
-   // m_handler->AddNode(new Node(new QVector3D(-5,0,-5),new QString("Node 3")));
-   // m_handler->AddNodeLink(0,new QString("Node 2"));
-   // m_handler->AddNodeLink(1,new QString("Node 1"));
-    //m_handler->NodeFromIndex(0).setSourceNode();
+    m_handler->ReadFilePVC(":/Premises");
+    m_handler->CalculateShortest(1,6);
 }
 
 void RenderState::paint()

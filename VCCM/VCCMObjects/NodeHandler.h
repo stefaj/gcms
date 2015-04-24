@@ -25,6 +25,7 @@ public:
     void AddNodeLink(int,QString*);
     void AddNodeLinkbyIndex(int,int);
     void CalculateShortest(int,int);
+    void ReadFilePVC(QString);
     int count();
     int pathcount();
     int pathindex(int);

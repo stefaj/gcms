@@ -20,7 +20,7 @@ int main(int argc, char **argv)
     QApplication app(argc, argv);
     QQuickView view; // quickqt view instance
     QSurfaceFormat format;// rendering format
-    format.setSamples(4);// antialiasing x4
+    format.setSamples(16);// antialiasing x4
     view.setFormat(format);// set the render format
     view.setResizeMode(QQuickView::SizeRootObjectToView); // resize the window to the quickqt window size
     qmlRegisterType<BackBone>("QMLOpenGL", 1, 0, "OpenGL"); // immplement the opengl to qml

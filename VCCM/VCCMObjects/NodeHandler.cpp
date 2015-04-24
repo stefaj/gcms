@@ -1,7 +1,8 @@
 #include "VCCMObjects/NodeHandler.h"
 #include <QVector3D>
 #include <qdebug.h>
-
+#include <QFile>
+#include <QTextStream>
 NodeHandler::NodeHandler()
 {
     m_premises.clear();
@@ -71,8 +72,8 @@ void NodeHandler::CalculateShortest(int start, int goal)
  while(que.count()>0)
  {
      // initialize the curren index, the index to be removed and the current min G value
-  int current_index = 0;
-  int remove_index = 0;
+  int current_index = -1;
+  int remove_index = -1;
   double current_min = inf;
 
   // select the next value with the lowest G value
@@ -138,4 +139,44 @@ int NodeHandler::pathcount()
 int NodeHandler::pathindex(int index)
 {
     return m_shortest.value(index);
+}
+
+void NodeHandler::ReadFilePVC(QString filename)
+{
+    //m_premises.clear();
+    if(m_premises.count()>0)
+        m_premises.clear();
+    QFile textfile(filename);
+    textfile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream ascread(&textfile);
+
+    if(textfile.isOpen())
+    {
+        QString line = ascread.readLine();
+
+        while(!line.isNull())
+        {
+            QStringList list = line.split(",");
+            if(list[0]=="n")
+            {
+                float vertex[list.count()];
+
+                for(int i = 0;i<list.count()-2;i++)
+                     QTextStream(&list[i+2])>>vertex[i];
+
+                AddNode(new Node(new QVector3D(vertex[0],vertex[1],vertex[2])));
+                //temp_vertices.push_back(QVector3D(vertex[0],vertex[1],vertex[2]));
+            }else
+               if(list[0]=="j")
+                {
+                    int uv[list.count()];
+                    for(int i = 0;i<list.count()-1;i++)
+                         QTextStream(&list[i+1])>>uv[i];
+                    AddNodeLinkbyIndex(uv[0],uv[1]);
+                    //temp_uvs.push_back(QPoint(uv[0],uv[1]));
+                }
+           line = ascread.readLine();
+        }
+        textfile.close();
+    }
 }
