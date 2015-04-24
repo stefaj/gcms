@@ -25,13 +25,17 @@ RenderState::RenderState(): m_program(0), m_t(0) {
          m_handler->AddNode(new Node(new QVector3D(k*5,0,p*5),nodename));
         }
     m_handler->AddNode(new Node(new QVector3D(0,0,5),new QString("Node:00")));
+       // m_handler->AddNode(new Node(new QVector3D(1,0,8),new QString("Node:10")));
     for(int pi = 1; pi<m_handler->count();pi++)
     {
-     m_handler->AddNodeLinkbyIndex(0,pi-1);
+     m_handler->AddNodeLinkbyIndex(0,pi);
     }
      m_handler->AddNodeLinkbyIndex(1,4);
      m_handler->AddNodeLinkbyIndex(2,4);
+     m_handler->AddNodeLinkbyIndex(3,4);
+     //m_handler->AddNodeLinkbyIndex(4,5);
      m_handler->CalculateShortest(0,4);
+
     /* qDebug()<<"node position: "<<m_handler->NodeFromIndex(0).Position();
      qDebug()<<"Linked:";
      for(int z = 0;z<m_handler->NodeFromIndex(0).countConnected();z++)

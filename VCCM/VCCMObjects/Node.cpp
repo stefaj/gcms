@@ -36,6 +36,8 @@ Node::Node(QVector3D * Position)
     m_connectedindex.clear();
     m_shortest.clear();
     m_links = false;
+    m_nshortest = 0;
+    m_g = 10000000.0;
 }
 
 QVector3D Node::getColor()
@@ -57,6 +59,8 @@ Node::Node(QVector3D *Position, QString *Name)
     m_connectedindex.clear();
     m_shortest.clear();
     m_links = false;
+    m_nshortest = 0;
+    m_g = 10000000.0;
 }
 
 void Node::setSourceNode()

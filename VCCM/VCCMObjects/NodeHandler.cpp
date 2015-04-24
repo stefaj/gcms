@@ -36,12 +36,50 @@ void NodeHandler::AddNodeLinkbyIndex(int index1,int index2)
 }
 void NodeHandler::CalculateShortest(int start, int goal)
 {
+  // initialize a checked list as empty.
+  QVector<int> checked;
+  //goal reached
+
+ // set initial conditions for dijkstra's algorithm
  m_premises.value(start)->addShortest(start);
- for(int i = 0; i<m_premises.value(start)->countConnected();i++)
+ m_premises.value(start)->setG(0.0);
+ // set initial next node to starting node and minimum distance to maxmimum (inf)
+ int current_node = start;
+for(int l = 0; l<m_premises.count(); l++)
+{
+if(!checked.contains(l))
+{
+    current_node = l;
+ while(checked.count() != m_premises.count())
  {
-     float distance =10.0;//m_premises.value(start)->Position().distanceToPoint(m_premises.value(m_premises.value(start)->getConnectedIndex(i))->Position());
-     m_premises.value(m_premises.value(start)->getConnectedIndex(i))->setG(distance);
+     double min_dist = 10000000.0;
+     int next_node = current_node;
+     // check all the parent nodes for the starting node
+     for(int i = 0; i<m_premises.value(current_node)->countConnected();i++)
+     {
+         if(!checked.contains(m_premises.value(current_node)->getConnectedIndex(i))){
+         float distance =m_premises.value(current_node)->Position().distanceToPoint(m_premises.value(m_premises.value(current_node)->getConnectedIndex(i))->Position());
+         if(min_dist>distance)
+         {
+             min_dist = distance;
+             next_node = m_premises.value(current_node)->getConnectedIndex(i);
+         }
+
+         m_premises.value(m_premises.value(current_node)->getConnectedIndex(i))->setG(distance);
+         m_premises.value(m_premises.value(current_node)->getConnectedIndex(i))->setShortest(current_node);
+         }
+     }
+     //add checked for starting node index
+     checked.push_back(current_node);
+     current_node = next_node;
+     qDebug()<<"fail:"<<current_node;
  }
+}
+}
+for(int k = 0; k < checked.count();k++)
+qDebug()<<"nodes_checked:"<<k;
  for(int k = 0; k < m_premises.count();k++)
-     qDebug()<<"node:"<<k<<":"<<m_premises.value(start)->getG();
+    qDebug()<<"node:"<<k<<":"<<m_premises.value(k)->getG()<<""<<m_premises.value(k)->getShortestIndex();
+
+
 }
