@@ -1,6 +1,6 @@
 #ifndef INFORMATIONREQUEST_H
 #define INFORMATIONREQUEST_H
-#include <QApplication>
+//#include <QApplication>
 #include <QtCore>
 #include <QtSql/QSql>
 #include <QtSql/QSqlDatabase>

@@ -1,4 +1,4 @@
-#include <QApplication>
+//#include <QApplication>
 #include <QtCore>
 #include <QtSql/QSql>
 #include <QtSql/QSqlDatabase>
