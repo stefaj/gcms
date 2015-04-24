@@ -70,6 +70,13 @@ void Node::setSourceNode()
     m_color->setZ(1.0f);
 }
 
+void Node::setDestinationNode()
+{
+    m_color->setX(1.0f);
+    m_color->setY(0.0f);
+    m_color->setZ(0.0f);
+}
+
 void Node::AddLink(QString *Name, int index)
 {
     m_connected.push_back(Name);

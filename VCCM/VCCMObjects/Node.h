@@ -26,6 +26,7 @@ public:
     QVector3D Position();
     QVector3D getColor();
     void setSourceNode();
+    void setDestinationNode();
     void setColor(QVector3D *);
     int countConnected();
     int getConnectedIndex(int index);

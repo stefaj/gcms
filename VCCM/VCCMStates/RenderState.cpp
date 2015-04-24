@@ -21,14 +21,19 @@ RenderState::RenderState(): m_program(0), m_t(0) {
     m_handler->AddNode(new Node(new QVector3D(7.8,0,-5.8),new QString("C")));//2
     m_handler->AddNode(new Node(new QVector3D(6.0,0,-14.5),new QString("D")));//3
     m_handler->AddNode(new Node(new QVector3D(7.0,0,-20.5),new QString("E")));//4
+    m_handler->AddNode(new Node(new QVector3D(0.0,0,-16.5),new QString("F")));//5
 
      m_handler->AddNodeLinkbyIndex(0,1);
      m_handler->AddNodeLinkbyIndex(1,2);
      m_handler->AddNodeLinkbyIndex(0,2);
      m_handler->AddNodeLinkbyIndex(2,3);
      m_handler->AddNodeLinkbyIndex(3,4);
-
-     m_handler->CalculateShortest(0,4);
+     m_handler->AddNodeLinkbyIndex(3,5);
+     m_handler->AddNodeLinkbyIndex(2,5);
+     m_handler->AddNodeLinkbyIndex(5,2);
+     m_handler->AddNodeLinkbyIndex(5,4);
+     m_handler->AddNodeLinkbyIndex(0,5);
+     m_handler->CalculateShortest(3,5);
 
     /* qDebug()<<"node position: "<<m_handler->NodeFromIndex(0).Position();
      qDebug()<<"Linked:";
@@ -47,7 +52,7 @@ RenderState::RenderState(): m_program(0), m_t(0) {
    // m_handler->AddNode(new Node(new QVector3D(-5,0,-5),new QString("Node 3")));
    // m_handler->AddNodeLink(0,new QString("Node 2"));
    // m_handler->AddNodeLink(1,new QString("Node 1"));
-    m_handler->NodeFromIndex(0).setSourceNode();
+    //m_handler->NodeFromIndex(0).setSourceNode();
 }
 
 void RenderState::paint()
@@ -107,6 +112,13 @@ void RenderState::paint()
       mMatrix.translate(m_handler->NodeFromIndex(x).Position());
       // draw different types of nodes, (connected & unconnected nodes & best path)
       DrawModel(node,vMatrix,mMatrix,QMatrix4x4()/*,0*/,m_handler->NodeFromIndex(x).getColor());
+    }
+
+    for(int o = 0;o<m_handler->pathcount()-1;o++){
+    DrawLine(m_handler->NodeFromIndex(m_handler->pathindex(o)).Position(),m_handler->NodeFromIndex(m_handler->pathindex(o+1)).Position(),
+             vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,1,0));
+    //qDebug()<<"connected:"<<m_handler->NodeFromIndex(m_handler->NodeFromIndex(x).getConnectedIndex(l)).Position();
+    //qDebug()<<m_handler->NodeFromIndex(x).Position();
     }
     // release the program for this frame
     m_program->release();

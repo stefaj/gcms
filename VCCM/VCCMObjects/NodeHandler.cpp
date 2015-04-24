@@ -36,6 +36,12 @@ void NodeHandler::AddNodeLinkbyIndex(int index1,int index2)
 }
 void NodeHandler::CalculateShortest(int start, int goal)
 {
+  //set nodes's colors
+  m_premises.value(start)->setSourceNode();
+  m_premises.value(goal)->setDestinationNode();
+  // clear shortest path
+  m_shortest.clear();
+
   // inf
   const double inf = 10000000000.0;
 
@@ -93,19 +99,30 @@ void NodeHandler::CalculateShortest(int start, int goal)
   for(int k = 0; k < m_premises.count();k++)
      qDebug()<<"node:"<<k<<":"<<m_premises.value(k)->getG()<<""<<m_premises.value(k)->getShortestIndex();
 
-
+  // list path
+  int _back_node = goal;
+  m_shortest.push_back(_back_node);
+  while(_back_node != start)
+  {
+      _back_node = m_premises.value(_back_node)->getShortestIndex();
+      m_shortest.push_back(_back_node);
+  }
 
   //temp test (checked)
   /*for(int k = 0; k< m_premises.count();k++)
       Debug()<<m_premises.value(k)->getG();*/
 
+  // test shortest path
+  for(int k = 0; k< m_shortest.count();k++)
+      qDebug()<<m_shortest.value(k);
+
 }
 int NodeHandler::pathcount()
 {
-    return 0;
+    return m_shortest.count();
 }
 
-int NodeHandler::pathindex(int)
+int NodeHandler::pathindex(int index)
 {
-    return 0;
+    return m_shortest.value(index);
 }

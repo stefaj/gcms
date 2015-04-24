@@ -26,8 +26,12 @@ public:
     void AddNodeLinkbyIndex(int,int);
     void CalculateShortest(int,int);
     int count();
+    int pathcount();
+    int pathindex(int);
 private:
     QVector<Node*> m_premises;
+    QVector<int> m_shortest;
+
 };
 
 #endif // NODEHANDLER_H
