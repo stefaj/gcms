@@ -36,50 +36,76 @@ void NodeHandler::AddNodeLinkbyIndex(int index1,int index2)
 }
 void NodeHandler::CalculateShortest(int start, int goal)
 {
-  // initialize a checked list as empty.
+  // inf
+  const double inf = 10000000000.0;
+
+  // initial empty visited
   QVector<int> checked;
-  //goal reached
 
- // set initial conditions for dijkstra's algorithm
- m_premises.value(start)->addShortest(start);
- m_premises.value(start)->setG(0.0);
- // set initial next node to starting node and minimum distance to maxmimum (inf)
- int current_node = start;
-for(int l = 0; l<m_premises.count(); l++)
-{
-if(!checked.contains(l))
-{
-    current_node = l;
- while(checked.count() != m_premises.count())
+  // set all distances to inf
+  foreach (Node *n, m_premises) {
+      n->setG(inf);
+  }
+  // set start G value to  0.0
+  m_premises.value(start)->setG(0.0);
+
+  // initial que contains all
+  QVector<int> que;
+
+  // fill que
+ for(int k = 0; k< m_premises.count();k++)
+  que.push_back(k);
+
+
+ while(que.count()>0)
  {
-     double min_dist = 10000000.0;
-     int next_node = current_node;
-     // check all the parent nodes for the starting node
-     for(int i = 0; i<m_premises.value(current_node)->countConnected();i++)
-     {
-         if(!checked.contains(m_premises.value(current_node)->getConnectedIndex(i))){
-         float distance =m_premises.value(current_node)->Position().distanceToPoint(m_premises.value(m_premises.value(current_node)->getConnectedIndex(i))->Position());
-         if(min_dist>distance)
-         {
-             min_dist = distance;
-             next_node = m_premises.value(current_node)->getConnectedIndex(i);
-         }
+  int current_index = 0;
+  int remove_index = 0;
+  double current_min = inf;
+  for(int l = 0; l < que.count();l++)
+  {
+      if(m_premises.value(l)->getG()<current_min)
+      {
+          current_min=m_premises.value(l)->getG();
+          current_index=que.value(l);
+          remove_index = l;
+      }
+  }
+  que.remove(remove_index);
+  checked.push_back(current_index);
+  for(int p = 0; p<m_premises.value(current_index)->countConnected();p++)
+  {
 
-         m_premises.value(m_premises.value(current_node)->getConnectedIndex(i))->setG(distance);
-         m_premises.value(m_premises.value(current_node)->getConnectedIndex(i))->setShortest(current_node);
-         }
-     }
-     //add checked for starting node index
-     checked.push_back(current_node);
-     current_node = next_node;
-     qDebug()<<"fail:"<<current_node;
+      double nodedist = m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->Position().distanceToPoint(m_premises.value(current_index)->Position());
+      qDebug()<<"distance between:"<<current_index<<" and "<<m_premises.value(current_index)->getConnectedIndex(p)<<" equals "<< nodedist;
+      if(nodedist +m_premises.value(current_index)->getG()< m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->getG())
+      {
+          m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->setG(nodedist+m_premises.value(current_index)->getG());
+          m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->setShortest(current_index);
+      }
+  }
+
  }
-}
-}
-for(int k = 0; k < checked.count();k++)
-qDebug()<<"nodes_checked:"<<k;
- for(int k = 0; k < m_premises.count();k++)
-    qDebug()<<"node:"<<k<<":"<<m_premises.value(k)->getG()<<""<<m_premises.value(k)->getShortestIndex();
+
+ // test results
+ for(int k = 0; k < checked.count();k++)
+ qDebug()<<"nodes_checked:"<<k;
+  for(int k = 0; k < m_premises.count();k++)
+     qDebug()<<"node:"<<k<<":"<<m_premises.value(k)->getG()<<""<<m_premises.value(k)->getShortestIndex();
 
 
+
+  //temp test (checked)
+  /*for(int k = 0; k< m_premises.count();k++)
+      Debug()<<m_premises.value(k)->getG();*/
+
+}
+int NodeHandler::pathcount()
+{
+    return 0;
+}
+
+int NodeHandler::pathindex(int)
+{
+    return 0;
 }

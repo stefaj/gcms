@@ -15,25 +15,19 @@
 RenderState::RenderState(): m_program(0), m_t(0) {
     m_position = new QVector3D(0,0,0);
     m_handler = new NodeHandler();
-    //int nodes = 0;
-    for(int k = -2;k<0;k++)
-        for(int p = -2;p<0;p++)
-        {
-         QString *nodename =new QString("Node:");
-         nodename->append(QString::number(k));
-         nodename->append(QString::number(p));
-         m_handler->AddNode(new Node(new QVector3D(k*5,0,p*5),nodename));
-        }
-    m_handler->AddNode(new Node(new QVector3D(0,0,5),new QString("Node:00")));
-       // m_handler->AddNode(new Node(new QVector3D(1,0,8),new QString("Node:10")));
-    for(int pi = 1; pi<m_handler->count();pi++)
-    {
-     m_handler->AddNodeLinkbyIndex(0,pi);
-    }
-     m_handler->AddNodeLinkbyIndex(1,4);
-     m_handler->AddNodeLinkbyIndex(2,4);
+
+    m_handler->AddNode(new Node(new QVector3D(-4,0,-5),new QString("A")));//0
+    m_handler->AddNode(new Node(new QVector3D(6.8,0,2),new QString("B")));//1
+    m_handler->AddNode(new Node(new QVector3D(7.8,0,-5.8),new QString("C")));//2
+    m_handler->AddNode(new Node(new QVector3D(6.0,0,-14.5),new QString("D")));//3
+    m_handler->AddNode(new Node(new QVector3D(7.0,0,-20.5),new QString("E")));//4
+
+     m_handler->AddNodeLinkbyIndex(0,1);
+     m_handler->AddNodeLinkbyIndex(1,2);
+     m_handler->AddNodeLinkbyIndex(0,2);
+     m_handler->AddNodeLinkbyIndex(2,3);
      m_handler->AddNodeLinkbyIndex(3,4);
-     //m_handler->AddNodeLinkbyIndex(4,5);
+
      m_handler->CalculateShortest(0,4);
 
     /* qDebug()<<"node position: "<<m_handler->NodeFromIndex(0).Position();
