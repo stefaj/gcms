@@ -16,18 +16,35 @@ RenderState::RenderState(): m_program(0), m_t(0) {
     m_position = new QVector3D(0,0,0);
     m_handler = new NodeHandler();
     //int nodes = 0;
-    for(int k = -2;k<3;k++)
-        for(int p = -2;p<3;p++)
+    for(int k = -2;k<0;k++)
+        for(int p = -2;p<0;p++)
         {
          QString *nodename =new QString("Node:");
          nodename->append(QString::number(k));
          nodename->append(QString::number(p));
          m_handler->AddNode(new Node(new QVector3D(k*5,0,p*5),nodename));
         }
-    for(int z = 0; z<m_handler->count();z++)
+    m_handler->AddNode(new Node(new QVector3D(0,0,5),new QString("Node:00")));
+    for(int pi = 1; pi<m_handler->count();pi++)
     {
-     m_handler->AddNodeLinkbyIndex(z,0);
+     m_handler->AddNodeLinkbyIndex(0,pi-1);
     }
+     m_handler->AddNodeLinkbyIndex(1,4);
+     m_handler->AddNodeLinkbyIndex(2,4);
+     m_handler->CalculateShortest(0,4);
+    /* qDebug()<<"node position: "<<m_handler->NodeFromIndex(0).Position();
+     qDebug()<<"Linked:";
+     for(int z = 0;z<m_handler->NodeFromIndex(0).countConnected();z++)
+     {
+
+     qDebug()<<m_handler->NodeFromIndex(0).getLinkedName(z);
+     qDebug()<<m_handler->NodeFromIndex(0).getConnectedIndex(z);
+     qDebug()<<"linked position:"<<m_handler->NodeFromIndex(m_handler->NodeFromIndex(0).getConnectedIndex(z)).Position();
+
+     }*/
+     //m_handler->AddNodeLinkbyIndex(1,5);
+   // }
+
    // m_handler->AddNode(new Node(new QVector3D(5,0,5),new QString("Node 2")));
    // m_handler->AddNode(new Node(new QVector3D(-5,0,-5),new QString("Node 3")));
    // m_handler->AddNodeLink(0,new QString("Node 2"));
@@ -75,13 +92,17 @@ void RenderState::paint()
     /// This is test code for drawing a line
     //DrawLine(QVector3D(0,0,0),QVector3D(5,0,5),vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0));
     /// This is test code for drawing another line
-    DrawLine(QVector3D(0,0,0),QVector3D(-5,0,-5),vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0));
+    //DrawLine(QVector3D(0,0,0),QVector3D(-5,0,-5),vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0));
 
     // draw each node to the scene
     for(int x = 0; x<m_handler->count();x++)
     {
-        for(int l = 0;l<m_handler->NodeFromIndex(x).countConnected();l++)
-        DrawLine(m_handler->NodeFromIndex(x).Position(),m_handler->NodeFromIndex(m_handler->NodeFromIndex(x).getConnectedIndex(l)).Position(),vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0));
+      for(int l = 0;l<m_handler->NodeFromIndex(x).countConnected();l++){
+      DrawLine(m_handler->NodeFromIndex(x).Position(),m_handler->NodeFromIndex(m_handler->NodeFromIndex(x).getConnectedIndex(l)).Position(),
+               vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0));
+      //qDebug()<<"connected:"<<m_handler->NodeFromIndex(m_handler->NodeFromIndex(x).getConnectedIndex(l)).Position();
+      //qDebug()<<m_handler->NodeFromIndex(x).Position();
+      }
       // this is for the model transformation
       QMatrix4x4 mMatrix;
       // transform the position locally
@@ -145,7 +166,8 @@ void RenderState::ShaderDraw(ModelMesh *box)
 
        m_program->release(); // release the current updated shader code (awaiting next frame)
    }
-   void RenderState::DrawLine(QVector3D point1, QVector3D point2,QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate/*, GLuint texture*/,QVector3D color)
+
+void RenderState::DrawLine(QVector3D point1, QVector3D point2,QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate/*, GLuint texture*/,QVector3D color)
    {
        QVector< QVector3D > temp_vertices;
        temp_vertices.push_back(point1);
@@ -168,6 +190,7 @@ void RenderState::ShaderDraw(ModelMesh *box)
     m_program->release(); // release the current updated shader code (awaiting next frame)
     temp_vertices.clear();
 }
+
 void RenderState::DrawModel(ModelMesh *box,QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate/*, GLuint texture*/,QVector3D color)
  {
      UpdateShaders(wvp, mvp, rotate/*, texture*/, color);

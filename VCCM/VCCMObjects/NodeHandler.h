@@ -15,7 +15,7 @@
 #include <QVector>
 #include <QString>
 #include <qdebug.h>
-
+class QVector3D;
 class NodeHandler
 {
 public:
@@ -24,6 +24,7 @@ public:
     Node NodeFromIndex(unsigned int);
     void AddNodeLink(int,QString*);
     void AddNodeLinkbyIndex(int,int);
+    void CalculateShortest(int,int);
     int count();
 private:
     QVector<Node*> m_premises;

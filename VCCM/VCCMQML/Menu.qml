@@ -1,7 +1,10 @@
-import QtQuick 2.0
+import QtQuick 2.4
+import QtQuick.Controls.Styles 1.3
+import QtQuick.Controls 1.3
 import QtQuick.Window 2.0
 import QMLOpenGL 1.0
 import QtGraphicalEffects 1.0
+
 Item {
     id:tree
     width: 450
@@ -20,7 +23,7 @@ Loader {
          fillMode: Image.Stretch
          opacity: 1
      }
-
+    //Text { anchors.top: parent; text: "Virtual Concierge Creator and Management System V0.0 pre-alpha (no style sheets)"; color: "black";font.pixelSize: 10;}
     Rectangle {
 
         anchors.centerIn: parent
@@ -30,8 +33,8 @@ Loader {
 
         Rectangle {
             id: playbutton
-            property color onHoverColor: Qt.rgba(1.0, 1.0, 1.0, 0.9)
-            property color defaultColor: Qt.rgba(1.0, 1.0, 1.0, 0.5)
+            property color onHoverColor: Qt.rgba(0.0, 0.0, 0.0, 0.9)
+            property color defaultColor: Qt.rgba(0.0, 0.0, 0.0, 0.5)
             anchors.top: parent.top
             width: 100;
             height: 50;
@@ -61,8 +64,8 @@ Loader {
         }
         Rectangle {
             id:exitbutton
-            property color onHoverColor: Qt.rgba(1.0, 1.0, 1.0, 0.9)
-            property color defaultColor: Qt.rgba(1.0, 1.0, 1.0, 0.5)
+            property color onHoverColor: Qt.rgba(0.0, 0.0, 0.0, 0.9)
+            property color defaultColor: Qt.rgba(0.0, 0.0, 0.0, 0.5)
             anchors.bottom: parent.bottom
             width: 100;
             height: 50;
@@ -85,7 +88,6 @@ Loader {
             name: "down"; when: mouseAreaexit.containsMouse == true
             PropertyChanges { target: exitbutton; y: 50; rotation: 10; }
         }
-
         transitions: Transition {
             from: ""; to: "down"; reversible: true
             ParallelAnimation {

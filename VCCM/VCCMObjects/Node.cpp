@@ -23,6 +23,8 @@ Node::Node()
     m_connectedindex.clear();
     m_shortest.clear();
     m_links = false;
+    m_nshortest = 0;
+    m_g = 10000000.0;
 }
 
 Node::Node(QVector3D * Position)
@@ -106,12 +108,20 @@ void Node::addShortest(int index)
     m_shortest.push_back(index);
 }
 
-void Node::setG(float g)
+void Node::setG(double g)
 {
     m_g = g;
 }
 
-float Node::getG()
+double Node::getG()
 {
     return m_g;
+}
+void Node::setShortest(int index)
+{
+    m_nshortest = index;
+}
+int Node::getShortestIndex()
+{
+    return m_nshortest;
 }

@@ -22,7 +22,7 @@ public:
     Node();
     Node(QVector3D *);
     Node(QVector3D *, QString *);
-    void AddLink(QString *,int);
+    void AddLink(QString *,int); // index from other node
     QVector3D Position();
     QVector3D getColor();
     void setSourceNode();
@@ -32,8 +32,10 @@ public:
     QString getLinkedName(int);
     void clearPath();
     void addShortest(int);
-    void setG(float g);
-    float getG();
+    void setG(double g);
+    void setShortest(int index);
+    int getShortestIndex();
+    double getG();
     QString getName();
 private:
     QVector3D *m_position;
@@ -42,7 +44,8 @@ private:
     QVector<QString*> m_connected;
     QVector<int> m_connectedindex;
     QVector<int> m_shortest;
-    float m_g;
+    int m_nshortest;
+    double m_g;
     bool m_links;
 };
 

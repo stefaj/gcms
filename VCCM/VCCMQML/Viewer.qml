@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.4
 import QMLOpenGL 1.0
 import QtGraphicalEffects 1.0
 import QtQuick.Window 2.0
@@ -18,34 +18,5 @@ Item {
             running: true
         }
     }
-   /* Grid {
-         anchors.bottom: parent.bottom
-         anchors.margins: 10
-         anchors.leftMargin: 10
-         anchors.rightMargin: 10
-         x:10
-         columns: 10
-         spacing: 2
-         Rectangle { color: defaultColor; width: iconsize; height: iconsize;
-          MouseArea {anchors.fill: parent ;hoverEnabled: true; onEntered:{ parent.color = onHoverColor;parent.border.color = onHoverColor;}onExited: {parent.color = defaultColor;parent.border.color = defaultColor}}}
-         Rectangle { color: defaultColor; width: iconsize; height: iconsize;
-          MouseArea {anchors.fill: parent ;hoverEnabled: true; onEntered:{ parent.color = onHoverColor;parent.border.color = onHoverColor;}onExited: {parent.color = defaultColor;parent.border.color = defaultColor}}}
-         Rectangle { color: defaultColor; width: iconsize; height: iconsize;
-          MouseArea {anchors.fill: parent ;hoverEnabled: true; onEntered:{ parent.color = onHoverColor;parent.border.color = onHoverColor;}onExited: {parent.color = defaultColor;parent.border.color = defaultColor}}}
-         Rectangle { color: defaultColor; width: iconsize; height: iconsize;
-          MouseArea {anchors.fill: parent ;hoverEnabled: true; onEntered:{ parent.color = onHoverColor;parent.border.color = onHoverColor;}onExited: {parent.color = defaultColor;parent.border.color = defaultColor}}}
-         Rectangle { color: defaultColor; width: iconsize; height: iconsize;
-          MouseArea {anchors.fill: parent ;hoverEnabled: true; onEntered:{ parent.color = onHoverColor;parent.border.color = onHoverColor;}onExited: {parent.color = defaultColor;parent.border.color = defaultColor}}}
-         Rectangle { color: defaultColor; width: iconsize; height: iconsize;
-          MouseArea {anchors.fill: parent ;hoverEnabled: true; onEntered:{ parent.color = onHoverColor;parent.border.color = onHoverColor;}onExited: {parent.color = defaultColor;parent.border.color = defaultColor}}}
-         Rectangle { color: defaultColor; width: iconsize; height: iconsize;
-          MouseArea {anchors.fill: parent ;hoverEnabled: true; onEntered:{ parent.color = onHoverColor;parent.border.color = onHoverColor;}onExited: {parent.color = defaultColor;parent.border.color = defaultColor}}}
-         Rectangle { color: defaultColor; width: iconsize; height: iconsize;
-          MouseArea {anchors.fill: parent ;hoverEnabled: true; onEntered:{ parent.color = onHoverColor;parent.border.color = onHoverColor;}onExited: {parent.color = defaultColor;parent.border.color = defaultColor}}}
-         Rectangle { color: defaultColor; width: iconsize; height: iconsize;
-          MouseArea {anchors.fill: parent ;hoverEnabled: true; onEntered:{ parent.color = onHoverColor;parent.border.color = onHoverColor;}onExited: {parent.color = defaultColor;parent.border.color = defaultColor}}}
-         Rectangle { color: defaultColor; width: iconsize; height: iconsize;
-          MouseArea {anchors.fill: parent ;hoverEnabled: true; onEntered:{ parent.color = onHoverColor;parent.border.color = onHoverColor;}onExited: {parent.color = defaultColor;parent.border.color = defaultColor}}}
-     }*/
 
 }
