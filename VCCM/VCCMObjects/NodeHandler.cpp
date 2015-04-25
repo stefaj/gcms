@@ -49,7 +49,7 @@ void NodeHandler::CalculateShortest(int start, int goal)
   m_shortest.clear();
 
   // inf
-  const double inf = 10000000000.0;
+  const double inf = 999999999999999.0;
 
   // initial empty visited
   QVector<int> checked;
@@ -87,9 +87,12 @@ void NodeHandler::CalculateShortest(int start, int goal)
       }
   }
   // remove current checked
+  if(remove_index > -1)
   que.remove(remove_index);
+  else break;
 
   // mark node as checked
+  if(current_index>-1){
   checked.push_back(current_index);
 
   // check all the neighbor nodes
@@ -108,6 +111,7 @@ void NodeHandler::CalculateShortest(int start, int goal)
           m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->setShortest(current_index);
       }
   }
+  }else break;
  }
 
  // test results

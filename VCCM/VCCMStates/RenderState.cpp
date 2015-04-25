@@ -15,8 +15,29 @@
 RenderState::RenderState(): m_program(0), m_t(0) {
     m_position = new QVector3D(0,0,0);
     m_handler = new NodeHandler();
-    m_handler->ReadFilePVC(":/Premises");
-    m_handler->CalculateShortest(1,6);
+    for(int k = -5; k < 5;k++)
+        for(int j = -5; j < 5;j++)
+            m_handler->AddNode(new Node(new QVector3D(4*k,0,4*j)));
+
+    for(int k = 0; k < 99;k++)
+    {
+        if(k%10 !=9)
+        {
+            m_handler->AddNodeLinkbyIndex(k,k+1);
+            m_handler->AddNodeLinkbyIndex(k+1,k);
+        }
+
+        if(k<90)
+            m_handler->AddNodeLinkbyIndex(k,k+10);
+
+        if(k>10)
+            m_handler->AddNodeLinkbyIndex(k,k-10);
+
+
+    }
+
+    //m_handler->ReadFilePVC(":/Premises");
+    m_handler->CalculateShortest(54,93);
 }
 
 void RenderState::paint()
