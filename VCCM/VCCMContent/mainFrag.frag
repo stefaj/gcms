@@ -48,9 +48,12 @@ void main()
     vec3 lightdir = vec3(-0.707,-0.707,0);
 
     // calculate -N*L (blinn)
-    float ndotl = -dot(normalize(normals),lightdir);
+    float ndotl = -dot(normalize(normals),lightdir)+0.5;
+
+    // set texture value
+    vec4 texturecol = texture2D(texture,varyingTextureCoordinate).rgba;
 
     // set the active colour with a ambiet colour
-    gl_FragColor = vec4(.5,.5,.5, 0)*ndotl+vec4(col, 1);
+    gl_FragColor = texturecol*ndotl+vec4(col, 1);
 
 }
