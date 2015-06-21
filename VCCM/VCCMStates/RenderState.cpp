@@ -15,34 +15,16 @@
 RenderState::RenderState(): m_program(0), m_t(0) {
     m_position = new QVector3D(0,0,0);
     m_handler = new NodeHandler();
-    for(int k = -5; k < 5;k++)
-        for(int j = -5; j < 5;j++)
-            m_handler->AddNode(new Node(new QVector3D(4*k,0,4*j)));
 
-    for(int k = 0; k < 99;k++)
-    {
-        if(k%10 !=9)
-        {
-            m_handler->AddNodeLinkbyIndex(k,k+1);
-            m_handler->AddNodeLinkbyIndex(k+1,k);
-        }
-
-        if(k<90)
-            m_handler->AddNodeLinkbyIndex(k,k+10);
-
-        if(k>10)
-            m_handler->AddNodeLinkbyIndex(k,k-10);
-
-
-    }
-
-    //m_handler->ReadFilePVC(":/Premises");
-    m_handler->CalculateShortest(54,93);
+    m_handler->ReadFilePVC(":/Premises");
+    m_handler->CalculateShortest(0,7);
 }
 
 void RenderState::paint()
 {
-    QMatrix4x4 vMatrix; // define a view matrix
+
+    // define a view matrix
+    QMatrix4x4 vMatrix;
     // whenever content is not loaded, load the content
     if(!m_program){LoadContent();}
     // set the uniform value t for the shader (give it a new value)
@@ -77,20 +59,13 @@ void RenderState::paint()
     QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
     // implement and transform the camera
     vMatrix.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
-    /// This is test code for drawing a line
-    //DrawLine(QVector3D(0,0,0),QVector3D(5,0,5),vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0));
-    /// This is test code for drawing another line
-    //DrawLine(QVector3D(0,0,0),QVector3D(-5,0,-5),vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0));
-
     // draw each node to the scene
     for(int x = 0; x<m_handler->count();x++)
     {
-      for(int l = 0;l<m_handler->NodeFromIndex(x).countConnected();l++){
-      DrawLine(m_handler->NodeFromIndex(x).Position(),m_handler->NodeFromIndex(m_handler->NodeFromIndex(x).getConnectedIndex(l)).Position(),
+      for(int l = 0;l<m_handler->NodeFromIndex(x).countConnected();l++)
+        DrawLine(m_handler->NodeFromIndex(x).Position(),m_handler->NodeFromIndex(m_handler->NodeFromIndex(x).getConnectedIndex(l)).Position(),
                vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0));
-      //qDebug()<<"connected:"<<m_handler->NodeFromIndex(m_handler->NodeFromIndex(x).getConnectedIndex(l)).Position();
-      //qDebug()<<m_handler->NodeFromIndex(x).Position();
-      }
+
       // this is for the model transformation
       QMatrix4x4 mMatrix;
       // transform the position locally
@@ -99,12 +74,13 @@ void RenderState::paint()
       DrawModel(node,vMatrix,mMatrix,QMatrix4x4()/*,0*/,m_handler->NodeFromIndex(x).getColor());
     }
 
-    for(int o = 0;o<m_handler->pathcount()-1;o++){
-    DrawLine(m_handler->NodeFromIndex(m_handler->pathindex(o)).Position(),m_handler->NodeFromIndex(m_handler->pathindex(o+1)).Position(),
+    // disable the z buffer test
+    glDisable(GL_DEPTH_TEST);
+    for(int o = 0;o<m_handler->pathcount()-1;o++)
+        DrawLine(m_handler->NodeFromIndex(m_handler->pathindex(o)).Position(),m_handler->NodeFromIndex(m_handler->pathindex(o+1)).Position(),
              vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,1,0));
-    //qDebug()<<"connected:"<<m_handler->NodeFromIndex(m_handler->NodeFromIndex(x).getConnectedIndex(l)).Position();
-    //qDebug()<<m_handler->NodeFromIndex(x).Position();
-    }
+
+    glEnable(GL_DEPTH_TEST);
     // release the program for this frame
     m_program->release();
     // disable the cullmode for the frame
