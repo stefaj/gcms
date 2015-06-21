@@ -12,17 +12,34 @@
 #include "VCCMStates/RenderState.h"
 #include <qdebug.h>
 
-RenderState::RenderState(): m_program(0), m_t(0) {
+RenderState::RenderState(): m_program(0), m_t(0)
+{
+    a = 0;
+    m_rotationx = 0;
+    // clear the textures
+    textures.clear();
+
     m_position = new QVector3D(0,0,0);
     m_handler = new NodeHandler();
 
     m_handler->ReadFilePVC(":/Premises");
     m_handler->CalculateShortest(0,7);
+
+    // texture test
+    QOpenGLTexture *texture = new QOpenGLTexture(QImage(":/Texture0").mirrored());
+    texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+    texture->setMagnificationFilter(QOpenGLTexture::Linear);
+    textures.append(texture);
+
 }
 
 void RenderState::paint()
 {
-
+    m_rotationx += 0.16f;
+    a++;
+    if(a>112)
+        a =0;
+    m_handler->CalculateShortest(0,a/16);
     // define a view matrix
     QMatrix4x4 vMatrix;
     // whenever content is not loaded, load the content
@@ -52,9 +69,9 @@ void RenderState::paint()
     // rotation in the y - axis
     cameraTransformation.rotate(0, 0, 1, 0);
     // rotation in the x - axis
-    cameraTransformation.rotate(-90, 1, 0, 0);
+    cameraTransformation.rotate(-90+m_rotationx, 1, 0, 0);
     // transform the camera's position with respect to the rotation matrix
-    QVector3D cameraPosition = cameraTransformation * QVector3D(m_position->x(), 0, 60.0f);
+    QVector3D cameraPosition = cameraTransformation * QVector3D(0.0f, 0, 60.0f);
     // define the direction of the camera's up vector
     QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
     // implement and transform the camera
@@ -70,6 +87,7 @@ void RenderState::paint()
       QMatrix4x4 mMatrix;
       // transform the position locally
       mMatrix.translate(m_handler->NodeFromIndex(x).Position());
+      /*mMatrix.scale(4.0);*/
       // draw different types of nodes, (connected & unconnected nodes & best path)
       DrawModel(node,vMatrix,mMatrix,QMatrix4x4()/*,0*/,m_handler->NodeFromIndex(x).getColor());
     }
@@ -109,41 +127,80 @@ void RenderState::LoadContent()
 
 void RenderState::UpdateShaders(QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate/*, GLuint texture*/,QVector3D color)
 {
-    //glBindTexture(GL_TEXTURE_2D, texture);
-    m_program->bind();// bind the current shader code
+    // bind the current shader code
+    m_program->bind();
+
+    // bind the texture for the object
+    textures.value(0)->bind();
+
+    // update the colour of the object
     m_program->setUniformValue("col",color);
+
+    // change the rotation of the object in the shader
     m_program->setUniformValue("rotationMatrix", rotate);
-    m_program->setUniformValue("mvpMatrix", mvp * rotate);// model view projection
-    m_program->setUniformValue("wvpMatrix", pMatrix * wvp);// model view projection
-    //shaderProgram->setUniformValue("texture", 0);// use GL_TEXTURE0
+
+    // update model view projection
+    m_program->setUniformValue("mvpMatrix", mvp * rotate);
+
+    // update world view projection in the shader
+    m_program->setUniformValue("wvpMatrix", pMatrix * wvp);
+
+    // use GL_TEXTURE0
+    m_program->setUniformValue("texture", 0);
 }
 
 void RenderState::ShaderDraw(ModelMesh *box)
 {
 
-    const char *vert ="vertex";//= vertex.toStdString().c_str();// convert the qstring to c-string for opengl purposes
-    //const char *textureCoordinate= "textureCoordinate";//= texCoord.toStdString().c_str();// convert the qstring to c-string for opengl purposes
-    const char *normals = "normal";// convert the qstring to c-string for opengl purposes
-    m_program->setAttributeArray(vert, box->vertices.constData());//load the vertices to the shaders
-    m_program->enableAttributeArray(vert);//enable the shader attribute( vertices )
-    m_program->setAttributeArray(normals, box->normals.constData());//load the normals to the shaders
-    m_program->enableAttributeArray(normals);//enable the shader attribute( normals )
-       //m_program->setAttributeArray(textureCoordinate, box->textureCoordinates.constData());//load the texture coordinates to the shaders
-      // m_program->enableAttributeArray(textureCoordinate);//enable the shader attribute( texture coordinates )
-       box->Draw(); // draw the opengl vertices
-       m_program->disableAttributeArray(vert);// disable the vertex attributes
-       m_program->disableAttributeArray(normals);// disable the normal attributes
-       //m_program->disableAttributeArray(textureCoordinate);// disable the Texture coordinates attributes
+    // convert the qstring to c-string for opengl purposes, this is the vertex variable in the shader files
+    const char *vert ="vertex";//= vertex.toStdString().c_str();
 
-       m_program->release(); // release the current updated shader code (awaiting next frame)
+    // convert the qstring to c-string for opengl purposes, this is the texture variable in the shader
+    const char *textureCoordinate= "textureCoordinate";//= texCoord.toStdString().c_str();
+
+    // convert the qstring to c-string for opengl, this is the normal variable in the shader code
+    const char *normals = "normal";
+
+    // load the vertices to the shaders
+    m_program->setAttributeArray(vert, box->vertices.constData());
+
+    // enable the shader attribute( vertices )
+    m_program->enableAttributeArray(vert);
+
+    // load the normals to the shaders
+    m_program->setAttributeArray(normals, box->normals.constData());
+
+    // enable the shader attribute( normals )
+    m_program->enableAttributeArray(normals);
+
+    // load the texture coordinates to the shaders
+    m_program->setAttributeArray(textureCoordinate, box->textureCoordinates.constData());
+
+    // enable the texture attribute
+    m_program->enableAttributeArray(textureCoordinate);
+
+    // draw the opengl vertices
+    box->Draw();
+
+    // disable the vertex attributes
+    m_program->disableAttributeArray(vert);
+
+    // disable the normal attributes
+    m_program->disableAttributeArray(normals);
+
+    // disable the Texture coordinates attributes
+    m_program->disableAttributeArray(textureCoordinate);
+
+    // release the current updated shader code (awaiting next frame)
+    m_program->release();
    }
 
 void RenderState::DrawLine(QVector3D point1, QVector3D point2,QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate/*, GLuint texture*/,QVector3D color)
    {
-       QVector< QVector3D > temp_vertices;
-       temp_vertices.push_back(point1);
-       temp_vertices.push_back(point2);
-   UpdateShaders(wvp, mvp, rotate/*, texture*/, color);
+     QVector< QVector3D > temp_vertices;
+     temp_vertices.push_back(point1);
+     temp_vertices.push_back(point2);
+    UpdateShaders(wvp, mvp, rotate/*, texture*/, color);
     const char *vert ="vertex";//= vertex.toStdString().c_str();// convert the qstring to c-string for opengl purposes
     //const char *textureCoordinate= "textureCoordinate";//= texCoord.toStdString().c_str();// convert the qstring to c-string for opengl purposes
     const char *normals = "normal";// convert the qstring to c-string for opengl purposes
@@ -153,7 +210,7 @@ void RenderState::DrawLine(QVector3D point1, QVector3D point2,QMatrix4x4 wvp,QMa
     m_program->enableAttributeArray(normals);//enable the shader attribute( vertices )
     //m_program->setAttributeArray(textureCoordinate, box->textureCoordinates.constData());//load the texture coordinates to the shaders
    // m_program->enableAttributeArray(textureCoordinate);//enable the shader attribute( texture coordinates )
-    glLineWidth(2.0);
+    glLineWidth(3.0);
     glDrawArrays(GL_LINES, 0, temp_vertices.size());
 
     m_program->disableAttributeArray(vert);// disable the vertex attributes

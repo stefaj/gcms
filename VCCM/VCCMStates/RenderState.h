@@ -17,6 +17,7 @@
 #include <QtGui/QOpenGLFunctions>
 #include <QGLWidget>
 #include <QtOpenGL>
+#include <QOpenGLTexture>
 #include "VCCMObjects/NodeHandler.h"
 
 class QGLContext;
@@ -52,6 +53,11 @@ private:
     qreal m_t;
     QVector3D *m_position;
     NodeHandler *m_handler;
+    QVector<QOpenGLTexture *> textures;
+
+    // only for testing
+    int a;
+    float m_rotationx;
 };
 
 #endif // RENDERENGINE_H
