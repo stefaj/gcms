@@ -11,6 +11,5 @@
         <file alias="Viewer">VCCMQML/Viewer.qml</file>
         <file alias="Node">VCCMContent/sphere.obj</file>
         <file alias="Premises">VCCMContent/Premises.pvc</file>
-        <file alias="Prem">VCCMContent/premisis.txt</file>
     </qresource>
 </RCC>
