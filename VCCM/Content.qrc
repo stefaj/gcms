@@ -5,11 +5,13 @@
         <file alias="BackGround">VCCMContent/background.png</file>
         <file alias="Cube">VCCMContent/cube.obj</file>
         <file alias="Sky">VCCMContent/sky.obj</file>
-        <file alias="SkyTexture">VCCMContent/sky.png</file>
+        <file alias="Texture0">VCCMContent/sky.png</file>
         <file alias="block">VCCMContent/untitled.obj</file>
         <file alias="Menu">VCCMQML/Menu.qml</file>
         <file alias="Viewer">VCCMQML/Viewer.qml</file>
         <file alias="Node">VCCMContent/sphere.obj</file>
         <file alias="Premises">VCCMContent/Premises.pvc</file>
+        <file alias="Plane">VCCMContent/plane.obj</file>
+        <file alias="AddButton">VCCMQML/addbutton.js</file>
     </qresource>
 </RCC>
