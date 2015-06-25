@@ -31,7 +31,8 @@ public:
     ModelMesh *box,
               *sky,
               *wagen,
-              *node;
+              *node,
+              *m_plane;
     void setT(qreal t) { m_t = t; }
     void setForward(qreal forward){m_position->setX(forward+m_position->x());}
     void setViewportSize(const QSize &size) { m_viewportSize = size; }

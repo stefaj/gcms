@@ -69,7 +69,7 @@ void RenderState::paint()
     // rotation in the y - axis
     cameraTransformation.rotate(0, 0, 1, 0);
     // rotation in the x - axis
-    cameraTransformation.rotate(-90+m_rotationx, 1, 0, 0);
+    cameraTransformation.rotate(-90, 1, 0, 0);
     // transform the camera's position with respect to the rotation matrix
     QVector3D cameraPosition = cameraTransformation * QVector3D(0.0f, 0, 60.0f);
     // define the direction of the camera's up vector
@@ -97,8 +97,9 @@ void RenderState::paint()
     for(int o = 0;o<m_handler->pathcount()-1;o++)
         DrawLine(m_handler->NodeFromIndex(m_handler->pathindex(o)).Position(),m_handler->NodeFromIndex(m_handler->pathindex(o+1)).Position(),
              vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,1,0));
-
     glEnable(GL_DEPTH_TEST);
+
+    DrawModel(m_plane, vMatrix, QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0));
     // release the program for this frame
     m_program->release();
     // disable the cullmode for the frame
@@ -118,6 +119,7 @@ void RenderState::LoadContent()
     node = new ModelMesh(":/Node");
     sky= new ModelMesh(":/Sky");
     wagen = new ModelMesh(":/Cube");
+    m_plane = new ModelMesh(":/Plane");
     // load shaders
     m_program = new QOpenGLShaderProgram();
     m_program->addShaderFromSourceFile(QOpenGLShader::Vertex,":/VertexShader");

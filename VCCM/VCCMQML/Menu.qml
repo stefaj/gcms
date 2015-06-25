@@ -4,6 +4,7 @@ import QtQuick.Controls 1.3
 import QtQuick.Window 2.0
 import QMLOpenGL 1.0
 import QtGraphicalEffects 1.0
+import "VCCMQML/addbutton.js"  as funct
 
 Item {
     id:tree
@@ -19,11 +20,10 @@ Loader {
          id: background
          anchors.fill: parent
 
-         source: "BackGround"
+         source: "Texture0"
          fillMode: Image.Stretch
          opacity: 1
      }
-    //Text { anchors.top: parent; text: "Virtual Concierge Creator and Management System V0.0 pre-alpha (no style sheets)"; color: "black";font.pixelSize: 10;}
     Rectangle {
 
         anchors.centerIn: parent

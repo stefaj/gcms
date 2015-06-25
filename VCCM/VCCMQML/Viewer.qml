@@ -2,6 +2,7 @@ import QtQuick 2.4
 import QMLOpenGL 1.0
 import QtGraphicalEffects 1.0
 import QtQuick.Window 2.0
+
 Item {
     width: 640
     height: 480

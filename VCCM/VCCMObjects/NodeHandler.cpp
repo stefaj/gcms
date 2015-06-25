@@ -3,6 +3,7 @@
 #include <qdebug.h>
 #include <QFile>
 #include <QTextStream>
+
 NodeHandler::NodeHandler()
 {
     m_premises.clear();
@@ -114,11 +115,11 @@ void NodeHandler::CalculateShortest(int start, int goal)
   }else break;
  }
 
- // test results
- for(int k = 0; k < checked.count();k++)
- qDebug()<<"nodes_checked:"<<k;
-  for(int k = 0; k < m_premises.count();k++)
-     qDebug()<<"node:"<<k<<":"<<m_premises.value(k)->getG()<<""<<m_premises.value(k)->getShortestIndex();
+// // test results
+// for(int k = 0; k < checked.count();k++)
+// qDebug()<<"nodes_checked:"<<k;
+//  for(int k = 0; k < m_premises.count();k++)
+//     qDebug()<<"node:"<<k<<":"<<m_premises.value(k)->getG()<<""<<m_premises.value(k)->getShortestIndex();
 
   // list path
   int _back_node = goal;
