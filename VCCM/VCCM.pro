@@ -30,11 +30,7 @@ RESOURCES += \
 OTHER_FILES += \
     VCCMContent/mainFrag.frag \
     VCCMContent/mainVert.vert \
-FORMS += \
-    Viewer.qml \
-    Menu.qml
-
-FORMS +=
+    VCCMQML/addbutton.js
 
 DISTFILES += \
     VCCMContent/Premises.pvc
