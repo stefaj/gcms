@@ -25,7 +25,8 @@ int main(int argc, char **argv)
     view.setResizeMode(QQuickView::SizeRootObjectToView); // resize the window to the quickqt window size
     qmlRegisterType<BackBone>("QMLOpenGL", 1, 0, "OpenGL"); // immplement the opengl to qml
     QObject::connect((QObject*)view.engine(), SIGNAL(quit()), &app, SLOT(quit())); // connect qml signal to qt signal
-    view.setSource(QUrl("qrc:///Menu")); // load source
+    view.setSource(QUrl("qrc:/Menu")); // load source
+
     view.show(); // show the qml window
     return app.exec(); // execute the application
 }

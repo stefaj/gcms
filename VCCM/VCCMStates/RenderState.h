@@ -54,11 +54,7 @@ private:
     qreal m_t;
     QVector3D *m_position;
     NodeHandler *m_handler;
-    QVector<QOpenGLTexture *> textures;
-
-    // only for testing
-    int a;
-    float m_rotationx;
+    QVector<QOpenGLTexture *> m_textures;
 };
 
 #endif // RENDERENGINE_H

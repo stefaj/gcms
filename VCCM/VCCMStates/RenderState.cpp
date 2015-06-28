@@ -14,10 +14,8 @@
 
 RenderState::RenderState(): m_program(0), m_t(0)
 {
-    a = 0;
-    m_rotationx = 0;
     // clear the textures
-    textures.clear();
+    m_textures.clear();
 
     m_position = new QVector3D(0,0,0);
     m_handler = new NodeHandler();
@@ -29,17 +27,12 @@ RenderState::RenderState(): m_program(0), m_t(0)
     QOpenGLTexture *texture = new QOpenGLTexture(QImage(":/Texture0").mirrored());
     texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
     texture->setMagnificationFilter(QOpenGLTexture::Linear);
-    textures.append(texture);
+    m_textures.append(texture);
 
 }
 
 void RenderState::paint()
 {
-    m_rotationx += 0.16f;
-    a++;
-    if(a>112)
-        a =0;
-    m_handler->CalculateShortest(0,a/16);
     // define a view matrix
     QMatrix4x4 vMatrix;
     // whenever content is not loaded, load the content
@@ -133,7 +126,7 @@ void RenderState::UpdateShaders(QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate
     m_program->bind();
 
     // bind the texture for the object
-    textures.value(0)->bind();
+    m_textures.value(0)->bind();
 
     // update the colour of the object
     m_program->setUniformValue("col",color);
@@ -164,19 +157,19 @@ void RenderState::ShaderDraw(ModelMesh *box)
     const char *normals = "normal";
 
     // load the vertices to the shaders
-    m_program->setAttributeArray(vert, box->vertices.constData());
+    m_program->setAttributeArray(vert, box->m_vertices.constData());
 
     // enable the shader attribute( vertices )
     m_program->enableAttributeArray(vert);
 
     // load the normals to the shaders
-    m_program->setAttributeArray(normals, box->normals.constData());
+    m_program->setAttributeArray(normals, box->m_normals.constData());
 
     // enable the shader attribute( normals )
     m_program->enableAttributeArray(normals);
 
     // load the texture coordinates to the shaders
-    m_program->setAttributeArray(textureCoordinate, box->textureCoordinates.constData());
+    m_program->setAttributeArray(textureCoordinate, box->m_textureCoordinates.constData());
 
     // enable the texture attribute
     m_program->enableAttributeArray(textureCoordinate);
