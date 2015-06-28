@@ -168,7 +168,7 @@ void NodeHandler::ReadFilePVC(QString filename)
                 float vertex[3];
 
                 // populate the vertices
-                for(int i = 0;i<list.count()-2;i++)
+                for(int i = 0;i<3;i++)
                      QTextStream(&list[i+2])>>vertex[i];
 
                 // add the node to the premises
@@ -181,7 +181,7 @@ void NodeHandler::ReadFilePVC(QString filename)
                     int uv[2];
 
                     // populate the indices
-                    for(int i = 0;i<list.count()-1;i++)
+                    for(int i = 0;i<2;i++)
                          QTextStream(&list[i+1])>>uv[i];
 
                     // add the links
