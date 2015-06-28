@@ -29,9 +29,9 @@ void NodeHandler::AddNodeLink(int index,QString* Name)
    m_premises.value(index)->AddLink(Name,index);
 }
 
-void NodeHandler::AddNodeLinkbyIndex(int index1,int index2)
+void NodeHandler::AddNodeLinkbyIndex(int index1, int index2)
 {
-    if(index1!=index2)
+    if(index1 != index2)
         m_premises.value(index1)->AddLink( new QString(m_premises.value(index2)->getName()),index2);
     else
         qDebug()<< "Node can't be linked to itself";
@@ -69,10 +69,10 @@ void NodeHandler::CalculateShortest(int start, int goal)
  for(int k = 0; k< m_premises.count();k++)
   que.push_back(k);
 
-// wait while the whole que is empty ( this may be ineffective )
+ // wait while the whole que is empty ( this may be ineffective )
  while(que.count()>0)
  {
-     // initialize the curren index, the index to be removed and the current min G value
+  // initialize the curren index, the index to be removed and the current min G value
   int current_index = -1;
   int remove_index = -1;
   double current_min = inf;
@@ -101,8 +101,6 @@ void NodeHandler::CalculateShortest(int start, int goal)
   {
        // calculate the distance between current node and the current active neigbor node
       double nodedist = m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->Position().distanceToPoint(m_premises.value(current_index)->Position());
-      // test
-      //qDebug()<<"distance between:"<<current_index<<" and "<<m_premises.value(current_index)->getConnectedIndex(p)<<" equals "<< nodedist;
 
       // replace the node's shortest current path if needed. (dist(v,u) + g(v)< g(u))
       if(nodedist +m_premises.value(current_index)->getG()< m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->getG())
@@ -115,12 +113,6 @@ void NodeHandler::CalculateShortest(int start, int goal)
   }else break;
  }
 
-// // test results
-// for(int k = 0; k < checked.count();k++)
-// qDebug()<<"nodes_checked:"<<k;
-//  for(int k = 0; k < m_premises.count();k++)
-//     qDebug()<<"node:"<<k<<":"<<m_premises.value(k)->getG()<<""<<m_premises.value(k)->getShortestIndex();
-
   // list path
   int _back_node = goal;
   m_shortest.push_back(_back_node);
@@ -130,11 +122,6 @@ void NodeHandler::CalculateShortest(int start, int goal)
       _back_node = m_premises.value(_back_node)->getShortestIndex();
       m_shortest.push_back(_back_node);
   }
-
-  // test shortest path
-  //for(int k = 0; k< m_shortest.count();k++)
-  //    qDebug()<<m_shortest.value(k);
-
 }
 int NodeHandler::pathcount()
 {
@@ -148,40 +135,63 @@ int NodeHandler::pathindex(int index)
 
 void NodeHandler::ReadFilePVC(QString filename)
 {
-    //m_premises.clear();
+    // clear the premises when not empty
     if(m_premises.count()>0)
         m_premises.clear();
+
+    /* populate the premisis from the text file */
+
+    // load the text file
     QFile textfile(filename);
+
+    // open the text file
     textfile.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream ascread(&textfile);
 
     if(textfile.isOpen())
     {
+        // read each line of the file
         QString line = ascread.readLine();
 
         while(!line.isNull())
         {
+            // break the line up in usable parts
             QStringList list = line.split(",");
+
+            // check the type of line
+            /* n-> node
+             * j-> join
+             */
             if(list[0]=="n")
             {
-                float vertex[list.count()];
+                // this is only x,y,z coordinates for the node
+                float vertex[3];
 
+                // populate the vertices
                 for(int i = 0;i<list.count()-2;i++)
                      QTextStream(&list[i+2])>>vertex[i];
 
+                // add the node to the premises
                 AddNode(new Node(new QVector3D(vertex[0],vertex[1],vertex[2])));
-                //temp_vertices.push_back(QVector3D(vertex[0],vertex[1],vertex[2]));
-            }else
-               if(list[0]=="j")
-                {
-                    int uv[list.count()];
+
+            } else
+            if(list[0]=="j")
+             {
+                   // this is only the indices that should be join
+                    int uv[2];
+
+                    // populate the indices
                     for(int i = 0;i<list.count()-1;i++)
                          QTextStream(&list[i+1])>>uv[i];
+
+                    // add the links
                     AddNodeLinkbyIndex(uv[0],uv[1]);
-                    //temp_uvs.push_back(QPoint(uv[0],uv[1]));
-                }
+             }
+            // read next line
            line = ascread.readLine();
         }
+
+        // close the textfile
         textfile.close();
     }
 }
