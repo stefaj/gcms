@@ -18,10 +18,10 @@
 
 bool ModelMesh::LoadOBJ(QString file)
  {
-    vertices.clear();
-    textureCoordinates.clear();
-    normals.clear();
-    vertexIndices.clear();
+    m_vertices.clear();
+    m_textureCoordinates.clear();
+    m_normals.clear();
+    m_vertexIndices.clear();
     QVector< QVector3D > temp_vertices;
     QVector< QVector2D > temp_uvs;
     QVector< QVector3D > temp_normals;
@@ -70,9 +70,9 @@ bool ModelMesh::LoadOBJ(QString file)
                             }
                             for(int j = 0;j<3;j++)
                             {
-                            vertexIndices.push_back(vertexIndex[j]);
-                            uvIndices.push_back(uvIndex[j]);
-                            normalIndices.push_back(normalIndex[j]);
+                            m_vertexIndices.push_back(vertexIndex[j]);
+                            m_uvIndices.push_back(uvIndex[j]);
+                            m_normalIndices.push_back(normalIndex[j]);
                             }
                         }
             line = ascread.readLine();
@@ -80,37 +80,37 @@ bool ModelMesh::LoadOBJ(QString file)
          textfile.close();
     }
     // For each vertex of each triangle
-    for( int i=0; i<vertexIndices.size(); i++ ){
-        int vertexIndex = vertexIndices[i];
+    for( int i=0; i<m_vertexIndices.size(); i++ ){
+        int vertexIndex = m_vertexIndices[i];
         QVector3D vertex = temp_vertices[ vertexIndex-1 ];
-        vertices.push_back(vertex);
+        m_vertices.push_back(vertex);
     }
     /*for( int i=0; i<temp_vertices.size(); i++ ){
         vertices.push_back(temp_vertices[i]);
     }*/
     // For each vertex of each triangle
-    for( int i=0; i<uvIndices.size(); i++ ){
-        int uvIndex = uvIndices[i];
+    for( int i=0; i<m_uvIndices.size(); i++ ){
+        int uvIndex = m_uvIndices[i];
         QVector2D uvs = temp_uvs[ uvIndex-1 ];
-        textureCoordinates.push_back(uvs);
+        m_textureCoordinates.push_back(uvs);
     }
     // For each vertex of each triangle
-    for( int k=0; k<normalIndices.size(); k++ ){
-        int normalIndex = normalIndices[k]-1;
+    for( int k=0; k<m_normalIndices.size(); k++ ){
+        int normalIndex = m_normalIndices[k]-1;
          QVector3D normal = temp_normals[normalIndex];
-         normals.push_back(normal);
+         m_normals.push_back(normal);
     }
     return true;
  }
 
 ModelMesh::~ModelMesh()
 {
-   textureCoordinates.detach();
-   vertices.detach();
-   normals.detach();
-   vertexIndices.detach();
-   uvIndices.detach();
-   normalIndices.detach();
+   m_textureCoordinates.detach();
+   m_vertices.detach();
+   m_normals.detach();
+   m_vertexIndices.detach();
+   m_uvIndices.detach();
+   m_normalIndices.detach();
 }
 
 ModelMesh::ModelMesh(QString file)
@@ -121,6 +121,6 @@ ModelMesh::ModelMesh(QString file)
 void ModelMesh::Draw()
 {
     // Draw the vertices as triangles, not linked triangles, each triangle is seperated from the other
-    glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+    glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
     //glDrawElements(GL_TRIANGLES,vertexIndices.size()*3,GL_INT,vertexIndices.constData());
 }
