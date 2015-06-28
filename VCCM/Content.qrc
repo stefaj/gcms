@@ -12,6 +12,7 @@
         <file alias="Node">VCCMContent/sphere.obj</file>
         <file alias="Premises">VCCMContent/Premises.pvc</file>
         <file alias="Plane">VCCMContent/plane.obj</file>
-        <file alias="AddButton">VCCMQML/addbutton.js</file>
+        <file>addbutton.js</file>
+        <file>VCCMQML/Cell.qml</file>
     </qresource>
 </RCC>

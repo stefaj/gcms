@@ -29,8 +29,7 @@ RESOURCES += \
 
 OTHER_FILES += \
     VCCMContent/mainFrag.frag \
-    VCCMContent/mainVert.vert \
-    VCCMQML/addbutton.js
+    VCCMContent/mainVert.vert
 
 DISTFILES += \
     VCCMContent/Premises.pvc
