@@ -45,7 +45,7 @@ void main()
 
     // use a default light direction this can be changed later
     /* may change later */
-    vec3 lightdir = vec3(-0.707,-0.707,-0.707);
+    vec3 lightdir = vec3(0,-0.707,0);
 
     // calculate -N*L (blinn)
     float ndotl = -dot(normalize(normals),lightdir)+0.5;

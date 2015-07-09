@@ -25,6 +25,7 @@ Node::Node()
     m_links = false;
     m_nshortest = 0;
     m_g = 10000000.0;
+    m_lastindex = 0;
 }
 
 Node::Node(QVector3D * Position)
@@ -82,6 +83,20 @@ void Node::AddLink(QString *Name, int index)
     m_connected.push_back(Name);
     m_connectedindex.push_back(index);
     m_links = true;
+}
+
+void Node::RemoveLinkedFromIndex(int index)
+{
+    m_connected.removeAt(index);
+    m_connectedindex.removeAt(index);
+    if(m_connected.count()<1)
+        m_links = false;
+}
+void Node::MoveLinkedIndexBack(int index)
+{
+    // replace the specific index
+    if(m_connectedindex.value(index)>0)
+    m_connectedindex.replace(index,m_connectedindex.value(index)-1);
 }
 
 QVector3D Node::Position()

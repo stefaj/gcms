@@ -4,35 +4,54 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     m_program(0),
     m_mouse_x(0),
     m_mouse_y(0),
+    m_node_index_selected(-1),
     m_mouse_zoom(60.0f),
     m_position_camera(QVector3D()),
     m_camera_prev(QVector3D()),
     m_raycast(QVector3D()),
-    m_mousedown_right(false)
+    m_mousedown_right(false),
+    m_mousedown_left(false),
+    m_node_placable(false)
 {
-    // enable antialiasing
+    // enable antialiasing (set the format of the widget)
     QSurfaceFormat format;
-   // format.setDepthBufferSize(24);
     format.setSamples(4);
-   // format.setStencilBufferSize(8);
-  //  format.setVersion(3, 2);
-    //format.setProfile(QSurfaceFormat::CoreProfile);
     this->setFormat(format);
-    m_clicked_position = new QVector3D(0,0,0);
+
+    // initialize the clicked position
+    m_clicked_position = new QVector3D();
+
     // set the current mouse position in 3D
-    m_current_position = new QVector3D(0,0,0);
+    m_current_position = new QVector3D();
 
     // clear the textures
     m_textures.clear();
 
     // set the position to initial null vector
-    m_position = new QVector3D(0,0,0);
+    m_position = new QVector3D();
 
     // clear the nodes
     m_nodes.clear();
 
     // set mouse tracking
     setMouseTracking(true);
+
+
+}
+
+void RenderState::allow_node(bool value)
+{
+     m_node_placable=value;
+}
+
+void RenderState::allow_remove(bool value)
+{
+    m_node_removable = value;
+}
+
+void RenderState::allow_link(bool value)
+{
+    m_node_linkable = value;
 }
 
 void RenderState::initializeGL()
@@ -55,46 +74,147 @@ void RenderState::mouseMoveEvent(QMouseEvent *event)
     // alert mouse event's position (x)
     m_mouse_y = event->y();
 
+    // update raycast vector
     m_raycast = mouseRayCast(m_mouse_x, m_mouse_y, vMatrix);
+
     if(m_mousedown_right)
     {
         m_position_camera.setX(m_clicked_position->x()-m_current_position->x());
         m_position_camera.setY(m_clicked_position->y()-m_current_position->y());
         m_position_camera.setZ(m_clicked_position->z()-m_current_position->z());
+
         // pan view
         m_camera_prev.setX(m_camera_prev.x()-m_position_camera.x());
         m_camera_prev.setY(m_camera_prev.y()-m_position_camera.y());
         m_camera_prev.setZ(m_camera_prev.z()-m_position_camera.z());
-    m_position_camera = QVector3D();
+        m_position_camera = QVector3D();
 
+    }
+
+    // removable dragable nodes
+    if(m_mousedown_left&&m_node_removable)
+    {
+//        // remove when draged
+//        for(int l = 0;l<m_nodes.count();l++)
+//        {
+//            if(m_current_position->distanceToPoint(m_nodes.value(l)->Position())<0.5f)
+//            {
+//                // remove node
+//                m_nodes.removeAt(l);
+
+//                // remove all dependencies
+//                foreach(Node *n, m_nodes)
+//                {
+//                    for(int z = 0; z < n->countConnected(); z++)
+//                    {
+//                        if(n->getConnectedIndex(z)==l)
+//                            qDebug()<<z;
+//                        //    n->RemoveLinkedFromIndex(z);
+//                    }
+//                }
+//            }
+//        }
     }
     // update openGL widget
     update();
 }
 void RenderState::mouseReleaseEvent(QMouseEvent *)
 {
-
-
+    // release button right click
+    if(m_mousedown_right)
     m_mousedown_right = false;
-update();
+
+    // remove button left click
+    if(m_mousedown_left)
+    {
+        m_mousedown_left = false;
+        if(m_node_linkable)
+        {
+            int linkindex = -1;
+            // get position of the clicked
+            m_clicked_position = new QVector3D(m_current_position->x(),m_current_position->y(),m_current_position->z());
+
+            // collision detection
+            for(int l = 0;l<m_nodes.count();l++)
+            {
+                if(m_clicked_position->distanceToPoint(m_nodes.value(l)->Position())<0.5f)
+                    linkindex = l;
+            }
+            if((linkindex>-1)&&(m_node_index_selected>-1)&&(m_node_index_selected<m_nodes.count()))
+            {
+                m_nodes.value(m_node_index_selected)->AddLink(new QString("Link"+QString::number(m_nodes.value(m_node_index_selected)->countConnected())),linkindex);
+            }
+        }
+    }
+
+
+    update();
 }
 
 void RenderState::mousePressEvent(QMouseEvent *event)
 {
+    // left click to add the node
+    if((event->button() == Qt::LeftButton)&&(m_node_placable))
+        add_node(new QString("pewpew"+QString::number(m_nodes.count())));
 
+    // right click to move the camara around
+    if(event->button() == Qt::RightButton)
+    {
+        m_mousedown_right = true;
+        m_clicked_position = new QVector3D(m_current_position->x(), m_current_position->y(), m_current_position->z());
+    }
 
-    if(event->button() == Qt::LeftButton)
-    add_node(new QString("pewpew"+QString::number(m_nodes.count())));
-    else
-        if(event->button() == Qt::RightButton)
+    // left click to remove the node
+    if((event->button() == Qt::LeftButton)&&(m_node_removable))
+    {
+        // make dragable from left click
+        m_mousedown_left = true;
+
+        // collision detection
+        for(int l = 0;l<m_nodes.count();l++)
         {
-            m_mousedown_right = true;
+            if(m_current_position->distanceToPoint(m_nodes.value(l)->Position())<0.5f)
+            {              // remove node
+                qDebug()<<m_nodes;
+                m_nodes.removeAt(l);
+                qDebug()<<m_nodes;
+                // remove all dependencies
+                for(int i = 0;i<m_nodes.count();i++)
+                {
+                    for(int z = 0; z<m_nodes.value(i)->countConnected();z++)
+                    {
+                        if(m_nodes.value(i)->getConnectedIndex(z)==l)
+                            m_nodes.value(i)->RemoveLinkedFromIndex(z);
+                    }
+                    for(int k = 0; k<m_nodes.value(i)->countConnected();k++)
+                    {
+                        if(m_nodes.value(i)->getConnectedIndex(k)>l)
+                            m_nodes.value(i)->MoveLinkedIndexBack(k);
+                    }
+                }
 
-            m_clicked_position = new QVector3D(m_current_position->x(),m_current_position->y(),m_current_position->z());
 
+            }
         }
-//    if(!m_mousedown_right)
-//    update();
+    }
+
+    // left click to add the link
+    if((event->button() == Qt::LeftButton)&&(m_node_linkable))
+    {
+        // make dragable from left click
+        m_mousedown_left = true;
+
+        // get position of the clicked
+        m_clicked_position = new QVector3D(m_current_position->x(),m_current_position->y(),m_current_position->z());
+
+        // collision detection
+        for(int l = 0;l<m_nodes.count();l++)
+        {
+            if(m_clicked_position->distanceToPoint(m_nodes.value(l)->Position())<0.5f)
+                m_node_index_selected = l;
+        }
+
+    }
 
 }
 
@@ -172,9 +292,7 @@ void RenderState::paintGL()
     // rotation in the y - axis
    // cameraTransformation.rotate(0, 0, 1, 0);
     // rotation in the x - axis
-
     cameraTransformation.rotate(-90, 1, 0, 0);
-
     // transform the camera's position with respect to the rotation matrix
     QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, m_mouse_zoom) ;
     // define the direction of the camera's up vector
@@ -192,20 +310,59 @@ void RenderState::paintGL()
 
     // draw line if right clicked
     if(m_mousedown_right)
-    DrawLine(*m_clicked_position, *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,0,0));
+    DrawLine(*m_clicked_position, *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
 
+    // draw left clicked line(s)
+    if((m_node_linkable)&&(m_mousedown_left)&&(m_node_index_selected>-1)&&(m_node_index_selected<m_nodes.count()))
+    {
+        QVector3D aux_calc_one, aux_calc_two, aux_angle;
+        QMatrix4x4 aux_rotate, aux_45;
+        aux_angle = m_nodes.value(m_node_index_selected)->Position() - *m_current_position;
+        aux_angle.setY(0);
+
+        // get the angle from the arccos function
+        if(aux_angle.z()>0)
+        aux_rotate.rotate(45-180*acos(aux_angle.x()/aux_angle.length())/(3.141592),0,1,0);
+        else
+          aux_rotate.rotate(45+180*acos(aux_angle.x()/aux_angle.length())/(3.141592),0,1,0);
+
+        aux_45.rotate(90,0,1,0);
+        aux_calc_one = aux_rotate*(QVector3D(0,0,1));
+        aux_calc_two = aux_45*aux_rotate*(QVector3D(0,0,1));
+
+
+        DrawLine(m_nodes.value(m_node_index_selected)->Position(), *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
+        DrawLine((m_nodes.value(m_node_index_selected)->Position()+
+                 *m_current_position)/2.0,
+                 aux_calc_one+(m_nodes.value(m_node_index_selected)->Position()+
+                           *m_current_position)/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
+        DrawLine((m_nodes.value(m_node_index_selected)->Position()+
+                 *m_current_position)/2.0,
+                 aux_calc_two+(m_nodes.value(m_node_index_selected)->Position()+
+                           *m_current_position)/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
+    }
+
+    // draw all the nodes here
     foreach(Node *n, m_nodes)
     {
         QMatrix4x4 translation;
         translation.translate(n->Position());
-
         DrawModel(node, vMatrix, translation,QMatrix4x4(),QVector3D());
-
+        for(int i = 0;i <n->countConnected();i++)
+        {
+            if(n->getConnectedIndex(i)<m_nodes.count())
+            DrawLine(n->Position(), m_nodes.value(n->getConnectedIndex(i))->Position(), vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D());
+        }
     }
 
-    QMatrix4x4 translation;
-    translation.translate(Pos);
-    DrawModel(node, vMatrix,translation, QMatrix4x4(),QVector3D());
+
+    // draw drawable node
+    if(m_node_placable)
+    {
+        QMatrix4x4 translation;
+        translation.translate(Pos);
+        DrawModel(node, vMatrix,translation, QMatrix4x4(),QVector3D());
+    }
     // release the program for this frame
     m_program->release();
     // disable the cullmode for the frame

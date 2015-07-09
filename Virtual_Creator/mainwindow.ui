@@ -964,7 +964,7 @@ QDoubleSpinBox::down-arrow:off
       <x>20</x>
       <y>20</y>
       <width>201</width>
-      <height>71</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="title">
@@ -994,6 +994,19 @@ QDoubleSpinBox::down-arrow:off
      </property>
      <property name="text">
       <string>Link</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="button_remove">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>60</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Remove</string>
      </property>
     </widget>
    </widget>

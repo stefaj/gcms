@@ -30,6 +30,8 @@ public:
     void setColor(QVector3D *);
     int countConnected();
     int getConnectedIndex(int index);
+    void RemoveLinkedFromIndex(int);
+    void MoveLinkedIndexBack(int);
     QString getLinkedName(int);
     void clearPath();
     void addShortest(int);
@@ -48,6 +50,7 @@ private:
     int m_nshortest;
     double m_g;
     bool m_links;
+    int m_lastindex;
 };
 
 #endif // NODE_H

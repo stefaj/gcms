@@ -9,6 +9,7 @@
 #include <QMouseEvent>
 #include <QVector3D>
 #include <QTimer>
+#include <QtMath>
 #include "Objects/ModelMesh.h"
 #include "Objects/Node.h"
 
@@ -47,7 +48,7 @@ private:
               *wagen,
               *node,
               *m_plane;
-    int m_mouse_x, m_mouse_y, m_dmouse_x,m_dmouse_y;
+    int m_mouse_x, m_mouse_y, m_dmouse_x,m_dmouse_y,m_node_index_selected;
     float m_mouse_zoom;
     // define a view matrix
     QMatrix4x4 vMatrix;
@@ -59,9 +60,12 @@ private:
     // intersection with y=0
     QVector3D intersectYnull(QVector3D,QVector3D);
 
-    bool m_mousedown_right;
+    bool m_mousedown_right,m_mousedown_left, m_node_placable, m_node_removable, m_node_linkable;
 private slots:
     void add_node(QString *);
+    void allow_node(bool);
+    void allow_remove(bool);
+    void allow_link(bool);
 };
 
 #endif // RENDERSTATE_H
