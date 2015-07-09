@@ -17,12 +17,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     renderstate.cpp \
     Objects/ModelMesh.cpp \
-    Objects/Node.cpp
+    Objects/Node.cpp \
+    visualobject.cpp
 
 HEADERS  += mainwindow.h \
     renderstate.h \
     Objects/ModelMesh.h \
-    Objects/Node.h
+    Objects/Node.h \
+    visualobject.h
 
 FORMS    += mainwindow.ui
 

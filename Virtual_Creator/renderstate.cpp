@@ -6,12 +6,14 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     m_mouse_y(0),
     m_node_index_selected(-1),
     m_mouse_zoom(60.0f),
+    m_noderadius(0.5f),
     m_position_camera(QVector3D()),
     m_camera_prev(QVector3D()),
     m_raycast(QVector3D()),
     m_mousedown_right(false),
     m_mousedown_left(false),
-    m_node_placable(false)
+    m_node_placable(false),
+    m_pavement_placable(false)
 {
     // enable antialiasing (set the format of the widget)
     QSurfaceFormat format;
@@ -32,6 +34,9 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
 
     // clear the nodes
     m_nodes.clear();
+
+    // clear visual objects
+    m_models.clear();
 
     // set mouse tracking
     setMouseTracking(true);
@@ -54,15 +59,23 @@ void RenderState::allow_link(bool value)
     m_node_linkable = value;
 }
 
+void RenderState::allow_pavement(bool value)
+{
+    m_pavement_placable = value;
+}
+
 void RenderState::initializeGL()
 {
     initializeOpenGLFunctions();
 
      // texture test
-    QOpenGLTexture *texture = new QOpenGLTexture(QImage("://Texture0").mirrored());
+    for(int i = 0;i<2;i++)
+    {
+    QOpenGLTexture *texture = new QOpenGLTexture(QImage("://Texture"+QString::number(i)).mirrored());
     texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
     texture->setMagnificationFilter(QOpenGLTexture::Linear);
-    m_textures.append(texture);
+    m_textures.push_back(texture);
+    }
 }
 
 void RenderState::mouseMoveEvent(QMouseEvent *event)
@@ -94,26 +107,32 @@ void RenderState::mouseMoveEvent(QMouseEvent *event)
     // removable dragable nodes
     if(m_mousedown_left&&m_node_removable)
     {
-//        // remove when draged
-//        for(int l = 0;l<m_nodes.count();l++)
-//        {
-//            if(m_current_position->distanceToPoint(m_nodes.value(l)->Position())<0.5f)
-//            {
-//                // remove node
-//                m_nodes.removeAt(l);
 
-//                // remove all dependencies
-//                foreach(Node *n, m_nodes)
-//                {
-//                    for(int z = 0; z < n->countConnected(); z++)
-//                    {
-//                        if(n->getConnectedIndex(z)==l)
-//                            qDebug()<<z;
-//                        //    n->RemoveLinkedFromIndex(z);
-//                    }
-//                }
-//            }
-//        }
+        // collision detection
+        for(int l = 0;l<m_nodes.count();l++)
+        {
+            if(m_current_position->distanceToPoint(m_nodes.value(l)->Position())<m_noderadius)
+            {
+                // remove node
+                m_nodes.removeAt(l);
+                // remove all dependencies
+                for(int i = 0;i<m_nodes.count();i++)
+                {
+                    for(int z = 0; z<m_nodes.value(i)->countConnected();z++)
+                    {
+                        if(m_nodes.value(i)->getConnectedIndex(z)==l)
+                            m_nodes.value(i)->RemoveLinkedFromIndex(z);
+                    }
+                    for(int k = 0; k<m_nodes.value(i)->countConnected();k++)
+                    {
+                        if(m_nodes.value(i)->getConnectedIndex(k)>l)
+                            m_nodes.value(i)->MoveLinkedIndexBack(k);
+                    }
+                }
+
+
+            }
+        }
     }
     // update openGL widget
     update();
@@ -137,17 +156,18 @@ void RenderState::mouseReleaseEvent(QMouseEvent *)
             // collision detection
             for(int l = 0;l<m_nodes.count();l++)
             {
-                if(m_clicked_position->distanceToPoint(m_nodes.value(l)->Position())<0.5f)
+                if(m_clicked_position->distanceToPoint(m_nodes.value(l)->Position())<m_noderadius)
                     linkindex = l;
             }
             if((linkindex>-1)&&(m_node_index_selected>-1)&&(m_node_index_selected<m_nodes.count()))
             {
+                // add a link to the node
                 m_nodes.value(m_node_index_selected)->AddLink(new QString("Link"+QString::number(m_nodes.value(m_node_index_selected)->countConnected())),linkindex);
             }
         }
     }
 
-
+    // update the frame
     update();
 }
 
@@ -156,6 +176,11 @@ void RenderState::mousePressEvent(QMouseEvent *event)
     // left click to add the node
     if((event->button() == Qt::LeftButton)&&(m_node_placable))
         add_node(new QString("pewpew"+QString::number(m_nodes.count())));
+
+    // left click to add pavement
+    if((event->button() == Qt::LeftButton)&&(m_pavement_placable))
+        add_pavement(m_plane,*m_current_position,*m_current_position);
+
 
     // right click to move the camara around
     if(event->button() == Qt::RightButton)
@@ -173,11 +198,10 @@ void RenderState::mousePressEvent(QMouseEvent *event)
         // collision detection
         for(int l = 0;l<m_nodes.count();l++)
         {
-            if(m_current_position->distanceToPoint(m_nodes.value(l)->Position())<0.5f)
-            {              // remove node
-                qDebug()<<m_nodes;
+            if(m_current_position->distanceToPoint(m_nodes.value(l)->Position())<m_noderadius)
+            {
+                // remove node
                 m_nodes.removeAt(l);
-                qDebug()<<m_nodes;
                 // remove all dependencies
                 for(int i = 0;i<m_nodes.count();i++)
                 {
@@ -210,7 +234,7 @@ void RenderState::mousePressEvent(QMouseEvent *event)
         // collision detection
         for(int l = 0;l<m_nodes.count();l++)
         {
-            if(m_clicked_position->distanceToPoint(m_nodes.value(l)->Position())<0.5f)
+            if(m_clicked_position->distanceToPoint(m_nodes.value(l)->Position())<m_noderadius)
                 m_node_index_selected = l;
         }
 
@@ -236,6 +260,12 @@ void RenderState::add_node(QString *name)
 
     // add new node to vector
     m_nodes.push_back(newnode);
+}
+void RenderState::add_pavement(ModelMesh * model, QVector3D rotation, QVector3D translation)
+{
+    // texture index 1 is the tile
+    VisualObject * object = new VisualObject(model,m_textures.value(1),translation,rotation);
+    m_models.push_back(object);
 }
 
 void RenderState::resizeGL(int w, int h)
@@ -303,6 +333,7 @@ void RenderState::paintGL()
 
     // return the position of the ray intersection with the y-axis
     QVector3D Pos  = intersectYnull(m_raycast, QVector3D(0, m_mouse_zoom, 0)-m_camera_prev );
+
     // update current position
     m_current_position->setX(Pos.x());
     m_current_position->setZ(Pos.z());
@@ -331,37 +362,78 @@ void RenderState::paintGL()
         aux_calc_two = aux_45*aux_rotate*(QVector3D(0,0,1));
 
 
-        DrawLine(m_nodes.value(m_node_index_selected)->Position(), *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
+        DrawLine(m_nodes.value(m_node_index_selected)->Position(), *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,0));
         DrawLine((m_nodes.value(m_node_index_selected)->Position()+
                  *m_current_position)/2.0,
                  aux_calc_one+(m_nodes.value(m_node_index_selected)->Position()+
-                           *m_current_position)/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
+                           *m_current_position)/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,0));
         DrawLine((m_nodes.value(m_node_index_selected)->Position()+
                  *m_current_position)/2.0,
                  aux_calc_two+(m_nodes.value(m_node_index_selected)->Position()+
-                           *m_current_position)/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
+                           *m_current_position)/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,0));
     }
 
     // draw all the nodes here
+
     foreach(Node *n, m_nodes)
     {
         QMatrix4x4 translation;
         translation.translate(n->Position());
-        DrawModel(node, vMatrix, translation,QMatrix4x4(),QVector3D());
+        DrawModel(node, vMatrix, translation,QMatrix4x4(),m_textures.value(0),QVector3D());
         for(int i = 0;i <n->countConnected();i++)
         {
             if(n->getConnectedIndex(i)<m_nodes.count())
-            DrawLine(n->Position(), m_nodes.value(n->getConnectedIndex(i))->Position(), vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D());
+            {
+                QVector3D aux_calc_one, aux_calc_two, aux_angle;
+                QMatrix4x4 aux_rotate, aux_45;
+                aux_angle = n->Position() - m_nodes.value(n->getConnectedIndex(i))->Position();
+                aux_angle.setY(0);
+
+                // get the angle from the arccos function
+                if(aux_angle.z()>0)
+                aux_rotate.rotate(45-180*acos(aux_angle.x()/aux_angle.length())/(3.141592),0,1,0);
+                else
+                  aux_rotate.rotate(45+180*acos(aux_angle.x()/aux_angle.length())/(3.141592),0,1,0);
+
+                aux_45.rotate(90,0,1,0);
+                aux_calc_one = aux_rotate*(QVector3D(0,0,1));
+                aux_calc_two = aux_45*aux_rotate*(QVector3D(0,0,1));
+
+
+                DrawLine(n->Position(), m_nodes.value(n->getConnectedIndex(i))->Position(), vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
+                DrawLine((n->Position()+
+                         m_nodes.value(n->getConnectedIndex(i))->Position())/2.0,
+                         aux_calc_one+(n->Position()+
+                                   m_nodes.value(n->getConnectedIndex(i))->Position())/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
+                DrawLine((n->Position()+
+                         m_nodes.value(n->getConnectedIndex(i))->Position())/2.0,
+                         aux_calc_two+(n->Position()+
+                                   m_nodes.value(n->getConnectedIndex(i))->Position())/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
+            }
+            //DrawLine(n->Position(), m_nodes.value(n->getConnectedIndex(i))->Position(), vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D());
         }
     }
 
+    foreach(VisualObject *object, m_models)
+    {
+        QMatrix4x4 translation;
+        translation.translate(object->getTranslation());
+        DrawModel(object->getModelMesh(), vMatrix, translation,QMatrix4x4(),object->getTexture(),QVector3D());
+    }
 
     // draw drawable node
     if(m_node_placable)
     {
         QMatrix4x4 translation;
         translation.translate(Pos);
-        DrawModel(node, vMatrix,translation, QMatrix4x4(),QVector3D());
+        DrawModel(node, vMatrix,translation, QMatrix4x4(),m_textures.value(0),QVector3D());
+    }
+
+    if(m_pavement_placable)
+    {
+        QMatrix4x4 translation;
+        translation.translate(Pos);
+        DrawModel(m_plane, vMatrix,translation, QMatrix4x4(),m_textures.value(1),QVector3D());
     }
     // release the program for this frame
     m_program->release();
@@ -373,13 +445,13 @@ void RenderState::paintGL()
     glFinish();
 }
 
-void RenderState::UpdateShaders(QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate/*, GLuint texture*/,QVector3D color)
+void RenderState::UpdateShaders(QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate, QOpenGLTexture * texture,QVector3D color)
 {
     // bind the current shader code
     m_program->bind();
 
     // bind the texture for the object
-    m_textures.value(0)->bind();
+    texture->bind();
 
     // update the colour of the object
     m_program->setUniformValue("col",color);
@@ -448,7 +520,7 @@ void RenderState::DrawLine(QVector3D point1, QVector3D point2,QMatrix4x4 wvp,QMa
      QVector< QVector3D > temp_vertices;
      temp_vertices.push_back(point1);
      temp_vertices.push_back(point2);
-    UpdateShaders(wvp, mvp, rotate/*, texture*/, color);
+    UpdateShaders(wvp, mvp, rotate,m_textures.value(0), color);
     const char *vert ="vertex";//= vertex.toStdString().c_str();// convert the qstring to c-string for opengl purposes
     //const char *textureCoordinate= "textureCoordinate";//= texCoord.toStdString().c_str();// convert the qstring to c-string for opengl purposes
     const char *normals = "normal";// convert the qstring to c-string for opengl purposes
@@ -466,9 +538,9 @@ void RenderState::DrawLine(QVector3D point1, QVector3D point2,QMatrix4x4 wvp,QMa
     temp_vertices.clear();
 }
 
-void RenderState::DrawModel(ModelMesh *box,QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate/*, GLuint texture*/,QVector3D color)
+void RenderState::DrawModel(ModelMesh *box,QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate,QOpenGLTexture *texture,QVector3D color)
  {
-     UpdateShaders(wvp, mvp, rotate/*, texture*/, color);
+     UpdateShaders(wvp, mvp, rotate,texture, color);
      ShaderDraw(box);
  }
 

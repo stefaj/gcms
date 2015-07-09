@@ -12,5 +12,7 @@
         <file alias="Texture0">Content/sky.png</file>
         <file alias="Sphere">Content/sphere.obj</file>
         <file>Content/untitled.obj</file>
+        <file alias="Tree01">Content/tree.obj</file>
+        <file alias="Texture1">Content/tile.png</file>
     </qresource>
 </RCC>
