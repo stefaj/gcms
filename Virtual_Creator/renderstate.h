@@ -49,26 +49,32 @@ private:
               *sky,
               *wagen,
               *node,
-              *m_plane;
+              *m_plane,
+              *m_wall,
+              *m_door;
     int m_mouse_x, m_mouse_y, m_dmouse_x,m_dmouse_y,m_node_index_selected;
     float m_mouse_zoom,m_noderadius;
     // define a view matrix
     QMatrix4x4 vMatrix;
     QVector3D *m_current_position;
-    QVector3D m_position_camera, m_camera_prev, m_raycast;
+    QVector3D m_position_camera, m_camera_prev, m_raycast, m_rotation;
     // raycasting prototype
     QVector3D mouseRayCast(int, int, QMatrix4x4);
     // intersection with y=0
     QVector3D intersectYnull(QVector3D,QVector3D);
-    bool m_mousedown_right,m_mousedown_left, m_node_placable, m_node_removable, m_node_linkable, m_pavement_placable;
-    void add_pavement(ModelMesh*,QVector3D,QVector3D);
+    bool m_mousedown_right,m_mousedown_left, m_node_placable, m_node_removable, m_node_linkable, m_pavement_placable,m_door_placeable,m_wall_placable;
+    void add_pavement(QVector3D,QVector3D);
+    void add_door(QVector3D,QVector3D);
+    void add_wall(QVector3D, QVector3D);
 private slots:
     void add_node(QString *);
     void allow_node(bool);
     void allow_remove(bool);
     void allow_link(bool);
     void allow_pavement(bool);
-
+    void allow_door(bool);
+    void allow_wall(bool);
+    void change_rotY(double);
 };
 
 #endif // RENDERSTATE_H

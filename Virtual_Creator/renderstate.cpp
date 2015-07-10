@@ -10,6 +10,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     m_position_camera(QVector3D()),
     m_camera_prev(QVector3D()),
     m_raycast(QVector3D()),
+    m_rotation(QVector3D()),
     m_mousedown_right(false),
     m_mousedown_left(false),
     m_node_placable(false),
@@ -64,12 +65,27 @@ void RenderState::allow_pavement(bool value)
     m_pavement_placable = value;
 }
 
+void RenderState::allow_door(bool value)
+{
+    m_door_placeable = value;
+}
+
+void RenderState::allow_wall(bool value)
+{
+    m_wall_placable = value;
+}
+
+void RenderState::change_rotY(double value)
+{
+    m_rotation.setY(value);
+}
+
 void RenderState::initializeGL()
 {
     initializeOpenGLFunctions();
 
      // texture test
-    for(int i = 0;i<2;i++)
+    for(int i = 0;i<4;i++)
     {
     QOpenGLTexture *texture = new QOpenGLTexture(QImage("://Texture"+QString::number(i)).mirrored());
     texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
@@ -179,8 +195,15 @@ void RenderState::mousePressEvent(QMouseEvent *event)
 
     // left click to add pavement
     if((event->button() == Qt::LeftButton)&&(m_pavement_placable))
-        add_pavement(m_plane,*m_current_position,*m_current_position);
+        add_pavement(m_rotation,*m_current_position);
 
+    // left click to add door
+    if((event->button() == Qt::LeftButton)&&(m_door_placeable))
+        add_door(m_rotation,*m_current_position);
+
+    // left click to add pavement
+    if((event->button() == Qt::LeftButton)&&(m_wall_placable))
+        add_wall(m_rotation,*m_current_position);
 
     // right click to move the camara around
     if(event->button() == Qt::RightButton)
@@ -216,8 +239,6 @@ void RenderState::mousePressEvent(QMouseEvent *event)
                             m_nodes.value(i)->MoveLinkedIndexBack(k);
                     }
                 }
-
-
             }
         }
     }
@@ -261,10 +282,24 @@ void RenderState::add_node(QString *name)
     // add new node to vector
     m_nodes.push_back(newnode);
 }
-void RenderState::add_pavement(ModelMesh * model, QVector3D rotation, QVector3D translation)
+void RenderState::add_pavement(QVector3D rotation, QVector3D translation)
 {
     // texture index 1 is the tile
-    VisualObject * object = new VisualObject(model,m_textures.value(1),translation,rotation);
+    VisualObject * object = new VisualObject(m_plane,m_textures.value(2),translation,rotation);
+    m_models.push_back(object);
+}
+
+void RenderState::add_wall(QVector3D rotation, QVector3D translation)
+{
+    // texture index 1 is the tile
+    VisualObject * object = new VisualObject(m_wall,m_textures.value(3),translation,rotation);
+    m_models.push_back(object);
+}
+
+void RenderState::add_door(QVector3D rotation, QVector3D translation)
+{
+    // texture index 1 is the tile
+    VisualObject * object = new VisualObject(m_door,m_textures.value(2),translation,rotation);
     m_models.push_back(object);
 }
 
@@ -277,7 +312,7 @@ void RenderState::resizeGL(int w, int h)
     pMatrix.setToIdentity();
 
     // set the projection matrix
-    pMatrix.perspective(45, (float) w / (float) h, 1.0f, 1000.0f);
+    pMatrix.perspective(10.65, (float) w / (float) h, 1.0f, 1000.0f);
 }
 void RenderState::LoadContent()
 {
@@ -289,6 +324,8 @@ void RenderState::LoadContent()
     sky= new ModelMesh(":/Sky");
     wagen = new ModelMesh(":/Cube");
     m_plane = new ModelMesh(":/Plane");
+    m_door = new ModelMesh("://Plane");
+    m_wall = new ModelMesh("://Plane");
 
     // load shaders
     m_program = new QOpenGLShaderProgram();
@@ -418,7 +455,9 @@ void RenderState::paintGL()
     {
         QMatrix4x4 translation;
         translation.translate(object->getTranslation());
-        DrawModel(object->getModelMesh(), vMatrix, translation,QMatrix4x4(),object->getTexture(),QVector3D());
+        QMatrix4x4 rotation;
+        rotation.rotate(object->getRotation().y(),0,1,0);
+        DrawModel(object->getModelMesh(), vMatrix, translation,rotation,object->getTexture(),QVector3D());
     }
 
     // draw drawable node
@@ -426,14 +465,39 @@ void RenderState::paintGL()
     {
         QMatrix4x4 translation;
         translation.translate(Pos);
-        DrawModel(node, vMatrix,translation, QMatrix4x4(),m_textures.value(0),QVector3D());
+        QMatrix4x4 rotation;
+        rotation.rotate(m_rotation.y(),0,1,0);
+        DrawModel(node, vMatrix,translation, rotation,m_textures.value(0),QVector3D());
     }
 
+    // draw placable tile
     if(m_pavement_placable)
     {
         QMatrix4x4 translation;
         translation.translate(Pos);
-        DrawModel(m_plane, vMatrix,translation, QMatrix4x4(),m_textures.value(1),QVector3D());
+        QMatrix4x4 rotation;
+        rotation.rotate(m_rotation.y(),0,1,0);
+        DrawModel(m_plane, vMatrix,translation, rotation,m_textures.value(2),QVector3D());
+    }
+
+    // draw placable door
+    if(m_door_placeable)
+    {
+        QMatrix4x4 translation;
+        translation.translate(Pos);
+        QMatrix4x4 rotation;
+        rotation.rotate(m_rotation.y(),0,1,0);
+        DrawModel(m_door, vMatrix,translation, rotation,m_textures.value(2),QVector3D());
+    }
+
+    // draw placable wall
+    if(m_wall_placable)
+    {
+        QMatrix4x4 translation;
+        translation.translate(Pos);
+        QMatrix4x4 rotation;
+        rotation.rotate(m_rotation.y(),0,1,0);
+        DrawModel(m_wall, vMatrix,translation,rotation,m_textures.value(3),QVector3D());
     }
     // release the program for this frame
     m_program->release();
