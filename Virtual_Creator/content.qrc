@@ -14,5 +14,8 @@
         <file>Content/untitled.obj</file>
         <file alias="Tree01">Content/tree.obj</file>
         <file alias="Texture1">Content/tile.png</file>
+        <file alias="Texture2">Content/brick_wall_basic.jpg</file>
+        <file alias="Texture3">Content/stone-wall-basic.jpg</file>
+        <file alias="Wall01">Content/wall.obj</file>
     </qresource>
 </RCC>

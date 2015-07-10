@@ -325,7 +325,7 @@ void RenderState::LoadContent()
     wagen = new ModelMesh(":/Cube");
     m_plane = new ModelMesh(":/Plane");
     m_door = new ModelMesh("://Plane");
-    m_wall = new ModelMesh("://Plane");
+    m_wall = new ModelMesh("://Wall01");
 
     // load shaders
     m_program = new QOpenGLShaderProgram();
