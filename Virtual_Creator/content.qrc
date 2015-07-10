@@ -17,5 +17,6 @@
         <file alias="Texture2">Content/brick_wall_basic.jpg</file>
         <file alias="Texture3">Content/stone-wall-basic.jpg</file>
         <file alias="Wall01">Content/wall.obj</file>
+        <file alias="DoorWay01">Content/doorway.obj</file>
     </qresource>
 </RCC>

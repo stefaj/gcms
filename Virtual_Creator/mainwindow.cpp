@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(place_pavement(bool)),ui->openGLWidget, SLOT(allow_pavement(bool)));
     connect(this, SIGNAL(place_wall(bool)),ui->openGLWidget, SLOT(allow_wall(bool)));
     connect(this, SIGNAL(place_door(bool)),ui->openGLWidget, SLOT(allow_door(bool)));
+    connect(this, SIGNAL(change_rotationY(double)),ui->openGLWidget,SLOT(change_rotY(double)));
 }
 
 MainWindow::~MainWindow()
@@ -100,4 +101,9 @@ void MainWindow::on_button_door_clicked()
     ui->button_wall->setChecked(false);
     EmitSignals();
 
+}
+
+void MainWindow::on_spin_rotationY_valueChanged(double arg1)
+{
+    change_rotationY(arg1);
 }

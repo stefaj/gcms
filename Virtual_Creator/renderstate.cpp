@@ -324,7 +324,7 @@ void RenderState::LoadContent()
     sky= new ModelMesh(":/Sky");
     wagen = new ModelMesh(":/Cube");
     m_plane = new ModelMesh(":/Plane");
-    m_door = new ModelMesh("://Plane");
+    m_door = new ModelMesh("://DoorWay01");
     m_wall = new ModelMesh("://Wall01");
 
     // load shaders

@@ -28,6 +28,8 @@ private slots:
 
     void on_button_door_clicked();
 
+    void on_spin_rotationY_valueChanged(double arg1);
+
 private:
     Ui::MainWindow *ui;
     void EmitSignals();
@@ -38,6 +40,7 @@ signals:
     void place_pavement(bool); // allow the placement of a node
     void place_wall(bool); // allows the placement of a wall
     void place_door(bool); // allows the placement of a wall
+    void change_rotationY(double);
 };
 
 #endif // MAINWINDOW_H
