@@ -58,7 +58,6 @@ QMainWindow::separator:vertical
 	border-left: 1px solid #393939;
 	border-right: 1px solid #959595;
 }
-
 QMainWindow::separator:hover
 {
     background: #686868;
@@ -68,9 +67,10 @@ QMainWindow::separator:hover
 QCheckBox 
 {
     spacing: 5px;
-   	border: 1px solid #242424;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #535353, stop:1 #373737);
-	max-width: 13px;
+   	/*border: 1px solid #242424;*/
+	/*background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #535353, stop:1 #686868);*/
+ 	background: transparent;
+	max-width: 200px;
     max-height: 13px;
 }
 
@@ -83,17 +83,17 @@ QCheckBox::indicator
 
 QCheckBox::indicator:checked
 {
-    image: url(:/checkbox_checked);
+    /*image: url(:/checkbox_checked);*/
 }
 
 QCheckBox::indicator:checked:hover
 {
-    image: url(:/checkbox_checked_hover);
+    /*image: url(:/checkbox_checked_hover);*/
 }
 
 QCheckBox::indicator:checked:pressed
 {
-    image: url(:/checkbox_checked_pressed);
+  /*  image: url(:/checkbox_checked_pressed);*/
 }
 
 /* Combobox */
@@ -1052,8 +1052,8 @@ QDoubleSpinBox::down-arrow:off
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>340</y>
+      <x>10</x>
+      <y>430</y>
       <width>231</width>
       <height>151</height>
      </rect>
@@ -1087,7 +1087,7 @@ QDoubleSpinBox::down-arrow:off
     <property name="title">
      <string>Transformations</string>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>11</x>
@@ -1115,6 +1115,38 @@ QDoubleSpinBox::down-arrow:off
        </widget>
       </item>
      </layout>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_4">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>340</y>
+      <width>221</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Accessibility</string>
+    </property>
+    <widget class="QCheckBox" name="checkBox_inversemouse_y">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>101</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>200</width>
+       <height>13</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Invert Mouse Y</string>
+     </property>
     </widget>
    </widget>
   </widget>

@@ -7,6 +7,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     m_node_index_selected(-1),
     m_mouse_zoom(60.0f),
     m_noderadius(0.5f),
+    m_mouse_y_inverted(1.0f),
     m_position_camera(QVector3D()),
     m_camera_prev(QVector3D()),
     m_raycast(QVector3D()),
@@ -48,6 +49,14 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
 void RenderState::allow_node(bool value)
 {
      m_node_placable=value;
+}
+
+void RenderState::invert_mouseY(bool value)
+{
+    if (value)
+        m_mouse_y_inverted = -1.0f;
+    else
+        m_mouse_y_inverted = 1.0f;
 }
 
 void RenderState::allow_remove(bool value)
@@ -613,7 +622,7 @@ QVector3D RenderState::mouseRayCast(int mx,
                                   QMatrix4x4 view_matrix)
 {
     float nx = (2.0f * mx) / this->width() - 1.0f; // normalize the x-mouse position
-    float ny = 1.0f - (2.0f * my) / this->height();// normalize the y-mouse position
+    float ny = m_mouse_y_inverted*(1.0f - (2.0f * my) / this->height());// normalize the y-mouse position
 
     QVector4D ray_clip = QVector4D(nx,ny,-1,1.0); // clip the x,y,z values between -1:1
     QMatrix4x4 pInverse = pMatrix.inverted(NULL);// invert the projection

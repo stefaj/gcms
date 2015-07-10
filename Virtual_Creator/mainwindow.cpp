@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(place_wall(bool)),ui->openGLWidget, SLOT(allow_wall(bool)));
     connect(this, SIGNAL(place_door(bool)),ui->openGLWidget, SLOT(allow_door(bool)));
     connect(this, SIGNAL(change_rotationY(double)),ui->openGLWidget,SLOT(change_rotY(double)));
+    connect(this,SIGNAL(invert_mouseY(bool)),ui->openGLWidget,SLOT(invert_mouseY(bool)));
 }
 
 MainWindow::~MainWindow()
@@ -106,4 +107,9 @@ void MainWindow::on_button_door_clicked()
 void MainWindow::on_spin_rotationY_valueChanged(double arg1)
 {
     change_rotationY(arg1);
+}
+
+void MainWindow::on_checkBox_inversemouse_y_clicked(bool checked)
+{
+ emit invert_mouseY(checked);
 }
