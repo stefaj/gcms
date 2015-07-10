@@ -24,6 +24,10 @@ private slots:
 
     void on_button_pavement_clicked();
 
+    void on_button_wall_clicked();
+
+    void on_button_door_clicked();
+
 private:
     Ui::MainWindow *ui;
     void EmitSignals();
@@ -31,7 +35,9 @@ signals:
     void place_node(bool); // allows a node to be placed
     void node_links(bool); // allow nodes to be linkeds
     void remove_nodes(bool); // allow nodes to be destroyed
-    void place_pavement(bool);
+    void place_pavement(bool); // allow the placement of a node
+    void place_wall(bool); // allows the placement of a wall
+    void place_door(bool); // allows the placement of a wall
 };
 
 #endif // MAINWINDOW_H
