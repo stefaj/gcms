@@ -199,17 +199,18 @@ QFrame
 QGroupBox
  {
      border: 1px solid #3a3a3a;
-     background: #808080;
+     background: #727272;
      border-radius: 5px;
-     margin-top: 13px;
+     margin-top: 20px;
  }
 
 QGroupBox::title
 {
-     subcontrol-origin: margin; 
+     subcontrol-origin: margin;
      subcontrol-position: top left;
-     padding: 0px 10px;
+     padding: 0px 0px;
      color: #0b0b0b;
+     background-color: transparent;
 }
 
 /* Header for ... */
@@ -900,15 +901,15 @@ QDoubleSpinBox::up-button:pressed
 
 QDoubleSpinBox::up-arrow
 {
-     image: url(:/arrow_up);
+    /* image: url(:/arrow_up);*/
      width: 11px;
      height: 6px;
 }
 
-QDoubleSpinBox::up-arrow:disabled, QDoubleSpinBox::up-arrow:off
-{ /* off state when value is max */
+/*QDoubleSpinBox::up-arrow:disabled, QDoubleSpinBox::up-arrow:off
+{  off state when value is max 
     image: url(:/arrow_up);
-}
+}*/
 
 QDoubleSpinBox::down-button
 {
@@ -951,9 +952,9 @@ QDoubleSpinBox::down-arrow:off
    <widget class="RenderState" name="openGLWidget">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>390</x>
       <y>40</y>
-      <width>661</width>
+      <width>561</width>
       <height>531</height>
      </rect>
     </property>
@@ -963,191 +964,149 @@ QDoubleSpinBox::down-arrow:off
      <rect>
       <x>20</x>
       <y>20</y>
-      <width>231</width>
+      <width>341</width>
       <height>211</height>
      </rect>
     </property>
     <property name="title">
      <string>Objects</string>
     </property>
-    <widget class="QPushButton" name="button_node">
-     <property name="geometry">
-      <rect>
-       <x>11</x>
-       <y>24</y>
-       <width>91</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Add Node</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="button_link">
-     <property name="geometry">
-      <rect>
-       <x>11</x>
-       <y>48</y>
-       <width>91</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Add Link</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="button_tree1">
-     <property name="geometry">
-      <rect>
-       <x>11</x>
-       <y>72</y>
-       <width>91</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Add Tree</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="button_pavement">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>100</y>
-       <width>91</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Add Pavement</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="button_wall">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>120</y>
-       <width>91</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Add Wall</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="button_door">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>140</y>
-       <width>91</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Add Door</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_2">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>430</y>
-      <width>231</width>
-      <height>151</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Remove</string>
-    </property>
-    <widget class="QPushButton" name="button_remove">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>30</y>
-       <width>79</width>
-       <height>16</height>
+       <width>141</width>
+       <height>170</height>
       </rect>
      </property>
-     <property name="text">
-      <string>Remove Node</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_3">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>250</y>
-      <width>231</width>
-      <height>80</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Transformations</string>
-    </property>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>11</x>
-       <y>31</y>
-       <width>201</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QLabel" name="label">
+       <widget class="QPushButton" name="button_node">
         <property name="text">
-         <string>Rotation Y:</string>
+         <string>Add Node</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="spin_rotationY">
-        <property name="minimum">
-         <double>-180.000000000000000</double>
+       <widget class="QPushButton" name="button_link">
+        <property name="text">
+         <string>Add Link</string>
         </property>
-        <property name="maximum">
-         <double>180.000000000000000</double>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="button_tree1">
+        <property name="text">
+         <string>Add Tree</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="button_pavement">
+        <property name="text">
+         <string>Add Pavement</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="button_wall">
+        <property name="text">
+         <string>Add Wall</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="button_door">
+        <property name="text">
+         <string>Add Door</string>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="groupBox_4">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>340</y>
-      <width>231</width>
-      <height>80</height>
+      <x>21</x>
+      <y>251</y>
+      <width>341</width>
+      <height>197</height>
      </rect>
     </property>
-    <property name="title">
-     <string>Accessibility</string>
-    </property>
-    <widget class="QCheckBox" name="checkBox_inversemouse_y">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>101</width>
-       <height>13</height>
-      </rect>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>200</width>
-       <height>13</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Invert Mouse Y</string>
-     </property>
-    </widget>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QGroupBox" name="groupBox_3">
+       <property name="title">
+        <string>Transformations</string>
+       </property>
+       <layout class="QFormLayout" name="formLayout">
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Rotation Y:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="spin_rotationY">
+            <property name="minimum">
+             <double>-180.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>180.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox_4">
+       <property name="title">
+        <string>Configuration</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="checkBox_inversemouse_y">
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>13</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Invert Mouse Y</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="title">
+        <string>Remove</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <widget class="QPushButton" name="button_remove">
+          <property name="text">
+           <string>Remove Node</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+       <zorder>button_remove</zorder>
+       <zorder>openGLWidget</zorder>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
  </widget>
