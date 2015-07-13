@@ -32,6 +32,8 @@ private slots:
 
     void on_checkBox_inversemouse_y_clicked(bool checked);
 
+    void on_button_tree1_clicked();
+
 private:
     Ui::MainWindow *ui;
     void EmitSignals();
@@ -43,6 +45,7 @@ signals:
     void place_wall(bool); // allows the placement of a wall
     void place_door(bool); // allows the placement of a wall
     void change_rotationY(double); // changes the rotation in Y direction
+    void place_tree(bool); // allows the placement of a basic tree
     void invert_mouseY(bool);
 };
 

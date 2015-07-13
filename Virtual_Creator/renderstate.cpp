@@ -15,7 +15,8 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     m_mousedown_right(false),
     m_mousedown_left(false),
     m_node_placable(false),
-    m_pavement_placable(false)
+    m_pavement_placable(false),
+    m_tree_placable(false)
 {
     // enable antialiasing (set the format of the widget)
     QSurfaceFormat format;
@@ -82,6 +83,11 @@ void RenderState::allow_door(bool value)
 void RenderState::allow_wall(bool value)
 {
     m_wall_placable = value;
+}
+
+void RenderState::allow_tree(bool value)
+{
+    m_tree_placable = value;
 }
 
 void RenderState::change_rotY(double value)
@@ -214,6 +220,10 @@ void RenderState::mousePressEvent(QMouseEvent *event)
     if((event->button() == Qt::LeftButton)&&(m_wall_placable))
         add_wall(m_rotation,*m_current_position);
 
+    // left click to add tree
+    if((event->button() == Qt::LeftButton)&&(m_tree_placable))
+        add_tree(m_rotation,*m_current_position);
+
     // right click to move the camara around
     if(event->button() == Qt::RightButton)
     {
@@ -291,10 +301,18 @@ void RenderState::add_node(QString *name)
     // add new node to vector
     m_nodes.push_back(newnode);
 }
+
 void RenderState::add_pavement(QVector3D rotation, QVector3D translation)
 {
     // texture index 1 is the tile
     VisualObject * object = new VisualObject(m_plane,m_textures.value(2),translation,rotation);
+    m_models.push_back(object);
+}
+
+void RenderState::add_tree(QVector3D rotation, QVector3D translation)
+{
+    // texture index 1 is the tile
+    VisualObject * object = new VisualObject(m_tree,m_textures.value(2),translation,rotation);
     m_models.push_back(object);
 }
 
@@ -335,6 +353,7 @@ void RenderState::LoadContent()
     m_plane = new ModelMesh(":/Plane");
     m_door = new ModelMesh("://DoorWay01");
     m_wall = new ModelMesh("://Wall01");
+    m_tree = new ModelMesh("://Tree01");
 
     // load shaders
     m_program = new QOpenGLShaderProgram();
@@ -469,45 +488,17 @@ void RenderState::paintGL()
         DrawModel(object->getModelMesh(), vMatrix, translation,rotation,object->getTexture(),QVector3D());
     }
 
-    // draw drawable node
-    if(m_node_placable)
-    {
-        QMatrix4x4 translation;
-        translation.translate(Pos);
-        QMatrix4x4 rotation;
-        rotation.rotate(m_rotation.y(),0,1,0);
-        DrawModel(node, vMatrix,translation, rotation,m_textures.value(0),QVector3D());
-    }
-
+    // draw placable node
+    draw_if_true(node, vMatrix,Pos,m_rotation,m_textures.value(0),QVector3D(),m_node_placable);
     // draw placable tile
-    if(m_pavement_placable)
-    {
-        QMatrix4x4 translation;
-        translation.translate(Pos);
-        QMatrix4x4 rotation;
-        rotation.rotate(m_rotation.y(),0,1,0);
-        DrawModel(m_plane, vMatrix,translation, rotation,m_textures.value(2),QVector3D());
-    }
-
+    draw_if_true(m_plane, vMatrix,Pos,m_rotation,m_textures.value(2),QVector3D(),m_pavement_placable);
     // draw placable door
-    if(m_door_placeable)
-    {
-        QMatrix4x4 translation;
-        translation.translate(Pos);
-        QMatrix4x4 rotation;
-        rotation.rotate(m_rotation.y(),0,1,0);
-        DrawModel(m_door, vMatrix,translation, rotation,m_textures.value(2),QVector3D());
-    }
-
+    draw_if_true(m_door, vMatrix,Pos,m_rotation,m_textures.value(2),QVector3D(),m_door_placeable);
     // draw placable wall
-    if(m_wall_placable)
-    {
-        QMatrix4x4 translation;
-        translation.translate(Pos);
-        QMatrix4x4 rotation;
-        rotation.rotate(m_rotation.y(),0,1,0);
-        DrawModel(m_wall, vMatrix,translation,rotation,m_textures.value(3),QVector3D());
-    }
+    draw_if_true(m_wall, vMatrix,Pos,m_rotation,m_textures.value(3),QVector3D(),m_wall_placable);
+    // draw placable tree
+    draw_if_true(m_tree, vMatrix,Pos,m_rotation,m_textures.value(3),QVector3D(),m_tree_placable);
+
     // release the program for this frame
     m_program->release();
     // disable the cullmode for the frame
@@ -516,6 +507,18 @@ void RenderState::paintGL()
     glDisable(GL_DEPTH_TEST);
     // finish up the opengl frame
     glFinish();
+}
+
+void RenderState::draw_if_true(ModelMesh* model,QMatrix4x4 view, QVector3D position,QVector3D rotation,QOpenGLTexture * texture, QVector3D color, bool value)
+{
+    if(value)
+    {
+        QMatrix4x4 translation;
+        translation.translate(position);
+        QMatrix4x4 rotationmat;
+        rotationmat.rotate(rotation.y(),0,1,0);
+        DrawModel(model, view,translation,rotationmat,texture,color);
+    }
 }
 
 void RenderState::UpdateShaders(QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate, QOpenGLTexture * texture,QVector3D color)

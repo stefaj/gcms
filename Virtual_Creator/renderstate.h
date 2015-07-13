@@ -51,7 +51,8 @@ private:
               *node,
               *m_plane,
               *m_wall,
-              *m_door;
+              *m_door,
+              *m_tree;
     int m_mouse_x, m_mouse_y, m_dmouse_x,m_dmouse_y,m_node_index_selected;
     float m_mouse_zoom,m_noderadius,m_mouse_y_inverted;
     // define a view matrix
@@ -62,10 +63,14 @@ private:
     QVector3D mouseRayCast(int, int, QMatrix4x4);
     // intersection with y=0
     QVector3D intersectYnull(QVector3D, QVector3D);
-    bool m_mousedown_right,m_mousedown_left, m_node_placable, m_node_removable, m_node_linkable, m_pavement_placable,m_door_placeable,m_wall_placable;
+    bool m_mousedown_right, m_mousedown_left, m_node_placable,
+    m_node_removable, m_node_linkable, m_pavement_placable,
+    m_door_placeable,m_wall_placable, m_tree_placable;
+    void draw_if_true(ModelMesh*,QMatrix4x4, QVector3D,QVector3D,QOpenGLTexture *, QVector3D, bool);
     void add_pavement(QVector3D, QVector3D);
     void add_door(QVector3D, QVector3D);
     void add_wall(QVector3D, QVector3D);
+    void add_tree(QVector3D, QVector3D);
 private slots:
     void add_node(QString *);
     void allow_node(bool);
@@ -74,6 +79,7 @@ private slots:
     void allow_pavement(bool);
     void allow_door(bool);
     void allow_wall(bool);
+    void allow_tree(bool);
     void change_rotY(double);
     void invert_mouseY(bool);
 };
