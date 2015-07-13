@@ -321,7 +321,7 @@ void RenderState::resizeGL(int w, int h)
     pMatrix.setToIdentity();
 
     // set the projection matrix
-    pMatrix.perspective(10.65, (float) w / (float) h, 1.0f, 1000.0f);
+    pMatrix.perspective(45, (float) w / (float) h, 1.0f, 1000.0f);
 }
 void RenderState::LoadContent()
 {
