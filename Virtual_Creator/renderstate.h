@@ -73,6 +73,8 @@ private:
     void add_tree(QVector3D, QVector3D, QVector3D);
     void draw_circle_flat(QVector3D, QMatrix4x4,QVector3D, float);
     float flat_angle_from_vectors(QVector3D,QVector3D);
+    QVector3D point_on_line(float, QVector3D,QVector3D);
+    float return_near_degree(float);
     const float tree_radius;
 private slots:
     void add_node(QString *);

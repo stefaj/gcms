@@ -570,10 +570,15 @@ void RenderState::paintGL()
     // draw placable wall
     if(m_mousedown_left&&m_wall_placable)
     {
-        DrawLine(*m_clicked_position, *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
+
         m_rotation.setY(flat_angle_from_vectors(*m_clicked_position, *m_current_position)+90);
         m_currentscale.setZ(m_clicked_position->distanceToPoint(*m_current_position));
         m_drag_middle_position = (*m_clicked_position+*m_current_position)/2.0;
+        if(return_near_degree(m_rotation.y())==45)
+        {
+        m_rotation.setY(return_near_degree(m_rotation.y()));
+        DrawLine(point_on_line(m_clicked_position->x()-50,*m_clicked_position, *m_current_position),point_on_line(m_current_position->x()+50,*m_clicked_position, *m_current_position), vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,1));
+        }
         draw_if_true(m_wall, vMatrix, m_drag_middle_position, m_rotation, m_currentscale, m_textures.value(3),QVector3D(),m_wall_placable);
     }
     // draw placable tree
@@ -748,6 +753,19 @@ float RenderState::flat_angle_from_vectors(QVector3D pointA, QVector3D pointB)
     else
         return (180*acos(delta_x/distance)/(3.141592));
 
+}
+
+QVector3D RenderState::point_on_line(float x, QVector3D pointA,QVector3D pointB)
+{
+    const float slope = (pointA.z()-pointB.z())/(pointA.x()-pointB.x());
+    return QVector3D(x,0,x*slope+(pointA.z()-slope*pointA.x()));
+}
+
+float RenderState::return_near_degree(float value)
+{
+    const float diff = 2.0f;
+    if((value-diff <45) &&(value+diff >45) )
+        return 45.0f;
 }
 
 RenderState::~RenderState()
