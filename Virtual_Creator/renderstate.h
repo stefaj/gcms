@@ -58,7 +58,7 @@ private:
     // define a view matrix
     QMatrix4x4 vMatrix;
     QVector3D *m_current_position;
-    QVector3D m_position_camera, m_camera_prev, m_raycast, m_rotation;
+    QVector3D m_position_camera, m_camera_prev, m_raycast, m_rotation, m_currentscale;
     // raycasting prototype
     QVector3D mouseRayCast(int, int, QMatrix4x4);
     // intersection with y=0
@@ -66,12 +66,13 @@ private:
     bool m_mousedown_right, m_mousedown_left, m_node_placable,
     m_node_removable, m_tree_removable, m_node_linkable, m_pavement_placable,
     m_door_placeable,m_wall_placable, m_tree_placable;
-    void draw_if_true(ModelMesh*,QMatrix4x4, QVector3D,QVector3D,QOpenGLTexture *, QVector3D, bool);
+    void draw_if_true(ModelMesh*,QMatrix4x4, QVector3D, QVector3D, QVector3D,QOpenGLTexture *, QVector3D, bool);
     void add_pavement(QVector3D, QVector3D);
     void add_door(QVector3D, QVector3D);
-    void add_wall(QVector3D, QVector3D);
+    void add_wall(QVector3D, QVector3D, QVector3D);
     void add_tree(QVector3D, QVector3D);
     void draw_circle_flat(QVector3D, QMatrix4x4,QVector3D, float);
+    float flat_angle_from_vectors(QVector3D,QVector3D);
     const float tree_radius;
 private slots:
     void add_node(QString *);

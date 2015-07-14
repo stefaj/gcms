@@ -12,6 +12,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     m_camera_prev(QVector3D()),
     m_raycast(QVector3D()),
     m_rotation(QVector3D()),
+    m_currentscale(QVector3D(1,1,1)),
     m_mousedown_right(false),
     m_mousedown_left(false),
     m_node_placable(false),
@@ -44,8 +45,6 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
 
     // set mouse tracking
     setMouseTracking(true);
-
-
 }
 
 void RenderState::allow_node(bool value)
@@ -176,13 +175,14 @@ void RenderState::mouseMoveEvent(QMouseEvent *event)
     // update openGL widget
     update();
 }
+
 void RenderState::mouseReleaseEvent(QMouseEvent *)
 {
     // release button right click
     if(m_mousedown_right)
     m_mousedown_right = false;
 
-    // remove button left click
+    // button left click released
     if(m_mousedown_left)
     {
         m_mousedown_left = false;
@@ -204,6 +204,11 @@ void RenderState::mouseReleaseEvent(QMouseEvent *)
                 m_nodes.value(m_node_index_selected)->AddLink(new QString("Link"+QString::number(m_nodes.value(m_node_index_selected)->countConnected())),linkindex);
             }
         }
+        if(m_wall_placable)
+        {
+            // place wall
+            // add_wall(m_rotation,*m_current_position);
+        }
     }
     m_clicked_position = new QVector3D(0,-1000,0);
     // update the frame
@@ -224,9 +229,11 @@ void RenderState::mousePressEvent(QMouseEvent *event)
     if((event->button() == Qt::LeftButton)&&(m_door_placeable))
         add_door(m_rotation,*m_current_position);
 
-    // left click to add pavement
-    if((event->button() == Qt::LeftButton)&&(m_wall_placable))
-        add_wall(m_rotation,*m_current_position);
+    // left click to add wall
+    if((event->button() == Qt::LeftButton)&&(m_wall_placable)){
+        m_mousedown_left = true;
+        m_clicked_position = new QVector3D(m_current_position->x(), m_current_position->y(), m_current_position->z());
+    }
 
     // left click to add tree
     if((event->button() == Qt::LeftButton)&&(m_tree_placable))
@@ -345,10 +352,11 @@ void RenderState::add_tree(QVector3D rotation, QVector3D translation)
     m_models.push_back(object);
 }
 
-void RenderState::add_wall(QVector3D rotation, QVector3D translation)
+void RenderState::add_wall(QVector3D rotation, QVector3D translation, QVector3D scaling)
 {
     // texture index 1 is the tile
     VisualObject * object = new VisualObject(m_wall,m_textures.value(3),translation,rotation, "Wall");
+    object->setScaling(scaling);
     m_models.push_back(object);
 }
 
@@ -370,6 +378,7 @@ void RenderState::resizeGL(int w, int h)
     // set the projection matrix
     pMatrix.perspective(45, (float) w / (float) h, 1.0f, 1000.0f);
 }
+
 void RenderState::LoadContent()
 {
     // this initializes all the opengl functions
@@ -397,7 +406,6 @@ void RenderState::LoadContent()
     // link the shaders
     m_program->link();
 }
-
 
 void RenderState::paintGL()
 {
@@ -547,15 +555,21 @@ void RenderState::paintGL()
         }
     }
     // draw placable node
-    draw_if_true(node, vMatrix,Pos,m_rotation,m_textures.value(0),QVector3D(),m_node_placable);
+    draw_if_true(node, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(0),QVector3D(),m_node_placable);
     // draw placable tile
-    draw_if_true(m_plane, vMatrix,Pos,m_rotation,m_textures.value(2),QVector3D(),m_pavement_placable);
+    draw_if_true(m_plane, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(2),QVector3D(),m_pavement_placable);
     // draw placable door
-    draw_if_true(m_door, vMatrix,Pos,m_rotation,m_textures.value(2),QVector3D(),m_door_placeable);
+    draw_if_true(m_door, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(2),QVector3D(),m_door_placeable);
     // draw placable wall
-    draw_if_true(m_wall, vMatrix,Pos,m_rotation,m_textures.value(3),QVector3D(),m_wall_placable);
+    if(m_mousedown_left&&m_wall_placable)
+    {
+        DrawLine(*m_clicked_position, *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
+        m_rotation.setY(flat_angle_from_vectors(*m_clicked_position, *m_current_position)+90);
+        m_currentscale.setZ(m_clicked_position->distanceToPoint(*m_current_position));
+        draw_if_true(m_wall, vMatrix,(*m_clicked_position+*m_current_position)/2.0,m_rotation,m_currentscale,m_textures.value(3),QVector3D(),m_wall_placable);
+    }
     // draw placable tree
-    draw_if_true(m_tree, vMatrix,Pos,m_rotation,m_textures.value(3),QVector3D(),m_tree_placable);
+    draw_if_true(m_tree, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(3),QVector3D(),m_tree_placable);
 
     // release the program for this frame
     m_program->release();
@@ -576,7 +590,7 @@ void RenderState::draw_circle_flat(QVector3D center, QMatrix4x4 wvp,QVector3D co
     }
 }
 
-void RenderState::draw_if_true(ModelMesh* model,QMatrix4x4 view, QVector3D position,QVector3D rotation,QOpenGLTexture * texture, QVector3D color, bool value)
+void RenderState::draw_if_true(ModelMesh* model,QMatrix4x4 view, QVector3D position,QVector3D rotation, QVector3D scaling, QOpenGLTexture * texture, QVector3D color, bool value)
 {
     if(value)
     {
@@ -584,6 +598,7 @@ void RenderState::draw_if_true(ModelMesh* model,QMatrix4x4 view, QVector3D posit
         translation.translate(position);
         QMatrix4x4 rotationmat;
         rotationmat.rotate(rotation.y(),0,1,0);
+        rotationmat.scale(scaling);
         DrawModel(model, view,translation,rotationmat,texture,color);
     }
 }
@@ -688,8 +703,8 @@ void RenderState::DrawModel(ModelMesh *box,QMatrix4x4 wvp,QMatrix4x4 mvp, QMatri
  }
 
 QVector3D RenderState::mouseRayCast(int mx,
-                                  int my,
-                                  QMatrix4x4 view_matrix)
+                                    int my,
+                                    QMatrix4x4 view_matrix)
 {
     float nx = (2.0f * mx) / this->width() - 1.0f; // normalize the x-mouse position
     float ny = m_mouse_y_inverted*(1.0f - (2.0f * my) / this->height());// normalize the y-mouse position
@@ -712,6 +727,19 @@ QVector3D RenderState::intersectYnull(QVector3D u_dir, QVector3D r_point)
     if(u_dir.y() != 0)// (1/0) validation
     t = -r_point.y()/u_dir.y(); // t=-r1.y/r (calculus)
     return r_point+t*u_dir;// v(t)=r+t*r1
+}
+
+float RenderState::flat_angle_from_vectors(QVector3D pointA, QVector3D pointB)
+{
+    float delta_x = pointB.x()-pointA.x();
+    float delta_z = pointB.z()-pointA.z();
+    float distance = pointA.distanceToPoint(pointB);
+    // get the angle from the arccos function
+    if(delta_z>0)
+    return -(180*acos(delta_x/distance)/(3.141592));
+    else
+        return (180*acos(delta_x/distance)/(3.141592));
+
 }
 
 RenderState::~RenderState()
