@@ -14,6 +14,12 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     m_rotation(QVector3D()),
     m_currentscale(QVector3D(1,1,1)),
     m_drag_middle_position(QVector3D()),
+    m_corner_1(QVector3D()),
+    m_corner_2(QVector3D()),
+    m_corner_3(QVector3D()),
+    m_corner_4(QVector3D()),
+    m_center_h_1(QVector3D()),
+    m_center_h_2(QVector3D()),
     m_mousedown_right(false),
     m_mousedown_left(false),
     m_node_placable(false),
@@ -363,6 +369,9 @@ void RenderState::add_wall(QVector3D rotation, QVector3D translation, QVector3D 
     // texture index 1 is the tile
     VisualObject * object = new VisualObject(m_wall,m_textures.value(3),translation,rotation, "Wall");
     object->setScaling(scaling);
+    // set horizontal centers
+    object->setLMidHorisontal(m_center_h_1);
+    object->setUMidHorisontal(m_center_h_2);
     m_models.push_back(object);
 }
 
@@ -561,6 +570,16 @@ void RenderState::paintGL()
             // draw a circle here
             draw_circle_flat(object->getTranslation(),vMatrix,QVector3D(1,0,0),4.0f);
         }
+        if(object->getLMidHorisontal().distanceToPoint(Pos)<1.0f)
+        {
+            draw_circle_flat(object->getLMidHorisontal(), vMatrix, QVector3D(0,1,0), 1.0f);
+            *m_current_position = object->getLMidHorisontal();
+        }
+        if(object->getUMidHorisontal().distanceToPoint(Pos)<1.0f)
+        {
+            draw_circle_flat(object->getUMidHorisontal(), vMatrix, QVector3D(0,1,0), 1.0f);
+           *m_current_position = object->getUMidHorisontal();
+        }
     }
     // draw placable node
     draw_if_true(node, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(0),QVector3D(),m_node_placable);
@@ -568,8 +587,9 @@ void RenderState::paintGL()
     draw_if_true(m_plane, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(2),QVector3D(),m_pavement_placable);
     // draw placable door
     draw_if_true(m_door, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(2),QVector3D(),m_door_placeable);
+
     // draw placable wall
-    if(m_mousedown_left&&m_wall_placable)
+    if((m_mousedown_left)&&(m_wall_placable))
     {
         m_drag_middle_position = (*m_clicked_position+*m_current_position)/2.0;
         m_rotation.setY(flat_angle_from_vectors(*m_clicked_position, *m_current_position)+90);
@@ -577,13 +597,17 @@ void RenderState::paintGL()
         // clamp to 0 and 180 degrees
         if((return_near_degree(m_rotation.y())==0.0)||(return_near_degree(m_rotation.y())==180))
         {
-        m_rotation.setY(return_near_degree(m_rotation.y()));
-        m_drag_middle_position.setX(m_clicked_position->x());
-        m_current_position->setX(m_clicked_position->x());
-        DrawLine(*m_clicked_position+QVector3D(0, 0,-infinte_lenght_lines),
-                 *m_current_position+QVector3D(0, 0, infinte_lenght_lines),
-                 vMatrix, QMatrix4x4(), QMatrix4x4(),
-                 QVector3D(1,1,1));
+            // set fixed rotation for the rotation
+            m_rotation.setY(return_near_degree(m_rotation.y()));
+
+            // set fixed position for the  x - axis
+            m_drag_middle_position.setX(m_clicked_position->x());
+            m_current_position->setX(m_clicked_position->x());
+
+            DrawLine(*m_clicked_position+QVector3D(0, 0,-infinte_lenght_lines),
+                     *m_current_position+QVector3D(0, 0, infinte_lenght_lines),
+                     vMatrix, QMatrix4x4(), QMatrix4x4(),
+                     QVector3D(1,1,1));
         }
 
         // clamp to 270 and 90 degrees
@@ -598,9 +622,11 @@ void RenderState::paintGL()
                  QVector3D(1,1,1));
         }
 
+        // set clickable centers
+        m_center_h_1 = *m_current_position;
+        m_center_h_2 = *m_clicked_position;
+
         m_currentscale.setZ(m_clicked_position->distanceToPoint(*m_current_position));
-
-
         draw_if_true(m_wall, vMatrix, m_drag_middle_position, m_rotation, m_currentscale, m_textures.value(3),QVector3D(),m_wall_placable);
     }
     // draw placable tree
@@ -785,26 +811,38 @@ QVector3D RenderState::point_on_line(float x, QVector3D pointA,QVector3D pointB)
 
 float RenderState::return_near_degree(float value)
 {
-    qDebug()<<value;
+    // clamping factor
     const float diff = 3.0f;
+
+    // if the degrees are near 45, clamp to 45 degrees
     if((value-diff <45) &&(value+diff >45) )
         return 45.0f;
+
+    // if the degrees are near 90, clamp to 90 degrees
     if((value-diff <90) &&(value+diff >90) )
         return 90.0f;
+
+    // if the degrees are near 180, clamp to 180 degrees
     if((value-diff < 180) &&(value+diff > 180) )
         return 180.0f;
 
+    // if the degrees are near -45, clamp to -45 degrees
     if((value-diff < -45) &&(value+diff > -45) )
         return -45.0f;
+
+    // if the degrees are near -90, clamp to -90 degrees
     if((value-diff > -90) &&(value+diff < -90) )
         return -90.0f;
 
+    // if the degrees are near 270, clamp to 270 degrees
     if((value-diff < 270) &&(value+diff > 270) )
         return 270.0f;
 
+    // if the degrees are near 0, clamp to 0 degrees
     if((value-diff < 0) &&(value+diff > 0) )
         return 0.0f;
 
+    // else return the normal value unchanged
     return value;
 }
 

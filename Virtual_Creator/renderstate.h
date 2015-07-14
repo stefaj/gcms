@@ -58,7 +58,8 @@ private:
     // define a view matrix
     QMatrix4x4 vMatrix;
     QVector3D *m_current_position;
-    QVector3D m_position_camera, m_camera_prev, m_raycast, m_rotation, m_currentscale, m_drag_middle_position;
+    QVector3D m_position_camera, m_camera_prev, m_raycast, m_rotation, m_currentscale, m_drag_middle_position,
+    m_corner_1, m_corner_2, m_corner_3, m_corner_4, m_center_h_1, m_center_h_2;
     // raycasting prototype
     QVector3D mouseRayCast(int, int, QMatrix4x4);
     // intersection with y=0
