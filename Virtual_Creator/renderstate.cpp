@@ -18,6 +18,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     m_pavement_placable(false),
     m_tree_placable(false)
 {
+
     // enable antialiasing (set the format of the widget)
     QSurfaceFormat format;
     format.setSamples(4);
@@ -49,7 +50,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
 
 void RenderState::allow_node(bool value)
 {
-     m_node_placable=value;
+     m_node_placable = value;
 }
 
 void RenderState::invert_mouseY(bool value)
@@ -154,6 +155,7 @@ void RenderState::mouseMoveEvent(QMouseEvent *event)
                         if(m_nodes.value(i)->getConnectedIndex(z)==l)
                             m_nodes.value(i)->RemoveLinkedFromIndex(z);
                     }
+                    // move the link back after the node was deleted
                     for(int k = 0; k<m_nodes.value(i)->countConnected();k++)
                     {
                         if(m_nodes.value(i)->getConnectedIndex(k)>l)
@@ -165,6 +167,7 @@ void RenderState::mouseMoveEvent(QMouseEvent *event)
             }
         }
     }
+
     // update openGL widget
     update();
 }
@@ -244,14 +247,18 @@ void RenderState::mousePressEvent(QMouseEvent *event)
             {
                 // remove node
                 m_nodes.removeAt(l);
+
                 // remove all dependencies
                 for(int i = 0;i<m_nodes.count();i++)
                 {
+                    // remove all the links of the deleted node
                     for(int z = 0; z<m_nodes.value(i)->countConnected();z++)
                     {
                         if(m_nodes.value(i)->getConnectedIndex(z)==l)
                             m_nodes.value(i)->RemoveLinkedFromIndex(z);
                     }
+
+                    // move the links after the node was deleted
                     for(int k = 0; k<m_nodes.value(i)->countConnected();k++)
                     {
                         if(m_nodes.value(i)->getConnectedIndex(k)>l)
@@ -284,9 +291,14 @@ void RenderState::mousePressEvent(QMouseEvent *event)
 
 void RenderState::wheelEvent(QWheelEvent *event)
 {
+    // camera zoom with the mouse scroll
     m_mouse_zoom -= (float)event->delta()/120.0f;
+
+    // limit the zoom
     if(m_mouse_zoom<5.0f)
         m_mouse_zoom = 5.0f;
+
+    // update the openGL frame after the zoom
     update();
 }
 
