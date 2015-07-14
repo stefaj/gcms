@@ -971,7 +971,7 @@ QDoubleSpinBox::down-arrow:off
     <property name="title">
      <string>Add Objects</string>
     </property>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="layoutWidget_add_objects">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -980,7 +980,7 @@ QDoubleSpinBox::down-arrow:off
        <height>170</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout_add_buttons">
       <item>
        <widget class="QPushButton" name="button_node">
         <property name="text">
@@ -1040,7 +1040,7 @@ QDoubleSpinBox::down-arrow:off
      <property name="title">
       <string>Accessible with/by/through</string>
      </property>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="layoutWidget_node_options">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1049,7 +1049,7 @@ QDoubleSpinBox::down-arrow:off
         <height>72</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayout_accessibility_checks">
        <item>
         <widget class="QCheckBox" name="checkBox_walk">
          <property name="text">
