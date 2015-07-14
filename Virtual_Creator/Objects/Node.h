@@ -37,6 +37,14 @@ public:
     void addShortest(int);
     void setG(double g);
     void setShortest(int index);
+    void setWalk(bool);
+    void setWheelChair(bool);
+    void setVehicle(bool);
+    void setBike(bool);
+    bool getWalk();
+    bool getWheelChair();
+    bool getVehicle();
+    bool getBike();
     int getShortestIndex();
     double getG();
     QString getName();
@@ -49,7 +57,7 @@ private:
     QVector<int> m_shortest;
     int m_nshortest;
     double m_g;
-    bool m_links;
+    bool m_links, m_walk, m_wheelchair, m_vehicle, m_bike;
     int m_lastindex;
 };
 
