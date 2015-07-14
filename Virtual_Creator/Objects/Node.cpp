@@ -23,6 +23,10 @@ Node::Node()
     m_connectedindex.clear();
     m_shortest.clear();
     m_links = false;
+    m_walk = false;
+    m_bike = false;
+    m_vehicle = false;
+    m_wheelchair = false;
     m_nshortest = 0;
     m_g = 10000000.0;
     m_lastindex = 0;
@@ -143,11 +147,53 @@ double Node::getG()
 {
     return m_g;
 }
+
 void Node::setShortest(int index)
 {
     m_nshortest = index;
 }
+
 int Node::getShortestIndex()
 {
     return m_nshortest;
+}
+
+void Node::setWalk(bool value)
+{
+    m_walk = value;
+}
+
+void Node::setWheelChair(bool value)
+{
+    m_wheelchair = value;
+}
+
+void Node::setVehicle(bool value)
+{
+    m_vehicle = value;
+}
+
+void Node::setBike(bool value)
+{
+    m_bike = value;
+}
+
+bool Node::getWalk()
+{
+    return m_walk;
+}
+
+bool Node::getWheelChair()
+{
+    return m_wheelchair;
+}
+
+bool Node::getVehicle()
+{
+    return m_vehicle;
+}
+
+bool Node::getBike()
+{
+    return m_bike;
 }

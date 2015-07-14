@@ -357,6 +357,7 @@ void RenderState::LoadContent()
 {
     // this initializes all the opengl functions
     initializeOpenGLFunctions();
+
     //load meshes
     box = new ModelMesh(":/Sphere");
     node = new ModelMesh(":/Sphere");
@@ -369,14 +370,21 @@ void RenderState::LoadContent()
 
     // load shaders
     m_program = new QOpenGLShaderProgram();
+
+    // laod vertex shader (the geometry of the 3D objects )
     m_program->addShaderFromSourceFile(QOpenGLShader::Vertex,"://Vertex");
+
+    // load the pixel/fragment shader. this is the pixel shader (per pixel rendering)
     m_program->addShaderFromSourceFile(QOpenGLShader::Fragment,"://Fragment");
+
+    // link the shaders
     m_program->link();
 }
 
 
 void RenderState::paintGL()
 {
+    // initialise the view matrix
     vMatrix.setToIdentity();
     // whenever content is not loaded, load the content
     if(!m_program){LoadContent();}

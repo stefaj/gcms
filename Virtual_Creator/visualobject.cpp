@@ -7,6 +7,7 @@ VisualObject::VisualObject(ModelMesh * model, QOpenGLTexture *texture, QVector3D
  m_translation = translation;
  m_rotation = rotation;
 }
+
 void VisualObject::setModel(ModelMesh* model){ m_model = model;}
 
 void VisualObject::setRotation(QVector3D){}
