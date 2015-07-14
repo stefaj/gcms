@@ -463,7 +463,6 @@ void RenderState::paintGL()
         aux_calc_one = aux_rotate*(QVector3D(0,0,1));
         aux_calc_two = aux_45*aux_rotate*(QVector3D(0,0,1));
 
-
         DrawLine(m_nodes.value(m_node_index_selected)->Position(), *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,0));
         DrawLine((m_nodes.value(m_node_index_selected)->Position()+
                  *m_current_position)/2.0,
