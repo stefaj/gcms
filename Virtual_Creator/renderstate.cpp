@@ -570,15 +570,21 @@ void RenderState::paintGL()
     // draw placable wall
     if(m_mousedown_left&&m_wall_placable)
     {
-
-        m_rotation.setY(flat_angle_from_vectors(*m_clicked_position, *m_current_position)+90);
-        m_currentscale.setZ(m_clicked_position->distanceToPoint(*m_current_position));
         m_drag_middle_position = (*m_clicked_position+*m_current_position)/2.0;
-        if(return_near_degree(m_rotation.y())==45)
+        m_rotation.setY(flat_angle_from_vectors(*m_clicked_position, *m_current_position)+90);
+
+        // clamp to 0 and 180 degrees
+        if((return_near_degree(m_rotation.y())==0.0)||(return_near_degree(m_rotation.y())==180))
         {
         m_rotation.setY(return_near_degree(m_rotation.y()));
-        DrawLine(point_on_line(m_clicked_position->x()-50,*m_clicked_position, *m_current_position),point_on_line(m_current_position->x()+50,*m_clicked_position, *m_current_position), vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,1));
+        m_drag_middle_position.setX(m_clicked_position->x());
+        m_current_position->setX(m_clicked_position->x());
+        DrawLine(*m_clicked_position+QVector3D(0,0,-50), *m_current_position+QVector3D(0,0,50), vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,1));
         }
+
+        m_currentscale.setZ(m_clicked_position->distanceToPoint(*m_current_position));
+
+
         draw_if_true(m_wall, vMatrix, m_drag_middle_position, m_rotation, m_currentscale, m_textures.value(3),QVector3D(),m_wall_placable);
     }
     // draw placable tree
@@ -763,9 +769,24 @@ QVector3D RenderState::point_on_line(float x, QVector3D pointA,QVector3D pointB)
 
 float RenderState::return_near_degree(float value)
 {
-    const float diff = 2.0f;
+    qDebug()<<value;
+    const float diff = 3.0f;
     if((value-diff <45) &&(value+diff >45) )
         return 45.0f;
+    if((value-diff <90) &&(value+diff >90) )
+        return 90.0f;
+    if((value-diff < 180) &&(value+diff > 180) )
+        return 180.0f;
+
+    if((value-diff < -45) &&(value+diff > -45) )
+        return -45.0f;
+    if((value-diff < -90) &&(value+diff > -90) )
+        return -90.0f;
+
+    if((value-diff < 0) &&(value+diff > 0) )
+        return 0.0f;
+
+    return value;
 }
 
 RenderState::~RenderState()
