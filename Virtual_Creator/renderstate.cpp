@@ -482,6 +482,11 @@ void RenderState::paintGL()
         QMatrix4x4 translation;
         translation.translate(n->Position());
         DrawModel(node, vMatrix, translation,QMatrix4x4(),m_textures.value(0),QVector3D());
+        if((m_node_removable)&&(n->Position().distanceToPoint(Pos)<1.0))
+        {
+            // draw a circle here
+            draw_circle_flat(n->Position(),vMatrix,QVector3D(1,0,0),0.7f);
+        }
         for(int i = 0;i <n->countConnected();i++)
         {
             if(n->getConnectedIndex(i)<m_nodes.count())
@@ -526,7 +531,7 @@ void RenderState::paintGL()
         if((m_tree_removable)&&(object->getType().compare("Tree",Qt::CaseInsensitive)==0)&&(object->getTranslation().distanceToPoint(Pos)<4.0))
         {
             // draw a circle here
-            draw_circle_flat(object->getTranslation(),vMatrix,QVector3D(0,1,0),4.0f);
+            draw_circle_flat(object->getTranslation(),vMatrix,QVector3D(1,0,0),4.0f);
         }
     }
     // draw placable node
