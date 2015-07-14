@@ -18,9 +18,8 @@ public:
 
 private slots:
     void on_button_node_clicked();
-    void on_button_link_clicked();
 
-    void on_button_remove_clicked();
+    void on_button_link_clicked();
 
     void on_button_pavement_clicked();
 
@@ -33,6 +32,8 @@ private slots:
     void on_checkBox_inversemouse_y_clicked(bool checked);
 
     void on_button_tree1_clicked();
+
+    void on_button_remove_node_clicked();
 
 private:
     Ui::MainWindow *ui;

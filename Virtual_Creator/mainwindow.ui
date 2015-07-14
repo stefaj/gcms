@@ -969,7 +969,7 @@ QDoubleSpinBox::down-arrow:off
      </rect>
     </property>
     <property name="title">
-     <string>Objects</string>
+     <string>Add Objects</string>
     </property>
     <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
@@ -1025,98 +1025,155 @@ QDoubleSpinBox::down-arrow:off
       </item>
      </layout>
     </widget>
-    <widget class="QGroupBox" name="groupBox_5">
+    <widget class="QGroupBox" name="groupBox_node_settings">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>170</x>
        <y>30</y>
        <width>151</width>
-       <height>171</height>
+       <height>111</height>
       </rect>
      </property>
      <property name="title">
-      <string>Node Settings</string>
+      <string>Accessible with/by/through</string>
      </property>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>121</width>
+        <height>72</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QCheckBox" name="checkBox_walk">
+         <property name="text">
+          <string>Walking</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_bike">
+         <property name="text">
+          <string>Bike</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_wheelchair">
+         <property name="text">
+          <string>Wheelchair</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox_vehicle">
+         <property name="text">
+          <string>Vehicle</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
      <rect>
-      <x>21</x>
-      <y>251</y>
-      <width>341</width>
-      <height>197</height>
+      <x>22</x>
+      <y>252</y>
+      <width>182</width>
+      <height>60</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QGroupBox" name="groupBox_3">
-       <property name="title">
-        <string>Transformations</string>
+    <property name="title">
+     <string>Transformations</string>
+    </property>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Rotation Y:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="spin_rotationY">
+         <property name="minimum">
+          <double>-180.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>180.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_4">
+    <property name="geometry">
+     <rect>
+      <x>22</x>
+      <y>333</y>
+      <width>111</width>
+      <height>53</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Configuration</string>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="checkBox_inversemouse_y">
+       <property name="maximumSize">
+        <size>
+         <width>200</width>
+         <height>13</height>
+        </size>
        </property>
-       <layout class="QFormLayout" name="formLayout">
-        <item row="0" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Rotation Y:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QDoubleSpinBox" name="spin_rotationY">
-            <property name="minimum">
-             <double>-180.000000000000000</double>
-            </property>
-            <property name="maximum">
-             <double>180.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
+       <property name="text">
+        <string>Invert Mouse Y</string>
+       </property>
       </widget>
      </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_4">
-       <property name="title">
-        <string>Configuration</string>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>22</x>
+      <y>392</y>
+      <width>111</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Remove</string>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QPushButton" name="button_remove_node">
+       <property name="text">
+        <string>Remove Node</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QCheckBox" name="checkBox_inversemouse_y">
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>13</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Invert Mouse Y</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </widget>
      </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="title">
-        <string>Remove</string>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="button_remove_tree">
+       <property name="text">
+        <string>Remove Tree</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
-         <widget class="QPushButton" name="button_remove">
-          <property name="text">
-           <string>Remove Node</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-       <zorder>button_remove</zorder>
-       <zorder>openGLWidget</zorder>
       </widget>
      </item>
     </layout>

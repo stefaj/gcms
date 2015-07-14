@@ -7,10 +7,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // hide things not needed
+    ui->groupBox_node_settings->setVisible(false);
     // set clickable buttons
     ui->button_node->setCheckable(true);
     ui->button_link->setCheckable(true);
-    ui->button_remove->setCheckable(true);
+    ui->button_remove_node->setCheckable(true);
     ui->button_pavement->setCheckable(true);
     ui->button_door->setCheckable(true);
     ui->button_wall->setCheckable(true);
@@ -36,29 +38,30 @@ void MainWindow::EmitSignals()
 {
     emit node_links(ui->button_link->isChecked());
     emit place_node(ui->button_node->isChecked());
-    emit remove_nodes(ui->button_remove->isChecked());
+    emit remove_nodes(ui->button_remove_node->isChecked());
     emit place_pavement(ui->button_pavement->isChecked());
     emit place_door(ui->button_door->isChecked());
     emit place_wall(ui->button_wall->isChecked());
     emit place_tree(ui->button_tree1->isChecked());
+    ui->groupBox_node_settings->setVisible(ui->button_node->isChecked());
+
 }
 
 void MainWindow::on_button_node_clicked()
 {
     ui->button_link->setChecked(false);
-    ui->button_remove->setChecked(false);
+    ui->button_remove_node->setChecked(false);
     ui->button_pavement->setChecked(false);
     ui->button_door->setChecked(false);
     ui->button_wall->setChecked(false);
     ui->button_tree1->setChecked(false);
     EmitSignals();
-
 }
 
 void MainWindow::on_button_link_clicked()
 {
     ui->button_node->setChecked(false);
-    ui->button_remove->setChecked(false);
+    ui->button_remove_node->setChecked(false);
     ui->button_pavement->setChecked(false);
     ui->button_door->setChecked(false);
     ui->button_wall->setChecked(false);
@@ -67,7 +70,7 @@ void MainWindow::on_button_link_clicked()
     EmitSignals();
 }
 
-void MainWindow::on_button_remove_clicked()
+void MainWindow::on_button_remove_node_clicked()
 {
     ui->button_node->setChecked(false);
     ui->button_link->setChecked(false);
@@ -84,7 +87,7 @@ void MainWindow::on_button_pavement_clicked()
 {
     ui->button_node->setChecked(false);
     ui->button_link->setChecked(false);
-    ui->button_remove->setChecked(false);
+    ui->button_remove_node->setChecked(false);
     ui->button_door->setChecked(false);
     ui->button_wall->setChecked(false);
     ui->button_tree1->setChecked(false);
@@ -96,11 +99,10 @@ void MainWindow::on_button_wall_clicked()
 {
     ui->button_node->setChecked(false);
     ui->button_link->setChecked(false);
-    ui->button_remove->setChecked(false);
+    ui->button_remove_node->setChecked(false);
     ui->button_door->setChecked(false);
     ui->button_pavement->setChecked(false);
     ui->button_tree1->setChecked(false);
-
     EmitSignals();
 
 }
@@ -109,13 +111,11 @@ void MainWindow::on_button_door_clicked()
 {
     ui->button_node->setChecked(false);
     ui->button_link->setChecked(false);
-    ui->button_remove->setChecked(false);
+    ui->button_remove_node->setChecked(false);
     ui->button_pavement->setChecked(false);
     ui->button_wall->setChecked(false);
     ui->button_tree1->setChecked(false);
-
     EmitSignals();
-
 }
 
 void MainWindow::on_spin_rotationY_valueChanged(double arg1)
@@ -132,10 +132,9 @@ void MainWindow::on_button_tree1_clicked()
 {
     ui->button_node->setChecked(false);
     ui->button_link->setChecked(false);
-    ui->button_remove->setChecked(false);
+    ui->button_remove_node->setChecked(false);
     ui->button_pavement->setChecked(false);
     ui->button_wall->setChecked(false);
     ui->button_door->setChecked(false);
-
     EmitSignals();
 }
