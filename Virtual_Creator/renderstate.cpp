@@ -205,7 +205,7 @@ void RenderState::mouseReleaseEvent(QMouseEvent *)
             }
         }
     }
-
+    m_clicked_position = new QVector3D(0,-1000,0);
     // update the frame
     update();
 }
@@ -482,10 +482,23 @@ void RenderState::paintGL()
         QMatrix4x4 translation;
         translation.translate(n->Position());
         DrawModel(node, vMatrix, translation,QMatrix4x4(),m_textures.value(0),QVector3D());
-        if((m_node_removable)&&(n->Position().distanceToPoint(Pos)<1.0))
+        if(n->Position().distanceToPoint(Pos)<0.5)
         {
             // draw a circle here
+
+            // draw red circle to indicate the node will be removed
+            if(m_node_removable)
             draw_circle_flat(n->Position(),vMatrix,QVector3D(1,0,0),0.7f);
+
+            // draw green circle to indicate a link will be added
+            if(m_node_linkable)
+            draw_circle_flat(n->Position(),vMatrix,QVector3D(0,1,0),0.7f);
+        }
+        if(n->Position().distanceToPoint(*m_clicked_position)<0.5)
+        {
+            // draw green circle to indicate a link will be added
+            if(m_node_linkable)
+            draw_circle_flat(n->Position(),vMatrix,QVector3D(0,1,0),0.7f);
         }
         for(int i = 0;i <n->countConnected();i++)
         {
