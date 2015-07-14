@@ -64,17 +64,20 @@ private:
     // intersection with y=0
     QVector3D intersectYnull(QVector3D, QVector3D);
     bool m_mousedown_right, m_mousedown_left, m_node_placable,
-    m_node_removable, m_node_linkable, m_pavement_placable,
+    m_node_removable, m_tree_removable, m_node_linkable, m_pavement_placable,
     m_door_placeable,m_wall_placable, m_tree_placable;
     void draw_if_true(ModelMesh*,QMatrix4x4, QVector3D,QVector3D,QOpenGLTexture *, QVector3D, bool);
     void add_pavement(QVector3D, QVector3D);
     void add_door(QVector3D, QVector3D);
     void add_wall(QVector3D, QVector3D);
     void add_tree(QVector3D, QVector3D);
+    void draw_circle_flat(QVector3D, QMatrix4x4,QVector3D, float);
+    const float tree_radius;
 private slots:
     void add_node(QString *);
     void allow_node(bool);
-    void allow_remove(bool);
+    void allow_remove_node(bool);
+    void allow_remove_tree(bool);
     void allow_link(bool);
     void allow_pavement(bool);
     void allow_door(bool);

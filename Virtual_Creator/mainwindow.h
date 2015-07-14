@@ -35,6 +35,8 @@ private slots:
 
     void on_button_remove_node_clicked();
 
+    void on_button_remove_tree_clicked();
+
 private:
     Ui::MainWindow *ui;
     void EmitSignals();
@@ -42,12 +44,13 @@ signals:
     void place_node(bool); // allows a node to be placed
     void node_links(bool); // allow nodes to be linkeds
     void remove_nodes(bool); // allow nodes to be destroyed
+    void remove_trees(bool); // allow trees to be destroyed
     void place_pavement(bool); // allow the placement of a node
     void place_wall(bool); // allows the placement of a wall
     void place_door(bool); // allows the placement of a wall
     void change_rotationY(double); // changes the rotation in Y direction
     void place_tree(bool); // allows the placement of a basic tree
-    void invert_mouseY(bool);
+    void invert_mouseY(bool); // invert the y of the mouse in 3D
 };
 
 #endif // MAINWINDOW_H

@@ -16,9 +16,9 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     m_mousedown_left(false),
     m_node_placable(false),
     m_pavement_placable(false),
-    m_tree_placable(false)
+    m_tree_placable(false),
+    tree_radius(4.0f)
 {
-
     // enable antialiasing (set the format of the widget)
     QSurfaceFormat format;
     format.setSamples(4);
@@ -61,9 +61,14 @@ void RenderState::invert_mouseY(bool value)
         m_mouse_y_inverted = 1.0f;
 }
 
-void RenderState::allow_remove(bool value)
+void RenderState::allow_remove_node(bool value)
 {
     m_node_removable = value;
+}
+
+void RenderState::allow_remove_tree(bool value)
+{
+    m_tree_removable = value;
 }
 
 void RenderState::allow_link(bool value)
@@ -234,6 +239,18 @@ void RenderState::mousePressEvent(QMouseEvent *event)
         m_clicked_position = new QVector3D(m_current_position->x(), m_current_position->y(), m_current_position->z());
     }
 
+    if((event->button() == Qt::LeftButton)&&(m_tree_removable))
+    {
+        for(int k = 0 ; k < m_models.count();k++)
+        {
+            if((m_models.value(k)->getType().compare("Tree",Qt::CaseInsensitive)==0)&&(m_models.value(k)->getTranslation().distanceToPoint(*m_current_position)<tree_radius))
+            {
+                m_models.removeAt(k);
+            }
+        }
+
+    }
+
     // left click to remove the node
     if((event->button() == Qt::LeftButton)&&(m_node_removable))
     {
@@ -317,28 +334,28 @@ void RenderState::add_node(QString *name)
 void RenderState::add_pavement(QVector3D rotation, QVector3D translation)
 {
     // texture index 1 is the tile
-    VisualObject * object = new VisualObject(m_plane,m_textures.value(2),translation,rotation);
+    VisualObject * object = new VisualObject(m_plane,m_textures.value(2),translation,rotation, "Pavement");
     m_models.push_back(object);
 }
 
 void RenderState::add_tree(QVector3D rotation, QVector3D translation)
 {
     // texture index 1 is the tile
-    VisualObject * object = new VisualObject(m_tree,m_textures.value(2),translation,rotation);
+    VisualObject * object = new VisualObject(m_tree,m_textures.value(2),translation,rotation, "Tree");
     m_models.push_back(object);
 }
 
 void RenderState::add_wall(QVector3D rotation, QVector3D translation)
 {
     // texture index 1 is the tile
-    VisualObject * object = new VisualObject(m_wall,m_textures.value(3),translation,rotation);
+    VisualObject * object = new VisualObject(m_wall,m_textures.value(3),translation,rotation, "Wall");
     m_models.push_back(object);
 }
 
 void RenderState::add_door(QVector3D rotation, QVector3D translation)
 {
     // texture index 1 is the tile
-    VisualObject * object = new VisualObject(m_door,m_textures.value(2),translation,rotation);
+    VisualObject * object = new VisualObject(m_door,m_textures.value(2),translation,rotation, "Door");
     m_models.push_back(object);
 }
 
@@ -506,8 +523,12 @@ void RenderState::paintGL()
         QMatrix4x4 rotation;
         rotation.rotate(object->getRotation().y(),0,1,0);
         DrawModel(object->getModelMesh(), vMatrix, translation,rotation,object->getTexture(),QVector3D());
+        if((m_tree_removable)&&(object->getType().compare("Tree",Qt::CaseInsensitive)==0)&&(object->getTranslation().distanceToPoint(Pos)<4.0))
+        {
+            // draw a circle here
+            draw_circle_flat(object->getTranslation(),vMatrix,QVector3D(0,1,0),4.0f);
+        }
     }
-
     // draw placable node
     draw_if_true(node, vMatrix,Pos,m_rotation,m_textures.value(0),QVector3D(),m_node_placable);
     // draw placable tile
@@ -527,6 +548,15 @@ void RenderState::paintGL()
     glDisable(GL_DEPTH_TEST);
     // finish up the opengl frame
     glFinish();
+}
+
+void RenderState::draw_circle_flat(QVector3D center, QMatrix4x4 wvp,QVector3D color, float radius)
+{
+    const int slices = 36;
+    for(int k = 0; k < slices;k++)
+    {
+        DrawLine(radius*QVector3D(cos(2*3.14*k/slices),0,sin(2*3.14*k/slices))+center,radius*QVector3D(cos(2*3.14*(k+1)/slices),0,sin(2*3.14*(k+1)/slices))+center, wvp, QMatrix4x4(), QMatrix4x4(), color);
+    }
 }
 
 void RenderState::draw_if_true(ModelMesh* model,QMatrix4x4 view, QVector3D position,QVector3D rotation,QOpenGLTexture * texture, QVector3D color, bool value)
