@@ -19,7 +19,8 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     m_node_placable(false),
     m_pavement_placable(false),
     m_tree_placable(false),
-    tree_radius(4.0f)
+    tree_radius(4.0f),
+    infinte_lenght_lines(100.0f)
 {
     // enable antialiasing (set the format of the widget)
     QSurfaceFormat format;
@@ -579,7 +580,22 @@ void RenderState::paintGL()
         m_rotation.setY(return_near_degree(m_rotation.y()));
         m_drag_middle_position.setX(m_clicked_position->x());
         m_current_position->setX(m_clicked_position->x());
-        DrawLine(*m_clicked_position+QVector3D(0,0,-50), *m_current_position+QVector3D(0,0,50), vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,1));
+        DrawLine(*m_clicked_position+QVector3D(0, 0,-infinte_lenght_lines),
+                 *m_current_position+QVector3D(0, 0, infinte_lenght_lines),
+                 vMatrix, QMatrix4x4(), QMatrix4x4(),
+                 QVector3D(1,1,1));
+        }
+
+        // clamp to 270 and 90 degrees
+        if((return_near_degree(m_rotation.y())==270)||(return_near_degree(m_rotation.y())==90)||(return_near_degree(m_rotation.y())==-90))
+        {
+        m_rotation.setY(return_near_degree(m_rotation.y()));
+        m_drag_middle_position.setZ(m_clicked_position->z());
+        m_current_position->setZ(m_clicked_position->z());
+        DrawLine(*m_clicked_position+QVector3D(-infinte_lenght_lines, 0,0),
+                 *m_current_position+QVector3D(infinte_lenght_lines, 0, 0),
+                 vMatrix, QMatrix4x4(), QMatrix4x4(),
+                 QVector3D(1,1,1));
         }
 
         m_currentscale.setZ(m_clicked_position->distanceToPoint(*m_current_position));
@@ -780,8 +796,11 @@ float RenderState::return_near_degree(float value)
 
     if((value-diff < -45) &&(value+diff > -45) )
         return -45.0f;
-    if((value-diff < -90) &&(value+diff > -90) )
+    if((value-diff > -90) &&(value+diff < -90) )
         return -90.0f;
+
+    if((value-diff < 270) &&(value+diff > 270) )
+        return 270.0f;
 
     if((value-diff < 0) &&(value+diff > 0) )
         return 0.0f;

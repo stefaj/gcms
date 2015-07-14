@@ -75,7 +75,7 @@ private:
     float flat_angle_from_vectors(QVector3D,QVector3D);
     QVector3D point_on_line(float, QVector3D,QVector3D);
     float return_near_degree(float);
-    const float tree_radius;
+    const float tree_radius, infinte_lenght_lines;
 private slots:
     void add_node(QString *);
     void allow_node(bool);
