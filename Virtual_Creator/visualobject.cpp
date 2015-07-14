@@ -15,7 +15,7 @@ void VisualObject::setRotation(QVector3D){}
 
 void VisualObject::setTranslation(QVector3D){}
 
-void VisualObject::setScaling(QVector3D){}
+void VisualObject::setScaling(QVector3D scale){ m_scaling = scale;}
 
 void VisualObject::setTexture(QOpenGLTexture *texture){ m_texture = texture;}
 

@@ -13,6 +13,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     m_raycast(QVector3D()),
     m_rotation(QVector3D()),
     m_currentscale(QVector3D(1,1,1)),
+    m_drag_middle_position(QVector3D()),
     m_mousedown_right(false),
     m_mousedown_left(false),
     m_node_placable(false),
@@ -207,10 +208,12 @@ void RenderState::mouseReleaseEvent(QMouseEvent *)
         if(m_wall_placable)
         {
             // place wall
-            // add_wall(m_rotation,*m_current_position);
+             add_wall(m_rotation,m_drag_middle_position,m_currentscale);
         }
     }
     m_clicked_position = new QVector3D(0,-1000,0);
+    m_rotation = QVector3D();
+    m_currentscale = QVector3D(1,1,1);
     // update the frame
     update();
 }
@@ -223,11 +226,11 @@ void RenderState::mousePressEvent(QMouseEvent *event)
 
     // left click to add pavement
     if((event->button() == Qt::LeftButton)&&(m_pavement_placable))
-        add_pavement(m_rotation,*m_current_position);
+        add_pavement(m_rotation,*m_current_position, m_currentscale);
 
     // left click to add door
     if((event->button() == Qt::LeftButton)&&(m_door_placeable))
-        add_door(m_rotation,*m_current_position);
+        add_door(m_rotation,*m_current_position, m_currentscale);
 
     // left click to add wall
     if((event->button() == Qt::LeftButton)&&(m_wall_placable)){
@@ -237,7 +240,7 @@ void RenderState::mousePressEvent(QMouseEvent *event)
 
     // left click to add tree
     if((event->button() == Qt::LeftButton)&&(m_tree_placable))
-        add_tree(m_rotation,*m_current_position);
+        add_tree(m_rotation,*m_current_position, m_currentscale);
 
     // right click to move the camara around
     if(event->button() == Qt::RightButton)
@@ -338,17 +341,19 @@ void RenderState::add_node(QString *name)
     m_nodes.push_back(newnode);
 }
 
-void RenderState::add_pavement(QVector3D rotation, QVector3D translation)
+void RenderState::add_pavement(QVector3D rotation, QVector3D translation, QVector3D scaling)
 {
     // texture index 1 is the tile
     VisualObject * object = new VisualObject(m_plane,m_textures.value(2),translation,rotation, "Pavement");
+    object->setScaling(scaling);
     m_models.push_back(object);
 }
 
-void RenderState::add_tree(QVector3D rotation, QVector3D translation)
+void RenderState::add_tree(QVector3D rotation, QVector3D translation, QVector3D scaling)
 {
     // texture index 1 is the tile
     VisualObject * object = new VisualObject(m_tree,m_textures.value(2),translation,rotation, "Tree");
+    object->setScaling(scaling);
     m_models.push_back(object);
 }
 
@@ -360,10 +365,11 @@ void RenderState::add_wall(QVector3D rotation, QVector3D translation, QVector3D 
     m_models.push_back(object);
 }
 
-void RenderState::add_door(QVector3D rotation, QVector3D translation)
+void RenderState::add_door(QVector3D rotation, QVector3D translation, QVector3D scaling)
 {
     // texture index 1 is the tile
     VisualObject * object = new VisualObject(m_door,m_textures.value(2),translation,rotation, "Door");
+    object->setScaling(scaling);
     m_models.push_back(object);
 }
 
@@ -547,6 +553,7 @@ void RenderState::paintGL()
         translation.translate(object->getTranslation());
         QMatrix4x4 rotation;
         rotation.rotate(object->getRotation().y(),0,1,0);
+        rotation.scale(object->getScaling());
         DrawModel(object->getModelMesh(), vMatrix, translation,rotation,object->getTexture(),QVector3D());
         if((m_tree_removable)&&(object->getType().compare("Tree",Qt::CaseInsensitive)==0)&&(object->getTranslation().distanceToPoint(Pos)<4.0))
         {
@@ -566,7 +573,8 @@ void RenderState::paintGL()
         DrawLine(*m_clicked_position, *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
         m_rotation.setY(flat_angle_from_vectors(*m_clicked_position, *m_current_position)+90);
         m_currentscale.setZ(m_clicked_position->distanceToPoint(*m_current_position));
-        draw_if_true(m_wall, vMatrix,(*m_clicked_position+*m_current_position)/2.0,m_rotation,m_currentscale,m_textures.value(3),QVector3D(),m_wall_placable);
+        m_drag_middle_position = (*m_clicked_position+*m_current_position)/2.0;
+        draw_if_true(m_wall, vMatrix, m_drag_middle_position, m_rotation, m_currentscale, m_textures.value(3),QVector3D(),m_wall_placable);
     }
     // draw placable tree
     draw_if_true(m_tree, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(3),QVector3D(),m_tree_placable);
