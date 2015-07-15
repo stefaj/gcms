@@ -12,7 +12,7 @@
 #include <QtMath>
 #include "Objects/ModelMesh.h"
 #include "Objects/Node.h"
-#include "visualobject.h"
+#include "Objects/visualobject.h"
 
 class RenderState : public QOpenGLWidget, protected QOpenGLFunctions
 {

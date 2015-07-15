@@ -1,4 +1,4 @@
-#include "visualobject.h"
+#include "Objects/visualobject.h"
 
 VisualObject::VisualObject(ModelMesh * model, QOpenGLTexture *texture, QVector3D translation, QVector3D rotation, QString type){
      m_model = model;
