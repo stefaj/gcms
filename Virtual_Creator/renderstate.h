@@ -30,7 +30,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *);
 private:
     // Reuse shaderprogram for all child classes
-    //QGLShaderProgram *shaderProgram;// Cannot be parameter of a function (violation)
+    // QGLShaderProgram *shaderProgram;// Cannot be parameter of a function (violation)
     // Projection for all child classes
     QMatrix4x4 pMatrix; // dynamic memory control not needed
     void DrawModel(ModelMesh *, QMatrix4x4 , QMatrix4x4 , QMatrix4x4 ,QOpenGLTexture *, QVector3D );
@@ -40,19 +40,11 @@ private:
     void LoadContent();
     QSize m_viewportSize;
     QOpenGLShaderProgram *m_program;
-    qreal m_t;
     QVector3D *m_position, *m_clicked_position;
     QVector<QOpenGLTexture *> m_textures;
     QVector<Node *> m_nodes;
     QVector<VisualObject *> m_models;
-    ModelMesh *box,
-              *sky,
-              *wagen,
-              *node,
-              *m_plane,
-              *m_wall,
-              *m_door,
-              *m_tree;
+    ModelMesh *box, *sky, *wagen, *node, *m_plane, *m_wall, *m_door, *m_tree;
     int m_mouse_x, m_mouse_y, m_dmouse_x,m_dmouse_y,m_node_index_selected;
     float m_mouse_zoom,m_noderadius,m_mouse_y_inverted;
     // define a view matrix

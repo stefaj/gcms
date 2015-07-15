@@ -16,8 +16,7 @@
 class QVector2D;
 class QVector3D;
 class QString;
-class Node
-{
+class Node{
 public:
     Node();
     Node(QVector3D *);

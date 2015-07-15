@@ -17,8 +17,7 @@ class QVector2D;
 class QVector3D;
 class QString;
 
-class ModelMesh
-{
+class ModelMesh{
 public:
     ModelMesh(QString);
     ~ModelMesh();

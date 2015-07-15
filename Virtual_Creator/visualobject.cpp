@@ -1,7 +1,6 @@
 #include "visualobject.h"
 
-VisualObject::VisualObject(ModelMesh * model, QOpenGLTexture *texture, QVector3D translation, QVector3D rotation, QString type)
-{
+VisualObject::VisualObject(ModelMesh * model, QOpenGLTexture *texture, QVector3D translation, QVector3D rotation, QString type){
      m_model = model;
      m_texture = texture;
      m_translation = translation;
@@ -63,8 +62,7 @@ QVector3D VisualObject::getLMidHorisontal(){return m_center_h_2;}
 
 void VisualObject::setType(QString type){m_type = type;}
 
-VisualObject::~VisualObject()
-{
+VisualObject::~VisualObject(){
  delete m_model;
  delete m_texture;
 }

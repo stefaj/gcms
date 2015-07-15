@@ -3,8 +3,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
+    ui(new Ui::MainWindow){
     ui->setupUi(this);
 
     // hide things not needed
@@ -32,13 +31,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(place_tree(bool)),ui->openGLWidget,SLOT(allow_tree(bool)));
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
+MainWindow::~MainWindow(){delete ui;}
 
-void MainWindow::EmitSignals()
-{
+void MainWindow::EmitSignals(){
     emit node_links(ui->button_link->isChecked());
     emit place_node(ui->button_node->isChecked());
     emit remove_nodes(ui->button_remove_node->isChecked());
@@ -50,8 +45,7 @@ void MainWindow::EmitSignals()
     ui->groupBox_node_settings->setVisible(ui->button_node->isChecked());
 }
 
-void MainWindow::on_button_node_clicked()
-{
+void MainWindow::on_button_node_clicked(){
     ui->button_link->setChecked(false);
     ui->button_remove_node->setChecked(false);
     ui->button_pavement->setChecked(false);
@@ -62,8 +56,7 @@ void MainWindow::on_button_node_clicked()
     EmitSignals();
 }
 
-void MainWindow::on_button_link_clicked()
-{
+void MainWindow::on_button_link_clicked(){
     ui->button_node->setChecked(false);
     ui->button_remove_node->setChecked(false);
     ui->button_pavement->setChecked(false);
@@ -74,8 +67,7 @@ void MainWindow::on_button_link_clicked()
     EmitSignals();
 }
 
-void MainWindow::on_button_remove_node_clicked()
-{
+void MainWindow::on_button_remove_node_clicked(){
     ui->button_node->setChecked(false);
     ui->button_link->setChecked(false);
     ui->button_pavement->setChecked(false);
@@ -87,8 +79,7 @@ void MainWindow::on_button_remove_node_clicked()
 
 }
 
-void MainWindow::on_button_pavement_clicked()
-{
+void MainWindow::on_button_pavement_clicked(){
     ui->button_node->setChecked(false);
     ui->button_link->setChecked(false);
     ui->button_remove_node->setChecked(false);
@@ -99,8 +90,7 @@ void MainWindow::on_button_pavement_clicked()
     EmitSignals();
 }
 
-void MainWindow::on_button_wall_clicked()
-{
+void MainWindow::on_button_wall_clicked(){
     ui->button_node->setChecked(false);
     ui->button_link->setChecked(false);
     ui->button_remove_node->setChecked(false);
@@ -112,8 +102,7 @@ void MainWindow::on_button_wall_clicked()
 
 }
 
-void MainWindow::on_button_door_clicked()
-{
+void MainWindow::on_button_door_clicked(){
     ui->button_node->setChecked(false);
     ui->button_link->setChecked(false);
     ui->button_remove_node->setChecked(false);
@@ -124,18 +113,11 @@ void MainWindow::on_button_door_clicked()
     EmitSignals();
 }
 
-void MainWindow::on_spin_rotationY_valueChanged(double arg1)
-{
-    change_rotationY(arg1);
-}
+void MainWindow::on_spin_rotationY_valueChanged(double arg1){change_rotationY(arg1);}
 
-void MainWindow::on_checkBox_inversemouse_y_clicked(bool checked)
-{
- emit invert_mouseY(checked);
-}
+void MainWindow::on_checkBox_inversemouse_y_clicked(bool checked){emit invert_mouseY(checked);}
 
-void MainWindow::on_button_tree1_clicked()
-{
+void MainWindow::on_button_tree1_clicked(){
     ui->button_node->setChecked(false);
     ui->button_link->setChecked(false);
     ui->button_remove_node->setChecked(false);
@@ -146,8 +128,7 @@ void MainWindow::on_button_tree1_clicked()
     EmitSignals();
 }
 
-void MainWindow::on_button_remove_tree_clicked()
-{
+void MainWindow::on_button_remove_tree_clicked(){
     ui->button_node->setChecked(false);
     ui->button_link->setChecked(false);
     ui->button_remove_node->setChecked(false);
