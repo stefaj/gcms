@@ -964,7 +964,7 @@ QDoubleSpinBox::down-arrow:off
      <rect>
       <x>20</x>
       <y>20</y>
-      <width>341</width>
+      <width>351</width>
       <height>211</height>
      </rect>
     </property>
@@ -1031,9 +1031,9 @@ QDoubleSpinBox::down-arrow:off
      </property>
      <property name="geometry">
       <rect>
-       <x>170</x>
+       <x>160</x>
        <y>30</y>
-       <width>151</width>
+       <width>181</width>
        <height>111</height>
       </rect>
      </property>
@@ -1090,7 +1090,7 @@ QDoubleSpinBox::down-arrow:off
      <rect>
       <x>22</x>
       <y>252</y>
-      <width>182</width>
+      <width>231</width>
       <height>60</height>
      </rect>
     </property>
@@ -1126,7 +1126,7 @@ QDoubleSpinBox::down-arrow:off
      <rect>
       <x>22</x>
       <y>333</y>
-      <width>191</width>
+      <width>281</width>
       <height>61</height>
      </rect>
     </property>

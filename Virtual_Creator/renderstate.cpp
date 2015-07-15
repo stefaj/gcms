@@ -710,7 +710,6 @@ void RenderState::UpdateShaders(QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate
 
 void RenderState::ShaderDraw(ModelMesh *box)
 {
-
     // convert the qstring to c-string for opengl purposes, this is the vertex variable in the shader files
     const char *vert ="vertex";//= vertex.toStdString().c_str();
 
@@ -793,7 +792,6 @@ QVector3D RenderState::mouseRayCast(int mx,
 {
     float nx = (2.0f * mx) / this->width() - 1.0f; // normalize the x-mouse position
     float ny = m_mouse_y_inverted*(1.0f - (2.0f * my) / this->height());// normalize the y-mouse position
-
     QVector4D ray_clip = QVector4D(nx,ny,-1,1.0); // clip the x,y,z values between -1:1
     QMatrix4x4 pInverse = pMatrix.inverted(NULL);// invert the projection
     QMatrix4x4 vInverse = view_matrix.inverted(NULL);// invert the view
