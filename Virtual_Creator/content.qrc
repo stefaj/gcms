@@ -7,7 +7,6 @@
         <file alias="Fragment">Content/mainFrag.frag</file>
         <file alias="Vertex">Content/mainVert.vert</file>
         <file alias="Plane">Content/plane.obj</file>
-        <file>Content/Premises.pvc</file>
         <file alias="Sky">Content/sky.obj</file>
         <file alias="Texture0">Content/sky.png</file>
         <file alias="Sphere">Content/sphere.obj</file>
@@ -18,5 +17,6 @@
         <file alias="Texture3">Content/stone-wall-basic.jpg</file>
         <file alias="Wall01">Content/wall.obj</file>
         <file alias="DoorWay01">Content/doorway.obj</file>
+        <file alias="Texture4">Content/one_brick.png</file>
     </qresource>
 </RCC>

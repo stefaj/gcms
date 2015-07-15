@@ -31,6 +31,7 @@ uniform vec3 col;
 
 // texture coordinates inherited from  vertex shader
 varying vec2 varyingTextureCoordinate;
+uniform vec2 texture_coordinates;
 
 // normal vector for each pixel inherit from the vertex shader
 varying vec3 normals;
@@ -51,7 +52,8 @@ void main()
     float ndotl = -dot(normalize(normals),lightdir)+0.5;
 
     // set texture value
-    vec4 texturecol = texture2D(texture,varyingTextureCoordinate).rgba;
+    vec4 texturecol = texture2D(texture,vec2(varyingTextureCoordinate.x*texture_coordinates.x,
+                                             varyingTextureCoordinate.y* texture_coordinates.y)).rgba;
 
     // set the active colour with a ambiet colour
     gl_FragColor = texturecol*ndotl+vec4(col, 1);

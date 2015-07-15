@@ -33,10 +33,10 @@ private:
     // QGLShaderProgram *shaderProgram;// Cannot be parameter of a function (violation)
     // Projection for all child classes
     QMatrix4x4 pMatrix; // dynamic memory control not needed
-    void DrawModel(ModelMesh *, QMatrix4x4 , QMatrix4x4 , QMatrix4x4 ,QOpenGLTexture *, QVector3D );
+    void DrawModel(ModelMesh *, QMatrix4x4 , QMatrix4x4 , QMatrix4x4 ,QOpenGLTexture *, QVector3D , QVector2D);
     void DrawLine(QVector3D , QVector3D ,QMatrix4x4 ,QMatrix4x4 , QMatrix4x4 /*, GLuint texture*/,QVector3D );
     void ShaderDraw(ModelMesh *);
-    void UpdateShaders(QMatrix4x4 ,QMatrix4x4 , QMatrix4x4 ,QOpenGLTexture *, QVector3D );
+    void UpdateShaders(QMatrix4x4 ,QMatrix4x4 , QMatrix4x4 ,QOpenGLTexture *, QVector3D, QVector2D);
     void LoadContent();
     QSize m_viewportSize;
     QOpenGLShaderProgram *m_program;
@@ -55,7 +55,7 @@ private:
     bool m_mousedown_right, m_mousedown_left, m_node_placable,
     m_node_removable, m_tree_removable, m_node_linkable, m_pavement_placable,
     m_door_placeable,m_wall_placable, m_tree_placable;
-    void draw_if_true(ModelMesh*,QMatrix4x4, QVector3D, QVector3D, QVector3D,QOpenGLTexture *, QVector3D, bool);
+    void draw_if_true(ModelMesh*,QMatrix4x4, QVector3D, QVector3D, QVector3D,QOpenGLTexture *, QVector3D, QVector2D, bool);
     void add_pavement(QVector3D, QVector3D, QVector3D);
     void add_door(QVector3D, QVector3D, QVector3D);
     void add_wall(QVector3D, QVector3D, QVector3D);
