@@ -2,17 +2,17 @@
 
 VisualObject::VisualObject(ModelMesh * model, QOpenGLTexture *texture, QVector3D translation, QVector3D rotation, QString type)
 {
- m_model = model;
- m_texture = texture;
- m_translation = translation;
- m_rotation = rotation;
- m_type = type;
- m_corner_1 = translation;
- m_corner_2 = translation;
- m_corner_3 = translation;
- m_corner_4 = translation;
- m_center_h_1 = translation;
- m_center_h_2 = translation;
+     m_model = model;
+     m_texture = texture;
+     m_translation = translation;
+     m_rotation = rotation;
+     m_type = type;
+     m_corner_1 = translation;
+     m_corner_2 = translation;
+     m_corner_3 = translation;
+     m_corner_4 = translation;
+     m_center_h_1 = translation;
+     m_center_h_2 = translation;
 }
 
 void VisualObject::setModel(ModelMesh* model){ m_model = model;}

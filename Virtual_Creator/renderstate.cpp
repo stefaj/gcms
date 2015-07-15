@@ -1,4 +1,5 @@
 #include "renderstate.h"
+#include "Functions/mathematics.h"
 
 RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     m_program(0),
@@ -132,7 +133,7 @@ void RenderState::mouseMoveEvent(QMouseEvent *event)
     m_mouse_y = event->y();
 
     // update raycast vector
-    m_raycast = mouseRayCast(m_mouse_x, m_mouse_y, vMatrix);
+    m_raycast = Mathematics::mouse_raycast(m_mouse_x, m_mouse_y, this->width(), this->height(), m_mouse_y_inverted, vMatrix, pMatrix);
 
     if(m_mousedown_right)
     {
@@ -183,7 +184,6 @@ void RenderState::mouseMoveEvent(QMouseEvent *event)
 
 void RenderState::mouseReleaseEvent(QMouseEvent *)
 {
-    qDebug()<<m_pavement_placable;
     // release button right click
     if(m_mousedown_right)
     m_mousedown_right = false;
@@ -456,7 +456,7 @@ void RenderState::paintGL()
     vMatrix.translate(m_camera_prev);
 
     // return the position of the ray intersection with the y-axis
-    QVector3D Pos  = intersectYnull(m_raycast, QVector3D(0, m_mouse_zoom, 0)-m_camera_prev );
+    QVector3D Pos  = Mathematics::intersectYnull(m_raycast, QVector3D(0, m_mouse_zoom, 0)-m_camera_prev );
 
     // update current position
     m_current_position->setX(Pos.x());
@@ -501,13 +501,13 @@ void RenderState::paintGL()
     if((m_mousedown_left)&&(m_wall_placable))
     {
         m_drag_middle_position = (*m_clicked_position+*m_current_position)/2.0;
-        m_rotation.setY(flat_angle_from_vectors(*m_clicked_position, *m_current_position)+90);
+        m_rotation.setY(Mathematics::flat_angle_from_vectors(*m_clicked_position, *m_current_position)+90);
 
         // clamp to 0 and 180 degrees
-        if((return_near_degree(m_rotation.y())==0.0)||(return_near_degree(m_rotation.y())==180))
+        if((Mathematics::return_near_degree(m_rotation.y())==0.0)||(Mathematics::return_near_degree(m_rotation.y())==180))
         {
             // set fixed rotation for the rotation
-            m_rotation.setY(return_near_degree(m_rotation.y()));
+            m_rotation.setY(Mathematics::return_near_degree(m_rotation.y()));
 
             // set fixed position for the  x - axis
             m_drag_middle_position.setX(m_clicked_position->x());
@@ -520,9 +520,11 @@ void RenderState::paintGL()
         }
 
         // clamp to 270 and 90 degrees
-        if((return_near_degree(m_rotation.y())==270)||(return_near_degree(m_rotation.y())==90)||(return_near_degree(m_rotation.y())==-90))
+        if((Mathematics::return_near_degree(m_rotation.y())==270)||
+           (Mathematics::return_near_degree(m_rotation.y())==90)||
+                (Mathematics::return_near_degree(m_rotation.y())==-90))
         {
-        m_rotation.setY(return_near_degree(m_rotation.y()));
+        m_rotation.setY(Mathematics::return_near_degree(m_rotation.y()));
         m_drag_middle_position.setZ(m_clicked_position->z());
         m_current_position->setZ(m_clicked_position->z());
         DrawLine(*m_clicked_position+QVector3D(-infinte_lenght_lines, 0,0),
@@ -785,88 +787,6 @@ void RenderState::DrawModel(ModelMesh *box,QMatrix4x4 wvp,QMatrix4x4 mvp, QMatri
      UpdateShaders(wvp, mvp, rotate,texture, color);
      ShaderDraw(box);
  }
-
-QVector3D RenderState::mouseRayCast(int mx,
-                                    int my,
-                                    QMatrix4x4 view_matrix)
-{
-    float nx = (2.0f * mx) / this->width() - 1.0f; // normalize the x-mouse position
-    float ny = m_mouse_y_inverted*(1.0f - (2.0f * my) / this->height());// normalize the y-mouse position
-    QVector4D ray_clip = QVector4D(nx,ny,-1,1.0); // clip the x,y,z values between -1:1
-    QMatrix4x4 pInverse = pMatrix.inverted(NULL);// invert the projection
-    QMatrix4x4 vInverse = view_matrix.inverted(NULL);// invert the view
-    QVector4D ray_eye = pInverse*ray_clip; // "convert" the normalized ray to the projection values
-    ray_eye = QVector4D(ray_eye.x(),ray_eye.y(),-1.0,0);// change the w-value of the vector for matrix manipulation purposes
-    QVector4D ray_wor4 = vInverse*ray_eye; // "convert" the new ray to the view values
-    QVector3D ray_wor = ray_wor4.toVector3D(); // take the x,y,z values of the new position
-    ray_wor.normalize();// make the ray a unit vector
-
-    return ray_wor; // return the raycast of the 2D mouse in the 3D world view projection
-}
-
-QVector3D RenderState::intersectYnull(QVector3D u_dir, QVector3D r_point)
-{
-    float t =0.0;//t determines the point of intersection
-    if(u_dir.y() != 0)// (1/0) validation
-    t = -r_point.y()/u_dir.y(); // t=-r1.y/r (calculus)
-    return r_point+t*u_dir;// v(t)=r+t*r1
-}
-
-float RenderState::flat_angle_from_vectors(QVector3D pointA, QVector3D pointB)
-{
-    float delta_x = pointB.x()-pointA.x();
-    float delta_z = pointB.z()-pointA.z();
-    float distance = pointA.distanceToPoint(pointB);
-    // get the angle from the arccos function
-    if(delta_z>0)
-    return -(180*acos(delta_x/distance)/(3.141592));
-    else
-        return (180*acos(delta_x/distance)/(3.141592));
-
-}
-
-QVector3D RenderState::point_on_line(float x, QVector3D pointA,QVector3D pointB)
-{
-    const float slope = (pointA.z()-pointB.z())/(pointA.x()-pointB.x());
-    return QVector3D(x,0,x*slope+(pointA.z()-slope*pointA.x()));
-}
-
-float RenderState::return_near_degree(float value)
-{
-    // clamping factor
-    const float diff = 2.0f;
-
-    // if the degrees are near 45, clamp to 45 degrees
-    if((value-diff <45) &&(value+diff >45) )
-        return 45.0f;
-
-    // if the degrees are near 90, clamp to 90 degrees
-    if((value-diff <90) &&(value+diff >90) )
-        return 90.0f;
-
-    // if the degrees are near 180, clamp to 180 degrees
-    if((value-diff < 180) &&(value+diff > 180) )
-        return 180.0f;
-
-    // if the degrees are near -45, clamp to -45 degrees
-    if((value-diff < -45) &&(value+diff > -45) )
-        return -45.0f;
-
-    // if the degrees are near -90, clamp to -90 degrees
-    if((value-diff > -90) &&(value+diff < -90) )
-        return -90.0f;
-
-    // if the degrees are near 270, clamp to 270 degrees
-    if((value-diff < 270) &&(value+diff > 270) )
-        return 270.0f;
-
-    // if the degrees are near 0, clamp to 0 degrees
-    if((value-diff < 0) &&(value+diff > 0) )
-        return 0.0f;
-
-    // else return the normal value unchanged
-    return value;
-}
 
 RenderState::~RenderState()
 {

@@ -60,10 +60,6 @@ private:
     QVector3D *m_current_position;
     QVector3D m_position_camera, m_camera_prev, m_raycast, m_rotation, m_currentscale, m_drag_middle_position,
     m_corner_1, m_corner_2, m_corner_3, m_corner_4, m_center_h_1, m_center_h_2;
-    // raycasting prototype
-    QVector3D mouseRayCast(int, int, QMatrix4x4);
-    // intersection with y=0
-    QVector3D intersectYnull(QVector3D, QVector3D);
     bool m_mousedown_right, m_mousedown_left, m_node_placable,
     m_node_removable, m_tree_removable, m_node_linkable, m_pavement_placable,
     m_door_placeable,m_wall_placable, m_tree_placable;
@@ -73,9 +69,6 @@ private:
     void add_wall(QVector3D, QVector3D, QVector3D);
     void add_tree(QVector3D, QVector3D, QVector3D);
     void draw_circle_flat(QVector3D, QMatrix4x4,QVector3D, float);
-    float flat_angle_from_vectors(QVector3D,QVector3D);
-    QVector3D point_on_line(float, QVector3D,QVector3D);
-    float return_near_degree(float);
     const float tree_radius, infinte_lenght_lines;
 private slots:
     void add_node(QString *);
