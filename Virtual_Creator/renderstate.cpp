@@ -472,6 +472,13 @@ void RenderState::paintGL()
         rotation.rotate(object->getRotation().y(),0,1,0);
         rotation.scale(object->getScaling());
         DrawModel(object->getModelMesh(), vMatrix, translation,rotation,object->getTexture(),QVector3D());
+        if(m_wall_placable)
+        {
+            if(object->getLMidHorisontal().distanceToPoint(Pos)<1.0f)
+                *m_current_position = object->getLMidHorisontal();
+            if(object->getUMidHorisontal().distanceToPoint(Pos)<1.0f)
+               *m_current_position = object->getUMidHorisontal();
+        }
     }
 
     // draw placable node
@@ -486,6 +493,7 @@ void RenderState::paintGL()
         m_currentscale.setX(pow(pow((m_clicked_position->x()-m_current_position->x()),2),0.5)*2.0);
     }
     draw_if_true(m_plane, vMatrix,*m_clicked_position,m_rotation,m_currentscale,m_textures.value(2),QVector3D(),m_pavement_placable&&(m_mousedown_left));
+
     // draw placable door
     draw_if_true(m_door, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(2),QVector3D(),m_door_placeable);
 
@@ -582,7 +590,6 @@ void RenderState::paintGL()
                 aux_calc_one = aux_rotate*(QVector3D(0,0,1));
                 aux_calc_two = aux_45*aux_rotate*(QVector3D(0,0,1));
 
-
                 DrawLine(n->Position(), m_nodes.value(n->getConnectedIndex(i))->Position(), vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
                 DrawLine((n->Position()+
                          m_nodes.value(n->getConnectedIndex(i))->Position())/2.0,
@@ -593,7 +600,6 @@ void RenderState::paintGL()
                          aux_calc_two+(n->Position()+
                                    m_nodes.value(n->getConnectedIndex(i))->Position())/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
             }
-            //DrawLine(n->Position(), m_nodes.value(n->getConnectedIndex(i))->Position(), vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D());
         }
     }
 
@@ -608,15 +614,9 @@ void RenderState::paintGL()
         if(m_wall_placable)
         {
             if(object->getLMidHorisontal().distanceToPoint(Pos)<1.0f)
-            {
                 draw_circle_flat(object->getLMidHorisontal(), vMatrix, QVector3D(0,1,0), 1.0f);
-                *m_current_position = object->getLMidHorisontal();
-            }
             if(object->getUMidHorisontal().distanceToPoint(Pos)<1.0f)
-            {
                 draw_circle_flat(object->getUMidHorisontal(), vMatrix, QVector3D(0,1,0), 1.0f);
-               *m_current_position = object->getUMidHorisontal();
-            }
         }
     }
     // draw line if right clicked
@@ -836,7 +836,7 @@ QVector3D RenderState::point_on_line(float x, QVector3D pointA,QVector3D pointB)
 float RenderState::return_near_degree(float value)
 {
     // clamping factor
-    const float diff = 3.0f;
+    const float diff = 2.0f;
 
     // if the degrees are near 45, clamp to 45 degrees
     if((value-diff <45) &&(value+diff >45) )
