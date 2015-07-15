@@ -62,6 +62,7 @@ private:
     void add_tree(QVector3D, QVector3D, QVector3D);
     void draw_circle_flat(QVector3D, QMatrix4x4,QVector3D, float);
     const float tree_radius, infinte_lenght_lines;
+    const char *vertex, *textureCoordinate, *normal;
 private slots:
     void add_node(QString *);
     void allow_node(bool);

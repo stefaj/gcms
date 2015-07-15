@@ -29,6 +29,11 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     tree_radius(4.0f),
     infinte_lenght_lines(100.0f){
 
+    // opengl shader variable names
+    vertex = "vertex";
+    textureCoordinate= "textureCoordinate";
+    normal = "normal";
+
     // enable antialiasing (set the format of the widget)
     QSurfaceFormat format;
     format.setSamples(4);
@@ -331,6 +336,7 @@ void RenderState::resizeGL(int w, int h){
 }
 
 void RenderState::LoadContent(){
+
     // this initializes all the opengl functions
     initializeOpenGLFunctions();
 
@@ -613,20 +619,14 @@ void RenderState::UpdateShaders(QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate
 }
 
 void RenderState::ShaderDraw(ModelMesh *box){
-    // convert the qstring to c-string for opengl purposes, this is the vertex variable in the shader files
-    const char *vert ="vertex";//= vertex.toStdString().c_str();
-    // convert the qstring to c-string for opengl purposes, this is the texture variable in the shader
-    const char *textureCoordinate= "textureCoordinate";//= texCoord.toStdString().c_str();
-    // convert the qstring to c-string for opengl, this is the normal variable in the shader code
-    const char *normals = "normal";
     // load the vertices to the shaders
-    m_program->setAttributeArray(vert, box->m_vertices.constData());
+    m_program->setAttributeArray(vertex, box->m_vertices.constData());
     // enable the shader attribute( vertices )
-    m_program->enableAttributeArray(vert);
+    m_program->enableAttributeArray(vertex);
     // load the normals to the shaders
-    m_program->setAttributeArray(normals, box->m_normals.constData());
+    m_program->setAttributeArray(normal, box->m_normals.constData());
     // enable the shader attribute( normals )
-    m_program->enableAttributeArray(normals);
+    m_program->enableAttributeArray(normal);
     // load the texture coordinates to the shaders
     m_program->setAttributeArray(textureCoordinate, box->m_textureCoordinates.constData());
     // enable the texture attribute
@@ -634,9 +634,9 @@ void RenderState::ShaderDraw(ModelMesh *box){
     // draw the opengl vertices
     box->Draw();
     // disable the vertex attributes
-    m_program->disableAttributeArray(vert);
+    m_program->disableAttributeArray(vertex);
     // disable the normal attributes
-    m_program->disableAttributeArray(normals);
+    m_program->disableAttributeArray(normal);
     // disable the Texture coordinates attributes
     m_program->disableAttributeArray(textureCoordinate);
     // release the current updated shader code (awaiting next frame)
@@ -648,20 +648,18 @@ void RenderState::DrawLine(QVector3D point1, QVector3D point2,QMatrix4x4 wvp,QMa
     temp_vertices.push_back(point1);
     temp_vertices.push_back(point2);
     UpdateShaders(wvp, mvp, rotate,m_textures.value(0), color);
-    const char *vert ="vertex";//= vertex.toStdString().c_str();// convert the qstring to c-string for opengl purposes
-    const char *normals = "normal";// convert the qstring to c-string for opengl purposes
-    m_program->setAttributeArray(vert, temp_vertices.constData());//load the vertices to the shaders
-    m_program->enableAttributeArray(vert);//enable the shader attribute( vertices )
-    m_program->setAttributeArray(normals, temp_vertices.constData());//load the normals to the shaders
-    m_program->enableAttributeArray(normals);//enable the shader attribute( vertices )
+    m_program->setAttributeArray(vertex, temp_vertices.constData());//load the vertices to the shaders
+    m_program->enableAttributeArray(vertex);//enable the shader attribute( vertices )
+    m_program->setAttributeArray(normal, temp_vertices.constData());//load the normals to the shaders
+    m_program->enableAttributeArray(normal);//enable the shader attribute( vertices )
     glLineWidth(2.0);
     glDisable(GL_DEPTH_TEST);
     glDepthFunc(GL_ALWAYS);
     glDrawArrays(GL_LINES, 0, temp_vertices.size());
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    m_program->disableAttributeArray(vert);// disable the vertex attributes
-    m_program->disableAttributeArray(normals);// disable the normal attributes
+    m_program->disableAttributeArray(vertex);// disable the vertex attributes
+    m_program->disableAttributeArray(normal);// disable the normal attributes
     m_program->release(); // release the current updated shader code (awaiting next frame)
     temp_vertices.clear();
 }
