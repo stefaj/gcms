@@ -1126,8 +1126,8 @@ QDoubleSpinBox::down-arrow:off
      <rect>
       <x>22</x>
       <y>333</y>
-      <width>111</width>
-      <height>53</height>
+      <width>191</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="title">
@@ -1154,7 +1154,7 @@ QDoubleSpinBox::down-arrow:off
      <rect>
       <x>22</x>
       <y>392</y>
-      <width>111</width>
+      <width>191</width>
       <height>91</height>
      </rect>
     </property>

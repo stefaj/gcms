@@ -151,7 +151,6 @@ void RenderState::mouseMoveEvent(QMouseEvent *event)
     // removable dragable nodes
     if(m_mousedown_left&&m_node_removable)
     {
-
         // collision detection
         for(int l = 0;l<m_nodes.count();l++)
         {
@@ -174,8 +173,6 @@ void RenderState::mouseMoveEvent(QMouseEvent *event)
                             m_nodes.value(i)->MoveLinkedIndexBack(k);
                     }
                 }
-
-
             }
         }
     }
@@ -186,6 +183,7 @@ void RenderState::mouseMoveEvent(QMouseEvent *event)
 
 void RenderState::mouseReleaseEvent(QMouseEvent *)
 {
+    qDebug()<<m_pavement_placable;
     // release button right click
     if(m_mousedown_right)
     m_mousedown_right = false;
@@ -212,10 +210,19 @@ void RenderState::mouseReleaseEvent(QMouseEvent *)
                 m_nodes.value(m_node_index_selected)->AddLink(new QString("Link"+QString::number(m_nodes.value(m_node_index_selected)->countConnected())),linkindex);
             }
         }
+
         if(m_wall_placable)
         {
             // place wall
              add_wall(m_rotation,m_drag_middle_position,m_currentscale);
+        }
+
+
+        if(m_pavement_placable)
+        {
+            // place pavement
+            add_pavement(m_rotation,*m_clicked_position,m_currentscale);
+
         }
     }
     m_clicked_position = new QVector3D(0,-1000,0);
@@ -227,34 +234,33 @@ void RenderState::mouseReleaseEvent(QMouseEvent *)
 
 void RenderState::mousePressEvent(QMouseEvent *event)
 {
+    // make dragable from left click
+    if(event->button() == Qt::LeftButton)
+    m_mousedown_left = true;
+
+    // right click to move the camara around
+    if(event->button() == Qt::RightButton)
+        m_mousedown_right = true;
+
     // left click to add the node
     if((event->button() == Qt::LeftButton)&&(m_node_placable))
         add_node(new QString("pewpew"+QString::number(m_nodes.count())));
-
-    // left click to add pavement
-    if((event->button() == Qt::LeftButton)&&(m_pavement_placable))
-        add_pavement(m_rotation,*m_current_position, m_currentscale);
 
     // left click to add door
     if((event->button() == Qt::LeftButton)&&(m_door_placeable))
         add_door(m_rotation,*m_current_position, m_currentscale);
 
     // left click to add wall
-    if((event->button() == Qt::LeftButton)&&(m_wall_placable)){
-        m_mousedown_left = true;
+    if((event->button() == Qt::LeftButton)&&(m_wall_placable))
         m_clicked_position = new QVector3D(m_current_position->x(), m_current_position->y(), m_current_position->z());
-    }
 
     // left click to add tree
     if((event->button() == Qt::LeftButton)&&(m_tree_placable))
         add_tree(m_rotation,*m_current_position, m_currentscale);
 
-    // right click to move the camara around
-    if(event->button() == Qt::RightButton)
-    {
-        m_mousedown_right = true;
-        m_clicked_position = new QVector3D(m_current_position->x(), m_current_position->y(), m_current_position->z());
-    }
+
+    // set current clicked position
+    m_clicked_position = new QVector3D(m_current_position->x(), m_current_position->y(), m_current_position->z());
 
     if((event->button() == Qt::LeftButton)&&(m_tree_removable))
     {
@@ -271,9 +277,6 @@ void RenderState::mousePressEvent(QMouseEvent *event)
     // left click to remove the node
     if((event->button() == Qt::LeftButton)&&(m_node_removable))
     {
-        // make dragable from left click
-        m_mousedown_left = true;
-
         // collision detection
         for(int l = 0;l<m_nodes.count();l++)
         {
@@ -306,9 +309,6 @@ void RenderState::mousePressEvent(QMouseEvent *event)
     // left click to add the link
     if((event->button() == Qt::LeftButton)&&(m_node_linkable))
     {
-        // make dragable from left click
-        m_mousedown_left = true;
-
         // get position of the clicked
         m_clicked_position = new QVector3D(m_current_position->x(),m_current_position->y(),m_current_position->z());
 
@@ -318,9 +318,7 @@ void RenderState::mousePressEvent(QMouseEvent *event)
             if(m_clicked_position->distanceToPoint(m_nodes.value(l)->Position())<m_noderadius)
                 m_node_index_selected = l;
         }
-
     }
-
 }
 
 void RenderState::wheelEvent(QWheelEvent *event)
@@ -465,46 +463,88 @@ void RenderState::paintGL()
     m_current_position->setZ(Pos.z());
     m_current_position->setY(Pos.y());
 
-    // draw line if right clicked
-    if(m_mousedown_right)
-    DrawLine(*m_clicked_position, *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
-
-    // draw left clicked line(s)
-    if((m_node_linkable)&&(m_mousedown_left)&&(m_node_index_selected>-1)&&(m_node_index_selected<m_nodes.count()))
+    // draw other objects first
+    foreach(VisualObject *object, m_models)
     {
-        QVector3D aux_calc_one, aux_calc_two, aux_angle;
-        QMatrix4x4 aux_rotate, aux_45;
-        aux_angle = m_nodes.value(m_node_index_selected)->Position() - *m_current_position;
-        aux_angle.setY(0);
-
-        // get the angle from the arccos function
-        if(aux_angle.z()>0)
-        aux_rotate.rotate(45-180*acos(aux_angle.x()/aux_angle.length())/(3.141592),0,1,0);
-        else
-          aux_rotate.rotate(45+180*acos(aux_angle.x()/aux_angle.length())/(3.141592),0,1,0);
-
-        aux_45.rotate(90,0,1,0);
-        aux_calc_one = aux_rotate*(QVector3D(0,0,1));
-        aux_calc_two = aux_45*aux_rotate*(QVector3D(0,0,1));
-
-        DrawLine(m_nodes.value(m_node_index_selected)->Position(), *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,0));
-        DrawLine((m_nodes.value(m_node_index_selected)->Position()+
-                 *m_current_position)/2.0,
-                 aux_calc_one+(m_nodes.value(m_node_index_selected)->Position()+
-                           *m_current_position)/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,0));
-        DrawLine((m_nodes.value(m_node_index_selected)->Position()+
-                 *m_current_position)/2.0,
-                 aux_calc_two+(m_nodes.value(m_node_index_selected)->Position()+
-                           *m_current_position)/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,0));
+        QMatrix4x4 translation;
+        translation.translate(object->getTranslation());
+        QMatrix4x4 rotation;
+        rotation.rotate(object->getRotation().y(),0,1,0);
+        rotation.scale(object->getScaling());
+        DrawModel(object->getModelMesh(), vMatrix, translation,rotation,object->getTexture(),QVector3D());
     }
 
-    // draw all the nodes here
+    // draw placable node
+    draw_if_true(node, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(0),QVector3D(),m_node_placable);
+    // draw placable tile draggable mouse
+    draw_if_true(m_plane, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(2),QVector3D(),m_pavement_placable&&(!m_mousedown_left));
+    // draw placable tile clicked
+    if(m_mousedown_left&&m_pavement_placable)
+    {
+        m_currentscale.setZ(pow(pow((m_clicked_position->z()-m_current_position->z()),2),0.5)*2.0);
+        m_currentscale.setY(1);
+        m_currentscale.setX(pow(pow((m_clicked_position->x()-m_current_position->x()),2),0.5)*2.0);
+    }
+    draw_if_true(m_plane, vMatrix,*m_clicked_position,m_rotation,m_currentscale,m_textures.value(2),QVector3D(),m_pavement_placable&&(m_mousedown_left));
+    // draw placable door
+    draw_if_true(m_door, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(2),QVector3D(),m_door_placeable);
 
+    // draw placable wall
+    if((m_mousedown_left)&&(m_wall_placable))
+    {
+        m_drag_middle_position = (*m_clicked_position+*m_current_position)/2.0;
+        m_rotation.setY(flat_angle_from_vectors(*m_clicked_position, *m_current_position)+90);
+
+        // clamp to 0 and 180 degrees
+        if((return_near_degree(m_rotation.y())==0.0)||(return_near_degree(m_rotation.y())==180))
+        {
+            // set fixed rotation for the rotation
+            m_rotation.setY(return_near_degree(m_rotation.y()));
+
+            // set fixed position for the  x - axis
+            m_drag_middle_position.setX(m_clicked_position->x());
+            m_current_position->setX(m_clicked_position->x());
+
+            DrawLine(*m_clicked_position+QVector3D(0, 0,-infinte_lenght_lines),
+                     *m_current_position+QVector3D(0, 0, infinte_lenght_lines),
+                     vMatrix, QMatrix4x4(), QMatrix4x4(),
+                     QVector3D(1,1,1));
+        }
+
+        // clamp to 270 and 90 degrees
+        if((return_near_degree(m_rotation.y())==270)||(return_near_degree(m_rotation.y())==90)||(return_near_degree(m_rotation.y())==-90))
+        {
+        m_rotation.setY(return_near_degree(m_rotation.y()));
+        m_drag_middle_position.setZ(m_clicked_position->z());
+        m_current_position->setZ(m_clicked_position->z());
+        DrawLine(*m_clicked_position+QVector3D(-infinte_lenght_lines, 0,0),
+                 *m_current_position+QVector3D(infinte_lenght_lines, 0, 0),
+                 vMatrix, QMatrix4x4(), QMatrix4x4(),
+                 QVector3D(1,1,1));
+        }
+
+
+        // set clickable centers
+        m_center_h_1 = *m_current_position;
+        m_center_h_2 = *m_clicked_position;
+
+        m_currentscale.setZ(m_clicked_position->distanceToPoint(*m_current_position));
+        draw_if_true(m_wall, vMatrix, m_drag_middle_position, m_rotation, m_currentscale, m_textures.value(2),QVector3D(),m_wall_placable);
+    }
+    // draw placable tree
+    draw_if_true(m_tree, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(3),QVector3D(),m_tree_placable);
+
+    // draw all the nodes here
     foreach(Node *n, m_nodes)
     {
         QMatrix4x4 translation;
         translation.translate(n->Position());
         DrawModel(node, vMatrix, translation,QMatrix4x4(),m_textures.value(0),QVector3D());
+    }
+
+    // draw all the node lines here
+    foreach(Node *n, m_nodes)
+    {
         if(n->Position().distanceToPoint(Pos)<0.5)
         {
             // draw a circle here
@@ -557,80 +597,60 @@ void RenderState::paintGL()
         }
     }
 
+    // draw lines last
     foreach(VisualObject *object, m_models)
     {
-        QMatrix4x4 translation;
-        translation.translate(object->getTranslation());
-        QMatrix4x4 rotation;
-        rotation.rotate(object->getRotation().y(),0,1,0);
-        rotation.scale(object->getScaling());
-        DrawModel(object->getModelMesh(), vMatrix, translation,rotation,object->getTexture(),QVector3D());
         if((m_tree_removable)&&(object->getType().compare("Tree",Qt::CaseInsensitive)==0)&&(object->getTranslation().distanceToPoint(Pos)<4.0))
         {
             // draw a circle here
             draw_circle_flat(object->getTranslation(),vMatrix,QVector3D(1,0,0),4.0f);
         }
-        if(object->getLMidHorisontal().distanceToPoint(Pos)<1.0f)
+        if(m_wall_placable)
         {
-            draw_circle_flat(object->getLMidHorisontal(), vMatrix, QVector3D(0,1,0), 1.0f);
-            *m_current_position = object->getLMidHorisontal();
-        }
-        if(object->getUMidHorisontal().distanceToPoint(Pos)<1.0f)
-        {
-            draw_circle_flat(object->getUMidHorisontal(), vMatrix, QVector3D(0,1,0), 1.0f);
-           *m_current_position = object->getUMidHorisontal();
+            if(object->getLMidHorisontal().distanceToPoint(Pos)<1.0f)
+            {
+                draw_circle_flat(object->getLMidHorisontal(), vMatrix, QVector3D(0,1,0), 1.0f);
+                *m_current_position = object->getLMidHorisontal();
+            }
+            if(object->getUMidHorisontal().distanceToPoint(Pos)<1.0f)
+            {
+                draw_circle_flat(object->getUMidHorisontal(), vMatrix, QVector3D(0,1,0), 1.0f);
+               *m_current_position = object->getUMidHorisontal();
+            }
         }
     }
-    // draw placable node
-    draw_if_true(node, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(0),QVector3D(),m_node_placable);
-    // draw placable tile
-    draw_if_true(m_plane, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(2),QVector3D(),m_pavement_placable);
-    // draw placable door
-    draw_if_true(m_door, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(2),QVector3D(),m_door_placeable);
+    // draw line if right clicked
+    if(m_mousedown_right)
+    DrawLine(*m_clicked_position, *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
 
-    // draw placable wall
-    if((m_mousedown_left)&&(m_wall_placable))
+    // draw left clicked line(s)
+    if((m_node_linkable)&&(m_mousedown_left)&&(m_node_index_selected>-1)&&(m_node_index_selected<m_nodes.count()))
     {
-        m_drag_middle_position = (*m_clicked_position+*m_current_position)/2.0;
-        m_rotation.setY(flat_angle_from_vectors(*m_clicked_position, *m_current_position)+90);
+        QVector3D aux_calc_one, aux_calc_two, aux_angle;
+        QMatrix4x4 aux_rotate, aux_45;
+        aux_angle = m_nodes.value(m_node_index_selected)->Position() - *m_current_position;
+        aux_angle.setY(0);
 
-        // clamp to 0 and 180 degrees
-        if((return_near_degree(m_rotation.y())==0.0)||(return_near_degree(m_rotation.y())==180))
-        {
-            // set fixed rotation for the rotation
-            m_rotation.setY(return_near_degree(m_rotation.y()));
+        // get the angle from the arccos function
+        if(aux_angle.z()>0)
+        aux_rotate.rotate(45-180*acos(aux_angle.x()/aux_angle.length())/(3.141592),0,1,0);
+        else
+          aux_rotate.rotate(45+180*acos(aux_angle.x()/aux_angle.length())/(3.141592),0,1,0);
 
-            // set fixed position for the  x - axis
-            m_drag_middle_position.setX(m_clicked_position->x());
-            m_current_position->setX(m_clicked_position->x());
+        aux_45.rotate(90,0,1,0);
+        aux_calc_one = aux_rotate*(QVector3D(0,0,1));
+        aux_calc_two = aux_45*aux_rotate*(QVector3D(0,0,1));
 
-            DrawLine(*m_clicked_position+QVector3D(0, 0,-infinte_lenght_lines),
-                     *m_current_position+QVector3D(0, 0, infinte_lenght_lines),
-                     vMatrix, QMatrix4x4(), QMatrix4x4(),
-                     QVector3D(1,1,1));
-        }
-
-        // clamp to 270 and 90 degrees
-        if((return_near_degree(m_rotation.y())==270)||(return_near_degree(m_rotation.y())==90)||(return_near_degree(m_rotation.y())==-90))
-        {
-        m_rotation.setY(return_near_degree(m_rotation.y()));
-        m_drag_middle_position.setZ(m_clicked_position->z());
-        m_current_position->setZ(m_clicked_position->z());
-        DrawLine(*m_clicked_position+QVector3D(-infinte_lenght_lines, 0,0),
-                 *m_current_position+QVector3D(infinte_lenght_lines, 0, 0),
-                 vMatrix, QMatrix4x4(), QMatrix4x4(),
-                 QVector3D(1,1,1));
-        }
-
-        // set clickable centers
-        m_center_h_1 = *m_current_position;
-        m_center_h_2 = *m_clicked_position;
-
-        m_currentscale.setZ(m_clicked_position->distanceToPoint(*m_current_position));
-        draw_if_true(m_wall, vMatrix, m_drag_middle_position, m_rotation, m_currentscale, m_textures.value(2),QVector3D(),m_wall_placable);
+        DrawLine(m_nodes.value(m_node_index_selected)->Position(), *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,0));
+        DrawLine((m_nodes.value(m_node_index_selected)->Position()+
+                 *m_current_position)/2.0,
+                 aux_calc_one+(m_nodes.value(m_node_index_selected)->Position()+
+                           *m_current_position)/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,0));
+        DrawLine((m_nodes.value(m_node_index_selected)->Position()+
+                 *m_current_position)/2.0,
+                 aux_calc_two+(m_nodes.value(m_node_index_selected)->Position()+
+                           *m_current_position)/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,0));
     }
-    // draw placable tree
-    draw_if_true(m_tree, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(3),QVector3D(),m_tree_placable);
 
     // release the program for this frame
     m_program->release();
@@ -750,7 +770,11 @@ void RenderState::DrawLine(QVector3D point1, QVector3D point2,QMatrix4x4 wvp,QMa
     //m_program->setAttributeArray(textureCoordinate, box->textureCoordinates.constData());//load the texture coordinates to the shaders
    // m_program->enableAttributeArray(textureCoordinate);//enable the shader attribute( texture coordinates )
     glLineWidth(2.0);
+    glDisable(GL_DEPTH_TEST);
+    glDepthFunc(GL_ALWAYS);
     glDrawArrays(GL_LINES, 0, temp_vertices.size());
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
     m_program->disableAttributeArray(vert);// disable the vertex attributes
     m_program->disableAttributeArray(normals);// disable the normal attributes
     m_program->release(); // release the current updated shader code (awaiting next frame)
