@@ -170,6 +170,8 @@ void RenderState::mouseReleaseEvent(QMouseEvent *){
                 // add a link to the node
                 m_nodes.value(m_node_index_selected)->AddLink(new QString("Link"+QString::number(m_nodes.value(m_node_index_selected)->countConnected())),linkindex);
             }
+            // export to temp nodes
+            PremisesExporter::export_nodes(m_nodes,"nodes.pvc");
         }
 
         if(m_wall_placable){
@@ -202,7 +204,10 @@ void RenderState::mousePressEvent(QMouseEvent *event){
 
     // left click to add the node
     if((event->button() == Qt::LeftButton)&&(m_node_placable))
+    {
         add_node(new QString("pewpew"+QString::number(m_nodes.count())));
+        PremisesExporter::export_nodes(m_nodes,"nodes.pvc");
+    }
 
     // left click to add door
     if((event->button() == Qt::LeftButton)&&(m_door_placeable))

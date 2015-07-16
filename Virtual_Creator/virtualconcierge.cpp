@@ -8,7 +8,6 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
     ui->setupUi(this);
 }
 
-VirtualConcierge::~VirtualConcierge()
-{
+VirtualConcierge::~VirtualConcierge(){
     delete ui;
 }

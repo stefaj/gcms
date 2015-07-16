@@ -61,9 +61,11 @@ void Node::setDestinationNode(){
 }
 
 void Node::AddLink(QString *Name, int index){
-    m_connected.push_back(Name);
-    m_connectedindex.push_back(index);
-    m_links = true;
+    if(!m_connectedindex.contains(index)){
+        m_connected.push_back(Name);
+        m_connectedindex.push_back(index);
+        m_links = true;
+    }
 }
 
 void Node::RemoveLinkedFromIndex(int index){

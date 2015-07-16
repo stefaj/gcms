@@ -13,6 +13,7 @@
 #include "Objects/ModelMesh.h"
 #include "Objects/Node.h"
 #include "Objects/visualobject.h"
+#include "Functions/premises_exporter.h"
 
 class RenderState : public QOpenGLWidget, protected QOpenGLFunctions
 {

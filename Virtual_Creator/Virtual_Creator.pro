@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     Objects/visualobject.cpp \
     Functions/mathematics.cpp \
     virtualconcierge.cpp \
-    virtualconciergerenderstate.cpp
+    virtualconciergerenderstate.cpp \
+    Functions/premises_exporter.cpp
 
 HEADERS  += mainwindow.h \
     renderstate.h \
@@ -30,7 +31,8 @@ HEADERS  += mainwindow.h \
     Objects/visualobject.h \
     Functions/mathematics.h \
     virtualconcierge.h \
-    virtualconciergerenderstate.h
+    virtualconciergerenderstate.h \
+    Functions/premises_exporter.h
 
 FORMS    += mainwindow.ui \
     virtualconcierge.ui
