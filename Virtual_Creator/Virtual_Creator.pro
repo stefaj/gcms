@@ -15,24 +15,26 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    renderstate.cpp \
     Objects/ModelMesh.cpp \
     Objects/Node.cpp \
     Objects/visualobject.cpp \
     Functions/mathematics.cpp \
     virtualconcierge.cpp \
-    virtualconciergerenderstate.cpp \
-    Functions/premises_exporter.cpp
+    Functions/premises_exporter.cpp \
+    Objects/NodeHandler.cpp \
+    RenderStates/renderstate.cpp \
+    RenderStates/virtualconciergerenderstate.cpp
 
 HEADERS  += mainwindow.h \
-    renderstate.h \
     Objects/ModelMesh.h \
     Objects/Node.h \
     Objects/visualobject.h \
     Functions/mathematics.h \
     virtualconcierge.h \
-    virtualconciergerenderstate.h \
-    Functions/premises_exporter.h
+    Functions/premises_exporter.h \
+    Objects/NodeHandler.h \
+    RenderStates/renderstate.h \
+    RenderStates/virtualconciergerenderstate.h
 
 FORMS    += mainwindow.ui \
     virtualconcierge.ui

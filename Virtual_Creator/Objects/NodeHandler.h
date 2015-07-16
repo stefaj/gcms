@@ -11,7 +11,7 @@
 
 #ifndef NODEHANDLER_H
 #define NODEHANDLER_H
-#include "VCCMObjects/Node.h"
+#include "Objects/Node.h"
 #include <QVector>
 #include <QString>
 #include <qdebug.h>

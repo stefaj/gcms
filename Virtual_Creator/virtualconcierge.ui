@@ -28,7 +28,7 @@
   <customwidget>
    <class>VirtualConciergeRenderstate</class>
    <extends>QOpenGLWidget</extends>
-   <header>virtualconciergerenderstate.h</header>
+   <header>RenderStates/virtualconciergerenderstate.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

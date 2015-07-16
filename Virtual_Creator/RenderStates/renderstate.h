@@ -40,7 +40,7 @@ private:
     void UpdateShaders(QMatrix4x4 ,QMatrix4x4 , QMatrix4x4 ,QOpenGLTexture *, QVector3D, QVector2D);
     void LoadContent();
     QSize m_viewportSize;
-    QOpenGLShaderProgram *m_program;
+    static QOpenGLShaderProgram *m_program;
     QVector3D *m_position, *m_clicked_position;
     QVector<QOpenGLTexture *> m_textures;
     QVector<Node *> m_nodes;

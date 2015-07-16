@@ -1198,7 +1198,7 @@ QDoubleSpinBox::down-arrow:off
   <customwidget>
    <class>RenderState</class>
    <extends>QOpenGLWidget</extends>
-   <header location="global">renderstate.h</header>
+   <header>RenderStates/renderstate.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

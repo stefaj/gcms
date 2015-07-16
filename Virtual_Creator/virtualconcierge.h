@@ -2,7 +2,7 @@
 #define VIRTUALCONCIERGE_H
 
 #include <QWidget>
-#include "virtualconciergerenderstate.h"
+#include "RenderStates/virtualconciergerenderstate.h"
 
 namespace Ui {
 class VirtualConcierge;

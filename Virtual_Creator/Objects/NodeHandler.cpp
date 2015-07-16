@@ -1,4 +1,4 @@
-#include "VCCMObjects/NodeHandler.h"
+#include "Objects/NodeHandler.h"
 #include <QVector3D>
 #include <qdebug.h>
 #include <QFile>
