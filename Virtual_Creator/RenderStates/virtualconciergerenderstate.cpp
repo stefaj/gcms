@@ -75,7 +75,7 @@ void VirtualConciergeRenderstate::paintGL(){
        // rotation in the x - axis
        cameraTransformation.rotate(-90, 1, 0, 0);
        // transform the camera's position with respect to the rotation matrix
-       QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, 50.0) ;
+       QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, 80.0) ;
        // define the direction of the camera's up vector
        QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
        // implement and transform the camera
@@ -89,7 +89,6 @@ void VirtualConciergeRenderstate::paintGL(){
          QMatrix4x4 mMatrix;
          // transform the position locally
          mMatrix.translate(m_handler->NodeFromIndex(x).Position());
-         /*mMatrix.scale(4.0);*/
          // draw different types of nodes, (connected & unconnected nodes & best path)
          DrawGL::DrawModel(m_node,vMatrix,mMatrix,QMatrix4x4(),m_textures.value(0),m_handler->NodeFromIndex(x).getColor(),QVector2D(1,1),m_program,pMatrix);
        }

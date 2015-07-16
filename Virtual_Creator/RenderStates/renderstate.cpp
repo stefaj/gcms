@@ -26,6 +26,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     m_node_placable(false),
     m_pavement_placable(false),
     m_tree_placable(false),
+    m_placable_floor_plan(false),
     tree_radius(4.0f),
     infinte_lenght_lines(100.0f){
 
@@ -79,7 +80,17 @@ void RenderState::allow_wall(bool value){m_wall_placable = value;}
 
 void RenderState::allow_tree(bool value){m_tree_placable = value;}
 
+void RenderState::allow_floor_plan(bool value){m_placable_floor_plan = value;}
+
 void RenderState::change_rotY(double value){m_rotation.setY(value);}
+
+void RenderState::load_texture_from_file(QString value)
+{
+    QOpenGLTexture *texture = new QOpenGLTexture(QImage(value).mirrored());
+    texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+    texture->setMagnificationFilter(QOpenGLTexture::Linear);
+    m_textures_from_files.push_back(texture);
+}
 
 void RenderState::initializeGL(){
     initializeOpenGLFunctions();
@@ -208,6 +219,10 @@ void RenderState::mousePressEvent(QMouseEvent *event){
     if((event->button() == Qt::LeftButton)&&(m_door_placeable))
         add_door(m_rotation,*m_current_position, m_currentscale);
 
+    // add floor plan
+    if((event->button() == Qt::LeftButton)&&(m_placable_floor_plan))
+        add_floor_plan(m_rotation,*m_current_position, QVector3D(20,1,20));
+
     // left click to add wall
     if((event->button() == Qt::LeftButton)&&(m_wall_placable))
         m_clicked_position = new QVector3D(m_current_position->x(), m_current_position->y(), m_current_position->z());
@@ -323,6 +338,13 @@ void RenderState::add_door(QVector3D rotation, QVector3D translation, QVector3D 
     m_models.push_back(object);
 }
 
+void RenderState::add_floor_plan(QVector3D rotation, QVector3D translation, QVector3D scaling){
+    // texture index 1 is the tile
+    VisualObject * object = new VisualObject(m_plane,m_textures_from_files.value(m_textures_from_files.count()-1),translation,rotation, "FloorPlan");
+    object->setScaling(scaling);
+    m_models.push_back(object);
+}
+
 void RenderState::resizeGL(int w, int h){
     // setup the viewport for opengl
     glViewport(0, 0, w, h);
@@ -405,7 +427,11 @@ void RenderState::paintGL(){
         QMatrix4x4 rotation;
         rotation.rotate(object->getRotation().y(),0,1,0);
         rotation.scale(object->getScaling());
+        if(object->getType().compare("FloorPlan")!=0)
         DrawGL::DrawModel(object->getModelMesh(), vMatrix, translation,rotation,object->getTexture(),QVector3D(),QVector2D(object->getScaling().z(),object->getScaling().x()),m_program,pMatrix);
+        else
+        DrawGL::DrawModel(object->getModelMesh(), vMatrix, translation,rotation,object->getTexture(),QVector3D(),QVector2D(1,1),m_program,pMatrix);
+
         if(m_wall_placable){
             if(object->getLMidHorisontal().distanceToPoint(Pos)<0.25f)
                 *m_current_position = object->getLMidHorisontal();
@@ -424,6 +450,7 @@ void RenderState::paintGL(){
         m_currentscale.setY(1);
         m_currentscale.setX(pow(pow((m_clicked_position->x()-m_current_position->x()),2),0.5)*2.0);
     }
+    // draw pavement
     DrawGL::draw_if_true(m_plane, vMatrix,*m_clicked_position,m_rotation,m_currentscale,m_textures.value(1),QVector3D(),QVector2D(m_currentscale.z(),m_currentscale.x()),pMatrix,m_program,m_pavement_placable&&(m_mousedown_left));
 
     // draw placable door
@@ -470,6 +497,9 @@ void RenderState::paintGL(){
     }
     // draw placable tree
     DrawGL::draw_if_true(m_tree, vMatrix,Pos,m_rotation,QVector3D(1,1,1), m_textures.value(3),QVector3D(),QVector2D(1,1),pMatrix,m_program,m_tree_placable);
+
+    // draw placable floorplan
+    DrawGL::draw_if_true(m_plane, vMatrix,Pos,m_rotation,QVector3D(1,1,1), m_textures_from_files.value(m_textures_from_files.count()-1),QVector3D(),QVector2D(1,1),pMatrix,m_program,m_placable_floor_plan&(m_textures_from_files.count()>0));
 
     // draw all the nodes here
     foreach(Node *n, m_nodes){

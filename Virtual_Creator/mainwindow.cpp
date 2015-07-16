@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->button_door->setCheckable(true);
     ui->button_wall->setCheckable(true);
     ui->button_tree1->setCheckable(true);
+    ui->button_floor_plan->setCheckable(true);
 
     connect(this, SIGNAL(place_node(bool)),ui->openGLWidget, SLOT(allow_node(bool)));
     connect(this, SIGNAL(remove_nodes(bool)),ui->openGLWidget, SLOT(allow_remove_node(bool)));
@@ -29,6 +30,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(change_rotationY(double)),ui->openGLWidget,SLOT(change_rotY(double)));
     connect(this, SIGNAL(invert_mouseY(bool)),ui->openGLWidget,SLOT(invert_mouseY(bool)));
     connect(this, SIGNAL(place_tree(bool)),ui->openGLWidget,SLOT(allow_tree(bool)));
+    connect(this, SIGNAL(place_floor_plan(bool)),ui->openGLWidget,SLOT(allow_floor_plan(bool)));
+    connect(this, SIGNAL(add_new_texture(QString)), ui->openGLWidget, SLOT(load_texture_from_file(QString)));
 }
 
 MainWindow::~MainWindow(){delete ui;}
@@ -42,6 +45,7 @@ void MainWindow::EmitSignals(){
     emit place_wall(ui->button_wall->isChecked());
     emit place_tree(ui->button_tree1->isChecked());
     emit remove_trees(ui->button_remove_tree->isChecked());
+    emit place_floor_plan(ui->button_floor_plan->isChecked());
     ui->groupBox_node_settings->setVisible(ui->button_node->isChecked());
 }
 
@@ -53,6 +57,8 @@ void MainWindow::on_button_node_clicked(){
     ui->button_wall->setChecked(false);
     ui->button_tree1->setChecked(false);
     ui->button_remove_tree->setChecked(false);
+    ui->button_floor_plan->setChecked(false);
+
     EmitSignals();
 }
 
@@ -64,6 +70,8 @@ void MainWindow::on_button_link_clicked(){
     ui->button_wall->setChecked(false);
     ui->button_tree1->setChecked(false);
     ui->button_remove_tree->setChecked(false);
+    ui->button_floor_plan->setChecked(false);
+
     EmitSignals();
 }
 
@@ -75,6 +83,8 @@ void MainWindow::on_button_remove_node_clicked(){
     ui->button_wall->setChecked(false);
     ui->button_tree1->setChecked(false);
     ui->button_remove_tree->setChecked(false);
+    ui->button_floor_plan->setChecked(false);
+
     EmitSignals();
 
 }
@@ -87,6 +97,8 @@ void MainWindow::on_button_pavement_clicked(){
     ui->button_wall->setChecked(false);
     ui->button_tree1->setChecked(false);
     ui->button_remove_tree->setChecked(false);
+    ui->button_floor_plan->setChecked(false);
+
     EmitSignals();
 }
 
@@ -98,6 +110,8 @@ void MainWindow::on_button_wall_clicked(){
     ui->button_pavement->setChecked(false);
     ui->button_tree1->setChecked(false);
     ui->button_remove_tree->setChecked(false);
+    ui->button_floor_plan->setChecked(false);
+
     EmitSignals();
 
 }
@@ -110,6 +124,8 @@ void MainWindow::on_button_door_clicked(){
     ui->button_wall->setChecked(false);
     ui->button_tree1->setChecked(false);
     ui->button_remove_tree->setChecked(false);
+    ui->button_floor_plan->setChecked(false);
+
     EmitSignals();
 }
 
@@ -125,6 +141,8 @@ void MainWindow::on_button_tree1_clicked(){
     ui->button_wall->setChecked(false);
     ui->button_door->setChecked(false);
     ui->button_remove_tree->setChecked(false);
+    ui->button_floor_plan->setChecked(false);
+
     EmitSignals();
 }
 
@@ -136,6 +154,8 @@ void MainWindow::on_button_remove_tree_clicked(){
     ui->button_wall->setChecked(false);
     ui->button_door->setChecked(false);
     ui->button_tree1->setChecked(false);
+    ui->button_floor_plan->setChecked(false);
+
     EmitSignals();
 }
 
@@ -143,4 +163,19 @@ void MainWindow::on_button_execute_virtual_concierge_clicked()
 {
     VirtualConcierge *co = new VirtualConcierge();
     co->show();
+}
+
+void MainWindow::on_button_floor_plan_clicked()
+{
+    ui->button_node->setChecked(false);
+    ui->button_link->setChecked(false);
+    ui->button_remove_node->setChecked(false);
+    ui->button_pavement->setChecked(false);
+    ui->button_wall->setChecked(false);
+    ui->button_door->setChecked(false);
+    ui->button_tree1->setChecked(false);
+    ui->button_remove_tree->setChecked(false);
+    EmitSignals();
+    emit add_new_texture(QFileDialog::getOpenFileName(this,tr("Open Image"), "/home/image_file", tr("Image Files (*.png *.jpg *.bmp)")));
+
 }

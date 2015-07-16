@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "virtualconcierge.h"
-
+#include <QFileDialog>
 namespace Ui {
 class MainWindow;
 }
@@ -27,6 +27,8 @@ private slots:
     void on_button_remove_tree_clicked();
     void on_button_execute_virtual_concierge_clicked();
 
+    void on_button_floor_plan_clicked();
+
 private:
     Ui::MainWindow *ui;
     void EmitSignals();
@@ -41,6 +43,8 @@ signals:
     void change_rotationY(double); // changes the rotation in Y direction
     void place_tree(bool); // allows the placement of a basic tree
     void invert_mouseY(bool); // invert the y of the mouse in 3D
+    void place_floor_plan(bool); // allows a floorplan to bew placed
+    void add_new_texture(QString);// adds new usable texture to the list
 };
 
 #endif // MAINWINDOW_H

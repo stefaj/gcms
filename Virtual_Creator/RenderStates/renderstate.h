@@ -50,12 +50,14 @@ private:
     m_corner_1, m_corner_2, m_corner_3, m_corner_4, m_center_h_1, m_center_h_2;
     bool m_mousedown_right, m_mousedown_left, m_node_placable,
     m_node_removable, m_tree_removable, m_node_linkable, m_pavement_placable,
-    m_door_placeable,m_wall_placable, m_tree_placable;
-//    void draw_if_true(ModelMesh*,QMatrix4x4, QVector3D, QVector3D, QVector3D,QOpenGLTexture *, QVector3D, QVector2D, bool);
+    m_door_placeable,m_wall_placable, m_tree_placable, m_placable_floor_plan;
+    QString m_floor_plan_path;
+    QVector<QOpenGLTexture *> m_textures_from_files;
     void add_pavement(QVector3D, QVector3D, QVector3D);
     void add_door(QVector3D, QVector3D, QVector3D);
     void add_wall(QVector3D, QVector3D, QVector3D);
     void add_tree(QVector3D, QVector3D, QVector3D);
+    void add_floor_plan(QVector3D, QVector3D, QVector3D);
     void draw_circle_flat(QVector3D, QMatrix4x4,QVector3D, float);
     const float tree_radius, infinte_lenght_lines;
 private slots:
@@ -68,8 +70,10 @@ private slots:
     void allow_door(bool);
     void allow_wall(bool);
     void allow_tree(bool);
+    void allow_floor_plan(bool);
     void change_rotY(double);
     void invert_mouseY(bool);
+    void load_texture_from_file(QString);
 };
 
 #endif // RENDERSTATE_H
