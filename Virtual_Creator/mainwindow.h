@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "virtualconcierge.h"
 
 namespace Ui {
 class MainWindow;
@@ -24,6 +25,8 @@ private slots:
     void on_button_tree1_clicked();
     void on_button_remove_node_clicked();
     void on_button_remove_tree_clicked();
+    void on_button_execute_virtual_concierge_clicked();
+
 private:
     Ui::MainWindow *ui;
     void EmitSignals();

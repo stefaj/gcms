@@ -1178,6 +1178,19 @@ QDoubleSpinBox::down-arrow:off
      </item>
     </layout>
    </widget>
+   <widget class="QPushButton" name="button_execute_virtual_concierge">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>550</y>
+      <width>161</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show Virtual Conciege</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

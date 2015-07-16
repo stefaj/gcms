@@ -19,16 +19,21 @@ SOURCES += main.cpp\
     Objects/ModelMesh.cpp \
     Objects/Node.cpp \
     Objects/visualobject.cpp \
-    Functions/mathematics.cpp
+    Functions/mathematics.cpp \
+    virtualconcierge.cpp \
+    virtualconciergerenderstate.cpp
 
 HEADERS  += mainwindow.h \
     renderstate.h \
     Objects/ModelMesh.h \
     Objects/Node.h \
     Objects/visualobject.h \
-    Functions/mathematics.h
+    Functions/mathematics.h \
+    virtualconcierge.h \
+    virtualconciergerenderstate.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    virtualconcierge.ui
 
 RESOURCES += \
     content.qrc

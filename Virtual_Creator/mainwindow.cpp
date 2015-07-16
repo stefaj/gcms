@@ -138,3 +138,9 @@ void MainWindow::on_button_remove_tree_clicked(){
     ui->button_tree1->setChecked(false);
     EmitSignals();
 }
+
+void MainWindow::on_button_execute_virtual_concierge_clicked()
+{
+    VirtualConcierge *co = new VirtualConcierge();
+    co->show();
+}
