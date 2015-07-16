@@ -16,11 +16,56 @@ class DrawGL
 public:
     DrawGL();
     ~DrawGL();
-    static void DrawModel(ModelMesh *, QMatrix4x4 , QMatrix4x4 , QMatrix4x4 ,QOpenGLTexture *, QVector3D , QVector2D,QOpenGLShaderProgram*, QMatrix4x4);
-    static void DrawLine(QVector3D , QVector3D ,QMatrix4x4 ,QMatrix4x4 , QMatrix4x4 /*, GLuint texture*/,QVector3D ,QOpenGLShaderProgram*, QMatrix4x4);
-    static void ShaderDraw(ModelMesh *,QOpenGLShaderProgram*);
-    static void UpdateShaders(QMatrix4x4 ,QMatrix4x4 , QMatrix4x4 ,QOpenGLTexture *, QVector3D, QVector2D,QOpenGLShaderProgram*, QMatrix4x4);
-    static void UpdateShaders(QMatrix4x4 ,QMatrix4x4 , QMatrix4x4 , QVector3D, QVector2D,QOpenGLShaderProgram*, QMatrix4x4);
+    static void DrawModel(ModelMesh *,
+                          QMatrix4x4,
+                          QMatrix4x4,
+                          QMatrix4x4,
+                          QOpenGLTexture *,
+                          QVector3D,
+                          QVector2D,
+                          QOpenGLShaderProgram*,
+                          QMatrix4x4);
+
+    static void DrawLine(QVector3D,
+                         QVector3D,
+                         QMatrix4x4,
+                         QMatrix4x4,
+                         QMatrix4x4,
+                         QVector3D,
+                         QOpenGLShaderProgram*,
+                         QMatrix4x4);
+
+    static void ShaderDraw(ModelMesh *,
+                           QOpenGLShaderProgram*);
+
+    static void UpdateShaders(QMatrix4x4,
+                              QMatrix4x4,
+                              QMatrix4x4,
+                              QOpenGLTexture *,
+                              QVector3D,
+                              QVector2D,
+                              QOpenGLShaderProgram*,
+                              QMatrix4x4);
+
+    static void UpdateShaders(QMatrix4x4,
+                              QMatrix4x4,
+                              QMatrix4x4,
+                              QVector3D,
+                              QVector2D,
+                              QOpenGLShaderProgram*,
+                              QMatrix4x4);
+
+    static void draw_if_true(ModelMesh*,
+                      QMatrix4x4,
+                      QVector3D,
+                      QVector3D,
+                      QVector3D,
+                      QOpenGLTexture *,
+                      QVector3D,
+                      QVector2D,
+                      QMatrix4x4,
+                      QOpenGLShaderProgram *,
+                      bool);
 
 };
 

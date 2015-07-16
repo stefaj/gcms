@@ -91,6 +91,16 @@ void DrawGL::DrawModel(ModelMesh *box,QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 
      UpdateShaders(wvp, mvp, rotate,texture, color,texturecoordmulti,m_program,pmatrix);
      ShaderDraw(box,m_program);
 }
+void DrawGL::draw_if_true(ModelMesh* model,QMatrix4x4 view, QVector3D position,QVector3D rotation, QVector3D scaling, QOpenGLTexture * texture, QVector3D color, QVector2D texturecoord, QMatrix4x4 pmatrix, QOpenGLShaderProgram *m_program, bool value){
+    if(value){
+        QMatrix4x4 translation;
+        translation.translate(position);
+        QMatrix4x4 rotationmat;
+        rotationmat.rotate(rotation.y(),0,1,0);
+        rotationmat.scale(scaling);
+        DrawGL::DrawModel(model, view, translation,rotationmat,texture,color,texturecoord, m_program, pmatrix);
+    }
+}
 DrawGL::~DrawGL()
 {
 

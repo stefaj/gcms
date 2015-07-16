@@ -29,11 +29,6 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     tree_radius(4.0f),
     infinte_lenght_lines(100.0f){
 
-    // opengl shader variable names
-    vertex = "vertex";
-    textureCoordinate= "textureCoordinate";
-    normal = "normal";
-
     // enable antialiasing (set the format of the widget)
     QSurfaceFormat format;
     format.setSamples(4);
@@ -345,10 +340,7 @@ void RenderState::LoadContent(){
     initializeOpenGLFunctions();
 
     //load meshes
-    box = new ModelMesh(":/Sphere");
-    node = new ModelMesh(":/Sphere");
-    sky= new ModelMesh(":/Sky");
-    wagen = new ModelMesh(":/Cube");
+    m_node = new ModelMesh(":/Sphere");
     m_plane = new ModelMesh(":/Plane");
     m_door = new ModelMesh("://DoorWay01");
     m_wall = new ModelMesh("://Wall01");
@@ -423,19 +415,19 @@ void RenderState::paintGL(){
     }
 
     // draw placable node
-    draw_if_true(node, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(0),QVector3D(),QVector2D(1,1),m_node_placable);
+    DrawGL::draw_if_true(m_node, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(0),QVector3D(),QVector2D(1,1),pMatrix,m_program,m_node_placable);
     // draw placable tile draggable mouse
-    draw_if_true(m_plane, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(1),QVector3D(),QVector2D(m_currentscale.z(),m_currentscale.x()),m_pavement_placable&&(!m_mousedown_left));
+    DrawGL::draw_if_true(m_plane, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(1),QVector3D(),QVector2D(m_currentscale.z(),m_currentscale.x()),pMatrix,m_program,m_pavement_placable&&(!m_mousedown_left));
     // draw placable tile clicked
     if(m_mousedown_left&&m_pavement_placable){
         m_currentscale.setZ(pow(pow((m_clicked_position->z()-m_current_position->z()),2),0.5)*2.0);
         m_currentscale.setY(1);
         m_currentscale.setX(pow(pow((m_clicked_position->x()-m_current_position->x()),2),0.5)*2.0);
     }
-    draw_if_true(m_plane, vMatrix,*m_clicked_position,m_rotation,m_currentscale,m_textures.value(1),QVector3D(),QVector2D(m_currentscale.z(),m_currentscale.x()),m_pavement_placable&&(m_mousedown_left));
+    DrawGL::draw_if_true(m_plane, vMatrix,*m_clicked_position,m_rotation,m_currentscale,m_textures.value(1),QVector3D(),QVector2D(m_currentscale.z(),m_currentscale.x()),pMatrix,m_program,m_pavement_placable&&(m_mousedown_left));
 
     // draw placable door
-    draw_if_true(m_door, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(2),QVector3D(),QVector2D(1,1),m_door_placeable);
+    DrawGL::draw_if_true(m_door, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(2),QVector3D(),QVector2D(1,1),pMatrix,m_program,m_door_placeable);
 
     // draw placable wall
     if((m_mousedown_left)&&(m_wall_placable)){
@@ -474,16 +466,16 @@ void RenderState::paintGL(){
         m_center_h_2 = *m_clicked_position;
 
         m_currentscale.setZ(m_clicked_position->distanceToPoint(*m_current_position));
-        draw_if_true(m_wall, vMatrix, m_drag_middle_position, m_rotation, m_currentscale, m_textures.value(4),QVector3D(),QVector2D(m_currentscale.z(),1.0),m_wall_placable);
+        DrawGL::draw_if_true(m_wall, vMatrix, m_drag_middle_position, m_rotation, m_currentscale, m_textures.value(4),QVector3D(),QVector2D(m_currentscale.z(),1.0),pMatrix,m_program,m_wall_placable);
     }
     // draw placable tree
-    draw_if_true(m_tree, vMatrix,Pos,m_rotation,QVector3D(1,1,1), m_textures.value(3),QVector3D(),QVector2D(1,1),m_tree_placable);
+    DrawGL::draw_if_true(m_tree, vMatrix,Pos,m_rotation,QVector3D(1,1,1), m_textures.value(3),QVector3D(),QVector2D(1,1),pMatrix,m_program,m_tree_placable);
 
     // draw all the nodes here
     foreach(Node *n, m_nodes){
         QMatrix4x4 translation;
         translation.translate(n->Position());
-        DrawGL::DrawModel(node, vMatrix, translation,QMatrix4x4(),m_textures.value(0),QVector3D(),QVector2D(1,1),m_program,pMatrix);
+        DrawGL::DrawModel(m_node, vMatrix, translation,QMatrix4x4(),m_textures.value(0),QVector3D(),QVector2D(1,1),m_program,pMatrix);
     }
 
     // draw all the node lines here
@@ -594,25 +586,11 @@ void RenderState::draw_circle_flat(QVector3D center, QMatrix4x4 wvp,QVector3D co
     }
 }
 
-void RenderState::draw_if_true(ModelMesh* model,QMatrix4x4 view, QVector3D position,QVector3D rotation, QVector3D scaling, QOpenGLTexture * texture, QVector3D color, QVector2D texturecoord, bool value){
-    if(value){
-        QMatrix4x4 translation;
-        translation.translate(position);
-        QMatrix4x4 rotationmat;
-        rotationmat.rotate(rotation.y(),0,1,0);
-        rotationmat.scale(scaling);
-        DrawGL::DrawModel(model, view,translation,rotationmat,texture,color,texturecoord, m_program, pMatrix);
-    }
-}
-
 RenderState::~RenderState(){
     delete m_program;
     delete m_position;
     delete m_clicked_position;
-    delete box;
-    delete sky;
-    delete wagen;
-    delete node;
+    delete m_node;
     delete m_plane;
     delete m_wall;
     delete m_door;

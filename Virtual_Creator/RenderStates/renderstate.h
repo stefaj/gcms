@@ -39,9 +39,11 @@ private:
     QVector<QOpenGLTexture *> m_textures;
     QVector<Node *> m_nodes;
     QVector<VisualObject *> m_models;
-    ModelMesh *box, *sky, *wagen, *node, *m_plane, *m_wall, *m_door, *m_tree;
-    int m_mouse_x, m_mouse_y, m_dmouse_x,m_dmouse_y,m_node_index_selected;
-    float m_mouse_zoom,m_noderadius,m_mouse_y_inverted;
+    ModelMesh *m_node, *m_plane, *m_wall, *m_door, *m_tree;
+
+    // internal integers used for mousemovement, counters etc.
+    int m_mouse_x, m_mouse_y, m_dmouse_x, m_dmouse_y, m_node_index_selected;
+    float m_mouse_zoom ,m_noderadius, m_mouse_y_inverted;
     // define a view matrix
     QMatrix4x4 vMatrix;
     QVector3D *m_current_position;
@@ -50,14 +52,13 @@ private:
     bool m_mousedown_right, m_mousedown_left, m_node_placable,
     m_node_removable, m_tree_removable, m_node_linkable, m_pavement_placable,
     m_door_placeable,m_wall_placable, m_tree_placable;
-    void draw_if_true(ModelMesh*,QMatrix4x4, QVector3D, QVector3D, QVector3D,QOpenGLTexture *, QVector3D, QVector2D, bool);
+//    void draw_if_true(ModelMesh*,QMatrix4x4, QVector3D, QVector3D, QVector3D,QOpenGLTexture *, QVector3D, QVector2D, bool);
     void add_pavement(QVector3D, QVector3D, QVector3D);
     void add_door(QVector3D, QVector3D, QVector3D);
     void add_wall(QVector3D, QVector3D, QVector3D);
     void add_tree(QVector3D, QVector3D, QVector3D);
     void draw_circle_flat(QVector3D, QMatrix4x4,QVector3D, float);
     const float tree_radius, infinte_lenght_lines;
-    const char *vertex, *textureCoordinate, *normal;
 private slots:
     void add_node(QString *);
     void allow_node(bool);
