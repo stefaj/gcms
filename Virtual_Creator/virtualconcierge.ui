@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Virtual Concierge</string>
   </property>
-  <widget class="QOpenGLWidget" name="openGLWidget">
+  <widget class="VritualConciergeRenderstate" name="openGLWidget">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -24,6 +24,13 @@
    </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>VritualConciergeRenderstate</class>
+   <extends>QOpenGLWidget</extends>
+   <header location="global">vritualconciergerenderstate.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
