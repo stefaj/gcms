@@ -74,6 +74,7 @@ private slots:
     void change_rotY(double);
     void invert_mouseY(bool);
     void load_texture_from_file(QString);
+    void set_object_scale(QVector3D);
 };
 
 #endif // RENDERSTATE_H

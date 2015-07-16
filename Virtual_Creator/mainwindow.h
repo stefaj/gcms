@@ -26,8 +26,10 @@ private slots:
     void on_button_remove_node_clicked();
     void on_button_remove_tree_clicked();
     void on_button_execute_virtual_concierge_clicked();
-
     void on_button_floor_plan_clicked();
+    void on_doubleSpinBox_floor_plan_width_valueChanged(double arg1);
+
+    void on_doubleSpinBox_floor_plan_height_valueChanged(double arg1);
 
 private:
     Ui::MainWindow *ui;
@@ -45,6 +47,7 @@ signals:
     void invert_mouseY(bool); // invert the y of the mouse in 3D
     void place_floor_plan(bool); // allows a floorplan to bew placed
     void add_new_texture(QString);// adds new usable texture to the list
+    void set_object_scale(QVector3D);
 };
 
 #endif // MAINWINDOW_H

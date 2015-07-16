@@ -965,7 +965,7 @@ QDoubleSpinBox::down-arrow:off
       <x>20</x>
       <y>20</y>
       <width>351</width>
-      <height>211</height>
+      <height>241</height>
      </rect>
     </property>
     <property name="title">
@@ -1091,12 +1091,91 @@ QDoubleSpinBox::down-arrow:off
       </layout>
      </widget>
     </widget>
+    <widget class="QGroupBox" name="groupBox_floor_plan_settings">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>130</y>
+       <width>181</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Floor Plan Settings</string>
+     </property>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>161</width>
+        <height>48</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Width</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="doubleSpinBox_floor_plan_width">
+           <property name="suffix">
+            <string>m</string>
+           </property>
+           <property name="minimum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>1000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Height</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDoubleSpinBox" name="doubleSpinBox_floor_plan_height">
+           <property name="prefix">
+            <string/>
+           </property>
+           <property name="suffix">
+            <string>m</string>
+           </property>
+           <property name="minimum">
+            <double>1.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>1000.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>370</y>
+      <y>400</y>
       <width>231</width>
       <height>60</height>
      </rect>
@@ -1132,7 +1211,7 @@ QDoubleSpinBox::down-arrow:off
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>440</y>
+      <y>470</y>
       <width>291</width>
       <height>61</height>
      </rect>
@@ -1160,7 +1239,7 @@ QDoubleSpinBox::down-arrow:off
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>240</y>
+      <y>260</y>
       <width>341</width>
       <height>121</height>
      </rect>
@@ -1188,8 +1267,8 @@ QDoubleSpinBox::down-arrow:off
    <widget class="QPushButton" name="button_execute_virtual_concierge">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>520</y>
+      <x>80</x>
+      <y>550</y>
       <width>161</width>
       <height>23</height>
      </rect>

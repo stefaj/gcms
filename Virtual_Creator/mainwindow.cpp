@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // hide things not needed
     ui->groupBox_node_settings->setVisible(false);
+    ui->groupBox_floor_plan_settings->setVisible(false);
 
     // set clickable buttons
     ui->button_node->setCheckable(true);
@@ -32,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(place_tree(bool)),ui->openGLWidget,SLOT(allow_tree(bool)));
     connect(this, SIGNAL(place_floor_plan(bool)),ui->openGLWidget,SLOT(allow_floor_plan(bool)));
     connect(this, SIGNAL(add_new_texture(QString)), ui->openGLWidget, SLOT(load_texture_from_file(QString)));
+    connect(this, SIGNAL(set_object_scale(QVector3D)), ui->openGLWidget,SLOT(set_object_scale(QVector3D)));
 }
 
 MainWindow::~MainWindow(){delete ui;}
@@ -47,6 +49,7 @@ void MainWindow::EmitSignals(){
     emit remove_trees(ui->button_remove_tree->isChecked());
     emit place_floor_plan(ui->button_floor_plan->isChecked());
     ui->groupBox_node_settings->setVisible(ui->button_node->isChecked());
+    ui->groupBox_floor_plan_settings->setVisible(ui->button_floor_plan->isChecked());
 }
 
 void MainWindow::on_button_node_clicked(){
@@ -178,4 +181,14 @@ void MainWindow::on_button_floor_plan_clicked()
     EmitSignals();
     emit add_new_texture(QFileDialog::getOpenFileName(this,tr("Open Image"), "/home/image_file", tr("Image Files (*.png *.jpg *.bmp)")));
 
+}
+
+void MainWindow::on_doubleSpinBox_floor_plan_width_valueChanged(double arg1)
+{
+    emit set_object_scale(QVector3D(arg1,1,ui->doubleSpinBox_floor_plan_height->value()));
+}
+
+void MainWindow::on_doubleSpinBox_floor_plan_height_valueChanged(double arg1)
+{
+    emit set_object_scale(QVector3D(ui->doubleSpinBox_floor_plan_width->value(),1,arg1));
 }
