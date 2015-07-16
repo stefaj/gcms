@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     Functions/premises_exporter.cpp \
     Objects/NodeHandler.cpp \
     RenderStates/renderstate.cpp \
-    RenderStates/virtualconciergerenderstate.cpp
+    RenderStates/virtualconciergerenderstate.cpp \
+    Functions/drawgl.cpp
 
 HEADERS  += mainwindow.h \
     Objects/ModelMesh.h \
@@ -34,7 +35,8 @@ HEADERS  += mainwindow.h \
     Functions/premises_exporter.h \
     Objects/NodeHandler.h \
     RenderStates/renderstate.h \
-    RenderStates/virtualconciergerenderstate.h
+    RenderStates/virtualconciergerenderstate.h \
+    Functions/drawgl.h
 
 FORMS    += mainwindow.ui \
     virtualconcierge.ui

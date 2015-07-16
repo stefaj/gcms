@@ -413,7 +413,7 @@ void RenderState::paintGL(){
         QMatrix4x4 rotation;
         rotation.rotate(object->getRotation().y(),0,1,0);
         rotation.scale(object->getScaling());
-        DrawModel(object->getModelMesh(), vMatrix, translation,rotation,object->getTexture(),QVector3D(),QVector2D(object->getScaling().z(),object->getScaling().x()));
+        DrawGL::DrawModel(object->getModelMesh(), vMatrix, translation,rotation,object->getTexture(),QVector3D(),QVector2D(object->getScaling().z(),object->getScaling().x()),m_program,pMatrix);
         if(m_wall_placable){
             if(object->getLMidHorisontal().distanceToPoint(Pos)<0.25f)
                 *m_current_position = object->getLMidHorisontal();
@@ -451,10 +451,10 @@ void RenderState::paintGL(){
             m_drag_middle_position.setX(m_clicked_position->x());
             m_current_position->setX(m_clicked_position->x());
 
-            DrawLine(*m_clicked_position+QVector3D(0, 0,-infinte_lenght_lines),
+           DrawGL::DrawLine(*m_clicked_position+QVector3D(0, 0,-infinte_lenght_lines),
                      *m_current_position+QVector3D(0, 0, infinte_lenght_lines),
                      vMatrix, QMatrix4x4(), QMatrix4x4(),
-                     QVector3D(1,1,1));
+                     QVector3D(1,1,1), m_program, pMatrix);
         }
 
         // clamp to 270 and 90 degrees
@@ -464,10 +464,10 @@ void RenderState::paintGL(){
         m_rotation.setY(Mathematics::return_near_degree(m_rotation.y()));
         m_drag_middle_position.setZ(m_clicked_position->z());
         m_current_position->setZ(m_clicked_position->z());
-        DrawLine(*m_clicked_position+QVector3D(-infinte_lenght_lines, 0, 0),
+        DrawGL::DrawLine(*m_clicked_position+QVector3D(-infinte_lenght_lines, 0, 0),
                  *m_current_position+QVector3D(infinte_lenght_lines, 0, 0),
                  vMatrix, QMatrix4x4(), QMatrix4x4(),
-                 QVector3D(1,1,1));
+                 QVector3D(1,1,1), m_program, pMatrix);
         }
         // set clickable centers
         m_center_h_1 = *m_current_position;
@@ -483,7 +483,7 @@ void RenderState::paintGL(){
     foreach(Node *n, m_nodes){
         QMatrix4x4 translation;
         translation.translate(n->Position());
-        DrawModel(node, vMatrix, translation,QMatrix4x4(),m_textures.value(0),QVector3D(),QVector2D(1,1));
+        DrawGL::DrawModel(node, vMatrix, translation,QMatrix4x4(),m_textures.value(0),QVector3D(),QVector2D(1,1),m_program,pMatrix);
     }
 
     // draw all the node lines here
@@ -519,15 +519,15 @@ void RenderState::paintGL(){
                 aux_calc_one = aux_rotate*(QVector3D(0,0,1));
                 aux_calc_two = aux_45*aux_rotate*(QVector3D(0,0,1));
 
-                DrawLine(n->Position(), m_nodes.value(n->getConnectedIndex(i))->Position(), vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
-                DrawLine((n->Position()+
+                DrawGL::DrawLine(n->Position(), m_nodes.value(n->getConnectedIndex(i))->Position(), vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0), m_program, pMatrix);
+                DrawGL::DrawLine((n->Position()+
                          m_nodes.value(n->getConnectedIndex(i))->Position())/2.0,
                          aux_calc_one+(n->Position()+
-                                   m_nodes.value(n->getConnectedIndex(i))->Position())/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
-                DrawLine((n->Position()+
+                                   m_nodes.value(n->getConnectedIndex(i))->Position())/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0), m_program, pMatrix);
+                DrawGL::DrawLine((n->Position()+
                          m_nodes.value(n->getConnectedIndex(i))->Position())/2.0,
                          aux_calc_two+(n->Position()+
-                                   m_nodes.value(n->getConnectedIndex(i))->Position())/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
+                                   m_nodes.value(n->getConnectedIndex(i))->Position())/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0), m_program, pMatrix);
             }
         }
     }
@@ -547,7 +547,7 @@ void RenderState::paintGL(){
     }
     // draw line if right clicked
     if(m_mousedown_right)
-    DrawLine(*m_clicked_position, *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0));
+    DrawGL::DrawLine(*m_clicked_position, *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(0,1,0), m_program, pMatrix);
 
     // draw left clicked line(s)
     if((m_node_linkable)&&(m_mousedown_left)&&(m_node_index_selected>-1)&&(m_node_index_selected<m_nodes.count())){
@@ -566,15 +566,15 @@ void RenderState::paintGL(){
         aux_calc_one = aux_rotate*(QVector3D(0,0,1));
         aux_calc_two = aux_45*aux_rotate*(QVector3D(0,0,1));
 
-        DrawLine(m_nodes.value(m_node_index_selected)->Position(), *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,0));
-        DrawLine((m_nodes.value(m_node_index_selected)->Position()+
+        DrawGL::DrawLine(m_nodes.value(m_node_index_selected)->Position(), *m_current_position, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,0), m_program, pMatrix);
+        DrawGL::DrawLine((m_nodes.value(m_node_index_selected)->Position()+
                  *m_current_position)/2.0,
                  aux_calc_one+(m_nodes.value(m_node_index_selected)->Position()+
-                           *m_current_position)/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,0));
-        DrawLine((m_nodes.value(m_node_index_selected)->Position()+
+                           *m_current_position)/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,0), m_program, pMatrix);
+        DrawGL::DrawLine((m_nodes.value(m_node_index_selected)->Position()+
                  *m_current_position)/2.0,
                  aux_calc_two+(m_nodes.value(m_node_index_selected)->Position()+
-                           *m_current_position)/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,0));
+                           *m_current_position)/2.0, vMatrix, QMatrix4x4(), QMatrix4x4(), QVector3D(1,1,0), m_program, pMatrix);
     }
 
     // release the program for this frame
@@ -590,7 +590,7 @@ void RenderState::paintGL(){
 void RenderState::draw_circle_flat(QVector3D center, QMatrix4x4 wvp,QVector3D color, float radius){
     const int slices = 36;
     for(int k = 0; k < slices;k++){
-        DrawLine(radius*QVector3D(cos(2*3.14*k/slices),0,sin(2*3.14*k/slices))+center,radius*QVector3D(cos(2*3.14*(k+1)/slices),0,sin(2*3.14*(k+1)/slices))+center, wvp, QMatrix4x4(), QMatrix4x4(), color);
+        DrawGL::DrawLine(radius*QVector3D(cos(2*3.14*k/slices),0,sin(2*3.14*k/slices))+center,radius*QVector3D(cos(2*3.14*(k+1)/slices),0,sin(2*3.14*(k+1)/slices))+center, wvp, QMatrix4x4(), QMatrix4x4(), color, m_program, pMatrix);
     }
 }
 
@@ -601,78 +601,8 @@ void RenderState::draw_if_true(ModelMesh* model,QMatrix4x4 view, QVector3D posit
         QMatrix4x4 rotationmat;
         rotationmat.rotate(rotation.y(),0,1,0);
         rotationmat.scale(scaling);
-        DrawModel(model, view,translation,rotationmat,texture,color,texturecoord);
+        DrawGL::DrawModel(model, view,translation,rotationmat,texture,color,texturecoord, m_program, pMatrix);
     }
-}
-
-void RenderState::UpdateShaders(QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate, QOpenGLTexture * texture,QVector3D color, QVector2D texturecooredinates){
-    // bind the current shader code
-    m_program->bind();
-    // bind the texture for the object
-    texture->bind();
-    // update the colour of the object
-    m_program->setUniformValue("col",color);
-    // change the rotation of the object in the shader
-    m_program->setUniformValue("rotationMatrix", rotate);
-    // update model view projection
-    m_program->setUniformValue("mvpMatrix", mvp * rotate);
-    // update world view projection in the shader
-    m_program->setUniformValue("wvpMatrix", pMatrix * wvp);
-    // use GL_TEXTURE0
-    m_program->setUniformValue("texture", 0);
-    // set the varying texture coordinate
-    m_program->setUniformValue("texture_coordinates",texturecooredinates);
-}
-
-void RenderState::ShaderDraw(ModelMesh *box){
-    // load the vertices to the shaders
-    m_program->setAttributeArray(vertex, box->m_vertices.constData());
-    // enable the shader attribute( vertices )
-    m_program->enableAttributeArray(vertex);
-    // load the normals to the shaders
-    m_program->setAttributeArray(normal, box->m_normals.constData());
-    // enable the shader attribute( normals )
-    m_program->enableAttributeArray(normal);
-    // load the texture coordinates to the shaders
-    m_program->setAttributeArray(textureCoordinate, box->m_textureCoordinates.constData());
-    // enable the texture attribute
-    m_program->enableAttributeArray(textureCoordinate);
-    // draw the opengl vertices
-    box->Draw();
-    // disable the vertex attributes
-    m_program->disableAttributeArray(vertex);
-    // disable the normal attributes
-    m_program->disableAttributeArray(normal);
-    // disable the Texture coordinates attributes
-    m_program->disableAttributeArray(textureCoordinate);
-    // release the current updated shader code (awaiting next frame)
-    m_program->release();
-   }
-
-void RenderState::DrawLine(QVector3D point1, QVector3D point2,QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate, QVector3D color){
-    QVector< QVector3D > temp_vertices;
-    temp_vertices.push_back(point1);
-    temp_vertices.push_back(point2);
-    UpdateShaders(wvp, mvp, rotate,m_textures.value(0), color,QVector2D(1,1));
-    m_program->setAttributeArray(vertex, temp_vertices.constData());//load the vertices to the shaders
-    m_program->enableAttributeArray(vertex);//enable the shader attribute( vertices )
-    m_program->setAttributeArray(normal, temp_vertices.constData());//load the normals to the shaders
-    m_program->enableAttributeArray(normal);//enable the shader attribute( vertices )
-    glLineWidth(2.0);
-    glDisable(GL_DEPTH_TEST);
-    glDepthFunc(GL_ALWAYS);
-    glDrawArrays(GL_LINES, 0, temp_vertices.size());
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-    m_program->disableAttributeArray(vertex);// disable the vertex attributes
-    m_program->disableAttributeArray(normal);// disable the normal attributes
-    m_program->release(); // release the current updated shader code (awaiting next frame)
-    temp_vertices.clear();
-}
-
-void RenderState::DrawModel(ModelMesh *box,QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate,QOpenGLTexture *texture,QVector3D color,QVector2D texturecoordmulti){
-     UpdateShaders(wvp, mvp, rotate,texture, color,texturecoordmulti);
-     ShaderDraw(box);
 }
 
 RenderState::~RenderState(){

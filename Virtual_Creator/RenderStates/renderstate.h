@@ -14,6 +14,7 @@
 #include "Objects/Node.h"
 #include "Objects/visualobject.h"
 #include "Functions/premises_exporter.h"
+#include "Functions/drawgl.h"
 
 class RenderState : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -30,17 +31,10 @@ protected:
     void wheelEvent(QWheelEvent *);
     void mouseReleaseEvent(QMouseEvent *);
 private:
-    // Reuse shaderprogram for all child classes
-    // QGLShaderProgram *shaderProgram;// Cannot be parameter of a function (violation)
-    // Projection for all child classes
     QMatrix4x4 pMatrix; // dynamic memory control not needed
-    void DrawModel(ModelMesh *, QMatrix4x4 , QMatrix4x4 , QMatrix4x4 ,QOpenGLTexture *, QVector3D , QVector2D);
-    void DrawLine(QVector3D , QVector3D ,QMatrix4x4 ,QMatrix4x4 , QMatrix4x4 /*, GLuint texture*/,QVector3D );
-    void ShaderDraw(ModelMesh *);
-    void UpdateShaders(QMatrix4x4 ,QMatrix4x4 , QMatrix4x4 ,QOpenGLTexture *, QVector3D, QVector2D);
     void LoadContent();
     QSize m_viewportSize;
-    static QOpenGLShaderProgram *m_program;
+    QOpenGLShaderProgram *m_program;
     QVector3D *m_position, *m_clicked_position;
     QVector<QOpenGLTexture *> m_textures;
     QVector<Node *> m_nodes;
