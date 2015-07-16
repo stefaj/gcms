@@ -1,5 +1,5 @@
 #include "mathematics.h"
-#include <math.h>
+#include <QtMath>
 
 Mathematics::Mathematics(){
 
