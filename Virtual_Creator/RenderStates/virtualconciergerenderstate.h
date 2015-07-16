@@ -7,6 +7,7 @@
 #include <QOpenGLShaderProgram>
 #include "Objects/ModelMesh.h"
 #include "Objects/NodeHandler.h"
+#include "Functions/drawgl.h"
 
 class VirtualConciergeRenderstate : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -17,10 +18,6 @@ public:
 private:
     ModelMesh *m_node;
     QMatrix4x4 pMatrix; // dynamic memory control not needed
-    void DrawModel(ModelMesh *box, QMatrix4x4 wvp, QMatrix4x4 mvp, QMatrix4x4 rotate/*, GLuint texture*/, QVector3D color);
-    void DrawLine(QVector3D point1, QVector3D point2,QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate/*, GLuint texture*/,QVector3D color);
-    void ShaderDraw(ModelMesh *box);
-    void UpdateShaders(QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate/*, GLuint texture*/, QVector3D color);
     void LoadContent();
     QSize m_viewportSize;
     QOpenGLShaderProgram *m_program;
@@ -28,9 +25,10 @@ private:
     NodeHandler *m_handler;
     QVector<QOpenGLTexture *> m_textures;
 protected:
-   // void initializeGL();
+    void initializeGL();
    // void resizeGL(int w, int h);
     void paintGL();
+    void resizeGL(int w, int h);
 //    void mouseMoveEvent(QMouseEvent *);
 //    void mousePressEvent(QMouseEvent *);
 //    void wheelEvent(QWheelEvent *);

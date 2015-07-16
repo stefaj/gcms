@@ -24,7 +24,7 @@ public:
     ~RenderState();
 protected:
     void initializeGL();
-    void resizeGL(int w, int h);
+    void resizeGL(int, int);
     void paintGL();
     void mouseMoveEvent(QMouseEvent *);
     void mousePressEvent(QMouseEvent *);
@@ -33,7 +33,6 @@ protected:
 private:
     QMatrix4x4 pMatrix; // dynamic memory control not needed
     void LoadContent();
-    QSize m_viewportSize;
     QOpenGLShaderProgram *m_program;
     QVector3D *m_position, *m_clicked_position;
     QVector<QOpenGLTexture *> m_textures;

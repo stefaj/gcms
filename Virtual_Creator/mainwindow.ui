@@ -1088,8 +1088,8 @@ QDoubleSpinBox::down-arrow:off
    <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
      <rect>
-      <x>22</x>
-      <y>252</y>
+      <x>20</x>
+      <y>370</y>
       <width>231</width>
       <height>60</height>
      </rect>
@@ -1124,9 +1124,9 @@ QDoubleSpinBox::down-arrow:off
    <widget class="QGroupBox" name="groupBox_4">
     <property name="geometry">
      <rect>
-      <x>22</x>
-      <y>333</y>
-      <width>281</width>
+      <x>20</x>
+      <y>440</y>
+      <width>291</width>
       <height>61</height>
      </rect>
     </property>
@@ -1152,10 +1152,10 @@ QDoubleSpinBox::down-arrow:off
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>22</x>
-      <y>392</y>
-      <width>191</width>
-      <height>91</height>
+      <x>20</x>
+      <y>240</y>
+      <width>341</width>
+      <height>121</height>
      </rect>
     </property>
     <property name="title">
@@ -1181,8 +1181,8 @@ QDoubleSpinBox::down-arrow:off
    <widget class="QPushButton" name="button_execute_virtual_concierge">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>550</y>
+      <x>90</x>
+      <y>520</y>
       <width>161</width>
       <height>23</height>
      </rect>
