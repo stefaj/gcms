@@ -179,7 +179,11 @@ void MainWindow::on_button_floor_plan_clicked()
     ui->button_tree1->setChecked(false);
     ui->button_remove_tree->setChecked(false);
     EmitSignals();
-    emit add_new_texture(QFileDialog::getOpenFileName(this,tr("Open Image"), "/home/image_file", tr("Image Files (*.png *.jpg *.bmp)")));
+    if(ui->button_floor_plan->isChecked()){
+    QString file_name = QFileDialog::getOpenFileName(this,tr("Open Image"), "/home/image_file", tr("Image Files (*.png *.jpg *.bmp)"));
+    if(!file_name.isEmpty())
+    emit add_new_texture(file_name);
+    }
 
 }
 
