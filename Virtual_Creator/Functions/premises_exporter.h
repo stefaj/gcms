@@ -9,6 +9,7 @@ public:
     PremisesExporter();
     static void export_environment(QVector<VisualObject *>,QString);
     static void export_nodes(QVector<Node *>,QString);
+    static void export_texture(QVector<QString>,QString);
     static bool fileExists(QString);
 };
 

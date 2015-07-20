@@ -39,7 +39,8 @@ HEADERS  += mainwindow.h \
     Functions/drawgl.h
 
 FORMS    += mainwindow.ui \
-    virtualconcierge.ui
+    virtualconcierge.ui \
+    texturedialog.ui
 
 RESOURCES += \
     content.qrc

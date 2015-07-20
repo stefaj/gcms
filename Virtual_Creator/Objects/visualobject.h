@@ -21,6 +21,8 @@ public:
     void setCornerLRight(QVector3D);
     void setUMidHorisontal(QVector3D);
     void setLMidHorisontal(QVector3D);
+    void setTextureID(int);
+    void setTexturePath(QString);
     QVector3D getCornerULeft();
     QVector3D getCornerURight();
     QVector3D getCornerLLeft();
@@ -33,11 +35,15 @@ public:
     ModelMesh * getModelMesh();
     QOpenGLTexture *getTexture();
     QString getType();
+    QString getTexturePath();
+    int getTextureID();
     void setType(QString);
 private:
     ModelMesh *m_model;
     QVector3D m_translation, m_rotation, m_scaling;
     QOpenGLTexture *m_texture;
+    int m_texture_id;
+    QString m_path_texture;
     QString m_type;
     QVector3D m_corner_1, m_corner_2, m_corner_3, m_corner_4, m_center_h_1, m_center_h_2;
 

@@ -89,12 +89,16 @@ void RenderState::set_object_scale(QVector3D value){m_currentscale = value;}
 
 void RenderState::change_current_floor_height(float value){m_current_floor_height=value;}
 
-void RenderState::load_texture_from_file(QString value)
-{
-    QOpenGLTexture *texture = new QOpenGLTexture(QImage(value).mirrored());
+void RenderState::load_texture_from_file(QString value){
+
+    QString val_new = "VirtualConcierge/"+QString("TEX")+QString::number(m_texture_paths.count());
+    QFile::copy(value,val_new);
+    QOpenGLTexture *texture = new QOpenGLTexture(QImage(val_new).mirrored());
     texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
     texture->setMagnificationFilter(QOpenGLTexture::Linear);
     m_textures_from_files.push_back(texture);
+    m_texture_paths.push_back(val_new);
+
 }
 
 void RenderState::initializeGL(){
@@ -128,7 +132,7 @@ void RenderState::mouseMoveEvent(QMouseEvent *event){
         m_camera_prev.setX(m_camera_prev.x()-m_position_camera.x());
         m_camera_prev.setY(m_camera_prev.y()-m_position_camera.y());
         m_camera_prev.setZ(m_camera_prev.z()-m_position_camera.z());
-        m_position_camera = QVector3D(0,m_current_floor_height,0);
+        m_position_camera = QVector3D(0,0,0);
     }
 
     // removable dragable nodes
@@ -314,6 +318,9 @@ void RenderState::add_pavement(QVector3D rotation, QVector3D translation, QVecto
     VisualObject * object = new VisualObject(m_plane,m_textures.value(1),translation,rotation, "Pavement");
     object->setScaling(scaling);
     m_models.push_back(object);
+    PremisesExporter::export_environment(m_models,"envirnment.env");
+    object->setTextureID(701);
+    object->setTexturePath("://Texture1");
 }
 
 void RenderState::add_tree(QVector3D rotation, QVector3D translation, QVector3D scaling){
@@ -321,6 +328,9 @@ void RenderState::add_tree(QVector3D rotation, QVector3D translation, QVector3D 
     VisualObject * object = new VisualObject(m_tree,m_textures.value(2),translation,rotation, "Tree");
     object->setScaling(scaling);
     m_models.push_back(object);
+    PremisesExporter::export_environment(m_models,"envirnment.env");
+    object->setTextureID(702);
+    object->setTexturePath("://Texture2");
 }
 
 void RenderState::add_wall(QVector3D rotation, QVector3D translation, QVector3D scaling){
@@ -331,20 +341,30 @@ void RenderState::add_wall(QVector3D rotation, QVector3D translation, QVector3D 
     object->setLMidHorisontal(m_center_h_1);
     object->setUMidHorisontal(m_center_h_2);
     m_models.push_back(object);
+    object->setTextureID(704);
+    object->setTexturePath("://Texture4");
+    PremisesExporter::export_environment(m_models,"envirnment.env");
 }
 
 void RenderState::add_door(QVector3D rotation, QVector3D translation, QVector3D scaling){
     // texture index 1 is the tile
     VisualObject * object = new VisualObject(m_door,m_textures.value(2),translation,rotation, "Door");
     object->setScaling(scaling);
+    object->setTextureID(702);
+    object->setTexturePath("://Texture2");
     m_models.push_back(object);
+    PremisesExporter::export_environment(m_models,"envirnment.env");
 }
 
 void RenderState::add_floor_plan(QVector3D rotation, QVector3D translation, QVector3D scaling){
     // texture index 1 is the tile
     VisualObject * object = new VisualObject(m_plane,m_textures_from_files.value(m_textures_from_files.count()-1),translation,rotation, "FloorPlan");
     object->setScaling(scaling);
+    object->setTextureID(m_textures_from_files.count()-1);
+    object->setTexturePath(m_texture_paths.value(m_textures_from_files.count()-1));
     m_models.push_back(object);
+    PremisesExporter::export_environment(m_models,"envirnment.env");
+    PremisesExporter::export_texture(m_texture_paths, "textures.tl");
 }
 
 void RenderState::resizeGL(int w, int h){
@@ -373,7 +393,7 @@ void RenderState::LoadContent(){
     // load shaders
     m_program = new QOpenGLShaderProgram();
 
-    // laod vertex shader (the geometry of the 3D objects )
+    // load vertex shader (the geometry of the 3D objects )
     m_program->addShaderFromSourceFile(QOpenGLShader::Vertex,"://Vertex");
 
     // load the pixel/fragment shader. this is the pixel shader (per pixel rendering)
@@ -407,7 +427,7 @@ void RenderState::paintGL(){
     // rotation in the x - axis
     cameraTransformation.rotate(-90, 1, 0, 0);
     // transform the camera's position with respect to the rotation matrix
-    QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, m_mouse_zoom) ;
+    QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, m_mouse_zoom+m_current_floor_height) ;
     // define the direction of the camera's up vector
     QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
     // implement and transform the camera

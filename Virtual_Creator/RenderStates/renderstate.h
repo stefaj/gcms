@@ -38,6 +38,7 @@ private:
     QVector<QOpenGLTexture *> m_textures;
     QVector<Node *> m_nodes;
     QVector<VisualObject *> m_models;
+    QVector<QString> m_texture_paths;
     ModelMesh *m_node, *m_plane, *m_wall, *m_door, *m_tree;
 
     // internal integers used for mousemovement, counters etc.
@@ -50,7 +51,7 @@ private:
     m_corner_1, m_corner_2, m_corner_3, m_corner_4, m_center_h_1, m_center_h_2;
     bool m_mousedown_right, m_mousedown_left, m_node_placable,
     m_node_removable, m_tree_removable, m_node_linkable, m_pavement_placable,
-    m_door_placeable,m_wall_placable, m_tree_placable, m_placable_floor_plan;
+    m_door_placeable, m_wall_placable, m_tree_placable, m_placable_floor_plan;
     QString m_floor_plan_path;
     QVector<QOpenGLTexture *> m_textures_from_files;
     void add_pavement(QVector3D, QVector3D, QVector3D);

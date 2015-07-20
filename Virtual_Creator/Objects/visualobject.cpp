@@ -48,6 +48,10 @@ void VisualObject::setUMidHorisontal(QVector3D value){m_center_h_2 = value;}
 
 void VisualObject::setLMidHorisontal(QVector3D value){m_center_h_1 = value;}
 
+void VisualObject::setTextureID(int value){m_texture_id = value;}
+
+void VisualObject::setTexturePath(QString value){ m_path_texture = value;}
+
 QVector3D VisualObject::getCornerULeft(){ return m_corner_1;}
 
 QVector3D VisualObject::getCornerURight(){return m_corner_2;}
@@ -61,6 +65,10 @@ QVector3D VisualObject::getUMidHorisontal(){return m_center_h_1;}
 QVector3D VisualObject::getLMidHorisontal(){return m_center_h_2;}
 
 void VisualObject::setType(QString type){m_type = type;}
+
+int VisualObject::getTextureID(){return m_texture_id;}
+
+QString VisualObject::getTexturePath() {return m_path_texture;}
 
 VisualObject::~VisualObject(){
  delete m_model;

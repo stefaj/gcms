@@ -186,6 +186,7 @@ void MainWindow::on_button_floor_plan_clicked()
     emit set_object_scale(QVector3D(ui->doubleSpinBox_floor_plan_width->value(),1,ui->doubleSpinBox_floor_plan_height->value()));
 
     if(ui->button_floor_plan->isChecked()){
+
         QString file_name = QFileDialog::getOpenFileName(this,tr("Open Image"), "/home/image_file", tr("Image Files (*.png *.jpg *.bmp)"));
         if(PremisesExporter::fileExists(file_name)){
             emit add_new_texture(file_name);
