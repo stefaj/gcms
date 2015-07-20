@@ -187,7 +187,7 @@ void RenderState::mouseReleaseEvent(QMouseEvent *){
 
         if(m_wall_placable){
             // place wall
-             add_wall(m_rotation,m_drag_middle_position,m_currentscale);
+             add_wall(m_rotation,m_drag_middle_position,QVector3D(1,1,m_currentscale.z()));
         }
 
         if(m_pavement_placable){
@@ -199,7 +199,7 @@ void RenderState::mouseReleaseEvent(QMouseEvent *){
 
     m_clicked_position = new QVector3D(0,-1000,0);
     m_rotation = QVector3D();
-    m_currentscale = QVector3D(1,1,1);
+    //m_currentscale = QVector3D(1,1,1);
     // update the frame
     update();
 }
@@ -214,8 +214,7 @@ void RenderState::mousePressEvent(QMouseEvent *event){
         m_mousedown_right = true;
 
     // left click to add the node
-    if((event->button() == Qt::LeftButton)&&(m_node_placable))
-    {
+    if((event->button() == Qt::LeftButton)&&(m_node_placable)){
         add_node(new QString("pewpew"+QString::number(m_nodes.count())));
         PremisesExporter::export_nodes(m_nodes,"nodes.pvc");
     }
@@ -235,7 +234,6 @@ void RenderState::mousePressEvent(QMouseEvent *event){
     // left click to add tree
     if((event->button() == Qt::LeftButton)&&(m_tree_placable))
         add_tree(m_rotation,*m_current_position, m_currentscale);
-
 
     // set current clicked position
     m_clicked_position = new QVector3D(m_current_position->x(), m_current_position->y(), m_current_position->z());
@@ -497,8 +495,9 @@ void RenderState::paintGL(){
         m_center_h_2 = *m_clicked_position;
 
         m_currentscale.setZ(m_clicked_position->distanceToPoint(*m_current_position));
-        DrawGL::draw_if_true(m_wall, vMatrix, m_drag_middle_position, m_rotation, m_currentscale, m_textures.value(4),QVector3D(),QVector2D(m_currentscale.z(),1.0),pMatrix,m_program,m_wall_placable);
+        DrawGL::draw_if_true(m_wall, vMatrix, m_drag_middle_position, m_rotation, QVector3D(1,1,m_currentscale.z()), m_textures.value(4),QVector3D(),QVector2D(m_currentscale.z(),1.0),pMatrix,m_program,m_wall_placable);
     }
+
     // draw placable tree
     DrawGL::draw_if_true(m_tree, vMatrix,Pos,m_rotation,QVector3D(1,1,1), m_textures.value(3),QVector3D(),QVector2D(1,1),pMatrix,m_program,m_tree_placable);
 
