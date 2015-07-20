@@ -318,7 +318,7 @@ void RenderState::add_pavement(QVector3D rotation, QVector3D translation, QVecto
     VisualObject * object = new VisualObject(m_plane,m_textures.value(1),translation,rotation, "Pavement");
     object->setScaling(scaling);
     m_models.push_back(object);
-    PremisesExporter::export_environment(m_models,"envirnment.env");
+    PremisesExporter::export_environment(m_models,"environment.env");
     object->setTextureID(701);
     object->setTexturePath("://Texture1");
 }
@@ -328,7 +328,7 @@ void RenderState::add_tree(QVector3D rotation, QVector3D translation, QVector3D 
     VisualObject * object = new VisualObject(m_tree,m_textures.value(2),translation,rotation, "Tree");
     object->setScaling(scaling);
     m_models.push_back(object);
-    PremisesExporter::export_environment(m_models,"envirnment.env");
+    PremisesExporter::export_environment(m_models,"environment.env");
     object->setTextureID(702);
     object->setTexturePath("://Texture2");
 }
@@ -343,7 +343,7 @@ void RenderState::add_wall(QVector3D rotation, QVector3D translation, QVector3D 
     m_models.push_back(object);
     object->setTextureID(704);
     object->setTexturePath("://Texture4");
-    PremisesExporter::export_environment(m_models,"envirnment.env");
+    PremisesExporter::export_environment(m_models,"environment.env");
 }
 
 void RenderState::add_door(QVector3D rotation, QVector3D translation, QVector3D scaling){
@@ -353,7 +353,7 @@ void RenderState::add_door(QVector3D rotation, QVector3D translation, QVector3D 
     object->setTextureID(702);
     object->setTexturePath("://Texture2");
     m_models.push_back(object);
-    PremisesExporter::export_environment(m_models,"envirnment.env");
+    PremisesExporter::export_environment(m_models,"environment.env");
 }
 
 void RenderState::add_floor_plan(QVector3D rotation, QVector3D translation, QVector3D scaling){
@@ -363,7 +363,7 @@ void RenderState::add_floor_plan(QVector3D rotation, QVector3D translation, QVec
     object->setTextureID(m_textures_from_files.count()-1);
     object->setTexturePath(m_texture_paths.value(m_textures_from_files.count()-1));
     m_models.push_back(object);
-    PremisesExporter::export_environment(m_models,"envirnment.env");
+    PremisesExporter::export_environment(m_models,"environment.env");
     PremisesExporter::export_texture(m_texture_paths, "textures.tl");
 }
 

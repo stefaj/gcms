@@ -11,17 +11,140 @@ VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent): QOpen
     m_position = new QVector3D(0,0,0);
     m_handler = new NodeHandler();
     m_handler->ReadFilePVC("VirtualConcierge/nodes.pvc");
+
     //m_handler->CalculateShortest(0,1);
 
 
 }
+void VirtualConciergeRenderstate::LoadTextures(QString path){
+    // clear the premises when not empty
+    if(m_textures.count()>0)
+        m_textures.clear();
 
-void VirtualConciergeRenderstate::LoadContent()
-{
+    /* populate the textures from the text file */
+
+    // load the text file
+    QFile textfile(path);
+
+    // open the text file
+    textfile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream ascread(&textfile);
+
+    if(textfile.isOpen()){
+        // read each line of the file
+        QString line = ascread.readLine();
+
+        while(!line.isNull()){
+            // break the line up in usable parts
+            QStringList list = line.split(",");
+
+            // check the type of line
+            /* n-> node
+             * j-> join
+             */
+            if(list[0]=="t"){
+
+                int texture_index = 0;
+                QString texture_path ="";
+
+                // texture type
+                QTextStream(&list[2])>>texture_path;
+
+                // texture index
+                QTextStream(&list[1])>>texture_index;
+
+                // load texture
+                QOpenGLTexture *texture = new QOpenGLTexture(QImage(texture_path).mirrored());
+                texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+                texture->setMagnificationFilter(QOpenGLTexture::Linear);
+                m_textures.push_back(texture);
+            }
+
+            // read next line
+           line = ascread.readLine();
+        }
+
+        // close the textfile
+        textfile.close();
+    }
+}
+
+void VirtualConciergeRenderstate::LoadObjects(QString path){
+    // clear the premises when not empty
+    if(m_objects.count()>0)
+        m_objects.clear();
+
+    /* populate the premisis from the text file */
+
+    // load the text file
+    QFile textfile(path);
+
+    // open the text file
+    textfile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream ascread(&textfile);
+
+    if(textfile.isOpen()){
+        // read each line of the file
+        QString line = ascread.readLine();
+
+        while(!line.isNull()){
+            // break the line up in usable parts
+            QStringList list = line.split(",");
+
+            // check the type of line
+            /* n-> node
+             * j-> join
+             */
+            if(list[0]=="o"){
+                // this is only x,y,z coordinates for the node
+                float matrix[9];
+                int texture_index = 0;
+                QString Type ="";
+
+                // populate the vertices
+                for(int i = 0;i<9;i++)
+                     QTextStream(&list[i+3])>>matrix[i];
+
+                // texture index
+                QTextStream(&list[12])>>texture_index;
+
+                // object type
+                QTextStream(&list[2])>>Type;
+
+                // add floorplan
+                if(Type.compare("FloorPlan",Qt::CaseInsensitive)==0){
+                    if(texture_index<m_textures.count()){
+                        VisualObject *object = new VisualObject(m_plane,m_textures[texture_index],
+                                                                QVector3D(matrix[0],matrix[1],matrix[2]),
+                                                                QVector3D(matrix[3],matrix[4],matrix[5]),"FloorPlan");
+                    object->setScaling(QVector3D(matrix[6],matrix[7],matrix[8]));
+                    m_objects.push_back(object);
+                    }
+                }
+            }
+
+            // read next line
+           line = ascread.readLine();
+        }
+
+        // close the textfile
+        textfile.close();
+    }
+}
+
+void VirtualConciergeRenderstate::LoadContent(){
     // this initializes all the opengl functions
     initializeOpenGLFunctions();
     //load meshes
-    m_node = new ModelMesh("://Sphere");
+    m_node = new ModelMesh(":/Sphere");
+    m_plane = new ModelMesh(":/Plane");
+    m_door = new ModelMesh("://DoorWay01");
+    m_wall = new ModelMesh("://Wall01");
+    m_tree = new ModelMesh("://Tree01");
+
+    // load objects and textures
+    LoadTextures("VirtualConcierge/textures.tl");
+    LoadObjects("VirtualConcierge/environment.env");
     // load shaders
     m_program = new QOpenGLShaderProgram();
     m_program->addShaderFromSourceFile(QOpenGLShader::Vertex,":/Vertex");
@@ -80,6 +203,19 @@ void VirtualConciergeRenderstate::paintGL(){
        QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
        // implement and transform the camera
        vMatrix.lookAt(cameraPosition, QVector3D(), cameraUpDirection);
+       // draw other objects first
+       foreach(VisualObject *object, m_objects){
+           QMatrix4x4 translation;
+           translation.translate(object->getTranslation());
+           QMatrix4x4 rotation;
+           rotation.rotate(object->getRotation().y(),0,1,0);
+           rotation.scale(object->getScaling());
+           if(object->getType().compare("FloorPlan")!=0)
+           DrawGL::DrawModel(object->getModelMesh(), vMatrix, translation,rotation,object->getTexture(),QVector3D(),QVector2D(object->getScaling().z(),object->getScaling().x()),m_program,pMatrix);
+           else
+           DrawGL::DrawModel(object->getModelMesh(), vMatrix, translation,rotation,object->getTexture(),QVector3D(),QVector2D(1,1),m_program,pMatrix);
+        }
+
        // draw each node to the scene
        for(int x = 0; x<m_handler->count();x++){
          // this is for the model transformation

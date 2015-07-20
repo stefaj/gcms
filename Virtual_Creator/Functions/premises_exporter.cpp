@@ -60,7 +60,6 @@ void PremisesExporter::export_texture(QVector<QString> textures,QString name)
         file.close();
 }
 
-
 void PremisesExporter::export_nodes(QVector<Node *> nodes,QString name){
 if(QDir().mkdir("VirtualConcierge"))
     qDebug()<<"Success in Creating Directory 'VirtualConcierge'";

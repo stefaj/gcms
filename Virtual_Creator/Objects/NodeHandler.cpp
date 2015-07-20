@@ -4,40 +4,34 @@
 #include <QFile>
 #include <QTextStream>
 
-NodeHandler::NodeHandler()
-{
+NodeHandler::NodeHandler(){
     m_premises.clear();
 }
 
-void NodeHandler::AddNode(Node* node)
-{
+void NodeHandler::AddNode(Node* node){
     m_premises.push_back(node);
 }
 
-Node NodeHandler::NodeFromIndex(unsigned int index)
-{
+Node NodeHandler::NodeFromIndex(unsigned int index){
     return *m_premises.value(index);
 }
 
-int NodeHandler::count()
-{
+int NodeHandler::count(){
     return m_premises.count();
 }
 
-void NodeHandler::AddNodeLink(int index,QString* Name)
-{
+void NodeHandler::AddNodeLink(int index,QString* Name){
    m_premises.value(index)->AddLink(Name,index);
 }
 
-void NodeHandler::AddNodeLinkbyIndex(int index1, int index2)
-{
+void NodeHandler::AddNodeLinkbyIndex(int index1, int index2){
     if(index1 != index2)
         m_premises.value(index1)->AddLink( new QString(m_premises.value(index2)->getName()),index2);
     else
         qDebug()<< "Node can't be linked to itself";
 }
-void NodeHandler::CalculateShortest(int start, int goal)
-{
+
+void NodeHandler::CalculateShortest(int start, int goal){
   /* this is the main implementation of Dijkstra's Algorithm for shortest paths from one node to another */
   /* for more details on the algorithm see the final report @ https://github.com/Baggins800/Final-Report */
   /* or contact Baggins: omega@live.co.za */
@@ -70,18 +64,15 @@ void NodeHandler::CalculateShortest(int start, int goal)
   que.push_back(k);
 
  // wait while the whole que is empty ( this may be ineffective )
- while(que.count()>0)
- {
+ while(que.count()>0){
   // initialize the curren index, the index to be removed and the current min G value
   int current_index = -1;
   int remove_index = -1;
   double current_min = inf;
 
   // select the next value with the lowest G value
-  for(int l = 0; l < que.count();l++)
-  {
-      if(m_premises.value(l)->getG()<current_min)
-      {
+  for(int l = 0; l < que.count();l++){
+      if(m_premises.value(l)->getG()<current_min){
           current_min=m_premises.value(l)->getG();
           current_index=que.value(l);
           remove_index = l;
@@ -123,18 +114,16 @@ void NodeHandler::CalculateShortest(int start, int goal)
       m_shortest.push_back(_back_node);
   }
 }
-int NodeHandler::pathcount()
-{
+
+int NodeHandler::pathcount(){
     return m_shortest.count();
 }
 
-int NodeHandler::pathindex(int index)
-{
+int NodeHandler::pathindex(int index){
     return m_shortest.value(index);
 }
 
-void NodeHandler::ReadFilePVC(QString filename)
-{
+void NodeHandler::ReadFilePVC(QString filename){
     // clear the premises when not empty
     if(m_premises.count()>0)
         m_premises.clear();
@@ -148,13 +137,11 @@ void NodeHandler::ReadFilePVC(QString filename)
     textfile.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream ascread(&textfile);
 
-    if(textfile.isOpen())
-    {
+    if(textfile.isOpen()){
         // read each line of the file
         QString line = ascread.readLine();
 
-        while(!line.isNull())
-        {
+        while(!line.isNull()){
             // break the line up in usable parts
             QStringList list = line.split(",");
 
@@ -162,8 +149,7 @@ void NodeHandler::ReadFilePVC(QString filename)
             /* n-> node
              * j-> join
              */
-            if(list[0]=="n")
-            {
+            if(list[0]=="n"){
                 // this is only x,y,z coordinates for the node
                 float vertex[3];
 
@@ -175,8 +161,7 @@ void NodeHandler::ReadFilePVC(QString filename)
                 AddNode(new Node(new QVector3D(vertex[0],vertex[1],vertex[2])));
 
             } else
-            if(list[0]=="j")
-             {
+            if(list[0]=="j"){
                    // this is only the indices that should be join
                     int uv[2];
 
