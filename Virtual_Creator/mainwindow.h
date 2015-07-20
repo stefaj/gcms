@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "virtualconcierge.h"
+#include "Functions/premises_exporter.h"
 #include <QFileDialog>
 namespace Ui {
 class MainWindow;

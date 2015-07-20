@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->button_tree1->setCheckable(true);
     ui->button_floor_plan->setCheckable(true);
 
+    // connections to all the slots of the opengl widget
     connect(this, SIGNAL(place_node(bool)),ui->openGLWidget, SLOT(allow_node(bool)));
     connect(this, SIGNAL(remove_nodes(bool)),ui->openGLWidget, SLOT(allow_remove_node(bool)));
     connect(this, SIGNAL(remove_trees(bool)),ui->openGLWidget, SLOT(allow_remove_tree(bool)));
@@ -180,10 +181,15 @@ void MainWindow::on_button_floor_plan_clicked()
     ui->button_tree1->setChecked(false);
     ui->button_remove_tree->setChecked(false);
     EmitSignals();
+
     if(ui->button_floor_plan->isChecked()){
     QString file_name = QFileDialog::getOpenFileName(this,tr("Open Image"), "/home/image_file", tr("Image Files (*.png *.jpg *.bmp)"));
-    if(!file_name.isEmpty())
-    emit add_new_texture(file_name);
+    if(PremisesExporter::fileExists(file_name)){
+        emit add_new_texture(file_name);
+    } else{
+        emit add_new_texture("://Texture0");
+    }
+
     }
 
 }

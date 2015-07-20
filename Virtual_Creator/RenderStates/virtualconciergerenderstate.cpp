@@ -80,11 +80,8 @@ void VirtualConciergeRenderstate::paintGL(){
        QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
        // implement and transform the camera
        vMatrix.lookAt(cameraPosition, QVector3D(), cameraUpDirection);
-      // vMatrix.translate(m_camera_prev);
-
        // draw each node to the scene
-       for(int x = 0; x<m_handler->count();x++)
-       {
+       for(int x = 0; x<m_handler->count();x++){
          // this is for the model transformation
          QMatrix4x4 mMatrix;
          // transform the position locally
@@ -97,8 +94,7 @@ void VirtualConciergeRenderstate::paintGL(){
                 vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,1,0),m_program,pMatrix);
 
        // draw each node to the scene
-       for(int z = 0; z<m_handler->count();z++)
-       {
+       for(int z = 0; z<m_handler->count();z++){
          for(int l = 0;l<m_handler->NodeFromIndex(z).countConnected();l++)
            DrawGL::DrawLine(m_handler->NodeFromIndex(z).Position(),m_handler->NodeFromIndex(m_handler->NodeFromIndex(z).getConnectedIndex(l)).Position(),
                   vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0),m_program,pMatrix);

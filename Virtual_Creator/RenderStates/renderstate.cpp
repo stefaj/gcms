@@ -128,7 +128,7 @@ void RenderState::mouseMoveEvent(QMouseEvent *event){
         m_camera_prev.setX(m_camera_prev.x()-m_position_camera.x());
         m_camera_prev.setY(m_camera_prev.y()-m_position_camera.y());
         m_camera_prev.setZ(m_camera_prev.z()-m_position_camera.z());
-        m_position_camera = QVector3D();
+        m_position_camera = QVector3D(0,m_current_floor_height,0);
     }
 
     // removable dragable nodes
@@ -318,8 +318,7 @@ void RenderState::add_pavement(QVector3D rotation, QVector3D translation, QVecto
     m_models.push_back(object);
 }
 
-void RenderState::add_tree(QVector3D rotation, QVector3D translation, QVector3D scaling)
-{
+void RenderState::add_tree(QVector3D rotation, QVector3D translation, QVector3D scaling){
     // texture index 1 is the tile
     VisualObject * object = new VisualObject(m_tree,m_textures.value(2),translation,rotation, "Tree");
     object->setScaling(scaling);
