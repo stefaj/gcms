@@ -42,7 +42,7 @@ private:
 
     // internal integers used for mousemovement, counters etc.
     int m_mouse_x, m_mouse_y, m_dmouse_x, m_dmouse_y, m_node_index_selected;
-    float m_mouse_zoom ,m_noderadius, m_mouse_y_inverted;
+    float m_mouse_zoom ,m_noderadius, m_mouse_y_inverted, m_current_floor_height;
     // define a view matrix
     QMatrix4x4 vMatrix;
     QVector3D *m_current_position;
@@ -75,6 +75,7 @@ private slots:
     void invert_mouseY(bool);
     void load_texture_from_file(QString);
     void set_object_scale(QVector3D);
+    void change_current_floor_height(float);
 };
 
 #endif // RENDERSTATE_H

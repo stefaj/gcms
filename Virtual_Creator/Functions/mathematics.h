@@ -9,6 +9,7 @@ public:
     Mathematics();
     ~Mathematics();
     static QVector3D intersectYnull(QVector3D, QVector3D);
+    static QVector3D intersectYat(QVector3D,QVector3D,float);
     static float flat_angle_from_vectors(QVector3D, QVector3D);
     static float return_near_degree(float);
     static QVector3D mouse_raycast(int, int, int, int, float, QMatrix4x4, QMatrix4x4);

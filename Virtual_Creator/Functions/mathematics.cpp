@@ -23,6 +23,13 @@ float Mathematics::flat_angle_from_vectors(QVector3D pointA, QVector3D pointB){
         return (180*acos(delta_x/distance)/(3.141592));
 }
 
+QVector3D Mathematics::intersectYat(QVector3D u_dir, QVector3D r_point,float y){
+    float t =0.0;//t determines the point of intersection
+    if(u_dir.y() != 0)// (1/0) validation
+    t = -r_point.y()/u_dir.y()-y; // t=-r1.y/r (calculus)
+    return r_point+t*u_dir;// v(t)=r+t*r1
+}
+
 float Mathematics::return_near_degree(float value){
     // clamping factor
     const float diff = 2.0f;

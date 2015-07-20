@@ -9,6 +9,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     m_mouse_zoom(60.0f),
     m_noderadius(0.5f),
     m_mouse_y_inverted(1.0f),
+    m_current_floor_height(0.0f),
     m_position_camera(QVector3D()),
     m_camera_prev(QVector3D()),
     m_raycast(QVector3D()),
@@ -85,6 +86,8 @@ void RenderState::allow_floor_plan(bool value){m_placable_floor_plan = value;}
 void RenderState::change_rotY(double value){m_rotation.setY(value);}
 
 void RenderState::set_object_scale(QVector3D value){m_currentscale = value;}
+
+void RenderState::change_current_floor_height(float value){m_current_floor_height=value;}
 
 void RenderState::load_texture_from_file(QString value)
 {
@@ -411,11 +414,11 @@ void RenderState::paintGL(){
     // define the direction of the camera's up vector
     QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
     // implement and transform the camera
-    vMatrix.lookAt(cameraPosition, QVector3D(), cameraUpDirection);
+    vMatrix.lookAt(cameraPosition, QVector3D(0,m_current_floor_height,0), cameraUpDirection);
     vMatrix.translate(m_camera_prev);
 
     // return the position of the ray intersection with the y-axis
-    QVector3D Pos  = Mathematics::intersectYnull(m_raycast, QVector3D(0, m_mouse_zoom, 0)-m_camera_prev );
+    QVector3D Pos  = Mathematics::intersectYat(m_raycast, QVector3D(0, m_mouse_zoom, 0)-m_camera_prev ,m_current_floor_height);
 
     // update current position
     m_current_position->setX(Pos.x());

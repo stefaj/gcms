@@ -31,6 +31,8 @@ private slots:
 
     void on_doubleSpinBox_floor_plan_height_valueChanged(double arg1);
 
+    void on_spinBox_floor_level_valueChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
     void EmitSignals();
@@ -47,7 +49,8 @@ signals:
     void invert_mouseY(bool); // invert the y of the mouse in 3D
     void place_floor_plan(bool); // allows a floorplan to bew placed
     void add_new_texture(QString);// adds new usable texture to the list
-    void set_object_scale(QVector3D);
+    void set_object_scale(QVector3D); // set the current scale of the object active
+    void change_floor_selected(float); // sets the current floor used
 };
 
 #endif // MAINWINDOW_H
