@@ -74,20 +74,22 @@ void RenderState::load_premises(QString value){
 
     // count the subdirectories
     int append = ls.count();
-    QString texture_path = "";
+    QString directory_path = "";
 
     // create new file path from previous
     for(int k = 0;k<append-1;k++){
-        texture_path += ls[k]+"/";
+        directory_path += ls[k]+"/";
     }
 
     // load textures and objects
-    LoadTextures(texture_path);
+    LoadTextures(directory_path);
     LoadObjects(value);
+    LoadNodes(directory_path);
 
     // export the files afterwards
     PremisesExporter::export_environment(m_models,"environment.env");
     PremisesExporter::export_texture(m_texture_paths, "textures.tl");
+    PremisesExporter::export_nodes(m_nodes,"nodes.pvc");
 }
 
 void RenderState::set_next_node_name(QString value){ m_next_node_name = value;}
@@ -781,6 +783,7 @@ void RenderState::LoadObjects(QString path){
                                                                 QVector3D(matrix[0],matrix[1],matrix[2]),
                                                                 QVector3D(matrix[3],matrix[4],matrix[5]),"FloorPlan");
                     object->setScaling(QVector3D(matrix[6],matrix[7],matrix[8]));
+                    object->setTextureID(texture_index);
                     m_models.push_back(object);
                     } else{
                         QMessageBox::warning(this, tr("Texture file error"),
@@ -791,6 +794,75 @@ void RenderState::LoadObjects(QString path){
                 }
             }
 
+            // read next line
+           line = ascread.readLine();
+        }
+
+        // close the textfile
+        textfile.close();
+    }
+}
+
+void RenderState::LoadNodes(QString filename){
+    // clear the premises when not empty
+    if(m_nodes.count()>0)
+        m_nodes.clear();
+
+    /* populate the premisis from the text file */
+
+    // load the text file
+    QFile textfile(filename+QString("nodes.pvc"));
+
+    // open the text file
+    textfile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream ascread(&textfile);
+
+    if(textfile.isOpen()){
+        // read each line of the file
+        QString line = ascread.readLine();
+
+        while(!line.isNull()){
+            // break the line up in usable parts
+            QStringList list = line.split(",");
+
+            // check the type of line
+            /* n-> node
+             * j-> join
+             */
+            if(list[0]=="n"){
+                // this is only x,y,z coordinates for the node
+                float vertex[3];
+                int signi = 0;
+                QString display_name ="";
+                // populate the vertices
+                for(int i = 0;i<3;i++)
+                     QTextStream(&list[i+2])>>vertex[i];
+
+                // get node significance
+                QTextStream(&list[6])>>signi;
+                // get the node's name
+                display_name = list[5];
+                Node *n = new Node(new QVector3D(vertex[0],vertex[1],vertex[2]));
+                // set node's significance
+                n->setSignificant((signi==1));
+                // set node's name
+                n->setName(display_name);
+                // add the node to the premises
+                m_nodes.push_back(n);
+
+            } else
+            if(list[0]=="j"){
+                   // this is only the indices that should be join
+                    int uv[2];
+
+                    // populate the indices
+                    for(int i = 0;i<2;i++)
+                         QTextStream(&list[i+1])>>uv[i];
+
+                    QString p = m_nodes.value(uv[1])->getName();
+                    // add the links
+                    m_nodes.value(uv[0])->AddLink(&p,uv[1]);
+             }
             // read next line
            line = ascread.readLine();
         }

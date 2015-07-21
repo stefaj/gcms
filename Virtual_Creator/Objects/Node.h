@@ -24,6 +24,7 @@ public:
     void clearPath();
     void addShortest(int);
     void setG(double g);
+    void setName(QString);
     void setShortest(int index);
     void setWalk(bool);
     void setWheelChair(bool);

@@ -55,9 +55,6 @@ void NodeHandler::CalculateShortest(int start, int goal){
   }
   // set start G value to  0.0
   m_premises.value(start)->setG(0.0);
-  foreach (Node *n, m_premises) {
-      qDebug()<<n->getG();
-  }
 
   // initial que contains all
   QVector<int> que;
@@ -116,7 +113,6 @@ void NodeHandler::CalculateShortest(int start, int goal){
       while(_back_node != start){
           // backwards trace the shortest path
           _back_node = m_premises.value(_back_node)->getShortestIndex();
-          qDebug()<<_back_node;
           m_shortest.push_back(_back_node);
       }
      }

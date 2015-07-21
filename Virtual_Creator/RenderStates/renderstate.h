@@ -64,6 +64,7 @@ private:
     void draw_circle_flat(QVector3D, QMatrix4x4,QVector3D, float);
     void LoadObjects(QString);
     void LoadTextures(QString);
+    void LoadNodes(QString);
     const float tree_radius, infinte_lenght_lines;
 private slots:
     void add_node(QString *);

@@ -33,6 +33,8 @@ Node::Node(QVector3D * Position){
     m_g = 99999999999999.0;
 }
 
+void Node::setName(QString value){*m_name = value;}
+
 QVector3D Node::getColor(){return *m_color;}
 
 void Node::setColor(QVector3D *color){m_color = color;}

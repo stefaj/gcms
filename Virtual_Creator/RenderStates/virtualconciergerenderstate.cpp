@@ -235,11 +235,11 @@ void VirtualConciergeRenderstate::paintGL(){
 //       }
 
        // draw each node to the scene
-       for(int z = 0; z<m_handler->count();z++){
-         for(int l = 0;l<m_handler->NodeFromIndex(z).countConnected();l++)
-           DrawGL::DrawLine(m_handler->NodeFromIndex(z).Position(),m_handler->NodeFromIndex(m_handler->NodeFromIndex(z).getConnectedIndex(l)).Position(),
-                  vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0),m_program,pMatrix);
-       }
+//       for(int z = 0; z<m_handler->count();z++){
+//         for(int l = 0;l<m_handler->NodeFromIndex(z).countConnected();l++)
+//           DrawGL::DrawLine(m_handler->NodeFromIndex(z).Position(),m_handler->NodeFromIndex(m_handler->NodeFromIndex(z).getConnectedIndex(l)).Position(),
+//                  vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0),m_program,pMatrix);
+//       }
        for(int o = 0;o<m_handler->pathcount()-1;o++)
            DrawGL::DrawLine(m_handler->NodeFromIndex(m_handler->pathindex(o)).Position(),m_handler->NodeFromIndex(m_handler->pathindex(o+1)).Position(),
                 vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,1,0),m_program,pMatrix);
