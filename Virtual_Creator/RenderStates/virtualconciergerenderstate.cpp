@@ -1,21 +1,28 @@
 #include "virtualconciergerenderstate.h"
 
-VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent): QOpenGLWidget(parent),m_program(0){
+VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent): QOpenGLWidget(parent),m_program(0),m_start(0),m_end(0){
     // enable antialiasing (set the format of the widget)
     QSurfaceFormat format;
     format.setSamples(4);
     this->setFormat(format);
     // clear the textures
     m_textures.clear();
-
+    m_textures_predefined.clear();
     m_position = new QVector3D(0,0,0);
     m_handler = new NodeHandler();
-    m_handler->ReadFilePVC("VirtualConcierge/nodes.pvc");
+
+    if(PremisesExporter::fileExists("VirtualConcierge/nodes.pvc"))
+        m_handler->ReadFilePVC("VirtualConcierge/nodes.pvc");
 
     //m_handler->CalculateShortest(0,1);
-
-
+    find_path(0,5);
 }
+
+void VirtualConciergeRenderstate::find_path(int start, int end){
+    if((m_handler->count()>start)&&(m_handler->count()>end))
+        m_handler->CalculateShortest(start,end);
+}
+
 void VirtualConciergeRenderstate::LoadTextures(QString path){
     // clear the premises when not empty
     if(m_textures.count()>0)
@@ -143,8 +150,10 @@ void VirtualConciergeRenderstate::LoadContent(){
     m_tree = new ModelMesh("://Tree01");
 
     // load objects and textures
-    LoadTextures("VirtualConcierge/textures.tl");
-    LoadObjects("VirtualConcierge/environment.env");
+    if(PremisesExporter::fileExists("VirtualConcierge/textures.tl"))
+        LoadTextures("VirtualConcierge/textures.tl");
+    if(PremisesExporter::fileExists("VirtualConcierge/environment.env"))
+        LoadObjects("VirtualConcierge/environment.env");
     // load shaders
     m_program = new QOpenGLShaderProgram();
     m_program->addShaderFromSourceFile(QOpenGLShader::Vertex,":/Vertex");
@@ -153,15 +162,14 @@ void VirtualConciergeRenderstate::LoadContent(){
 
 }
 
-void VirtualConciergeRenderstate::initializeGL()
-{
+void VirtualConciergeRenderstate::initializeGL(){
     // this initializes all the opengl functions
     initializeOpenGLFunctions();
     // texture test
     QOpenGLTexture *texture = new QOpenGLTexture(QImage("://Texture0").mirrored());
     texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
     texture->setMagnificationFilter(QOpenGLTexture::Linear);
-    m_textures.append(texture);
+    m_textures_predefined.append(texture);
 }
 
 void VirtualConciergeRenderstate::resizeGL(int w, int h){
@@ -223,11 +231,8 @@ void VirtualConciergeRenderstate::paintGL(){
          // transform the position locally
          mMatrix.translate(m_handler->NodeFromIndex(x).Position());
          // draw different types of nodes, (connected & unconnected nodes & best path)
-         DrawGL::DrawModel(m_node,vMatrix,mMatrix,QMatrix4x4(),m_textures.value(0),m_handler->NodeFromIndex(x).getColor(),QVector2D(1,1),m_program,pMatrix);
+         DrawGL::DrawModel(m_node,vMatrix,mMatrix,QMatrix4x4(),m_textures_predefined.value(0),m_handler->NodeFromIndex(x).getColor(),QVector2D(1,1),m_program,pMatrix);
        }
-       for(int o = 0;o<m_handler->pathcount()-1;o++)
-           DrawGL::DrawLine(m_handler->NodeFromIndex(m_handler->pathindex(o)).Position(),m_handler->NodeFromIndex(m_handler->pathindex(o+1)).Position(),
-                vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,1,0),m_program,pMatrix);
 
        // draw each node to the scene
        for(int z = 0; z<m_handler->count();z++){
@@ -235,6 +240,10 @@ void VirtualConciergeRenderstate::paintGL(){
            DrawGL::DrawLine(m_handler->NodeFromIndex(z).Position(),m_handler->NodeFromIndex(m_handler->NodeFromIndex(z).getConnectedIndex(l)).Position(),
                   vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0),m_program,pMatrix);
        }
+       for(int o = 0;o<m_handler->pathcount()-1;o++)
+           DrawGL::DrawLine(m_handler->NodeFromIndex(m_handler->pathindex(o)).Position(),m_handler->NodeFromIndex(m_handler->pathindex(o+1)).Position(),
+                vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,1,0),m_program,pMatrix);
+
        //DrawModel(m_plane, vMatrix, QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0));
        // release the program for this frame
        m_program->release();

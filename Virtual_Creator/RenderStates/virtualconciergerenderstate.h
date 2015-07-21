@@ -9,6 +9,7 @@
 #include "Objects/NodeHandler.h"
 #include "Functions/drawgl.h"
 #include "Objects/visualobject.h"
+#include "Functions/premises_exporter.h"
 
 class VirtualConciergeRenderstate : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -24,10 +25,11 @@ private:
     QOpenGLShaderProgram *m_program;
     QVector3D *m_position;
     NodeHandler *m_handler;
-    QVector<QOpenGLTexture *> m_textures;
+    QVector<QOpenGLTexture *> m_textures,m_textures_predefined;
     QVector<VisualObject *> m_objects;
     void LoadObjects(QString);
     void LoadTextures(QString);
+    int m_start,m_end;
 protected:
     void initializeGL();
    // void resizeGL(int w, int h);
@@ -37,6 +39,8 @@ protected:
 //    void mousePressEvent(QMouseEvent *);
 //    void wheelEvent(QWheelEvent *);
 //    void mouseReleaseEvent(QMouseEvent *);
+private slots:
+    void find_path(int,int);
 };
 
 #endif // VIRTUALCONCIERGERENDERSTATE_H
