@@ -1314,13 +1314,13 @@ QDoubleSpinBox::down-arrow:off
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>24</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
      <width>0</width>
-     <height>24</height>
+     <height>22</height>
     </size>
    </property>
    <property name="defaultUp">
@@ -1333,7 +1333,7 @@ QDoubleSpinBox::down-arrow:off
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="actionOpen"/>
+    <addaction name="actionOpen_nodes_file"/>
     <addaction name="actionOpen_Premises_File"/>
    </widget>
    <widget class="QMenu" name="menuBuild">
@@ -1563,7 +1563,7 @@ QDoubleSpinBox::down-arrow:off
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionOpen">
+  <action name="actionOpen_nodes_file">
    <property name="text">
     <string>Open Nodes File</string>
    </property>

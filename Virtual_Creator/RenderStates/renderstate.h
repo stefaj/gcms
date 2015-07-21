@@ -10,6 +10,7 @@
 #include <QVector3D>
 #include <QTimer>
 #include <QtMath>
+#include <QMessageBox>
 #include "Objects/ModelMesh.h"
 #include "Objects/Node.h"
 #include "Objects/visualobject.h"
@@ -61,6 +62,8 @@ private:
     void add_tree(QVector3D, QVector3D, QVector3D);
     void add_floor_plan(QVector3D, QVector3D, QVector3D);
     void draw_circle_flat(QVector3D, QMatrix4x4,QVector3D, float);
+    void LoadObjects(QString);
+    void LoadTextures(QString);
     const float tree_radius, infinte_lenght_lines;
 private slots:
     void add_node(QString *);
@@ -80,6 +83,7 @@ private slots:
     void change_current_floor_height(float);
     void set_next_node_name(QString);
     void set_next_node_significant(bool);
+    void load_premises(QString);
 };
 
 #endif // RENDERSTATE_H

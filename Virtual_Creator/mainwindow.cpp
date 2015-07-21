@@ -38,6 +38,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(change_floor_selected(float)),ui->openGLWidget, SLOT(change_current_floor_height(float)));
     connect(this, SIGNAL(change_node_name(QString)),ui->openGLWidget, SLOT(set_next_node_name(QString)));
     connect(this, SIGNAL(set_node_significant(bool)),ui->openGLWidget, SLOT(set_next_node_significant(bool)));
+    connect(this, SIGNAL(load_premises(QString)),ui->openGLWidget,SLOT(load_premises(QString)));
+    connect(ui->actionOpen_Premises_File,SIGNAL(triggered()),this, SLOT(send_loaded_premises()));
 }
 
 MainWindow::~MainWindow(){delete ui;}
@@ -67,6 +69,13 @@ void MainWindow::on_button_node_clicked(){
     ui->button_floor_plan->setChecked(false);
     ui->stackedWidget_side_add->setCurrentIndex(0);
     EmitSignals();
+}
+
+void MainWindow::send_loaded_premises(){
+    QString file_name = QFileDialog::getOpenFileName(this,tr("Open Environment File"), "/home/environment", tr("Environment Files (*.env)"));
+    if(PremisesExporter::fileExists(file_name)){
+        emit load_premises(file_name);
+    }
 }
 
 void MainWindow::on_button_link_clicked(){

@@ -31,11 +31,9 @@ private slots:
     void on_doubleSpinBox_floor_plan_width_valueChanged(double arg1);
     void on_doubleSpinBox_floor_plan_height_valueChanged(double arg1);
     void on_spinBox_floor_level_valueChanged(int arg1);
-
     void on_lineEdit_node_name_textChanged(const QString &arg1);
-
     void on_checkbox_significant_clicked(bool checked);
-
+    void send_loaded_premises();
 private:
     Ui::MainWindow *ui;
     void EmitSignals();
@@ -56,6 +54,7 @@ signals:
     void change_floor_selected(float); // sets the current floor used
     void change_node_name(QString); // changes the name of the next node
     void set_node_significant(bool); // set whether the node should be a button or not
+    void load_premises(QString);// load premises from file
 };
 
 #endif // MAINWINDOW_H

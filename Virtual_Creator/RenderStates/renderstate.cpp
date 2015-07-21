@@ -68,6 +68,28 @@ void RenderState::invert_mouseY(bool value){
         m_mouse_y_inverted = 1.0f;
 }
 
+void RenderState::load_premises(QString value){
+    // get the path of each subdirectory
+    QStringList ls = value.split("/");
+
+    // count the subdirectories
+    int append = ls.count();
+    QString texture_path = "";
+
+    // create new file path from previous
+    for(int k = 0;k<append-1;k++){
+        texture_path += ls[k]+"/";
+    }
+
+    // load textures and objects
+    LoadTextures(texture_path);
+    LoadObjects(value);
+
+    // export the files afterwards
+    PremisesExporter::export_environment(m_models,"environment.env");
+    PremisesExporter::export_texture(m_texture_paths, "textures.tl");
+}
+
 void RenderState::set_next_node_name(QString value){ m_next_node_name = value;}
 
 void RenderState::set_next_node_significant(bool value){m_node_significant = value;}
@@ -95,15 +117,13 @@ void RenderState::set_object_scale(QVector3D value){m_currentscale = value;}
 void RenderState::change_current_floor_height(float value){m_current_floor_height=value;}
 
 void RenderState::load_texture_from_file(QString value){
-
     QString val_new = "VirtualConcierge/"+QString("TEX")+QString::number(m_texture_paths.count());
     QFile::copy(value,val_new);
-    QOpenGLTexture *texture = new QOpenGLTexture(QImage(val_new).mirrored());
+    QOpenGLTexture *texture = new QOpenGLTexture(QImage(value).mirrored());
     texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
     texture->setMagnificationFilter(QOpenGLTexture::Linear);
     m_textures_from_files.push_back(texture);
     m_texture_paths.push_back(val_new);
-
 }
 
 void RenderState::initializeGL(){
@@ -326,6 +346,7 @@ void RenderState::add_pavement(QVector3D rotation, QVector3D translation, QVecto
     object->setScaling(scaling);
     m_models.push_back(object);
     PremisesExporter::export_environment(m_models,"environment.env");
+    PremisesExporter::export_texture(m_texture_paths, "textures.tl");
     object->setTextureID(701);
     object->setTexturePath("://Texture1");
 }
@@ -336,6 +357,7 @@ void RenderState::add_tree(QVector3D rotation, QVector3D translation, QVector3D 
     object->setScaling(scaling);
     m_models.push_back(object);
     PremisesExporter::export_environment(m_models,"environment.env");
+    PremisesExporter::export_texture(m_texture_paths, "textures.tl");
     object->setTextureID(702);
     object->setTexturePath("://Texture2");
 }
@@ -351,6 +373,7 @@ void RenderState::add_wall(QVector3D rotation, QVector3D translation, QVector3D 
     object->setTextureID(704);
     object->setTexturePath("://Texture4");
     PremisesExporter::export_environment(m_models,"environment.env");
+    PremisesExporter::export_texture(m_texture_paths, "textures.tl");
 }
 
 void RenderState::add_door(QVector3D rotation, QVector3D translation, QVector3D scaling){
@@ -361,6 +384,7 @@ void RenderState::add_door(QVector3D rotation, QVector3D translation, QVector3D 
     object->setTexturePath("://Texture2");
     m_models.push_back(object);
     PremisesExporter::export_environment(m_models,"environment.env");
+    PremisesExporter::export_texture(m_texture_paths, "textures.tl");
 }
 
 void RenderState::add_floor_plan(QVector3D rotation, QVector3D translation, QVector3D scaling){
@@ -458,9 +482,10 @@ void RenderState::paintGL(){
         rotation.scale(object->getScaling());
         if(object->getType().compare("FloorPlan")!=0)
         DrawGL::DrawModel(object->getModelMesh(), vMatrix, translation,rotation,object->getTexture(),QVector3D(),QVector2D(object->getScaling().z(),object->getScaling().x()),m_program,pMatrix);
-        else
+        else{
         DrawGL::DrawModel(object->getModelMesh(), vMatrix, translation,rotation,object->getTexture(),QVector3D(),QVector2D(1,1),m_program,pMatrix);
 
+        }
         if(m_wall_placable){
             if(object->getLMidHorisontal().distanceToPoint(Pos)<0.25f)
                 *m_current_position = object->getLMidHorisontal();
@@ -650,6 +675,128 @@ void RenderState::draw_circle_flat(QVector3D center, QMatrix4x4 wvp,QVector3D co
     const int slices = 36;
     for(int k = 0; k < slices;k++){
         DrawGL::DrawLine(radius*QVector3D(cos(2*3.14*k/slices),0,sin(2*3.14*k/slices))+center,radius*QVector3D(cos(2*3.14*(k+1)/slices),0,sin(2*3.14*(k+1)/slices))+center, wvp, QMatrix4x4(), QMatrix4x4(), color, m_program, pMatrix);
+    }
+}
+
+void RenderState::LoadTextures(QString path){
+    // clear the premises when not empty
+    if(m_textures_from_files.count()>0){
+        m_textures_from_files.clear();
+        m_texture_paths.clear();
+    }
+
+    /* populate the textures from the text file */
+    if(PremisesExporter::fileExists(path+QString("textures.tl"))){
+        // load the text file
+        QFile textfile(path+QString("textures.tl"));
+
+        // open the text file
+        textfile.open(QIODevice::ReadOnly | QIODevice::Text);
+        QTextStream ascread(&textfile);
+
+        if(textfile.isOpen()){
+            // read each line of the file
+            QString line = ascread.readLine();
+
+            while(!line.isNull()){
+                // break the line up in usable parts
+                QStringList list = line.split(",");
+
+                // check the type of line
+                /* n-> node
+                 * j-> join
+                 */
+                if(list[0]=="t"){
+
+                    int texture_index = 0;
+                    QString texture_path ="";
+
+                    // texture type
+                    texture_path=list[2];
+                    QStringList ls = texture_path.split("/");
+
+                    // texture index
+                    QTextStream(&list[1])>>texture_index;
+                    QString new_path = path+ls[ls.count()-1];
+                    if(PremisesExporter::fileExists(new_path))
+                        load_texture_from_file(new_path);
+                }
+
+                // read next line
+               line = ascread.readLine();
+            }
+
+            // close the textfile
+            textfile.close();
+        }
+    }
+}
+
+void RenderState::LoadObjects(QString path){
+    // clear the premises when not empty
+    if(m_models.count()>0)
+        m_models.clear();
+
+    /* populate the premisis from the text file */
+
+    // load the text file
+    QFile textfile(path);
+
+    // open the text file
+    textfile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream ascread(&textfile);
+
+    if(textfile.isOpen()){
+        // read each line of the file
+        QString line = ascread.readLine();
+
+        while(!line.isNull()){
+            // break the line up in usable parts
+            QStringList list = line.split(",");
+
+            // check the type of line
+            /* n-> node
+             * j-> join
+             */
+            if(list[0]=="o"){
+                // this is only x,y,z coordinates for the node
+                float matrix[9];
+                int texture_index = 0;
+                QString Type ="";
+
+                // populate the vertices
+                for(int i = 0;i<9;i++)
+                     QTextStream(&list[i+3])>>matrix[i];
+
+                // texture index
+                QTextStream(&list[12])>>texture_index;
+
+                // object type
+                QTextStream(&list[2])>>Type;
+
+                // add floorplan
+                if(Type.compare("FloorPlan",Qt::CaseInsensitive)==0){
+                    if(texture_index<m_textures_from_files.count()){
+                        VisualObject *object = new VisualObject(m_plane,m_textures_from_files[texture_index],
+                                                                QVector3D(matrix[0],matrix[1],matrix[2]),
+                                                                QVector3D(matrix[3],matrix[4],matrix[5]),"FloorPlan");
+                    object->setScaling(QVector3D(matrix[6],matrix[7],matrix[8]));
+                    m_models.push_back(object);
+                    } else{
+                        QMessageBox::warning(this, tr("Texture file error"),
+                                             tr("The texture file may be corrupted\n"
+                                                "or the textures are not located in the "
+                                                "same folder as the environment file."));
+                    }
+                }
+            }
+
+            // read next line
+           line = ascread.readLine();
+        }
+
+        // close the textfile
+        textfile.close();
     }
 }
 
