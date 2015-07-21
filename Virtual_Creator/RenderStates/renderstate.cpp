@@ -28,6 +28,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     m_pavement_placable(false),
     m_tree_placable(false),
     m_placable_floor_plan(false),
+    m_node_significant(true),
     tree_radius(4.0f),
     infinte_lenght_lines(100.0f){
 
@@ -66,6 +67,10 @@ void RenderState::invert_mouseY(bool value){
     else
         m_mouse_y_inverted = 1.0f;
 }
+
+void RenderState::set_next_node_name(QString value){ m_next_node_name = value;}
+
+void RenderState::set_next_node_significant(bool value){m_node_significant = value;}
 
 void RenderState::allow_remove_node(bool value){m_node_removable = value;}
 
@@ -219,7 +224,7 @@ void RenderState::mousePressEvent(QMouseEvent *event){
 
     // left click to add the node
     if((event->button() == Qt::LeftButton)&&(m_node_placable)){
-        add_node(new QString("pewpew"+QString::number(m_nodes.count())));
+        add_node(new QString(m_next_node_name/*"pewpew"+QString::number(m_nodes.count())*/));
         PremisesExporter::export_nodes(m_nodes,"nodes.pvc");
     }
 

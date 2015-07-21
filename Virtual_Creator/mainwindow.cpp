@@ -36,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(add_new_texture(QString)), ui->openGLWidget, SLOT(load_texture_from_file(QString)));
     connect(this, SIGNAL(set_object_scale(QVector3D)), ui->openGLWidget,SLOT(set_object_scale(QVector3D)));
     connect(this, SIGNAL(change_floor_selected(float)),ui->openGLWidget, SLOT(change_current_floor_height(float)));
+    connect(this, SIGNAL(change_node_name(QString)),ui->openGLWidget, SLOT(set_next_node_name(QString)));
+    connect(this, SIGNAL(set_node_significant(bool)),ui->openGLWidget, SLOT(set_next_node_significant(bool)));
 }
 
 MainWindow::~MainWindow(){delete ui;}
@@ -63,7 +65,7 @@ void MainWindow::on_button_node_clicked(){
     ui->button_tree1->setChecked(false);
     ui->button_remove_tree->setChecked(false);
     ui->button_floor_plan->setChecked(false);
-
+    ui->stackedWidget_side_add->setCurrentIndex(0);
     EmitSignals();
 }
 
@@ -76,7 +78,6 @@ void MainWindow::on_button_link_clicked(){
     ui->button_tree1->setChecked(false);
     ui->button_remove_tree->setChecked(false);
     ui->button_floor_plan->setChecked(false);
-
     EmitSignals();
 }
 
@@ -89,7 +90,6 @@ void MainWindow::on_button_remove_node_clicked(){
     ui->button_tree1->setChecked(false);
     ui->button_remove_tree->setChecked(false);
     ui->button_floor_plan->setChecked(false);
-
     EmitSignals();
 
 }
@@ -103,7 +103,6 @@ void MainWindow::on_button_pavement_clicked(){
     ui->button_tree1->setChecked(false);
     ui->button_remove_tree->setChecked(false);
     ui->button_floor_plan->setChecked(false);
-
     EmitSignals();
 }
 
@@ -116,9 +115,7 @@ void MainWindow::on_button_wall_clicked(){
     ui->button_tree1->setChecked(false);
     ui->button_remove_tree->setChecked(false);
     ui->button_floor_plan->setChecked(false);
-
     EmitSignals();
-
 }
 
 void MainWindow::on_button_door_clicked(){
@@ -130,7 +127,6 @@ void MainWindow::on_button_door_clicked(){
     ui->button_tree1->setChecked(false);
     ui->button_remove_tree->setChecked(false);
     ui->button_floor_plan->setChecked(false);
-
     EmitSignals();
 }
 
@@ -182,6 +178,7 @@ void MainWindow::on_button_floor_plan_clicked()
     ui->button_remove_tree->setChecked(false);
     EmitSignals();
 
+    ui->stackedWidget_side_add->setCurrentIndex(1);
     // emit new scale for the floor plan
     emit set_object_scale(QVector3D(ui->doubleSpinBox_floor_plan_width->value(),1,ui->doubleSpinBox_floor_plan_height->value()));
 
@@ -217,4 +214,12 @@ void MainWindow::on_spinBox_floor_level_valueChanged(int arg1)
     }
     // sends the current floor to the opengl window
     emit change_floor_selected((float)arg1);
+}
+
+void MainWindow::on_lineEdit_node_name_textChanged(const QString &arg1){
+    emit change_node_name(arg1);
+}
+
+void MainWindow::on_checkbox_significant_clicked(bool checked){
+    emit set_node_significant(checked);
 }

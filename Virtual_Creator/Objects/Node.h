@@ -29,10 +29,12 @@ public:
     void setWheelChair(bool);
     void setVehicle(bool);
     void setBike(bool);
+    void setSignificant(bool);
     bool getWalk();
     bool getWheelChair();
     bool getVehicle();
     bool getBike();
+    bool getSignificant();
     int getShortestIndex();
     double getG();
     QString getName();
@@ -45,7 +47,7 @@ private:
     QVector<int> m_shortest;
     int m_nshortest;
     double m_g;
-    bool m_links, m_walk, m_wheelchair, m_vehicle, m_bike;
+    bool m_links, m_walk, m_wheelchair, m_vehicle, m_bike, m_significant;
     int m_lastindex;
 };
 

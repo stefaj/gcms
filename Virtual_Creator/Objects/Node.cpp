@@ -15,6 +15,7 @@ Node::Node(){
     m_bike = false;
     m_vehicle = false;
     m_wheelchair = false;
+    m_significant = true;
     m_nshortest = 0;
     m_g = 10000000.0;
     m_lastindex = 0;
@@ -111,6 +112,8 @@ void Node::setVehicle(bool value){m_vehicle = value;}
 
 void Node::setBike(bool value){m_bike = value;}
 
+void Node::setSignificant(bool value){m_significant = value;}
+
 bool Node::getWalk(){return m_walk;}
 
 bool Node::getWheelChair(){return m_wheelchair;}
@@ -118,3 +121,6 @@ bool Node::getWheelChair(){return m_wheelchair;}
 bool Node::getVehicle(){return m_vehicle;}
 
 bool Node::getBike(){return m_bike;}
+
+bool Node::getSignificant(){return m_significant;}
+

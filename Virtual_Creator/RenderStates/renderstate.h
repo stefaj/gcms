@@ -51,8 +51,9 @@ private:
     m_corner_1, m_corner_2, m_corner_3, m_corner_4, m_center_h_1, m_center_h_2;
     bool m_mousedown_right, m_mousedown_left, m_node_placable,
     m_node_removable, m_tree_removable, m_node_linkable, m_pavement_placable,
-    m_door_placeable, m_wall_placable, m_tree_placable, m_placable_floor_plan;
-    QString m_floor_plan_path;
+    m_door_placeable, m_wall_placable, m_tree_placable, m_placable_floor_plan,
+    m_node_significant;
+    QString m_floor_plan_path, m_next_node_name;
     QVector<QOpenGLTexture *> m_textures_from_files;
     void add_pavement(QVector3D, QVector3D, QVector3D);
     void add_door(QVector3D, QVector3D, QVector3D);
@@ -77,6 +78,8 @@ private slots:
     void load_texture_from_file(QString);
     void set_object_scale(QVector3D);
     void change_current_floor_height(float);
+    void set_next_node_name(QString);
+    void set_next_node_significant(bool);
 };
 
 #endif // RENDERSTATE_H

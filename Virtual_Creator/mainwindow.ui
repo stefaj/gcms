@@ -976,8 +976,8 @@ QDoubleSpinBox::down-arrow:off
       <rect>
        <x>10</x>
        <y>30</y>
-       <width>141</width>
-       <height>199</height>
+       <width>101</width>
+       <height>201</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_add_buttons">
@@ -1032,142 +1032,228 @@ QDoubleSpinBox::down-arrow:off
       </item>
      </layout>
     </widget>
-    <widget class="QGroupBox" name="groupBox_node_settings">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
+    <widget class="QStackedWidget" name="stackedWidget_side_add">
      <property name="geometry">
       <rect>
-       <x>160</x>
+       <x>120</x>
        <y>30</y>
-       <width>181</width>
-       <height>111</height>
+       <width>221</width>
+       <height>191</height>
       </rect>
      </property>
-     <property name="title">
-      <string>Accessible with/by/through</string>
+     <property name="midLineWidth">
+      <number>0</number>
      </property>
-     <widget class="QWidget" name="layoutWidget_node_options">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>121</width>
-        <height>72</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_accessibility_checks">
-       <item>
-        <widget class="QCheckBox" name="checkBox_walk">
-         <property name="text">
-          <string>Walking</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_bike">
-         <property name="text">
-          <string>Bike</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_wheelchair">
-         <property name="text">
-          <string>Wheelchair</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_vehicle">
-         <property name="text">
-          <string>Vehicle</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="page_add_node">
+      <widget class="QGroupBox" name="groupBox_node_settings">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>201</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Accessible with/by/through</string>
+       </property>
+       <widget class="QWidget" name="">
+        <property name="geometry">
+         <rect>
+          <x>11</x>
+          <y>31</y>
+          <width>171</width>
+          <height>36</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QCheckBox" name="checkBox_bike">
+             <property name="text">
+              <string>Bike</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="checkBox_vehicle">
+             <property name="text">
+              <string>Vehicle</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QCheckBox" name="checkBox_walk">
+             <property name="text">
+              <string>Walking</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="checkBox_wheelchair">
+             <property name="text">
+              <string>Wheelchair</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_node_settings_2">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>90</y>
+         <width>191</width>
+         <height>101</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Node Settings</string>
+       </property>
+       <widget class="QCheckBox" name="checkbox_significant">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>30</y>
+          <width>161</width>
+          <height>13</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Add Button of this node</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QWidget" name="">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>56</y>
+          <width>171</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Node Description</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_node_name">
+           <property name="text">
+            <string>default_node</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
      </widget>
-    </widget>
-    <widget class="QGroupBox" name="groupBox_floor_plan_settings">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>160</x>
-       <y>130</y>
-       <width>181</width>
-       <height>101</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Floor Plan Settings</string>
-     </property>
-     <widget class="QWidget" name="layoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>151</width>
-        <height>62</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <widget class="QWidget" name="page_floor_plan">
+      <widget class="QGroupBox" name="groupBox_floor_plan_settings">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>10</y>
+         <width>211</width>
+         <height>101</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Floor Plan Settings</string>
+       </property>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>30</y>
+          <width>151</width>
+          <height>62</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>Width</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Width</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_floor_plan_width">
+             <property name="suffix">
+              <string>m</string>
+             </property>
+             <property name="minimum">
+              <double>1.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>1000.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="doubleSpinBox_floor_plan_width">
-           <property name="suffix">
-            <string>m</string>
-           </property>
-           <property name="minimum">
-            <double>1.000000000000000</double>
-           </property>
-           <property name="maximum">
-            <double>1000.000000000000000</double>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Height</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_floor_plan_height">
+             <property name="prefix">
+              <string/>
+             </property>
+             <property name="suffix">
+              <string>m</string>
+             </property>
+             <property name="minimum">
+              <double>1.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>1000.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>Height</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QDoubleSpinBox" name="doubleSpinBox_floor_plan_height">
-           <property name="prefix">
-            <string/>
-           </property>
-           <property name="suffix">
-            <string>m</string>
-           </property>
-           <property name="minimum">
-            <double>1.000000000000000</double>
-           </property>
-           <property name="maximum">
-            <double>1000.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
+       </widget>
+      </widget>
      </widget>
     </widget>
    </widget>
@@ -1231,7 +1317,7 @@ QDoubleSpinBox::down-arrow:off
       <string>(Ground Floor)</string>
      </property>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget_stacked">
      <property name="geometry">
       <rect>
        <x>10</x>
