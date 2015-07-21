@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1069</width>
-    <height>600</height>
+    <width>1024</width>
+    <height>768</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -952,100 +952,51 @@ QDoubleSpinBox::down-arrow:off
    <widget class="RenderState" name="openGLWidget">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>10</y>
+      <x>0</x>
+      <y>0</y>
       <width>681</width>
       <height>581</height>
      </rect>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>351</width>
-      <height>241</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Add Objects</string>
-    </property>
-    <widget class="QWidget" name="layoutWidget_add_objects">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>30</y>
-       <width>101</width>
-       <height>201</height>
-      </rect>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_add_buttons">
-      <item>
-       <widget class="QPushButton" name="button_node">
-        <property name="text">
-         <string>Add Node</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_link">
-        <property name="text">
-         <string>Add Link</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_tree1">
-        <property name="text">
-         <string>Add Tree</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_pavement">
-        <property name="text">
-         <string>Add Pavement</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_wall">
-        <property name="text">
-         <string>Add Wall</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_door">
-        <property name="text">
-         <string>Add Door</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_floor_plan">
-        <property name="text">
-         <string>Add Floor Plan</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget_add_stuff">
+   <property name="minimumSize">
+    <size>
+     <width>320</width>
+     <height>240</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>320</width>
+     <height>240</height>
+    </size>
+   </property>
+   <property name="accessibleName">
+    <string/>
+   </property>
+   <property name="windowTitle">
+    <string>Add Objects</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
     <widget class="QStackedWidget" name="stackedWidget_side_add">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>30</y>
-       <width>221</width>
-       <height>191</height>
+       <x>101</x>
+       <y>11</y>
+       <width>209</width>
+       <height>199</height>
       </rect>
      </property>
      <property name="midLineWidth">
       <number>0</number>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_add_node">
       <widget class="QGroupBox" name="groupBox_node_settings">
@@ -1056,63 +1007,67 @@ QDoubleSpinBox::down-arrow:off
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>201</width>
+         <width>191</width>
          <height>71</height>
         </rect>
        </property>
        <property name="title">
         <string>Accessible with/by/through</string>
        </property>
-       <widget class="QWidget" name="">
+       <widget class="QCheckBox" name="checkBox_bike">
         <property name="geometry">
          <rect>
-          <x>11</x>
-          <y>31</y>
-          <width>171</width>
-          <height>36</height>
+          <x>13</x>
+          <y>33</y>
+          <width>37</width>
+          <height>13</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_3">
-           <item>
-            <widget class="QCheckBox" name="checkBox_bike">
-             <property name="text">
-              <string>Bike</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="checkBox_vehicle">
-             <property name="text">
-              <string>Vehicle</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
-           <item>
-            <widget class="QCheckBox" name="checkBox_walk">
-             <property name="text">
-              <string>Walking</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="checkBox_wheelchair">
-             <property name="text">
-              <string>Wheelchair</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
+        <property name="text">
+         <string>Bike</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_vehicle">
+        <property name="geometry">
+         <rect>
+          <x>13</x>
+          <y>52</y>
+          <width>51</width>
+          <height>13</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Vehicle</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_wheelchair">
+        <property name="geometry">
+         <rect>
+          <x>101</x>
+          <y>52</y>
+          <width>71</width>
+          <height>13</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Wheelchair</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_walk">
+        <property name="geometry">
+         <rect>
+          <x>101</x>
+          <y>33</y>
+          <width>55</width>
+          <height>13</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Walking</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
        </widget>
       </widget>
       <widget class="QGroupBox" name="groupBox_node_settings_2">
@@ -1146,31 +1101,31 @@ QDoubleSpinBox::down-arrow:off
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QLineEdit" name="lineEdit_node_name">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>56</y>
-          <width>171</width>
-          <height>41</height>
+          <x>11</x>
+          <y>80</y>
+          <width>134</width>
+          <height>16</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <item>
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Node Description</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="lineEdit_node_name">
-           <property name="text">
-            <string>default_node</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <property name="text">
+         <string>default_node</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label">
+        <property name="geometry">
+         <rect>
+          <x>11</x>
+          <y>57</y>
+          <width>97</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Node Description</string>
+        </property>
        </widget>
       </widget>
      </widget>
@@ -1183,113 +1138,306 @@ QDoubleSpinBox::down-arrow:off
         <rect>
          <x>0</x>
          <y>10</y>
-         <width>211</width>
+         <width>201</width>
          <height>101</height>
         </rect>
        </property>
        <property name="title">
         <string>Floor Plan Settings</string>
        </property>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QLabel" name="label_2">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>30</y>
-          <width>151</width>
-          <height>62</height>
+          <x>12</x>
+          <y>32</y>
+          <width>44</width>
+          <height>16</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QLabel" name="label_2">
-             <property name="text">
-              <string>Width</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QDoubleSpinBox" name="doubleSpinBox_floor_plan_width">
-             <property name="suffix">
-              <string>m</string>
-             </property>
-             <property name="minimum">
-              <double>1.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <item>
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>Height</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QDoubleSpinBox" name="doubleSpinBox_floor_plan_height">
-             <property name="prefix">
-              <string/>
-             </property>
-             <property name="suffix">
-              <string>m</string>
-             </property>
-             <property name="minimum">
-              <double>1.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1000.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
+        <property name="text">
+         <string>Width</string>
+        </property>
+       </widget>
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_floor_plan_width">
+        <property name="geometry">
+         <rect>
+          <x>62</x>
+          <y>32</y>
+          <width>88</width>
+          <height>18</height>
+         </rect>
+        </property>
+        <property name="suffix">
+         <string>m</string>
+        </property>
+        <property name="minimum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
+       </widget>
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_floor_plan_height">
+        <property name="geometry">
+         <rect>
+          <x>65</x>
+          <y>65</y>
+          <width>88</width>
+          <height>18</height>
+         </rect>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="suffix">
+         <string>m</string>
+        </property>
+        <property name="minimum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>1000.000000000000000</double>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_3">
+        <property name="geometry">
+         <rect>
+          <x>12</x>
+          <y>65</y>
+          <width>47</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Height</string>
+        </property>
        </widget>
       </widget>
      </widget>
     </widget>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_3">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>379</y>
-      <width>341</width>
-      <height>111</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Transformations</string>
-    </property>
-    <widget class="QSpinBox" name="spinBox_floor_level">
+    <widget class="QPushButton" name="button_tree1">
      <property name="geometry">
       <rect>
-       <x>111</x>
-       <y>74</y>
-       <width>61</width>
-       <height>25</height>
+       <x>12</x>
+       <y>12</y>
+       <width>56</width>
+       <height>16</height>
       </rect>
      </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+     <property name="text">
+      <string>Add Tree</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="button_pavement">
+     <property name="geometry">
+      <rect>
+       <x>12</x>
+       <y>54</y>
+       <width>82</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add Pavement</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="button_node">
+     <property name="geometry">
+      <rect>
+       <x>12</x>
+       <y>33</y>
+       <width>59</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add Node</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="button_wall">
+     <property name="geometry">
+      <rect>
+       <x>12</x>
+       <y>96</y>
+       <width>54</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add Wall</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="button_link">
+     <property name="geometry">
+      <rect>
+       <x>12</x>
+       <y>75</y>
+       <width>52</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add Link</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="button_door">
+     <property name="geometry">
+      <rect>
+       <x>12</x>
+       <y>138</y>
+       <width>57</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add Door</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="button_floor_plan">
+     <property name="geometry">
+      <rect>
+       <x>12</x>
+       <y>117</y>
+       <width>81</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add Floor Plan</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1024</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>24</height>
+    </size>
+   </property>
+   <property name="defaultUp">
+    <bool>false</bool>
+   </property>
+   <property name="nativeMenuBar">
+    <bool>true</bool>
+   </property>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionOpen_Premises_File"/>
+   </widget>
+   <widget class="QMenu" name="menuBuild">
+    <property name="title">
+     <string>Build</string>
+    </property>
+    <addaction name="actionRun"/>
+   </widget>
+   <widget class="QMenu" name="menuConfiguration">
+    <property name="title">
+     <string>Configuration</string>
+    </property>
+    <addaction name="actionInvert_Mouse_Y"/>
+   </widget>
+   <addaction name="menu_File"/>
+   <addaction name="menuBuild"/>
+   <addaction name="menuConfiguration"/>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget_remove_objects">
+   <property name="minimumSize">
+    <size>
+     <width>320</width>
+     <height>80</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>320</width>
+     <height>80</height>
+    </size>
+   </property>
+   <property name="windowTitle">
+    <string>Remove Objects</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_remove_objects">
+    <widget class="QPushButton" name="button_remove_node">
+     <property name="geometry">
+      <rect>
+       <x>11</x>
+       <y>11</y>
+       <width>79</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Remove Node</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="button_remove_tree">
+     <property name="geometry">
+      <rect>
+       <x>11</x>
+       <y>32</y>
+       <width>76</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Remove Tree</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget_transformations">
+   <property name="minimumSize">
+    <size>
+     <width>320</width>
+     <height>150</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>320</width>
+     <height>150</height>
+    </size>
+   </property>
+   <property name="windowTitle">
+    <string>Transformations</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_transformations">
+    <widget class="QLabel" name="label_ground_floor">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>50</y>
+       <width>115</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>(Ground Floor)</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_floor_level">
      <property name="geometry">
       <rect>
-       <x>12</x>
-       <y>74</y>
+       <x>23</x>
+       <y>50</y>
        <width>93</width>
        <height>21</height>
       </rect>
@@ -1304,120 +1452,141 @@ QDoubleSpinBox::down-arrow:off
       <string>Floor Level</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_ground_floor">
+    <widget class="QSpinBox" name="spinBox_floor_level">
      <property name="geometry">
       <rect>
-       <x>179</x>
-       <y>74</y>
-       <width>115</width>
-       <height>21</height>
+       <x>122</x>
+       <y>50</y>
+       <width>61</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_rotation_y">
+     <property name="geometry">
+      <rect>
+       <x>22</x>
+       <y>17</y>
+       <width>70</width>
+       <height>16</height>
       </rect>
      </property>
      <property name="text">
-      <string>(Ground Floor)</string>
+      <string>Rotation Y:</string>
      </property>
     </widget>
-    <widget class="QWidget" name="layoutWidget_stacked">
+    <widget class="QDoubleSpinBox" name="spin_rotationY">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>40</y>
-       <width>199</width>
-       <height>21</height>
+       <x>124</x>
+       <y>17</y>
+       <width>78</width>
+       <height>18</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="label_rotation_y">
-        <property name="text">
-         <string>Rotation Y:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QDoubleSpinBox" name="spin_rotationY">
-        <property name="minimum">
-         <double>-180.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>180.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <property name="minimum">
+      <double>-180.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>180.000000000000000</double>
+     </property>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="groupBox_4">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>500</y>
-      <width>291</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Configuration</string>
-    </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QCheckBox" name="checkBox_inversemouse_y">
-       <property name="maximumSize">
-        <size>
-         <width>200</width>
-         <height>13</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Invert Mouse Y</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_2">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>260</y>
-      <width>341</width>
-      <height>121</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Remove</string>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="0">
-      <widget class="QPushButton" name="button_remove_node">
-       <property name="text">
-        <string>Remove Node</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QPushButton" name="button_remove_tree">
-       <property name="text">
-        <string>Remove Tree</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QPushButton" name="button_execute_virtual_concierge">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>570</y>
-      <width>161</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Show Virtual Conciege</string>
-    </property>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget_configuration">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>320</width>
+     <height>150</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>320</width>
+     <height>150</height>
+    </size>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::DefaultContextMenu</enum>
+   </property>
+   <property name="features">
+    <set>QDockWidget::AllDockWidgetFeatures</set>
+   </property>
+   <property name="windowTitle">
+    <string>Configuration</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_configuration">
+    <widget class="QCheckBox" name="checkBox_inversemouse_y">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>20</y>
+       <width>200</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>200</width>
+       <height>13</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Invert Mouse Y</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="button_execute_virtual_concierge">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>40</y>
+       <width>131</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Show Virtual Conciege</string>
+     </property>
+    </widget>
    </widget>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open Nodes File</string>
+   </property>
+  </action>
+  <action name="actionRun">
+   <property name="text">
+    <string>Run</string>
+   </property>
+  </action>
+  <action name="actionInvert_Mouse_Y">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Invert Mouse Y</string>
+   </property>
+  </action>
+  <action name="actionOpen_Premises_File">
+   <property name="text">
+    <string>Open Premises File</string>
+   </property>
+  </action>
+  <zorder>dockWidget_configuration</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -1428,5 +1597,38 @@ QDoubleSpinBox::down-arrow:off
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionInvert_Mouse_Y</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>checkBox_inversemouse_y</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>129</x>
+     <y>541</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRun</sender>
+   <signal>triggered()</signal>
+   <receiver>button_execute_virtual_concierge</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>120</x>
+     <y>576</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

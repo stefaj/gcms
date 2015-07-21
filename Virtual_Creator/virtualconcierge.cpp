@@ -56,7 +56,7 @@ void VirtualConcierge::load_interface(QString filename){
             if(list[0]=="n"){
                 QString name ="";
                 int index = 0, add = 0;
-                QTextStream(&list[5])>>name;
+                name=list[5];
                 QTextStream(&list[6])>>add;
                 QTextStream(&list[1])>>index;
                 if(add==1){
