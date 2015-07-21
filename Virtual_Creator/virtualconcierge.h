@@ -2,6 +2,9 @@
 #define VIRTUALCONCIERGE_H
 
 #include <QWidget>
+#include <QVector>
+#include <QPushButton>
+#include "Objects/nodebutton.h"
 #include "RenderStates/virtualconciergerenderstate.h"
 
 namespace Ui {
@@ -18,6 +21,15 @@ public:
 
 private:
     Ui::VirtualConcierge *ui;
+    void create_interface();
+    void load_interface(QString);
+    QVector<NodeButton *> m_buttons;
+    QVector<NodeButton *> m_catagory;
+private slots:
+    void get_button_value(int);
+signals:
+    void find_path(int,int);
+
 };
 
 #endif // VIRTUALCONCIERGE_H

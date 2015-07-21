@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     Objects/NodeHandler.cpp \
     RenderStates/renderstate.cpp \
     RenderStates/virtualconciergerenderstate.cpp \
-    Functions/drawgl.cpp
+    Functions/drawgl.cpp \
+    Objects/nodebutton.cpp
 
 HEADERS  += mainwindow.h \
     Objects/ModelMesh.h \
@@ -36,7 +37,8 @@ HEADERS  += mainwindow.h \
     Objects/NodeHandler.h \
     RenderStates/renderstate.h \
     RenderStates/virtualconciergerenderstate.h \
-    Functions/drawgl.h
+    Functions/drawgl.h \
+    Objects/nodebutton.h
 
 FORMS    += mainwindow.ui \
     virtualconcierge.ui \
