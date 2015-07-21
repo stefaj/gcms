@@ -44,7 +44,7 @@ void NodeHandler::CalculateShortest(int start, int goal){
   m_shortest.clear();
 
   // inf
-  const double inf = 999999999999999.0;
+  const double inf = 1e+99;
 
   // initial empty visited
   QVector<int> checked;
@@ -55,13 +55,18 @@ void NodeHandler::CalculateShortest(int start, int goal){
   }
   // set start G value to  0.0
   m_premises.value(start)->setG(0.0);
+  foreach (Node *n, m_premises) {
+      qDebug()<<n->getG();
+  }
 
   // initial que contains all
   QVector<int> que;
 
   // fill que
- for(int k = 0; k< m_premises.count();k++)
-  que.push_back(k);
+ for(int k = 0; k< m_premises.count(); k++){
+        que.push_back(k);
+ }
+
 
  // wait while the whole que is empty ( this may be ineffective )
  while(que.count()>0){
@@ -94,7 +99,7 @@ void NodeHandler::CalculateShortest(int start, int goal){
       double nodedist = m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->Position().distanceToPoint(m_premises.value(current_index)->Position());
 
       // replace the node's shortest current path if needed. (dist(v,u) + g(v)< g(u))
-      if(nodedist +m_premises.value(current_index)->getG()< m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->getG())
+      if(nodedist + m_premises.value(current_index)->getG()<= m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->getG())
       {
           // update the g value and shortest path of the neighbor
           m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->setG(nodedist+m_premises.value(current_index)->getG());
@@ -104,15 +109,17 @@ void NodeHandler::CalculateShortest(int start, int goal){
   }else break;
  }
 
-  // list path
-  int _back_node = goal;
-  m_shortest.push_back(_back_node);
-  while(_back_node != start)
-  {
-      // backwards trace the shortest path
-      _back_node = m_premises.value(_back_node)->getShortestIndex();
+ // list path
+ int _back_node = goal;
+     if(m_premises.value(_back_node)->getShortestIndex()>-1){
       m_shortest.push_back(_back_node);
-  }
+      while(_back_node != start){
+          // backwards trace the shortest path
+          _back_node = m_premises.value(_back_node)->getShortestIndex();
+          qDebug()<<_back_node;
+          m_shortest.push_back(_back_node);
+      }
+     }
 }
 
 int NodeHandler::pathcount(){

@@ -75,7 +75,7 @@ void DrawGL::DrawLine(QVector3D point1, QVector3D point2,QMatrix4x4 wvp,QMatrix4
     m_program->enableAttributeArray("vertex");//enable the shader attribute( vertices )
     m_program->setAttributeArray("normal", temp_vertices.constData());//load the normals to the shaders
     m_program->enableAttributeArray("normal");//enable the shader attribute( vertices )
-    glLineWidth(5.0);
+    glLineWidth(3.5);
     glDisable(GL_DEPTH_TEST);
     glDepthFunc(GL_ALWAYS);
     glDrawArrays(GL_LINES, 0, temp_vertices.size());

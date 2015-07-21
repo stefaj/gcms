@@ -17,7 +17,7 @@ Node::Node(){
     m_wheelchair = false;
     m_significant = true;
     m_nshortest = 0;
-    m_g = 10000000.0;
+    m_g = 99999999999999.0;
     m_lastindex = 0;
 }
 
@@ -29,8 +29,8 @@ Node::Node(QVector3D * Position){
     m_connectedindex.clear();
     m_shortest.clear();
     m_links = false;
-    m_nshortest = 0;
-    m_g = 10000000.0;
+    m_nshortest = -1;
+    m_g = 99999999999999.0;
 }
 
 QVector3D Node::getColor(){return *m_color;}
@@ -45,8 +45,8 @@ Node::Node(QVector3D *Position, QString *Name){
     m_connectedindex.clear();
     m_shortest.clear();
     m_links = false;
-    m_nshortest = 0;
-    m_g = 10000000.0;
+    m_nshortest = -1;
+    m_g = 99999999999999.0;
 }
 
 void Node::setSourceNode(){
