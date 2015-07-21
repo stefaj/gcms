@@ -470,7 +470,11 @@ void RenderState::paintGL(){
     }
 
     // draw placable node
-    DrawGL::draw_if_true(m_node, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(0),QVector3D(),QVector2D(1,1),pMatrix,m_program,m_node_placable);
+    DrawGL::draw_if_true(m_node, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(0),QVector3D(1,0,0),QVector2D(1,1),pMatrix,m_program,m_node_placable&m_node_significant);
+
+    // draw placable node (not significant)
+    DrawGL::draw_if_true(m_node, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(0),QVector3D(),QVector2D(1,1),pMatrix,m_program,m_node_placable&!m_node_significant);
+
     // draw placable tile draggable mouse
     DrawGL::draw_if_true(m_plane, vMatrix,Pos,m_rotation,QVector3D(1,1,1),m_textures.value(1),QVector3D(),QVector2D(m_currentscale.z(),m_currentscale.x()),pMatrix,m_program,m_pavement_placable&&(!m_mousedown_left));
     // draw placable tile clicked
@@ -535,7 +539,10 @@ void RenderState::paintGL(){
     foreach(Node *n, m_nodes){
         QMatrix4x4 translation;
         translation.translate(n->Position());
-        DrawGL::DrawModel(m_node, vMatrix, translation,QMatrix4x4(),m_textures.value(0),QVector3D(),QVector2D(1,1),m_program,pMatrix);
+        if(n->getSignificant())
+        DrawGL::DrawModel(m_node, vMatrix, translation,QMatrix4x4(),m_textures.value(0),QVector3D(1,0,0),QVector2D(1,1),m_program,pMatrix);
+        else
+            DrawGL::DrawModel(m_node, vMatrix, translation,QMatrix4x4(),m_textures.value(0),QVector3D(),QVector2D(1,1),m_program,pMatrix);
     }
 
     // draw all the node lines here
