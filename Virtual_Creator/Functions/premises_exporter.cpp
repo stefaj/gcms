@@ -73,11 +73,21 @@ QFile file("VirtualConcierge/"+name);
 
     // write the nodes
     for(int l = 0;l < nodes.count();l++){
-        out <<"n,"<< l <<","
+        if(nodes.value(l)->getSignificant()){
+            out <<"n,"<< l <<","
             << nodes.value(l)->Position().x()<<","
             << nodes.value(l)->Position().y()<<","
             << nodes.value(l)->Position().z()<<","
-            << nodes.value(l)->getName()<<"\n";
+            << nodes.value(l)->getName()<<","
+            << "1\n";
+        }else {
+            out <<"n,"<< l <<","
+            << nodes.value(l)->Position().x()<<","
+            << nodes.value(l)->Position().y()<<","
+            << nodes.value(l)->Position().z()<<","
+            << nodes.value(l)->getName()<<","
+            << "0\n";
+        }
     }
     // write the links to each node
     for(int k= 0;k < nodes.count();k++){

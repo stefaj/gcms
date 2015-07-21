@@ -313,6 +313,8 @@ void RenderState::add_node(QString *name){
                                            m_current_position->y(),
                                            m_current_position->z()),
                                            name);
+    // set significance
+    newnode->setSignificant(m_node_significant);
 
     // add new node to vector
     m_nodes.push_back(newnode);

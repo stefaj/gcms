@@ -55,15 +55,18 @@ void VirtualConcierge::load_interface(QString filename){
              */
             if(list[0]=="n"){
                 QString name ="";
-                int index = 0;
+                int index = 0, add = 0;
                 QTextStream(&list[5])>>name;
+                QTextStream(&list[6])>>add;
                 QTextStream(&list[1])>>index;
-                NodeButton *button = new NodeButton(ui->widget_directory);
-                button->setText(name);
-                button->setIndex(index);
-                button->setGeometry(m_buttons.count()*button->width(),0,button->width(),button->height());
-                connect(button,SIGNAL(clicked_index(int)), this ,SLOT(get_button_value(int)));
-                m_buttons.push_back(button);
+                if(add==1){
+                    NodeButton *button = new NodeButton(ui->widget_directory);
+                    button->setText(name);
+                    button->setIndex(index);
+                    button->setGeometry(m_buttons.count()*button->width(),0,button->width(),button->height());
+                    connect(button,SIGNAL(clicked_index(int)), this ,SLOT(get_button_value(int)));
+                    m_buttons.push_back(button);
+                }
 
             }
             // read next line
