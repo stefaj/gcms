@@ -30,7 +30,8 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     m_placable_floor_plan(false),
     m_node_significant(true),
     tree_radius(4.0f),
-    infinte_lenght_lines(100.0f){
+    infinte_lenght_lines(100.0f),
+    m_selected_label(this){
 
     // enable antialiasing (set the format of the widget)
     QSurfaceFormat format;
@@ -119,8 +120,17 @@ void RenderState::set_object_scale(QVector3D value){m_currentscale = value;}
 void RenderState::change_current_floor_height(float value){m_current_floor_height=value;}
 
 void RenderState::load_texture_from_file(QString value){
+
     QString val_new = "VirtualConcierge/"+QString("TEX")+QString::number(m_texture_paths.count());
-    QFile::copy(value,val_new);
+    if(QFile::exists(val_new))
+        QFile::remove(val_new);
+
+    // try to copy the texture to the drive
+    if(!QFile::copy(value,val_new))
+        QMessageBox::warning(this, tr("Error file copying"),
+                             tr("Texture file could not be copied to the drive."));
+
+    // add texture to the lists
     QOpenGLTexture *texture = new QOpenGLTexture(QImage(value).mirrored());
     texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
     texture->setMagnificationFilter(QOpenGLTexture::Linear);
@@ -570,6 +580,11 @@ void RenderState::paintGL(){
         DrawGL::DrawModel(m_node, vMatrix, translation,QMatrix4x4(),m_textures.value(0),QVector3D(1,0,0),QVector2D(1,1),m_program,pMatrix);
         else
             DrawGL::DrawModel(m_node, vMatrix, translation,QMatrix4x4(),m_textures.value(0),QVector3D(),QVector2D(1,1),m_program,pMatrix);
+        QPoint pos_x_y = Mathematics::transform_3d_to_2d(vMatrix,pMatrix,n->Position(),this->width(),this->height());
+        m_selected_label.setGeometry(pos_x_y.x(),pos_x_y.y(),100,20);
+        m_selected_label.setText(n->getName());
+        m_selected_label.setEnabled(false);
+        //m_selected_label.set
     }
 
     // draw all the node lines here

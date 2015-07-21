@@ -85,6 +85,15 @@ QVector3D Mathematics::point_on_line(float x, QVector3D pointA,QVector3D pointB)
     return QVector3D(x,0,x*slope+(pointA.z()-slope*pointA.x()));
 }
 
+QPoint Mathematics::transform_3d_to_2d(QMatrix4x4 view, QMatrix4x4 projection,QVector3D point,int width,int height){
+    QMatrix4x4 view_proj_ = projection*view;
+    // transform world to clipping coordinates
+    QVector3D p =view_proj_*point;
+    int x = (int)qRound((((p.x()+1.0)/2.0)*width));
+    int y = (int)qRound((((1.0-p.y())/2.0)*height));
+    return QPoint(x,y);
+}
+
 Mathematics::~Mathematics(){
 
 }

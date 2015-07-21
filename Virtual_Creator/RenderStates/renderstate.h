@@ -10,6 +10,7 @@
 #include <QVector3D>
 #include <QTimer>
 #include <QtMath>
+#include <QLabel>
 #include <QMessageBox>
 #include "Objects/ModelMesh.h"
 #include "Objects/Node.h"
@@ -66,6 +67,7 @@ private:
     void LoadTextures(QString);
     void LoadNodes(QString);
     const float tree_radius, infinte_lenght_lines;
+    QLabel m_selected_label;
 private slots:
     void add_node(QString *);
     void allow_node(bool);
