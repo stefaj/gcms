@@ -1,6 +1,9 @@
 #include "virtualconcierge.h"
 #include "ui_virtualconcierge.h"
 #include <QDebug>
+#include <QFileDialog>
+#include <QStringList>
+#include "SMTP/smtp.h"
 
 VirtualConcierge::VirtualConcierge(QWidget *parent) :
     QWidget(parent),
@@ -80,4 +83,19 @@ void VirtualConcierge::load_interface(QString filename){
 
 VirtualConcierge::~VirtualConcierge(){
     delete ui;
+}
+
+void VirtualConcierge::on_pushButton_send_mail_clicked()
+{
+    Smtp* smtp = new Smtp("virtualconcierge@yahoo.com", "sel_foon@1", "smtp.yahoo.com",465,30000);
+    //QString file = QFileDialog::getSaveFileName(this, "Save as...", "name", "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)");
+    QImage img =ui->openGLWidget->grabFramebuffer();
+    img.save("FloorPlan.jpg");
+    //connect(smtp, SIGNAL(status(QString)), this, SLOT(mailSent(QString)));
+
+
+    QStringList ls;
+    ls.append("FloorPlan.jpg");
+    smtp->sendMail("Virtual Concierge", ui->lineEdit_email->text() , "This is a subject", "This is a body",ls);
+
 }

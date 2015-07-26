@@ -1,10 +1,14 @@
 #include "virtualconciergerenderstate.h"
+#include <QFileDialog>
 
 VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent): QOpenGLWidget(parent),m_program(0),m_start(0),m_end(0){
     // enable antialiasing (set the format of the widget)
-    QSurfaceFormat format;
+
+    /*QSurfaceFormat format;
+    format.setSwapBehavior(QSurfaceFormat::SingleBuffer);
     format.setSamples(4);
-    this->setFormat(format);
+    this->setFormat(format);*/
+
     // clear the textures
     m_textures.clear();
     m_textures_predefined.clear();
@@ -15,7 +19,7 @@ VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent): QOpen
         m_handler->ReadFilePVC("VirtualConcierge/nodes.pvc");
 
     //m_handler->CalculateShortest(0,1);
-    find_path(0,5);
+    //find_path(0,5);
 }
 
 void VirtualConciergeRenderstate::find_path(int start, int end){
@@ -170,6 +174,8 @@ void VirtualConciergeRenderstate::initializeGL(){
     texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
     texture->setMagnificationFilter(QOpenGLTexture::Linear);
     m_textures_predefined.append(texture);
+    glReadBuffer(GL_FRONT);
+
 }
 
 void VirtualConciergeRenderstate::resizeGL(int w, int h){
@@ -244,6 +250,8 @@ void VirtualConciergeRenderstate::paintGL(){
            DrawGL::DrawLine(m_handler->NodeFromIndex(m_handler->pathindex(o)).Position(),m_handler->NodeFromIndex(m_handler->pathindex(o+1)).Position(),
                 vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,1,0),m_program,pMatrix);
 
+
+
        //DrawModel(m_plane, vMatrix, QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0));
        // release the program for this frame
        m_program->release();
@@ -253,6 +261,7 @@ void VirtualConciergeRenderstate::paintGL(){
        glDisable(GL_DEPTH_TEST);
        // finish up the opengl frame
        glFinish();
+
 }
 
 VirtualConciergeRenderstate::~VirtualConciergeRenderstate(){

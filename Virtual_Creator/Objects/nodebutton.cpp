@@ -13,7 +13,7 @@ int NodeButton::getIndex(){
     return m_index;
 }
 
-void NodeButton::mousePressEvent(QMouseEvent * e){
+void NodeButton::mousePressEvent(QMouseEvent * ){
     emit clicked_index(m_index);
 }
 

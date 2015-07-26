@@ -27,6 +27,8 @@ private:
     QVector<NodeButton *> m_catagory;
 private slots:
     void get_button_value(int);
+    void on_pushButton_send_mail_clicked();
+
 signals:
     void find_path(int,int);
 

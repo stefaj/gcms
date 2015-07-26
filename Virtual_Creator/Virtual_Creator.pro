@@ -6,7 +6,7 @@
 
 QT += core gui
 QT += opengl
-
+QT += network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Virtual_Creator
@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     RenderStates/renderstate.cpp \
     RenderStates/virtualconciergerenderstate.cpp \
     Functions/drawgl.cpp \
-    Objects/nodebutton.cpp
+    Objects/nodebutton.cpp \
+    SMTP/smtp.cpp
 
 HEADERS  += mainwindow.h \
     Objects/ModelMesh.h \
@@ -38,7 +39,8 @@ HEADERS  += mainwindow.h \
     RenderStates/renderstate.h \
     RenderStates/virtualconciergerenderstate.h \
     Functions/drawgl.h \
-    Objects/nodebutton.h
+    Objects/nodebutton.h \
+    SMTP/smtp.h
 
 FORMS    += mainwindow.ui \
     virtualconcierge.ui \
