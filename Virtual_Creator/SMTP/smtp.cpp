@@ -17,11 +17,13 @@ Smtp::Smtp( const QString &user, const QString &pass, const QString &host, int p
 {    
     socket = new QSslSocket(this);
     QNetworkProxy proxy;
+
     proxy.setType(QNetworkProxy::HttpProxy);
     proxy.setHostName("cache7.p.nwu.ac.za");
     proxy.setPort(80);
     proxy.setUser("23511354");
     proxy.setPassword("lolipop");
+
     socket->setProxy(proxy);
     connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
     connect(socket, SIGNAL(connected()), this, SLOT(connected() ) );

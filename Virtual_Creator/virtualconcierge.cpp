@@ -87,13 +87,13 @@ VirtualConcierge::~VirtualConcierge(){
 
 void VirtualConcierge::on_pushButton_send_mail_clicked()
 {
-    Smtp* smtp = new Smtp("virtualconcierge@yahoo.com", "sel_foon@1", "smtp.mail.yahoo.com",465, 30000);
+
     //QString file = QFileDialog::getSaveFileName(this, "Save as...", "name", "PNG (*.png);; BMP (*.bmp);;TIFF (*.tiff *.tif);; JPEG (*.jpg *.jpeg)");
     QImage img =ui->openGLWidget->grabFramebuffer();
     img.save("FloorPlan.jpg");
     //connect(smtp, SIGNAL(status(QString)), this, SLOT(mailSent(QString)));
 
-
+    Smtp* smtp = new Smtp("virtualconcierge@yahoo.com", "sel_foon@1", "smtp.mail.yahoo.com",465, 30000);
     QStringList ls;
     ls.append("FloorPlan.jpg");
     smtp->sendMail("virtualconcierge@yahoo.com",ui->lineEdit_email->text() , "This is a subject", "This is a body",ls);
