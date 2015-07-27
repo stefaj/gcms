@@ -24,7 +24,7 @@ void VirtualConcierge::get_button_value(int value){
 void VirtualConcierge::create_interface(){
 //    NodeButton *button = new NodeButton(ui->widget_directory);
 //    m_buttons.push_back(button);
-    const int width = 100, height = 32;
+    const int width = 150, height = 32;
     int magic_number = floor( ui->widget_directory->height()/height);
     int column = 0, row = -1;
     for(int k = 0; k < m_buttons.count();k++){

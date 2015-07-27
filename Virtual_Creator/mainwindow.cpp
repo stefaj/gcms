@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "userinterfacecreator.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -40,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(set_node_significant(bool)),ui->openGLWidget, SLOT(set_next_node_significant(bool)));
     connect(this, SIGNAL(load_premises(QString)),ui->openGLWidget,SLOT(load_premises(QString)));
     connect(ui->actionOpen_Premises_File,SIGNAL(triggered()),this, SLOT(send_loaded_premises()));
+    connect(ui->actionEdit_User_Interface,SIGNAL(triggered()),this, SLOT(load_virtual_concierge_interface()));
 }
 
 MainWindow::~MainWindow(){delete ui;}
@@ -203,18 +205,15 @@ void MainWindow::on_button_floor_plan_clicked()
 
 }
 
-void MainWindow::on_doubleSpinBox_floor_plan_width_valueChanged(double arg1)
-{
+void MainWindow::on_doubleSpinBox_floor_plan_width_valueChanged(double arg1){
     emit set_object_scale(QVector3D(arg1,1,ui->doubleSpinBox_floor_plan_height->value()));
 }
 
-void MainWindow::on_doubleSpinBox_floor_plan_height_valueChanged(double arg1)
-{
+void MainWindow::on_doubleSpinBox_floor_plan_height_valueChanged(double arg1){
     emit set_object_scale(QVector3D(ui->doubleSpinBox_floor_plan_width->value(),1,arg1));
 }
 
-void MainWindow::on_spinBox_floor_level_valueChanged(int arg1)
-{
+void MainWindow::on_spinBox_floor_level_valueChanged(int arg1){
     // show whenever the ground floor is active
     if(arg1==0){
         ui->label_ground_floor->setVisible(true);
@@ -231,4 +230,9 @@ void MainWindow::on_lineEdit_node_name_textChanged(const QString &arg1){
 
 void MainWindow::on_checkbox_significant_clicked(bool checked){
     emit set_node_significant(checked);
+}
+
+void MainWindow::load_virtual_concierge_interface(){
+    UserInterfaceCreator *v = new UserInterfaceCreator();
+    v->show();
 }

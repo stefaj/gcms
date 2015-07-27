@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     RenderStates/virtualconciergerenderstate.cpp \
     Functions/drawgl.cpp \
     Objects/nodebutton.cpp \
-    SMTP/smtp.cpp
+    SMTP/smtp.cpp \
+    userinterfacecreator.cpp
 
 HEADERS  += mainwindow.h \
     Objects/ModelMesh.h \
@@ -40,11 +41,13 @@ HEADERS  += mainwindow.h \
     RenderStates/virtualconciergerenderstate.h \
     Functions/drawgl.h \
     Objects/nodebutton.h \
-    SMTP/smtp.h
+    SMTP/smtp.h \
+    userinterfacecreator.h
 
 FORMS    += mainwindow.ui \
     virtualconcierge.ui \
-    texturedialog.ui
+    texturedialog.ui \
+    userinterfacecreator.ui
 
 RESOURCES += \
     content.qrc

@@ -34,6 +34,7 @@ private slots:
     void on_lineEdit_node_name_textChanged(const QString &arg1);
     void on_checkbox_significant_clicked(bool checked);
     void send_loaded_premises();
+    void load_virtual_concierge_interface();
 private:
     Ui::MainWindow *ui;
     void EmitSignals();

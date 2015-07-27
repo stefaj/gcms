@@ -19,7 +19,7 @@ Smtp::Smtp( const QString &user, const QString &pass, const QString &host, int p
     QNetworkProxy proxy;
 
     proxy.setType(QNetworkProxy::HttpProxy);
-    proxy.setHostName("cache7.p.nwu.ac.za");
+    proxy.setHostName("cache10.p.nwu.ac.za");
     proxy.setPort(80);
     proxy.setUser("23511354");
     proxy.setPassword("lolipop");
