@@ -22,6 +22,8 @@ private slots:
     void OnDeleteIt();
     void AddAfterCurrentIndex();
 
+    void on_pushButton_add_child_clicked();
+
 private:
     Ui::UserInterfaceCreator *ui;
     void addTreeRoot(QString name, QString description);

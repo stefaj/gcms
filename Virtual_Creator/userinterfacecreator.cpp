@@ -105,5 +105,14 @@ void UserInterfaceCreator::load_interface(QString filename){
 
 void UserInterfaceCreator::AddAfterCurrentIndex(){
   // qDebug()<< ui->treeWidget->selectedItems().count();
-        addTreeRoot(QString::number(ui->treeWidget->topLevelItemCount()),ui->lineEdit_new_directory->text());
+
+    ui->listWidget_nodes_directories->addItem("DIR:"+ui->lineEdit_new_directory->text()+","+QString::number(ui->treeWidget->topLevelItemCount()));
+    addTreeRoot(QString::number(ui->treeWidget->topLevelItemCount()),"DIR:"+ui->lineEdit_new_directory->text());
+}
+
+void UserInterfaceCreator::on_pushButton_add_child_clicked(){
+    QTreeWidgetItem *item = ui->treeWidget->currentItem();
+    if(!item) return;
+    QStringList ls =ui->listWidget_nodes_directories->currentItem()->text().split(",");
+    addTreeChild(item,ls.value(1),ls.value(0));
 }
