@@ -25,6 +25,10 @@ VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent): QOpen
 void VirtualConciergeRenderstate::find_path(int start, int end){
     if((m_handler->count()>start)&&(m_handler->count()>end))
         m_handler->CalculateShortest(start,end);
+
+    // update the frame of the virtual concierge
+    paintGL();
+    update();
 }
 
 void VirtualConciergeRenderstate::LoadTextures(QString path){
@@ -249,8 +253,6 @@ void VirtualConciergeRenderstate::paintGL(){
        for(int o = 0;o<m_handler->pathcount()-1;o++)
            DrawGL::DrawLine(m_handler->NodeFromIndex(m_handler->pathindex(o)).Position(),m_handler->NodeFromIndex(m_handler->pathindex(o+1)).Position(),
                 vMatrix,QMatrix4x4(),QMatrix4x4(),QVector3D(0,1,0),m_program,pMatrix);
-
-
 
        //DrawModel(m_plane, vMatrix, QMatrix4x4(),QMatrix4x4(),QVector3D(0,0,0));
        // release the program for this frame
