@@ -55,20 +55,45 @@ void UserInterfaceCreator::addTreeChild(QTreeWidgetItem *parent,
 
 void UserInterfaceCreator::OnDeleteIt(){
     // delete current selected item
-    m_directories.removeAt(ui->treeWidget->currentIndex().row());
-    int removed = ui->treeWidget->currentIndex().row();
+        int removed = ui->treeWidget->currentIndex().row();
     QTreeWidgetItem *item = ui->treeWidget->currentItem();
+    if(!item) return;
     delete item;
+    ui->listWidget_nodes_directories->clear();
 
     for(int l = 0;l<ui->treeWidget->topLevelItemCount();l++){
         QTreeWidgetItem *item = ui->treeWidget->topLevelItem(l);
+        ui->listWidget_nodes_directories->addItem(item->text(1)+","+item->text(0));
         int index = item->text(0).toInt();
-        index >= removed ? item->setText(0,QString::number(index-1)) : item->setText(0,item->text(0));
+        // shift go back one with indices
+        index > removed ? item->setText(0,QString::number(index-1)) : item->setText(0,item->text(0));
+   }
+
+    for(int l = 0;l<ui->treeWidget->topLevelItemCount();l++){
+        QTreeWidgetItem *item = ui->treeWidget->topLevelItem(l);
         for(int k = 0; k<item->childCount();k++){
-            int index_child = item->child(k)->text(0).toInt();
-            index_child >= removed ? item->child(k)->setText(0,QString::number(index_child-1)) : item->child(k)->setText(0,item->child(0)->text(0));
+
+            QTreeWidgetItem *item_child = item->child(k);
+            int index_child = item_child->text(0).toInt();
+            // go back one with indices
+            index_child > removed? item_child->setText(0,QString::number(index_child-1)):item_child->setText(0,QString::number(index_child));
+        }
+
+        //const int child_cont = item->childCount();
+        for(int k = 0; k<item->childCount();k++){
+
+
+
+            QTreeWidgetItem *item_child = item->child(k);
+            int index_child = item_child->text(0).toInt();
+
+            // go back one with indices
+            index_child > removed? item_child->setText(0,QString::number(index_child-1)):item_child->setText(0,QString::number(index_child));
+            if(index_child==removed){delete item_child; k--;}
+
         }
     }
+
 }
 
 void UserInterfaceCreator::load_interface(QString filename){
@@ -128,6 +153,6 @@ void UserInterfaceCreator::on_pushButton_add_child_clicked(){
     }
 }
 
-void UserInterfaceCreator::save_to_file(QString filename){
+void UserInterfaceCreator::save_to_file(QString){
 
 }
