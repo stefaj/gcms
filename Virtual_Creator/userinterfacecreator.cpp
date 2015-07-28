@@ -151,7 +151,6 @@ void UserInterfaceCreator::AddAfterCurrentIndex(){
   // qDebug()<< ui->treeWidget->selectedItems().count();
 
   ui->listWidget_nodes_directories->addItem("DIR:"+ui->lineEdit_new_directory->text()+","+QString::number(ui->treeWidget->topLevelItemCount()));
-
   addTreeRoot(QString::number(ui->treeWidget->topLevelItemCount()),"DIR:"+ui->lineEdit_new_directory->text());
 }
 
@@ -182,4 +181,20 @@ void UserInterfaceCreator::on_pushButton_add_child_clicked(){
 
 void UserInterfaceCreator::save_to_file(QString){
 
+}
+
+void UserInterfaceCreator::on_pushButton_add_display_clicked(){
+    // only allow items to be added when an item is selected
+    if(ui->listWidget_nodes_directories->selectedItems().count()>0){
+      QStringList ls =ui->listWidget_nodes_directories->currentItem()->text().split(",");
+      ui->listWidget_display->addItem(ls.value(0)+","+ls.value(1));
+    }
+}
+
+void UserInterfaceCreator::on_pushButton_remove_display_clicked(){
+    if(ui->listWidget_display->selectedItems().count()>0){
+        QListWidgetItem *item =  ui->listWidget_display->currentItem();
+        if(item->isSelected())
+            delete item;
+    }
 }
