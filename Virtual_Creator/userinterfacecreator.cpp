@@ -37,6 +37,18 @@ void UserInterfaceCreator::addTreeRoot(QString name, QString description){
     // QTreeWidgetItem::setText(int column, const QString & text)
     treeItem->setText(0, name);
     treeItem->setText(1, description);
+
+    // clear the prev list
+    ui->listWidget_nodes_directories->clear();
+
+     // add the new list to the addable items
+    for(int l = 0;l<ui->treeWidget->topLevelItemCount();l++){
+         QTreeWidgetItem *item_ = ui->treeWidget->topLevelItem(l);
+         ui->listWidget_nodes_directories->addItem(item_->text(1)+","+item_->text(0));
+    }
+
+    // populate list with nodes
+    load_interface("VirtualConcierge/nodes.pvc");
 }
 
 void UserInterfaceCreator::addTreeChild(QTreeWidgetItem *parent,
@@ -57,50 +69,43 @@ void UserInterfaceCreator::OnDeleteIt(){
     // delete current selected item
     bool remove = false;
     int removed = ui->treeWidget->currentIndex().row();
-    const int removed_child = removed;
     QTreeWidgetItem *item = ui->treeWidget->currentItem();
+
+    // leave when to pointer does not exist
     if(!item) return;
+
     if(ui->treeWidget->topLevelItem(removed)->isSelected()){
         ui->treeWidget->takeTopLevelItem(removed);
         remove = true;
-    }else{
-        delete item;
-    }
-    //delete item;
-    ui->listWidget_nodes_directories->clear();
+    }else delete item;
 
+    // update the other items
     for(int l = 0;l<ui->treeWidget->topLevelItemCount();l++){
         QTreeWidgetItem *item_ = ui->treeWidget->topLevelItem(l);
-        ui->listWidget_nodes_directories->addItem(item_->text(1)+","+item_->text(0));
+        // get current index
         int index = item_->text(0).toInt();
+
         // shift go back one with indices
         (index > removed)&&(remove) ? item_->setText(0,QString::number(index-1)) : item_->setText(0,item_->text(0));
 
+        // update or delete all the child items
         for(int k = 0; k<item_->childCount();k++){
-
             QTreeWidgetItem *item_child = item_->child(k);
             int index_child = item_child->text(0).toInt();
             // go back one with indices
             (index_child > removed)&&(remove)? item_child->setText(0,QString::number(index_child-1)):item_child->setText(0,QString::number(index_child));
             if((index_child==removed)&&(remove)){delete item_child; k--;}
         }
-        //if((removed == index)&&(item==item_)){qDebug()<<item<<item_; ui->treeWidget->takeTopLevelItem(removed);l--;removed = -1;/*delete item_;l--;removed=-1;*/}
-
    }
 
-    /*for(int l = 0;l<ui->treeWidget->topLevelItemCount();l++){
-        QTreeWidgetItem *item__ = ui->treeWidget->topLevelItem(l);
-
-        //const int child_cont = item->childCount();
-        for(int k = 0; k<item__->childCount();k++){
-            QTreeWidgetItem *item_child = item__->child(k);
-            int index_child = item_child->text(0).toInt();
-            // remove recursively
-            if(index_child==removed){delete item_child; k--;}
-
-        }
-    }*/
-
+   ui->listWidget_nodes_directories->clear();
+    // add the new list to the addable items
+   for(int l = 0;l<ui->treeWidget->topLevelItemCount();l++){
+        QTreeWidgetItem *item_ = ui->treeWidget->topLevelItem(l);
+        ui->listWidget_nodes_directories->addItem(item_->text(1)+","+item_->text(0));
+   }
+   // populate list with nodes
+   load_interface("VirtualConcierge/nodes.pvc");
 }
 
 void UserInterfaceCreator::load_interface(QString filename){
@@ -146,16 +151,32 @@ void UserInterfaceCreator::AddAfterCurrentIndex(){
   // qDebug()<< ui->treeWidget->selectedItems().count();
 
   ui->listWidget_nodes_directories->addItem("DIR:"+ui->lineEdit_new_directory->text()+","+QString::number(ui->treeWidget->topLevelItemCount()));
+
   addTreeRoot(QString::number(ui->treeWidget->topLevelItemCount()),"DIR:"+ui->lineEdit_new_directory->text());
 }
 
 void UserInterfaceCreator::on_pushButton_add_child_clicked(){
 
+    // only allow items to be added when an item is selected
     if(ui->listWidget_nodes_directories->selectedItems().count()>0){
         QTreeWidgetItem *item = ui->treeWidget->currentItem();
+
+        // get the selected item's index
+        int selected_index = ui->treeWidget->currentIndex().row();
+        bool selected_secondlevel = false;
+
+        // exit when nothing is selected
         if(!item) return;
-        QStringList ls =ui->listWidget_nodes_directories->currentItem()->text().split(",");
-        addTreeChild(item,ls.value(1),ls.value(0));
+
+        // check if a toplevel item was selected
+        if(ui->treeWidget->topLevelItem(selected_index)->isSelected())
+            selected_secondlevel = true;
+
+        // add a child item to the top level
+        if(selected_secondlevel){
+            QStringList ls =ui->listWidget_nodes_directories->currentItem()->text().split(",");
+            addTreeChild(item,ls.value(1),ls.value(0));
+        }
     }
 }
 
