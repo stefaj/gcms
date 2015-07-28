@@ -30,6 +30,8 @@ private:
     void addTreeChild(QTreeWidgetItem *parent,
                           QString name, QString description);
     void load_interface(QString filename);
+    void save_to_file(QString);
+    QList<QString> m_directories;
 };
 
 #endif // USERINTERFACECREATOR_H

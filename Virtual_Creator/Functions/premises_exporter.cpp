@@ -99,6 +99,39 @@ QFile file("VirtualConcierge/"+name);
     file.close();
 }
 
+void PremisesExporter::export_directories(QVector<QString> directory, QVector<QString> directory_list, QVector<QString> startup_menu,QString filename){
+    if(QDir().mkdir("VirtualConcierge"))
+        qDebug()<<"Success in Creating Directory 'VirtualConcierge'";
+
+    if(!QDir().cd("VirtualConcierge"))
+        qDebug()<<"Directory 'VirtualConcierge' does not exists";
+
+    QFile file("VirtualConcierge/" + filename);
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
+        QTextStream out(&file);
+
+        // write the directories
+        for(int l = 0;l < directory.count();l++){
+            out << "d," << l << ","
+                << directory.value(l) << "\n";
+        }
+
+        // write the directory list
+        for(int l = 0;l < directory_list.count();l++){
+            out << "dl," << l << ","
+                << directory_list.value(l) << "\n";
+        }
+
+        // write the startup
+        for(int l = 0;l < startup_menu.count();l++){
+            out << "dl," << l << ","
+                << startup_menu.value(l) << "\n";
+        }
+
+        // optional, as QFile destructor will already do it:
+        file.close();
+}
+
 bool PremisesExporter::fileExists(QString path) {
     QFileInfo checkFile(path);
     // check if file exists and if yes: Is it really a file and no directory?

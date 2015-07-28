@@ -63,9 +63,11 @@ void UserInterfaceCreator::OnDeleteIt(){
     for(int l = 0;l<ui->treeWidget->topLevelItemCount();l++){
         QTreeWidgetItem *item = ui->treeWidget->topLevelItem(l);
         int index = item->text(0).toInt();
+        // shift go back one with indices
         index >= removed ? item->setText(0,QString::number(index-1)) : item->setText(0,item->text(0));
         for(int k = 0; k<item->childCount();k++){
             int index_child = item->child(k)->text(0).toInt();
+            // go back one with
             index_child >= removed ? item->child(k)->setText(0,QString::number(index_child-1)) : item->child(k)->setText(0,item->child(0)->text(0));
         }
     }
