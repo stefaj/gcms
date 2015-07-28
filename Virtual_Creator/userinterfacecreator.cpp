@@ -55,44 +55,51 @@ void UserInterfaceCreator::addTreeChild(QTreeWidgetItem *parent,
 
 void UserInterfaceCreator::OnDeleteIt(){
     // delete current selected item
-        int removed = ui->treeWidget->currentIndex().row();
+    bool remove = false;
+    int removed = ui->treeWidget->currentIndex().row();
+    const int removed_child = removed;
     QTreeWidgetItem *item = ui->treeWidget->currentItem();
     if(!item) return;
-    delete item;
+    if(ui->treeWidget->topLevelItem(removed)->isSelected()){
+        ui->treeWidget->takeTopLevelItem(removed);
+        remove = true;
+    }else{
+        delete item;
+    }
+    //delete item;
     ui->listWidget_nodes_directories->clear();
 
     for(int l = 0;l<ui->treeWidget->topLevelItemCount();l++){
-        QTreeWidgetItem *item = ui->treeWidget->topLevelItem(l);
-        ui->listWidget_nodes_directories->addItem(item->text(1)+","+item->text(0));
-        int index = item->text(0).toInt();
+        QTreeWidgetItem *item_ = ui->treeWidget->topLevelItem(l);
+        ui->listWidget_nodes_directories->addItem(item_->text(1)+","+item_->text(0));
+        int index = item_->text(0).toInt();
         // shift go back one with indices
-        index > removed ? item->setText(0,QString::number(index-1)) : item->setText(0,item->text(0));
+        (index > removed)&&(remove) ? item_->setText(0,QString::number(index-1)) : item_->setText(0,item_->text(0));
+
+        for(int k = 0; k<item_->childCount();k++){
+
+            QTreeWidgetItem *item_child = item_->child(k);
+            int index_child = item_child->text(0).toInt();
+            // go back one with indices
+            (index_child > removed)&&(remove)? item_child->setText(0,QString::number(index_child-1)):item_child->setText(0,QString::number(index_child));
+            if((index_child==removed)&&(remove)){delete item_child; k--;}
+        }
+        //if((removed == index)&&(item==item_)){qDebug()<<item<<item_; ui->treeWidget->takeTopLevelItem(removed);l--;removed = -1;/*delete item_;l--;removed=-1;*/}
+
    }
 
-    for(int l = 0;l<ui->treeWidget->topLevelItemCount();l++){
-        QTreeWidgetItem *item = ui->treeWidget->topLevelItem(l);
-        for(int k = 0; k<item->childCount();k++){
-
-            QTreeWidgetItem *item_child = item->child(k);
-            int index_child = item_child->text(0).toInt();
-            // go back one with indices
-            index_child > removed? item_child->setText(0,QString::number(index_child-1)):item_child->setText(0,QString::number(index_child));
-        }
+    /*for(int l = 0;l<ui->treeWidget->topLevelItemCount();l++){
+        QTreeWidgetItem *item__ = ui->treeWidget->topLevelItem(l);
 
         //const int child_cont = item->childCount();
-        for(int k = 0; k<item->childCount();k++){
-
-
-
-            QTreeWidgetItem *item_child = item->child(k);
+        for(int k = 0; k<item__->childCount();k++){
+            QTreeWidgetItem *item_child = item__->child(k);
             int index_child = item_child->text(0).toInt();
-
-            // go back one with indices
-            index_child > removed? item_child->setText(0,QString::number(index_child-1)):item_child->setText(0,QString::number(index_child));
+            // remove recursively
             if(index_child==removed){delete item_child; k--;}
 
         }
-    }
+    }*/
 
 }
 
@@ -125,7 +132,6 @@ void UserInterfaceCreator::load_interface(QString filename){
                 if(add==1){
                     ui->listWidget_nodes_directories->addItem(name+","+QString::number(index));
                 }
-
             }
             // read next line
            line = ascread.readLine();
