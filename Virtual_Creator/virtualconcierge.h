@@ -22,11 +22,11 @@ public:
 private:
     Ui::VirtualConcierge *ui;
     void create_interface();
-    void load_interface(QString);
+    void load_interface(QString,QString);
     QVector<NodeButton *> m_buttons;
     QVector<NodeButton *> m_catagory;
 private slots:
-    void get_button_value(int);
+    void get_button_value(int, bool);
     void on_pushButton_send_mail_clicked();
 
 signals:

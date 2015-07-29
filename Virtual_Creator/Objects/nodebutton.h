@@ -12,11 +12,14 @@ public:
     ~NodeButton();
     int getIndex();
     void setIndex(int);
-    void mousePressEvent(QMouseEvent * e);
+    void setDirectory(bool);
+    bool isDirectory();
+    void mousePressEvent(QMouseEvent *);
 private:
     int m_index;
+    bool m_directory;
 signals:
-    void clicked_index(int);
+    void clicked_index(int,bool);
 };
 
 #endif // NODEBUTTON_H
