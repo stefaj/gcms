@@ -76,13 +76,15 @@ void UserInterfaceCreator::OnDeleteIt(){
     bool remove = false;
     int removed = ui->treeWidget->currentIndex().row();
     QTreeWidgetItem *item = ui->treeWidget->currentItem();
-
     // leave when to pointer does not exist
     if(!item) return;
 
-    if(ui->treeWidget->topLevelItem(removed)->isSelected()){
-        ui->treeWidget->takeTopLevelItem(removed);
-        remove = true;
+
+    if(ui->treeWidget->topLevelItemCount()>removed){
+        if(ui->treeWidget->topLevelItem(removed)->isSelected()){
+            ui->treeWidget->takeTopLevelItem(removed);
+            remove = true;
+        }else {delete item;}
     }else {delete item;}
     if(remove){
         // update the other items
@@ -189,7 +191,6 @@ void UserInterfaceCreator::on_pushButton_add_child_clicked(){
 }
 
 void UserInterfaceCreator::save_to_file(QString){
-
 }
 
 void UserInterfaceCreator::on_pushButton_add_display_clicked(){
@@ -209,8 +210,7 @@ void UserInterfaceCreator::on_pushButton_remove_display_clicked(){
     }
 }
 
-void UserInterfaceCreator::on_pushButton_removedirectory_clicked()
-{
+void UserInterfaceCreator::on_pushButton_removedirectory_clicked(){
 
 }
 

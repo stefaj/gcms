@@ -16,7 +16,6 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
 }
 
 void VirtualConcierge::get_button_value(int value,bool findvalue){
-    //qDebug()<<value<<"\n";
     // 0 is the starting position
     if(!findvalue)
     emit find_path(0,value);
@@ -51,7 +50,7 @@ void VirtualConcierge::show_new_interface(int value){
           }
       }
 
-      // add child paths
+      // add child path locations
       if(value < m_node_list.count()){
           QStringList node_ls =  m_node_list.value(value).split(";");
           const int count = node_ls.count();
@@ -59,7 +58,6 @@ void VirtualConcierge::show_new_interface(int value){
              int node_index = (node_ls[y]!="")?node_ls[y].toInt():(-1);
               if(node_index > -1) {
                   int index_from_list = get_index_from_index(m_buttons,node_index);
-                  qDebug()<<index_from_list;
                   if(index_from_list > -1){
                       NodeButton *button = m_buttons.value(index_from_list);
                       button->show();
@@ -68,6 +66,7 @@ void VirtualConcierge::show_new_interface(int value){
               }
           }
       }
+      create_interface();
 }
 
 int VirtualConcierge::get_index_from_index(QVector<NodeButton* > list,int index){
@@ -81,15 +80,17 @@ int VirtualConcierge::get_index_from_index(QVector<NodeButton* > list,int index)
 void VirtualConcierge::create_interface(){
 //    NodeButton *button = new NodeButton(ui->widget_directory);
     const int width = 150, height = 32;
-    int magic_number = floor( ui->widget_directory->height()/height);
-    int column = 0, row = -1;
-    for(int k = 0; k < m_buttons.count();k++){
-        if(row>=magic_number){
-            row = 0;
-            column++;
-        } else row++;
-        m_buttons.value(k)->setGeometry(column*width,row*height,width,height);
-    }
+
+
+    // reconstruct the directories
+    for(int k = 0; k < m_catagory.count();k++)
+        m_catagory.value(k)->setGeometry(0,k*height,width,height);
+
+    // reconstruct temp buttons
+    for( int z = 0; z < m_temp.count(); z++)
+        m_temp.value(z)->setGeometry(0,z*height,width,height);
+
+
 }
 
 void VirtualConcierge::load_interface(QString filename, QString filename_directories){
