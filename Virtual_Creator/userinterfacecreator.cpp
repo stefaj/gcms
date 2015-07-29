@@ -296,7 +296,21 @@ void UserInterfaceCreator::load_directories(QString filename){
                         }
                     }
                 }
+                // add subdirectories
+                QStringList dirls = list[3].split(";");
+                // count the subdirectories
+                int subdircount = dirls.count();
+                if(subdircount>0){
+                        for(int y = 0; y<subdircount;y++){
+                            if(dirls[y]!=""){
+                                int dirindex = dirls[y].toInt();
+                                QTreeWidgetItem *item_child = ui->treeWidget->topLevelItem(dirindex);
+                                addTreeChild(item_,item_child->text(0),item_child->text(1));
+                            }
+                        }
+                }
             }
+
             // read next line
            line = ascread.readLine();
         }
