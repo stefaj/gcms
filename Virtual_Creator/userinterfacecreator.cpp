@@ -83,35 +83,36 @@ void UserInterfaceCreator::OnDeleteIt(){
     if(ui->treeWidget->topLevelItem(removed)->isSelected()){
         ui->treeWidget->takeTopLevelItem(removed);
         remove = true;
-    }else delete item;
+    }else {delete item;}
+    if(remove){
+        // update the other items
+        for(int l = 0;l<ui->treeWidget->topLevelItemCount();l++){
+            QTreeWidgetItem *item_ = ui->treeWidget->topLevelItem(l);
+            // get current index
+            int index = item_->text(0).toInt();
 
-    // update the other items
-    for(int l = 0;l<ui->treeWidget->topLevelItemCount();l++){
-        QTreeWidgetItem *item_ = ui->treeWidget->topLevelItem(l);
-        // get current index
-        int index = item_->text(0).toInt();
+            // shift go back one with indices
+            (index > removed)&&(remove) ? item_->setText(0,QString::number(index-1)) : item_->setText(0,item_->text(0));
 
-        // shift go back one with indices
-        (index > removed)&&(remove) ? item_->setText(0,QString::number(index-1)) : item_->setText(0,item_->text(0));
+            // update or delete all the child items
+            for(int k = 0; k<item_->childCount();k++){
+                QTreeWidgetItem *item_child = item_->child(k);
+                int index_child = item_child->text(0).toInt();
+                // go back one with indices
+                (index_child > removed)&&(remove) ? item_child->setText(0,QString::number(index_child-1)):item_child->setText(0,QString::number(index_child));
+                if((index_child==removed)&&(remove)){delete item_child; k--;}
+            }
+       }
 
-        // update or delete all the child items
-        for(int k = 0; k<item_->childCount();k++){
-            QTreeWidgetItem *item_child = item_->child(k);
-            int index_child = item_child->text(0).toInt();
-            // go back one with indices
-            (index_child > removed)&&(remove)? item_child->setText(0,QString::number(index_child-1)):item_child->setText(0,QString::number(index_child));
-            if((index_child==removed)&&(remove)){delete item_child; k--;}
-        }
-   }
-
-   ui->listWidget_nodes_directories->clear();
-    // add the new list to the addable items
-   for(int l = 0;l<ui->treeWidget->topLevelItemCount();l++){
-        QTreeWidgetItem *item_ = ui->treeWidget->topLevelItem(l);
-        ui->listWidget_nodes_directories->addItem(item_->text(1)+","+item_->text(0));
-   }
-   // populate list with nodes
-   load_interface("VirtualConcierge/nodes.pvc");
+       ui->listWidget_nodes_directories->clear();
+        // add the new list to the addable items
+       for(int l = 0;l<ui->treeWidget->topLevelItemCount();l++){
+            QTreeWidgetItem *item_ = ui->treeWidget->topLevelItem(l);
+            ui->listWidget_nodes_directories->addItem(item_->text(1)+","+item_->text(0));
+       }
+       // populate list with nodes
+       load_interface("VirtualConcierge/nodes.pvc");
+    }
 }
 
 void UserInterfaceCreator::load_interface(QString filename){
@@ -196,6 +197,7 @@ void UserInterfaceCreator::on_pushButton_add_display_clicked(){
     if(ui->listWidget_nodes_directories->selectedItems().count()>0){
       QStringList ls =ui->listWidget_nodes_directories->currentItem()->text().split(",");
       ui->listWidget_display->addItem(ls.value(0)+","+ls.value(1));
+      m_display.push_back(ls.value(0)+","+ls.value(1));
     }
 }
 
@@ -249,7 +251,10 @@ void UserInterfaceCreator::on_buttonBox_accepted()
 
 void UserInterfaceCreator::load_directories(QString filename){
 
+    // clear the list of nodes
     ui->listWidget_nodes_directories->clear();
+    ui->listWidget_display->clear();
+
     // load the text file
     QFile textfile(filename);
 
@@ -309,6 +314,8 @@ void UserInterfaceCreator::load_directories(QString filename){
                             }
                         }
                 }
+            } else if(list[0]=="dd"){
+                ui->listWidget_display->addItem(list[1]+","+list[2]);
             }
 
             // read next line
