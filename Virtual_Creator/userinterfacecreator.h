@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QTreeWidget>
 #include <QFile>
+#include <QVector>
 
 namespace Ui {
 class UserInterfaceCreator;
@@ -28,14 +29,19 @@ private slots:
 
     void on_pushButton_remove_display_clicked();
 
+    void on_pushButton_removedirectory_clicked();
+
+    void on_buttonBox_accepted();
+
 private:
     Ui::UserInterfaceCreator *ui;
     void addTreeRoot(QString name, QString description);
     void addTreeChild(QTreeWidgetItem *parent,
                           QString name, QString description);
     void load_interface(QString filename);
+    void load_directories(QString filename);
     void save_to_file(QString);
-    QList<QString> m_directories;
+    QVector<QString> m_directories, m_directorylist, m_display, m_nodes;
 };
 
 #endif // USERINTERFACECREATOR_H

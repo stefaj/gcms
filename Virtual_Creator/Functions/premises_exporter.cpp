@@ -112,20 +112,17 @@ void PremisesExporter::export_directories(QVector<QString> directory, QVector<QS
 
         // write the directories
         for(int l = 0;l < directory.count();l++){
-            out << "d," << l << ","
-                << directory.value(l) << "\n";
+            out << "d," << directory.value(l) << "\n";
         }
 
         // write the directory list
         for(int l = 0;l < directory_list.count();l++){
-            out << "dl," << l << ","
-                << directory_list.value(l) << "\n";
+            out << "dl,"<< directory_list.value(l) << "\n";
         }
 
         // write the startup
         for(int l = 0;l < startup_menu.count();l++){
-            out << "dl," << l << ","
-                << startup_menu.value(l) << "\n";
+            out << "dd," <<startup_menu.value(l) << "\n";
         }
 
         // optional, as QFile destructor will already do it:

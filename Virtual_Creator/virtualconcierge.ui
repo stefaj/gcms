@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>480</width>
-    <height>800</height>
+    <height>640</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -110,7 +110,7 @@ QLabel
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>700</y>
+      <y>510</y>
       <width>152</width>
       <height>83</height>
      </rect>
