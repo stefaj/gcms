@@ -11,10 +11,10 @@ public:
     ModelMesh(QString);
     ~ModelMesh();
     void Draw();
-    QVector<QVector2D> m_textureCoordinates;
-    QVector<QVector3D> m_vertices;
-    QVector<QVector3D> m_normals;
-    QVector<int> m_vertexIndices, m_uvIndices, m_normalIndices;
+    QVector<QVector2D> textureCoordinates;
+    QVector<QVector3D> vertices;
+    QVector<QVector3D> normals;
+    QVector<int> vertexIndices, uvIndices, normalIndices;
     bool LoadOBJ(QString);
 };
 

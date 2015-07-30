@@ -35,28 +35,28 @@ protected:
 private:
     QMatrix4x4 pMatrix; // dynamic memory control not needed
     void LoadContent();
-    QOpenGLShaderProgram *m_program;
-    QVector3D *m_position, *m_clicked_position;
-    QVector<QOpenGLTexture *> m_textures;
-    QVector<Node *> m_nodes;
-    QVector<VisualObject *> m_models;
-    QVector<QString> m_texture_paths;
-    ModelMesh *m_node, *m_plane, *m_wall, *m_door, *m_tree;
+    QOpenGLShaderProgram *program;
+    QVector3D *position, *clicked_position;
+    QVector<QOpenGLTexture *> textures;
+    QVector<Node *> nodes;
+    QVector<VisualObject *> models;
+    QVector<QString> texture_paths;
+    ModelMesh *node, *plane, *wall, *door, *tree;
 
     // internal integers used for mousemovement, counters etc.
-    int m_mouse_x, m_mouse_y, m_dmouse_x, m_dmouse_y, m_node_index_selected;
-    float m_mouse_zoom ,m_noderadius, m_mouse_y_inverted, m_current_floor_height;
+    int mouse_x, mouse_y, dmouse_x, dmouse_y, node_index_selected;
+    float mouse_zoom ,noderadius, mouse_y_inverted, current_floor_height;
     // define a view matrix
     QMatrix4x4 vMatrix;
-    QVector3D *m_current_position;
-    QVector3D m_position_camera, m_camera_prev, m_raycast, m_rotation, m_currentscale, m_drag_middle_position,
-    m_corner_1, m_corner_2, m_corner_3, m_corner_4, m_center_h_1, m_center_h_2;
-    bool m_mousedown_right, m_mousedown_left, m_node_placable,
-    m_node_removable, m_tree_removable, m_node_linkable, m_pavement_placable,
-    m_door_placeable, m_wall_placable, m_tree_placable, m_placable_floor_plan,
-    m_node_significant;
-    QString m_floor_plan_path, m_next_node_name;
-    QVector<QOpenGLTexture *> m_textures_from_files;
+    QVector3D *current_position;
+    QVector3D position_camera, camera_prev, raycast, rotation, currentscale, drag_middle_position,
+    corner_1, corner_2, corner_3, corner_4, center_h_1, center_h_2;
+    bool mousedown_right, mousedown_left, node_placable,
+    node_removable, tree_removable, node_linkable, pavement_placable,
+    door_placeable, wall_placable, tree_placable, placable_floor_plan,
+    node_significant;
+    QString floor_plan_path, next_node_name;
+    QVector<QOpenGLTexture *> textures_from_files;
     void add_pavement(QVector3D, QVector3D, QVector3D);
     void add_door(QVector3D, QVector3D, QVector3D);
     void add_wall(QVector3D, QVector3D, QVector3D);
@@ -67,7 +67,7 @@ private:
     void LoadTextures(QString);
     void LoadNodes(QString);
     const float tree_radius, infinte_lenght_lines;
-    QLabel m_selected_label;
+    QLabel selected_label;
 private slots:
     void add_node(QString *);
     void allow_node(bool);

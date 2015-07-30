@@ -16,8 +16,8 @@ public:
     bool isDirectory();
     void mousePressEvent(QMouseEvent *);
 private:
-    int m_index;
-    bool m_directory;
+    int index;
+    bool directory;
 signals:
     void clicked_index(int,bool);
 };

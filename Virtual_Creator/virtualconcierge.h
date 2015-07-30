@@ -24,9 +24,9 @@ private:
     void create_interface();
     void load_interface(QString,QString);
     int get_index_from_index(QVector<NodeButton* >,int);
-    QVector<NodeButton *> m_buttons, m_directories;
-    QVector<NodeButton *> m_catagory, m_temp;
-    QVector<QString> m_directory_list,m_node_list;
+    QVector<NodeButton *> buttons, directories;
+    QVector<NodeButton *> catagory, temp;
+    QVector<QString> directory_list,node_list;
 private slots:
     void get_button_value(int, bool);
     void on_pushButton_send_mail_clicked();

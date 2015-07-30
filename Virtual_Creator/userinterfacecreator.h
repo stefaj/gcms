@@ -41,7 +41,7 @@ private:
     void load_interface(QString filename);
     void load_directories(QString filename);
     void save_to_file(QString);
-    QVector<QString> m_directories, m_directorylist, m_display, m_nodes;
+    QVector<QString> directories, directorylist, display, nodes;
 };
 
 #endif // USERINTERFACECREATOR_H

@@ -19,9 +19,9 @@ UserInterfaceCreator::UserInterfaceCreator(QWidget *parent) :
     load_interface("VirtualConcierge/nodes.pvc");
 
     // clear the directory list
-    m_directories.clear();
-    m_directorylist.clear();
-    m_display.clear();
+    this->directories.clear();
+    this->directorylist.clear();
+    this->display.clear();
 
     // load the directories for working temp directory
     load_directories("VirtualConcierge/directories.dir");
@@ -125,7 +125,7 @@ void UserInterfaceCreator::load_interface(QString filename){
     textfile.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream ascread(&textfile);
     // clear the nodes
-    m_nodes.clear();
+    this->nodes.clear();
     if(textfile.isOpen()){
         // read each line of the file
         QString line = ascread.readLine();
@@ -146,7 +146,7 @@ void UserInterfaceCreator::load_interface(QString filename){
                 QTextStream(&list[1])>>index;
                 if(add==1){
                     ui->listWidget_nodes_directories->addItem(name+","+QString::number(index));
-                    m_nodes.push_back(name+","+QString::number(index));
+                    this->nodes.push_back(name+","+QString::number(index));
                 }
             }
             // read next line
@@ -198,7 +198,7 @@ void UserInterfaceCreator::on_pushButton_add_display_clicked(){
     if(ui->listWidget_nodes_directories->selectedItems().count()>0){
       QStringList ls =ui->listWidget_nodes_directories->currentItem()->text().split(",");
       ui->listWidget_display->addItem(ls.value(0)+","+ls.value(1));
-      m_display.push_back(ls.value(0)+","+ls.value(1));
+      this->display.push_back(ls.value(0)+","+ls.value(1));
     }
 }
 
@@ -211,15 +211,14 @@ void UserInterfaceCreator::on_pushButton_remove_display_clicked(){
 }
 
 void UserInterfaceCreator::on_pushButton_removedirectory_clicked(){
-
 }
 
 void UserInterfaceCreator::on_buttonBox_accepted()
 {
     // clear the directories
-    m_directories.clear();
-    m_directorylist.clear();
-    m_display.clear();
+    this->directories.clear();
+    this->directorylist.clear();
+    this->display.clear();
 
     // add new data to the directories
     for(int i = 0; i <ui->treeWidget->topLevelItemCount();i++){
@@ -227,7 +226,7 @@ void UserInterfaceCreator::on_buttonBox_accepted()
         QTreeWidgetItem *item_ = ui->treeWidget->topLevelItem(i);
         // get current index
         int index = item_->text(0).toInt();
-        m_directories.push_back(item_->text(1));
+        this->directories.push_back(item_->text(1));
         QString node_children, dir_children;
         for(int k = 0; k<item_->childCount();k++){
             QTreeWidgetItem *item_child = item_->child(k);
@@ -237,16 +236,16 @@ void UserInterfaceCreator::on_buttonBox_accepted()
         // remove the ";" at end of each list
         node_children.count()>1?node_children.remove(node_children.count()-1,1):(0);
         dir_children.count()>1?dir_children.remove(dir_children.count()-1,1):(0);
-        m_directorylist.push_back(QString::number(index)+","+node_children+","+dir_children);
+        this->directorylist.push_back(QString::number(index)+","+node_children+","+dir_children);
     }
 
     // add the display list of directories
     for(int j = 0;j<ui->listWidget_display->count();j++){
-        m_display.push_back(ui->listWidget_display->item(j)->text());
+        this->display.push_back(ui->listWidget_display->item(j)->text());
     }
 
     // export the new directories to working (temp) directory
-    PremisesExporter::export_directories(m_directories,m_directorylist,m_display,"directories.dir");
+    PremisesExporter::export_directories(this->directories,this->directorylist,this->display,"directories.dir");
 }
 
 void UserInterfaceCreator::load_directories(QString filename){
@@ -289,7 +288,7 @@ void UserInterfaceCreator::load_directories(QString filename){
                 // whenever the child node esist
                 if(childcount>0){
                     // search for the corresponding child
-                    foreach(QString node, m_nodes){
+                    foreach(QString node, this->nodes){
                         QStringList ls = node.split(",");
                         int numb = ls[1].toInt();
                         // add all the child nodes

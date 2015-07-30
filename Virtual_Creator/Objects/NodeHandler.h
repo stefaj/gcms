@@ -30,8 +30,8 @@ public:
     int pathcount();
     int pathindex(int);
 private:
-    QVector<Node*> m_premises;
-    QVector<int> m_shortest;
+    QVector<Node*> premises;
+    QVector<int> shortest;
 
 };
 

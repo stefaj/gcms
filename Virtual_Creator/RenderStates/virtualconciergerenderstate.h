@@ -18,18 +18,19 @@ public:
     explicit VirtualConciergeRenderstate(QWidget *parent = 0);
     ~VirtualConciergeRenderstate();
 private:
-    ModelMesh *m_node, *m_plane, *m_wall, *m_door, *m_tree;
+    ModelMesh *node, *plane, *wall, *door, *tree;
     QMatrix4x4 pMatrix; // dynamic memory control not needed
     void LoadContent();
-    QSize m_viewportSize;
-    QOpenGLShaderProgram *m_program;
-    QVector3D *m_position;
-    NodeHandler *m_handler;
-    QVector<QOpenGLTexture *> m_textures,m_textures_predefined;
-    QVector<VisualObject *> m_objects;
+    QSize viewportSize;
+    QOpenGLShaderProgram *program;
+    QVector3D *position;
+    NodeHandler *handler;
+    QVector<QOpenGLTexture *> textures,textures_predefined;
+    QVector<VisualObject *> objects;
     void LoadObjects(QString);
     void LoadTextures(QString);
-    int m_start,m_end;
+    int start,end;
+    QSurfaceFormat format;
 protected:
     void initializeGL();
    // void resizeGL(int w, int h);

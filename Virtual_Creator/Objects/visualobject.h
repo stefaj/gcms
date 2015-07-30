@@ -39,13 +39,13 @@ public:
     int getTextureID();
     void setType(QString);
 private:
-    ModelMesh *m_model;
-    QVector3D m_translation, m_rotation, m_scaling;
-    QOpenGLTexture *m_texture;
-    int m_texture_id;
-    QString m_path_texture;
-    QString m_type;
-    QVector3D m_corner_1, m_corner_2, m_corner_3, m_corner_4, m_center_h_1, m_center_h_2;
+    ModelMesh *model;
+    QVector3D translation, rotation, scaling;
+    QOpenGLTexture *texture;
+    int texture_id;
+    QString path_texture;
+    QString type;
+    QVector3D corner_1, corner_2, corner_3, corner_4, center_h_1, center_h_2;
 
 };
 

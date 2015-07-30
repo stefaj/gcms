@@ -40,16 +40,16 @@ public:
     double getG();
     QString getName();
 private:
-    QVector3D *m_position;
-    QString *m_name;
-    QVector3D *m_color;
-    QVector<QString*> m_connected;
-    QVector<int> m_connectedindex;
-    QVector<int> m_shortest;
-    int m_nshortest;
-    double m_g;
-    bool m_links, m_walk, m_wheelchair, m_vehicle, m_bike, m_significant;
-    int m_lastindex;
+    QVector3D *position;
+    QString *name;
+    QVector3D *color;
+    QVector<QString*> connected;
+    QVector<int> connectedindex;
+    QVector<int> shortest;
+    int nshortest;
+    double g;
+    bool links, walk, wheelchair, vehicle, bike, significant;
+    int lastindex;
 };
 
 #endif // NODE_H

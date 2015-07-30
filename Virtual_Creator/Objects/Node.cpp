@@ -4,125 +4,125 @@
 #include <QString>
 
 Node::Node(){
-    m_position = new QVector3D(0,0,0);
-    m_color = new QVector3D(0,0,0);
-    m_name = new QString();
-    m_connected.clear();
-    m_connectedindex.clear();
-    m_shortest.clear();
-    m_links = false;
-    m_walk = false;
-    m_bike = false;
-    m_vehicle = false;
-    m_wheelchair = false;
-    m_significant = true;
-    m_nshortest = 0;
-    m_g = 99999999999999.0;
-    m_lastindex = 0;
+    this->position = new QVector3D(0,0,0);
+    this->color = new QVector3D(0,0,0);
+    this->name = new QString();
+    this->connected.clear();
+    this->connectedindex.clear();
+    this->shortest.clear();
+    this->links = false;
+    this->walk = false;
+    this->bike = false;
+    this->vehicle = false;
+    this->wheelchair = false;
+    this->significant = true;
+    this->nshortest = 0;
+    this->g = 99999999999999.0;
+    this->lastindex = 0;
 }
 
 Node::Node(QVector3D * Position){
-    m_position = Position;
-    m_color = new QVector3D(0,0,0);
-    m_name = new QString();
-    m_connected.clear();
-    m_connectedindex.clear();
-    m_shortest.clear();
-    m_links = false;
-    m_nshortest = -1;
-    m_g = 99999999999999.0;
+    this->position = Position;
+    this->color = new QVector3D(0,0,0);
+    this->name = new QString();
+    this->connected.clear();
+    this->connectedindex.clear();
+    this->shortest.clear();
+    this->links = false;
+    this->nshortest = -1;
+    this->g = 99999999999999.0;
 }
 
-void Node::setName(QString value){*m_name = value;}
+void Node::setName(QString value){*this->name = value;}
 
-QVector3D Node::getColor(){return *m_color;}
+QVector3D Node::getColor(){return *this->color;}
 
-void Node::setColor(QVector3D *color){m_color = color;}
+void Node::setColor(QVector3D *color){this->color = color;}
 
 Node::Node(QVector3D *Position, QString *Name){
-    m_position = Position;
-    m_name = Name;
-    m_color = new QVector3D(0,0,0);
-    m_connected.clear();
-    m_connectedindex.clear();
-    m_shortest.clear();
-    m_links = false;
-    m_nshortest = -1;
-    m_g = 99999999999999.0;
+    this->position = Position;
+    this->name = Name;
+    this->color = new QVector3D(0,0,0);
+    this->connected.clear();
+    this->connectedindex.clear();
+    this->shortest.clear();
+    this->links = false;
+    this->nshortest = -1;
+    this->g = 99999999999999.0;
 }
 
 void Node::setSourceNode(){
-    m_color->setX(0.0f);
-    m_color->setY(0.0f);
-    m_color->setZ(1.0f);
+    this->color->setX(0.0f);
+    this->color->setY(0.0f);
+    this->color->setZ(1.0f);
 }
 
 void Node::setDestinationNode(){
-    m_color->setX(1.0f);
-    m_color->setY(0.0f);
-    m_color->setZ(0.0f);
+    this->color->setX(1.0f);
+    this->color->setY(0.0f);
+    this->color->setZ(0.0f);
 }
 
 void Node::AddLink(QString *Name, int index){
-    if(!m_connectedindex.contains(index)){
-        m_connected.push_back(Name);
-        m_connectedindex.push_back(index);
-        m_links = true;
+    if(!this->connectedindex.contains(index)){
+        this->connected.push_back(Name);
+        this->connectedindex.push_back(index);
+        this->links = true;
     }
 }
 
 void Node::RemoveLinkedFromIndex(int index){
-    m_connected.removeAt(index);
-    m_connectedindex.removeAt(index);
-    if(m_connected.count()<1)
-        m_links = false;
+    this->connected.removeAt(index);
+    this->connectedindex.removeAt(index);
+    if(this->connected.count()<1)
+        this->links = false;
 }
 
 void Node::MoveLinkedIndexBack(int index){
     // replace the specific index
-    if(m_connectedindex.value(index)>0)
-    m_connectedindex.replace(index,m_connectedindex.value(index)-1);
+    if(this->connectedindex.value(index)>0)
+    this->connectedindex.replace(index,this->connectedindex.value(index)-1);
 }
 
-QVector3D Node::Position(){return *m_position;}
+QVector3D Node::Position(){return *this->position;}
 
-int Node::countConnected(){return m_connected.size();}
+int Node::countConnected(){return this->connected.size();}
 
-QString Node::getLinkedName(int index){return *m_connected.value(index);}
+QString Node::getLinkedName(int index){return *this->connected.value(index);}
 
-int Node::getConnectedIndex(int index){return m_connectedindex.value(index);}
+int Node::getConnectedIndex(int index){return this->connectedindex.value(index);}
 
-QString Node::getName(){return *m_name;}
+QString Node::getName(){return *this->name;}
 
-void Node::clearPath(){m_shortest.clear();}
+void Node::clearPath(){this->shortest.clear();}
 
-void Node::addShortest(int index){m_shortest.push_back(index);}
+void Node::addShortest(int index){this->shortest.push_back(index);}
 
-void Node::setG(double g){m_g = g;}
+void Node::setG(double g){this->g = g;}
 
-double Node::getG(){return m_g;}
+double Node::getG(){return this->g;}
 
-void Node::setShortest(int index){m_nshortest = index;}
+void Node::setShortest(int index){this->nshortest = index;}
 
-int Node::getShortestIndex(){return m_nshortest;}
+int Node::getShortestIndex(){return this->nshortest;}
 
-void Node::setWalk(bool value){m_walk = value;}
+void Node::setWalk(bool value){this->walk = value;}
 
-void Node::setWheelChair(bool value){m_wheelchair = value;}
+void Node::setWheelChair(bool value){this->wheelchair = value;}
 
-void Node::setVehicle(bool value){m_vehicle = value;}
+void Node::setVehicle(bool value){this->vehicle = value;}
 
-void Node::setBike(bool value){m_bike = value;}
+void Node::setBike(bool value){this->bike = value;}
 
-void Node::setSignificant(bool value){m_significant = value;}
+void Node::setSignificant(bool value){this->significant = value;}
 
-bool Node::getWalk(){return m_walk;}
+bool Node::getWalk(){return this->walk;}
 
-bool Node::getWheelChair(){return m_wheelchair;}
+bool Node::getWheelChair(){return this->wheelchair;}
 
-bool Node::getVehicle(){return m_vehicle;}
+bool Node::getVehicle(){return this->vehicle;}
 
-bool Node::getBike(){return m_bike;}
+bool Node::getBike(){return this->bike;}
 
-bool Node::getSignificant(){return m_significant;}
+bool Node::getSignificant(){return this->significant;}
 

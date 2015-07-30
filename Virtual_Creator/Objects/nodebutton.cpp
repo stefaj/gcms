@@ -1,28 +1,26 @@
 #include "nodebutton.h"
 
-NodeButton::NodeButton(QWidget *parent) :QPushButton(parent), m_directory(false)
-{
-
+NodeButton::NodeButton(QWidget *parent) :QPushButton(parent),directory(false){
 }
 
 void NodeButton::setIndex(int value){
-    m_index = value;
+    this->index = value;
 }
 
 int NodeButton::getIndex(){
-    return m_index;
+    return this->index;
 }
 
 void NodeButton::mousePressEvent(QMouseEvent * ){
-    emit clicked_index(m_index,m_directory);
+    emit clicked_index(this->index, this->directory);
 }
 
 void NodeButton::setDirectory(bool directory){
-    m_directory = directory;
+    this->directory = directory;
 }
 
 bool NodeButton::isDirectory(){
-    return m_directory;
+    return this->directory;
 }
 
 NodeButton::~NodeButton()

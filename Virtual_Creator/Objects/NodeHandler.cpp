@@ -5,28 +5,28 @@
 #include <QTextStream>
 
 NodeHandler::NodeHandler(){
-    m_premises.clear();
+    this->premises.clear();
 }
 
 void NodeHandler::AddNode(Node* node){
-    m_premises.push_back(node);
+    this->premises.push_back(node);
 }
 
 Node NodeHandler::NodeFromIndex(unsigned int index){
-    return *m_premises.value(index);
+    return *this->premises.value(index);
 }
 
 int NodeHandler::count(){
-    return m_premises.count();
+    return this->premises.count();
 }
 
 void NodeHandler::AddNodeLink(int index,QString* Name){
-   m_premises.value(index)->AddLink(Name,index);
+   this->premises.value(index)->AddLink(Name,index);
 }
 
 void NodeHandler::AddNodeLinkbyIndex(int index1, int index2){
     if(index1 != index2)
-        m_premises.value(index1)->AddLink( new QString(m_premises.value(index2)->getName()),index2);
+        this->premises.value(index1)->AddLink( new QString(this->premises.value(index2)->getName()),index2);
     else
         qDebug()<< "Node can't be linked to itself";
 }
@@ -37,11 +37,11 @@ void NodeHandler::CalculateShortest(int start, int goal){
   /* or contact Baggins: omega@live.co.za */
 
   //set nodes's colors
-  m_premises.value(start)->setSourceNode();
-  m_premises.value(goal)->setDestinationNode();
+  this->premises.value(start)->setSourceNode();
+  this->premises.value(goal)->setDestinationNode();
 
   // clear shortest path
-  m_shortest.clear();
+  this->shortest.clear();
 
   // inf
   const double inf = 1e+99;
@@ -50,17 +50,17 @@ void NodeHandler::CalculateShortest(int start, int goal){
   QVector<int> checked;
 
   // set all distances to inf
-  foreach (Node *n, m_premises) {
+  foreach (Node *n, this->premises) {
       n->setG(inf);
   }
   // set start G value to  0.0
-  m_premises.value(start)->setG(0.0);
+  this->premises.value(start)->setG(0.0);
 
   // initial que contains all
   QVector<int> que;
 
   // fill que
- for(int k = 0; k< m_premises.count(); k++){
+ for(int k = 0; k< this->premises.count(); k++){
         que.push_back(k);
  }
 
@@ -74,8 +74,8 @@ void NodeHandler::CalculateShortest(int start, int goal){
 
   // select the next value with the lowest G value
   for(int l = 0; l < que.count();l++){
-      if(m_premises.value(l)->getG()<current_min){
-          current_min=m_premises.value(l)->getG();
+      if(this->premises.value(l)->getG()<current_min){
+          current_min=this->premises.value(l)->getG();
           current_index=que.value(l);
           remove_index = l;
       }
@@ -90,17 +90,17 @@ void NodeHandler::CalculateShortest(int start, int goal){
   checked.push_back(current_index);
 
   // check all the neighbor nodes
-  for(int p = 0; p<m_premises.value(current_index)->countConnected();p++)
+  for(int p = 0; p<this->premises.value(current_index)->countConnected();p++)
   {
        // calculate the distance between current node and the current active neigbor node
-      double nodedist = m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->Position().distanceToPoint(m_premises.value(current_index)->Position());
+      double nodedist = this->premises.value(this->premises.value(current_index)->getConnectedIndex(p))->Position().distanceToPoint(this->premises.value(current_index)->Position());
 
       // replace the node's shortest current path if needed. (dist(v,u) + g(v)< g(u))
-      if(nodedist + m_premises.value(current_index)->getG()<= m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->getG())
+      if(nodedist + this->premises.value(current_index)->getG()<= this->premises.value(this->premises.value(current_index)->getConnectedIndex(p))->getG())
       {
           // update the g value and shortest path of the neighbor
-          m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->setG(nodedist+m_premises.value(current_index)->getG());
-          m_premises.value(m_premises.value(current_index)->getConnectedIndex(p))->setShortest(current_index);
+          this->premises.value(this->premises.value(current_index)->getConnectedIndex(p))->setG(nodedist+this->premises.value(current_index)->getG());
+          this->premises.value(this->premises.value(current_index)->getConnectedIndex(p))->setShortest(current_index);
       }
   }
   }else break;
@@ -108,28 +108,28 @@ void NodeHandler::CalculateShortest(int start, int goal){
 
  // list path
  int _back_node = goal;
-     if(m_premises.value(_back_node)->getShortestIndex()>-1){
-      m_shortest.push_back(_back_node);
+     if(this->premises.value(_back_node)->getShortestIndex()>-1){
+      this->shortest.push_back(_back_node);
       while(_back_node != start){
           // backwards trace the shortest path
-          _back_node = m_premises.value(_back_node)->getShortestIndex();
-          m_shortest.push_back(_back_node);
+          _back_node = this->premises.value(_back_node)->getShortestIndex();
+          this->shortest.push_back(_back_node);
       }
      }
 }
 
 int NodeHandler::pathcount(){
-    return m_shortest.count();
+    return this->shortest.count();
 }
 
 int NodeHandler::pathindex(int index){
-    return m_shortest.value(index);
+    return this->shortest.value(index);
 }
 
 void NodeHandler::ReadFilePVC(QString filename){
     // clear the premises when not empty
-    if(m_premises.count()>0)
-        m_premises.clear();
+    if(this->premises.count()>0)
+        this->premises.clear();
 
     /* populate the premisis from the text file */
 
