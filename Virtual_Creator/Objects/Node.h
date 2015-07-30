@@ -1,14 +1,13 @@
 #ifndef NODE_H
 #define NODE_H
 #include <QVector>
-
 class QVector2D;
 class QVector3D;
 class QString;
 class Node{
 public:
     Node();
-    Node(QVector3D *);
+    explicit Node(QVector3D *);
     Node(QVector3D *, QString *);
     void AddLink(QString *,int); // index from other node
     QVector3D Position();

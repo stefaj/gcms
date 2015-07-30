@@ -42,7 +42,8 @@ HEADERS  += mainwindow.h \
     Functions/drawgl.h \
     Objects/nodebutton.h \
     SMTP/smtp.h \
-    userinterfacecreator.h
+    userinterfacecreator.h \
+    main.h
 
 FORMS    += mainwindow.ui \
     virtualconcierge.ui \

@@ -1,5 +1,6 @@
-#ifndef USERINTERFACECREATOR_H
-#define USERINTERFACECREATOR_H
+/* Copyright 2015 Ruan Luies */
+#ifndef VIRTUAL_CREATOR_USERINTERFACECREATOR_H_
+#define VIRTUAL_CREATOR_USERINTERFACECREATOR_H_
 
 #include <QDialog>
 #include <QTreeWidget>
@@ -10,38 +11,32 @@ namespace Ui {
 class UserInterfaceCreator;
 }
 
-class UserInterfaceCreator : public QDialog
-{
+class UserInterfaceCreator : public QDialog {
     Q_OBJECT
 
-public:
+ public:
     explicit UserInterfaceCreator(QWidget *parent = 0);
     ~UserInterfaceCreator();
 
-private slots:
+ private slots:
     void on_pushButton_adddirectory_clicked();
     void OnDeleteIt();
     void AddAfterCurrentIndex();
-
     void on_pushButton_add_child_clicked();
-
     void on_pushButton_add_display_clicked();
-
     void on_pushButton_remove_display_clicked();
-
     void on_pushButton_removedirectory_clicked();
-
     void on_buttonBox_accepted();
 
-private:
+ private:
     Ui::UserInterfaceCreator *ui;
     void addTreeRoot(QString name, QString description);
     void addTreeChild(QTreeWidgetItem *parent,
                           QString name, QString description);
     void load_interface(QString filename);
     void load_directories(QString filename);
-    void save_to_file(QString);
+    void save_to_file(QString filename);
     QVector<QString> directories, directorylist, display, nodes;
 };
 
-#endif // USERINTERFACECREATOR_H
+#endif  // VIRTUAL_CREATOR_USERINTERFACECREATOR_H_
