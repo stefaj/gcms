@@ -80,7 +80,7 @@ QVector3D Mathematics::mouse_raycast(int mx, int my, int width, int height, floa
     return ray_wor; // return the raycast of the 2D mouse in the 3D world view projection
 }
 
-QVector3D Mathematics::point_on_line(float x, QVector3D pointA,QVector3D pointB){
+QVector3D Mathematics::point_on_line(float x, QVector3D pointA, QVector3D pointB) {
     const float slope = (pointA.z()-pointB.z())/(pointA.x()-pointB.x());
     return QVector3D(x,0,x*slope+(pointA.z()-slope*pointA.x()));
 }

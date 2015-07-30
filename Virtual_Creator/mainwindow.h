@@ -1,5 +1,4 @@
 /* Copyright 2015 Ruan Luies */
-
 #ifndef VIRTUAL_CREATOR_MAINWINDOW_H_
 #define VIRTUAL_CREATOR_MAINWINDOW_H_
 

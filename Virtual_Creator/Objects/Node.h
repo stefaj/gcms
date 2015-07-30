@@ -1,35 +1,38 @@
-#ifndef NODE_H
-#define NODE_H
+/* Copyright 2015 Ruan Luies */
+#ifndef VIRTUAL_CREATOR_OBJECTS_NODE_H_
+#define VIRTUAL_CREATOR_OBJECTS_NODE_H_
+
 #include <QVector>
 class QVector2D;
 class QVector3D;
 class QString;
-class Node{
-public:
+class Node {
+ public:
     Node();
-    explicit Node(QVector3D *);
-    Node(QVector3D *, QString *);
-    void AddLink(QString *,int); // index from other node
+    explicit Node(QVector3D * position);
+    Node(QVector3D* position, QString* name);
+    // index from other node
+    void AddLink(QString* name, int index);
     QVector3D Position();
     QVector3D getColor();
     void setSourceNode();
     void setDestinationNode();
-    void setColor(QVector3D *);
+    void setColor(QVector3D * rgb);
     int countConnected();
     int getConnectedIndex(int index);
-    void RemoveLinkedFromIndex(int);
-    void MoveLinkedIndexBack(int);
-    QString getLinkedName(int);
+    void RemoveLinkedFromIndex(int index);
+    void MoveLinkedIndexBack(int index);
+    QString getLinkedName(int index);
     void clearPath();
-    void addShortest(int);
+    void addShortest(int index);
     void setG(double g);
     void setName(QString);
     void setShortest(int index);
-    void setWalk(bool);
-    void setWheelChair(bool);
-    void setVehicle(bool);
-    void setBike(bool);
-    void setSignificant(bool);
+    void setWalk(bool can_walk);
+    void setWheelChair(bool can_use_wheelchair);
+    void setVehicle(bool can_use_vehicle);
+    void setBike(bool can_use_bike);
+    void setSignificant(bool is_significant);
     bool getWalk();
     bool getWheelChair();
     bool getVehicle();
@@ -38,7 +41,8 @@ public:
     int getShortestIndex();
     double getG();
     QString getName();
-private:
+
+ private:
     QVector3D *position;
     QString *name;
     QVector3D *color;
@@ -51,4 +55,4 @@ private:
     int lastindex;
 };
 
-#endif // NODE_H
+#endif  // VIRTUAL_CREATOR_OBJECTS_NODE_H_

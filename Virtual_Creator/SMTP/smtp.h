@@ -1,5 +1,4 @@
 /* Copyright 2015 Ruan Luies */
-
 #ifndef VIRTUAL_CREATOR_SMTP_SMTP_H_
 #define VIRTUAL_CREATOR_SMTP_SMTP_H_
 

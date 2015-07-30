@@ -1,5 +1,6 @@
-#ifndef VIRTUALCONCIERGERENDERSTATE_H
-#define VIRTUALCONCIERGERENDERSTATE_H
+/* Copyright 2015 Ruan Luies */
+#ifndef VIRTUAL_CREATOR_RENDERSTATES_VIRTUALCONCIERGERENDERSTATE_H_
+#define VIRTUAL_CREATOR_RENDERSTATES_VIRTUALCONCIERGERENDERSTATE_H_
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -11,37 +12,37 @@
 #include "Objects/visualobject.h"
 #include "Functions/premises_exporter.h"
 
-class VirtualConciergeRenderstate : public QOpenGLWidget, protected QOpenGLFunctions
-{
+class VirtualConciergeRenderstate :
+        public QOpenGLWidget,
+        protected QOpenGLFunctions {
      Q_OBJECT
-public:
+
+ public:
     explicit VirtualConciergeRenderstate(QWidget *parent = 0);
     ~VirtualConciergeRenderstate();
-private:
-    ModelMesh *node, *plane, *wall, *door, *tree;
-    QMatrix4x4 pMatrix; // dynamic memory control not needed
+
+ private:
     void LoadContent();
+    void LoadObjects(QString);
+    void LoadTextures(QString);
+    ModelMesh *node, *plane, *wall, *door, *tree;
+    QMatrix4x4 pMatrix;
     QSize viewportSize;
     QOpenGLShaderProgram *program;
     QVector3D *position;
     NodeHandler *handler;
-    QVector<QOpenGLTexture *> textures,textures_predefined;
+    QVector<QOpenGLTexture *> textures, textures_predefined;
     QVector<VisualObject *> objects;
-    void LoadObjects(QString);
-    void LoadTextures(QString);
-    int start,end;
+    int start, end;
     QSurfaceFormat format;
-protected:
+
+ protected:
     void initializeGL();
-   // void resizeGL(int w, int h);
     void paintGL();
     void resizeGL(int w, int h);
-//    void mouseMoveEvent(QMouseEvent *);
-//    void mousePressEvent(QMouseEvent *);
-//    void wheelEvent(QWheelEvent *);
-//    void mouseReleaseEvent(QMouseEvent *);
-private slots:
-    void find_path(int,int);
+
+ private slots:
+    void find_path(int start, int end);
 };
 
-#endif // VIRTUALCONCIERGERENDERSTATE_H
+#endif  // VIRTUAL_CREATOR_RENDERSTATES_VIRTUALCONCIERGERENDERSTATE_H_

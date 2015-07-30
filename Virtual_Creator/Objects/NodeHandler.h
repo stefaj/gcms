@@ -1,38 +1,29 @@
-/** *********************************************************************** **/
-/** *********************************************************************** **/
-/**     Created by:     Ruan (Baggins) Luies 23511354                       **/
-/**     email:          23511354@nwu.ac.za                                  **/
-/**     Project name:   Virtual Concierge Creator And Management System     **/
-/**     File Name:      NodeHandler.h                                       **/
-/**     From Date:      2015/02/24                                          **/
-/**     To Date:        2015/10/01                                          **/
-/** **********************************************************************  **/
-/** *********************************************************************** **/
+/* Copyright 2015 Ruan Luies */
+#ifndef VIRTUAL_CREATOR_OBJECTS_NODEHANDLER_H_
+#define VIRTUAL_CREATOR_OBJECTS_NODEHANDLER_H_
 
-#ifndef NODEHANDLER_H
-#define NODEHANDLER_H
-#include "Objects/Node.h"
 #include <QVector>
 #include <QString>
 #include <qdebug.h>
+#include "Objects/Node.h"
+
 class QVector3D;
-class NodeHandler
-{
-public:
+class NodeHandler {
+ public:
     NodeHandler();
-    void AddNode(Node*);
-    Node NodeFromIndex(unsigned int);
-    void AddNodeLink(int,QString*);
-    void AddNodeLinkbyIndex(int,int);
-    void CalculateShortest(int,int);
-    void ReadFilePVC(QString);
+    void AddNode(Node* node);
+    Node NodeFromIndex(unsigned int index);
+    void AddNodeLink(int index, QString* name);
+    void AddNodeLinkbyIndex(int index1, int index2);
+    void CalculateShortest(int start, int finish);
+    void ReadFilePVC(QString filename);
     int count();
     int pathcount();
-    int pathindex(int);
-private:
+    int pathindex(int shortest_index);
+
+ private:
     QVector<Node*> premises;
     QVector<int> shortest;
-
 };
 
-#endif // NODEHANDLER_H
+#endif  // VIRTUAL_CREATOR_OBJECTS_NODEHANDLER_H_

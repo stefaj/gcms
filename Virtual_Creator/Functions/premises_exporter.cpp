@@ -99,7 +99,10 @@ QFile file("VirtualConcierge/"+name);
     file.close();
 }
 
-void PremisesExporter::export_directories(QVector<QString> directory, QVector<QString> directory_list, QVector<QString> startup_menu,QString filename){
+void PremisesExporter::export_directories(QVector<QString> directory,
+                                          QVector<QString> directory_list,
+                                          QVector<QString> startup_menu,
+                                          QString filename) {
     if(QDir().mkdir("VirtualConcierge"))
         qDebug()<<"Success in Creating Directory 'VirtualConcierge'";
 

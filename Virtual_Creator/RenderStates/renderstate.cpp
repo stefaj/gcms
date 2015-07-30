@@ -233,7 +233,7 @@ void RenderState::mouseReleaseEvent(QMouseEvent *){
 
         if(this->pavement_placable){
             // place pavement
-            add_pavement(this->rotation,*this->clicked_position,this->currentscale);
+            add_pavement(this->rotation, *this->clicked_position, this->currentscale);
 
         }
     }
@@ -352,9 +352,15 @@ void RenderState::add_node(QString *name){
     this->nodes.push_back(newnode);
 }
 
-void RenderState::add_pavement(QVector3D rotation, QVector3D translation, QVector3D scaling){
+void RenderState::add_pavement(QVector3D rotation,
+                               QVector3D translation,
+                               QVector3D scaling) {
     // texture index 1 is the tile
-    VisualObject * object = new VisualObject(this->plane,this->textures.value(1),translation,rotation, "Pavement");
+    VisualObject * object = new VisualObject(this->plane,
+                                             this->textures.value(1),
+                                             translation,
+                                             rotation,
+                                             "Pavement");
     object->setScaling(scaling);
     this->models.push_back(object);
     PremisesExporter::export_environment(this->models,"environment.env");

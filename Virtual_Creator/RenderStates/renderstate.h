@@ -1,5 +1,6 @@
-#ifndef RENDERSTATE_H
-#define RENDERSTATE_H
+/* Copyright 2015 Ruan Luies */
+#ifndef VIRTUAL_CREATOR_RENDERSTATES_RENDERSTATE_H_
+#define VIRTUAL_CREATOR_RENDERSTATES_RENDERSTATE_H_
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -18,22 +19,24 @@
 #include "Functions/premises_exporter.h"
 #include "Functions/drawgl.h"
 
-class RenderState : public QOpenGLWidget, protected QOpenGLFunctions
-{
+class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
      Q_OBJECT
-public:
+
+ public:
     explicit RenderState(QWidget *parent = 0);
     ~RenderState();
-protected:
+
+ protected:
     void initializeGL();
-    void resizeGL(int, int);
+    void resizeGL(int width, int height);
     void paintGL();
-    void mouseMoveEvent(QMouseEvent *);
-    void mousePressEvent(QMouseEvent *);
-    void wheelEvent(QWheelEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
-private:
-    QMatrix4x4 pMatrix; // dynamic memory control not needed
+    void mouseMoveEvent(QMouseEvent* event);
+    void mousePressEvent(QMouseEvent* event);
+    void wheelEvent(QWheelEvent* event);
+    void mouseReleaseEvent(QMouseEvent* event);
+
+ private:
+    QMatrix4x4 pMatrix, vMatrix;
     void LoadContent();
     QOpenGLShaderProgram *program;
     QVector3D *position, *clicked_position;
@@ -45,48 +48,70 @@ private:
 
     // internal integers used for mousemovement, counters etc.
     int mouse_x, mouse_y, dmouse_x, dmouse_y, node_index_selected;
-    float mouse_zoom ,noderadius, mouse_y_inverted, current_floor_height;
-    // define a view matrix
-    QMatrix4x4 vMatrix;
+    float mouse_zoom, noderadius, mouse_y_inverted, current_floor_height;
     QVector3D *current_position;
-    QVector3D position_camera, camera_prev, raycast, rotation, currentscale, drag_middle_position,
-    corner_1, corner_2, corner_3, corner_4, center_h_1, center_h_2;
+    QVector3D position_camera,
+            camera_prev,
+            raycast,
+            rotation,
+            currentscale,
+            drag_middle_position,
+            corner_1,
+            corner_2,
+            corner_3,
+            corner_4,
+            center_h_1,
+            center_h_2;
     bool mousedown_right, mousedown_left, node_placable,
     node_removable, tree_removable, node_linkable, pavement_placable,
     door_placeable, wall_placable, tree_placable, placable_floor_plan,
     node_significant;
     QString floor_plan_path, next_node_name;
     QVector<QOpenGLTexture *> textures_from_files;
-    void add_pavement(QVector3D, QVector3D, QVector3D);
-    void add_door(QVector3D, QVector3D, QVector3D);
-    void add_wall(QVector3D, QVector3D, QVector3D);
-    void add_tree(QVector3D, QVector3D, QVector3D);
-    void add_floor_plan(QVector3D, QVector3D, QVector3D);
-    void draw_circle_flat(QVector3D, QMatrix4x4,QVector3D, float);
-    void LoadObjects(QString);
-    void LoadTextures(QString);
-    void LoadNodes(QString);
+    void add_pavement(QVector3D rotation,
+                      QVector3D position,
+                      QVector3D scale);
+    void add_door(QVector3D rotation,
+                  QVector3D position,
+                  QVector3D scale);
+    void add_wall(QVector3D rotation,
+                  QVector3D position,
+                  QVector3D scale);
+    void add_tree(QVector3D rotation,
+                  QVector3D position,
+                  QVector3D scale);
+    void add_floor_plan(QVector3D rotation,
+                        QVector3D position,
+                        QVector3D scale);
+    void draw_circle_flat(QVector3D position,
+                          QMatrix4x4 view_matrix,
+                          QVector3D color,
+                          float radius);
+    void LoadObjects(QString filename);
+    void LoadTextures(QString filename);
+    void LoadNodes(QString filename);
     const float tree_radius, infinte_lenght_lines;
     QLabel selected_label;
-private slots:
-    void add_node(QString *);
-    void allow_node(bool);
-    void allow_remove_node(bool);
-    void allow_remove_tree(bool);
-    void allow_link(bool);
-    void allow_pavement(bool);
-    void allow_door(bool);
-    void allow_wall(bool);
-    void allow_tree(bool);
-    void allow_floor_plan(bool);
-    void change_rotY(double);
-    void invert_mouseY(bool);
-    void load_texture_from_file(QString);
-    void set_object_scale(QVector3D);
-    void change_current_floor_height(float);
-    void set_next_node_name(QString);
-    void set_next_node_significant(bool);
-    void load_premises(QString);
+
+ private slots:
+    void add_node(QString* name);
+    void allow_node(bool allow);
+    void allow_remove_node(bool allow);
+    void allow_remove_tree(bool allow);
+    void allow_link(bool allow);
+    void allow_pavement(bool allow);
+    void allow_door(bool allow);
+    void allow_wall(bool allow);
+    void allow_tree(bool allow);
+    void allow_floor_plan(bool allow);
+    void change_rotY(double degrees);
+    void invert_mouseY(bool invert_mouse);
+    void load_texture_from_file(QString filename);
+    void set_object_scale(QVector3D scale);
+    void change_current_floor_height(float y_height);
+    void set_next_node_name(QString name);
+    void set_next_node_significant(bool is_significant);
+    void load_premises(QString filename);
 };
 
-#endif // RENDERSTATE_H
+#endif  // VIRTUAL_CREATOR_RENDERSTATES_RENDERSTATE_H_
