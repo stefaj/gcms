@@ -1,17 +1,24 @@
-#include "drawgl.h"
+/* Copyright 2015 Ruan Luies */
 
-DrawGL::DrawGL()
-{
+#include "./drawgl.h"
 
+DrawGL::DrawGL() {
 }
 
-void DrawGL::UpdateShaders(QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate, QOpenGLTexture * texture,QVector3D color, QVector2D texturecooredinates, QOpenGLShaderProgram *shader_program, QMatrix4x4 pmatrix){
+void DrawGL::UpdateShaders(QMatrix4x4 wvp,
+                           QMatrix4x4 mvp,
+                           QMatrix4x4 rotate,
+                           QOpenGLTexture* texture,
+                           QVector3D color,
+                           QVector2D texturecooredinates,
+                           QOpenGLShaderProgram* shader_program,
+                           QMatrix4x4 pmatrix) {
     // bind the current shader code
     shader_program->bind();
     // bind the texture for the object
     texture->bind();
     // update the colour of the object
-    shader_program->setUniformValue("col",color);
+    shader_program->setUniformValue("col", color);
     // change the rotation of the object in the shader
     shader_program->setUniformValue("rotationMatrix", rotate);
     // update model view projection
@@ -21,14 +28,21 @@ void DrawGL::UpdateShaders(QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate, QOp
     // use GL_TEXTURE0
     shader_program->setUniformValue("texture", 0);
     // set the varying texture coordinate
-    shader_program->setUniformValue("texture_coordinates",texturecooredinates);
+    shader_program->setUniformValue("texture_coordinates",
+                                    texturecooredinates);
 }
 
-void DrawGL::UpdateShaders(QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate,QVector3D color, QVector2D texturecooredinates, QOpenGLShaderProgram *shader_program, QMatrix4x4 pmatrix){
+void DrawGL::UpdateShaders(QMatrix4x4 wvp,
+                           QMatrix4x4 mvp,
+                           QMatrix4x4 rotate,
+                           QVector3D color,
+                           QVector2D texturecooredinates,
+                           QOpenGLShaderProgram *shader_program,
+                           QMatrix4x4 pmatrix) {
     // bind the current shader code
     shader_program->bind();
     // update the colour of the object
-    shader_program->setUniformValue("col",color);
+    shader_program->setUniformValue("col", color);
     // change the rotation of the object in the shader
     shader_program->setUniformValue("rotationMatrix", rotate);
     // update model view projection
@@ -38,10 +52,12 @@ void DrawGL::UpdateShaders(QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate,QVec
     // use GL_TEXTURE0
     shader_program->setUniformValue("texture", 0);
     // set the varying texture coordinate
-    shader_program->setUniformValue("texture_coordinates",texturecooredinates);
+    shader_program->setUniformValue("texture_coordinates",
+                                    texturecooredinates);
 }
 
-void DrawGL::ShaderDraw(ModelMesh *box,QOpenGLShaderProgram *shader_program){
+void DrawGL::ShaderDraw(ModelMesh* box,
+                        QOpenGLShaderProgram* shader_program) {
     // load the vertices to the shaders
     shader_program->setAttributeArray("vertex", box->vertices.constData());
     // enable the shader attribute( vertices )
@@ -51,7 +67,8 @@ void DrawGL::ShaderDraw(ModelMesh *box,QOpenGLShaderProgram *shader_program){
     // enable the shader attribute( normals )
     shader_program->enableAttributeArray("normal");
     // load the texture coordinates to the shaders
-    shader_program->setAttributeArray("textureCoordinate", box->textureCoordinates.constData());
+    shader_program->setAttributeArray("textureCoordinate",
+                                      box->textureCoordinates.constData());
     // enable the texture attribute
     shader_program->enableAttributeArray("textureCoordinate");
     // draw the opengl vertices
@@ -64,47 +81,99 @@ void DrawGL::ShaderDraw(ModelMesh *box,QOpenGLShaderProgram *shader_program){
     shader_program->disableAttributeArray("textureCoordinate");
     // release the current updated shader code (awaiting next frame)
     shader_program->release();
-   }
+}
 
-void DrawGL::DrawLine(QVector3D point1, QVector3D point2,QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate, QVector3D color,QOpenGLShaderProgram *shader_program, QMatrix4x4 pmatrix){
+void DrawGL::DrawLine(QVector3D point1,
+                      QVector3D point2,
+                      QMatrix4x4 wvp,
+                      QMatrix4x4 mvp,
+                      QMatrix4x4 rotate,
+                      QVector3D color,
+                      QOpenGLShaderProgram* shader_program,
+                      QMatrix4x4 pmatrix) {
     QVector< QVector3D > temp_vertices;
     temp_vertices.push_back(point1);
     temp_vertices.push_back(point2);
-    UpdateShaders(wvp, mvp, rotate, color,QVector2D(1,1),shader_program,pmatrix);
-    shader_program->setAttributeArray("vertex", temp_vertices.constData());//load the vertices to the shaders
-    shader_program->enableAttributeArray("vertex");//enable the shader attribute( vertices )
-    shader_program->setAttributeArray("normal", temp_vertices.constData());//load the normals to the shaders
-    shader_program->enableAttributeArray("normal");//enable the shader attribute( vertices )
+    UpdateShaders(wvp,
+                  mvp,
+                  rotate,
+                  color,
+                  QVector2D(1, 1),
+                  shader_program,
+                  pmatrix);
+    // load the vertices to the shaders
+    shader_program->setAttributeArray("vertex", temp_vertices.constData());
+    // enable the shader attribute( vertices )
+    shader_program->enableAttributeArray("vertex");
+    // load the normals to the shaders
+    shader_program->setAttributeArray("normal", temp_vertices.constData());
+    // enable the shader attribute( vertices )
+    shader_program->enableAttributeArray("normal");
     glLineWidth(3.5);
     glDisable(GL_DEPTH_TEST);
     glDepthFunc(GL_ALWAYS);
     glDrawArrays(GL_LINES, 0, temp_vertices.size());
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    shader_program->disableAttributeArray("vertex");// disable the vertex attributes
-    shader_program->disableAttributeArray("normal");// disable the normal attributes
-    shader_program->release(); // release the current updated shader code (awaiting next frame)
+    // disable the vertex attributes
+    shader_program->disableAttributeArray("vertex");
+    // disable the normal attributes
+    shader_program->disableAttributeArray("normal");
+    // release the current updated shader code (awaiting next frame)
+    shader_program->release();
     temp_vertices.clear();
 }
 
-void DrawGL::DrawModel(ModelMesh *box,QMatrix4x4 wvp,QMatrix4x4 mvp, QMatrix4x4 rotate,QOpenGLTexture *texture,QVector3D color,QVector2D texturecoordmulti,QOpenGLShaderProgram *shader_program, QMatrix4x4 pmatrix){
-     UpdateShaders(wvp, mvp, rotate,texture, color,texturecoordmulti,shader_program,pmatrix);
-     ShaderDraw(box,shader_program);
+void DrawGL::DrawModel(ModelMesh *box,
+                       QMatrix4x4 wvp,
+                       QMatrix4x4 mvp,
+                       QMatrix4x4 rotate,
+                       QOpenGLTexture* texture,
+                       QVector3D color,
+                       QVector2D texturecoordmulti,
+                       QOpenGLShaderProgram* shader_program,
+                       QMatrix4x4 pmatrix) {
+     UpdateShaders(wvp,
+                   mvp,
+                   rotate,
+                   texture,
+                   color,
+                   texturecoordmulti,
+                   shader_program,
+                   pmatrix);
+     ShaderDraw(box,
+                shader_program);
 }
 
-void DrawGL::draw_if_true(ModelMesh* model,QMatrix4x4 view, QVector3D position,QVector3D rotation, QVector3D scaling, QOpenGLTexture * texture, QVector3D color, QVector2D texturecoord, QMatrix4x4 pmatrix, QOpenGLShaderProgram *shader_program, bool value){
-    if(value){
+void DrawGL::draw_if_true(ModelMesh *model,
+                          QMatrix4x4 view,
+                          QVector3D position,
+                          QVector3D rotation,
+                          QVector3D scaling,
+                          QOpenGLTexture* texture,
+                          QVector3D color,
+                          QVector2D texturecoord,
+                          QMatrix4x4 pmatrix,
+                          QOpenGLShaderProgram* shader_program,
+                          bool value) {
+    if ( value ) {
         QMatrix4x4 translation;
         translation.translate(position);
         QMatrix4x4 rotationmat;
-        rotationmat.rotate(rotation.y(),0,1,0);
+        rotationmat.rotate(rotation.y(), 0, 1, 0);
         rotationmat.scale(scaling);
-        DrawGL::DrawModel(model, view, translation,rotationmat,texture,color,texturecoord, shader_program, pmatrix);
+        DrawGL::DrawModel(model,
+                          view,
+                          translation,
+                          rotationmat,
+                          texture,
+                          color,
+                          texturecoord,
+                          shader_program,
+                          pmatrix);
     }
 }
 
-DrawGL::~DrawGL()
-{
-
+DrawGL::~DrawGL() {
 }
 

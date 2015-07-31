@@ -1,30 +1,30 @@
-#include "nodebutton.h"
+/* Copyright 2015 Ruan Luies */
 
-NodeButton::NodeButton(QWidget *parent) :QPushButton(parent),directory(false){
+#include "./nodebutton.h"
+
+NodeButton::NodeButton(QWidget *parent) :QPushButton(parent), directory(false) {
 }
 
-void NodeButton::setIndex(int value){
+void NodeButton::setIndex(int value) {
     this->index = value;
 }
 
-int NodeButton::getIndex(){
+int NodeButton::getIndex() {
     return this->index;
 }
 
-void NodeButton::mousePressEvent(QMouseEvent * ){
+void NodeButton::mousePressEvent(QMouseEvent* /*event*/ ) {
     emit clicked_index(this->index, this->directory);
 }
 
-void NodeButton::setDirectory(bool directory){
+void NodeButton::setDirectory(bool directory) {
     this->directory = directory;
 }
 
-bool NodeButton::isDirectory(){
+bool NodeButton::isDirectory() {
     return this->directory;
 }
 
-NodeButton::~NodeButton()
-{
-
+NodeButton::~NodeButton() {
 }
 
