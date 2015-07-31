@@ -58,30 +58,36 @@ void DrawGL::UpdateShaders(QMatrix4x4 wvp,
 
 void DrawGL::ShaderDraw(ModelMesh* box,
                         QOpenGLShaderProgram* shader_program) {
-    // load the vertices to the shaders
-    shader_program->setAttributeArray("vertex", box->vertices.constData());
-    // enable the shader attribute( vertices )
-    shader_program->enableAttributeArray("vertex");
-    // load the normals to the shaders
-    shader_program->setAttributeArray("normal", box->normals.constData());
-    // enable the shader attribute( normals )
-    shader_program->enableAttributeArray("normal");
-    // load the texture coordinates to the shaders
-    shader_program->setAttributeArray("textureCoordinate",
-                                      box->textureCoordinates.constData());
-    // enable the texture attribute
-    shader_program->enableAttributeArray("textureCoordinate");
+  if ( (box == (void*)0x1) || (box == (void*)0x0) ||
+       (shader_program == (void*)0x1) ||
+       (shader_program == (void*)0x0)) {
+      return;
+  }
+  // load the vertices to the shaders
+  shader_program->setAttributeArray("vertex", box->vertices.constData());
+  // enable the shader attribute( vertices )
+  shader_program->enableAttributeArray("vertex");
+  // load the normals to the shaders
+  shader_program->setAttributeArray("normal", box->normals.constData());
+  // enable the shader attribute( normals )
+  shader_program->enableAttributeArray("normal");
+  // load the texture coordinates to the shaders
+  shader_program->setAttributeArray("textureCoordinate",
+                                    box->textureCoordinates.constData());
+  // enable the texture attribute
+  shader_program->enableAttributeArray("textureCoordinate");
     // draw the opengl vertices
-    box->Draw();
-    // disable the vertex attributes
-    shader_program->disableAttributeArray("vertex");
-    // disable the normal attributes
-    shader_program->disableAttributeArray("normal");
-    // disable the Texture coordinates attributes
-    shader_program->disableAttributeArray("textureCoordinate");
-    // release the current updated shader code (awaiting next frame)
-    shader_program->release();
+  box->Draw();
+  // disable the vertex attributes
+  shader_program->disableAttributeArray("vertex");
+  // disable the normal attributes
+  shader_program->disableAttributeArray("normal");
+  // disable the Texture coordinates attributes
+  shader_program->disableAttributeArray("textureCoordinate");
+  // release the current updated shader code (awaiting next frame)
+  shader_program->release();
 }
+
 
 void DrawGL::DrawLine(QVector3D point1,
                       QVector3D point2,

@@ -142,28 +142,29 @@ void VirtualConciergeRenderstate::LoadObjects(QString path) {
 }
 
 void VirtualConciergeRenderstate::LoadContent() {
-    // this initializes all the opengl functions
-    initializeOpenGLFunctions();
+  // this initializes all the opengl functions
+  initializeOpenGLFunctions();
 
-    // load meshes
-    this->node = new ModelMesh(":/Sphere");
-    this->plane = new ModelMesh(":/Plane");
-    this->door = new ModelMesh("://DoorWay01");
-    this->wall = new ModelMesh("://Wall01");
-    this->tree = new ModelMesh("://Tree01");
+   // load meshes
+  this->node = new ModelMesh(":/Sphere");
+  this->plane = new ModelMesh(":/Plane");
+  this->door = new ModelMesh("://DoorWay01");
+  this->wall = new ModelMesh("://Wall01");
+  this->tree = new ModelMesh("://Tree01");
 
-    // load objects and textures
-    if ( PremisesExporter::fileExists("VirtualConcierge/textures.tl"))
-        LoadTextures("VirtualConcierge/textures.tl");
-    if ( PremisesExporter::fileExists("VirtualConcierge/environment.env"))
-        LoadObjects("VirtualConcierge/environment.env");
-    // load shaders
-    this->program = new QOpenGLShaderProgram();
-    this->program->addShaderFromSourceFile(QOpenGLShader::Vertex,
-                                           ":/Vertex");
-    this->program->addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                           ":/Fragment");
-    this->program->link();
+  // load environment and textures
+  if ( PremisesExporter::fileExists("VirtualConcierge/textures.tl"))
+     LoadTextures("VirtualConcierge/textures.tl");
+  if ( PremisesExporter::fileExists("VirtualConcierge/environment.env"))
+    LoadObjects("VirtualConcierge/environment.env");
+
+  // load shaders, both the vertex and pixel shader
+  this->program = new QOpenGLShaderProgram();
+  this->program->addShaderFromSourceFile(QOpenGLShader::Vertex,
+                                         ":/Vertex");
+  this->program->addShaderFromSourceFile(QOpenGLShader::Fragment,
+                                         ":/Fragment");
+  this->program->link();
 }
 
 void VirtualConciergeRenderstate::initializeGL() {

@@ -6,93 +6,106 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow) {
-    ui->setupUi(this);
+  ui(new Ui::MainWindow) {
+  ui->setupUi(this);
 
-    // hide things not needed
-    ui->groupBox_node_settings->setVisible(false);
-    ui->groupBox_floor_plan_settings->setVisible(false);
+  // hide things not needed
+  ui->groupBox_node_settings->setVisible(false);
+  ui->groupBox_floor_plan_settings->setVisible(false);
 
-    // set clickable buttons
-    ui->button_node->setCheckable(true);
-    ui->button_link->setCheckable(true);
-    ui->button_remove_node->setCheckable(true);
-    ui->button_remove_tree->setCheckable(true);
-    ui->button_pavement->setCheckable(true);
-    ui->button_door->setCheckable(true);
-    ui->button_wall->setCheckable(true);
-    ui->button_tree1->setCheckable(true);
-    ui->button_floor_plan->setCheckable(true);
+  // set clickable buttons
+  ui->button_node->setCheckable(true);
+  ui->button_link->setCheckable(true);
+  ui->button_remove_node->setCheckable(true);
+  ui->button_remove_tree->setCheckable(true);
+  ui->button_pavement->setCheckable(true);
+  ui->button_door->setCheckable(true);
+  ui->button_wall->setCheckable(true);
+  ui->button_tree1->setCheckable(true);
+  ui->button_floor_plan->setCheckable(true);
 
-    // connections to all the slots of the opengl widget
-    connect(this, SIGNAL(place_node(bool)),
-            ui->openGLWidget, SLOT(allow_node(bool)));
-    connect(this, SIGNAL(remove_nodes(bool)),
-            ui->openGLWidget, SLOT(allow_remove_node(bool)));
-    connect(this, SIGNAL(remove_trees(bool)),
-            ui->openGLWidget, SLOT(allow_remove_tree(bool)));
-    connect(this, SIGNAL(node_links(bool)),
-            ui->openGLWidget, SLOT(allow_link(bool)));
-    connect(this, SIGNAL(place_pavement(bool)),
-            ui->openGLWidget, SLOT(allow_pavement(bool)));
-    connect(this, SIGNAL(place_wall(bool)),
-            ui->openGLWidget, SLOT(allow_wall(bool)));
-    connect(this, SIGNAL(place_door(bool)),
-            ui->openGLWidget, SLOT(allow_door(bool)));
-    connect(this, SIGNAL(change_rotationY(double)),
-            ui->openGLWidget, SLOT(change_rotY(double)));
-    connect(this, SIGNAL(invert_mouseY(bool)),
-            ui->openGLWidget, SLOT(invert_mouseY(bool)));
-    connect(this, SIGNAL(place_tree(bool)),
-            ui->openGLWidget, SLOT(allow_tree(bool)));
-    connect(this, SIGNAL(place_floor_plan(bool)),
-            ui->openGLWidget, SLOT(allow_floor_plan(bool)));
-    connect(this, SIGNAL(add_new_texture(QString)),
-            ui->openGLWidget, SLOT(load_texture_from_file(QString)));
-    connect(this, SIGNAL(set_object_scale(QVector3D)),
-            ui->openGLWidget, SLOT(set_object_scale(QVector3D)));
-    connect(this, SIGNAL(change_floor_selected(float)),
-            ui->openGLWidget, SLOT(change_current_floor_height(float)));
-    connect(this, SIGNAL(change_node_name(QString)),
-            ui->openGLWidget, SLOT(set_next_node_name(QString)));
-    connect(this, SIGNAL(set_node_significant(bool)),
-            ui->openGLWidget, SLOT(set_next_node_significant(bool)));
-    connect(this, SIGNAL(load_premises(QString)),
-            ui->openGLWidget, SLOT(load_premises(QString)));
-    connect(ui->actionOpen_Premises_File, SIGNAL(triggered()),
-            this, SLOT(send_loaded_premises()));
-    connect(ui->actionEdit_User_Interface, SIGNAL(triggered()),
-            this, SLOT(load_virtual_concierge_interface()));
+  // connections to all the slots of the opengl widget
+  connect(this, SIGNAL(place_node(bool)),
+          ui->openGLWidget, SLOT(allow_node(bool)));
+  connect(this, SIGNAL(remove_nodes(bool)),
+          ui->openGLWidget, SLOT(allow_remove_node(bool)));
+  connect(this, SIGNAL(remove_trees(bool)),
+          ui->openGLWidget, SLOT(allow_remove_tree(bool)));
+  connect(this, SIGNAL(node_links(bool)),
+          ui->openGLWidget, SLOT(allow_link(bool)));
+  connect(this, SIGNAL(place_pavement(bool)),
+          ui->openGLWidget, SLOT(allow_pavement(bool)));
+  connect(this, SIGNAL(place_wall(bool)),
+          ui->openGLWidget, SLOT(allow_wall(bool)));
+  connect(this, SIGNAL(place_door(bool)),
+          ui->openGLWidget, SLOT(allow_door(bool)));
+  connect(this, SIGNAL(change_rotationY(double)),
+          ui->openGLWidget, SLOT(change_rotY(double)));
+  connect(this, SIGNAL(invert_mouseY(bool)),
+          ui->openGLWidget, SLOT(invert_mouseY(bool)));
+  connect(this, SIGNAL(place_tree(bool)),
+          ui->openGLWidget, SLOT(allow_tree(bool)));
+  connect(this, SIGNAL(place_floor_plan(bool)),
+          ui->openGLWidget, SLOT(allow_floor_plan(bool)));
+  connect(this, SIGNAL(add_new_texture(QString)),
+          ui->openGLWidget, SLOT(load_texture_from_file(QString)));
+  connect(this, SIGNAL(set_object_scale(QVector3D)),
+          ui->openGLWidget, SLOT(set_object_scale(QVector3D)));
+  connect(this, SIGNAL(change_floor_selected(float)),
+          ui->openGLWidget, SLOT(change_current_floor_height(float)));
+  connect(this, SIGNAL(change_node_name(QString)),
+          ui->openGLWidget, SLOT(set_next_node_name(QString)));
+  connect(this, SIGNAL(set_node_significant(bool)),
+          ui->openGLWidget, SLOT(set_next_node_significant(bool)));
+  connect(this, SIGNAL(load_premises(QString)),
+          ui->openGLWidget, SLOT(load_premises(QString)));
+  connect(ui->actionOpen_Premises_File, SIGNAL(triggered()),
+          this, SLOT(send_loaded_premises()));
+  connect(ui->actionEdit_User_Interface, SIGNAL(triggered()),
+          this, SLOT(load_virtual_concierge_interface()));
+  connect(ui->openGLWidget, SIGNAL(opengl_initialised(bool)),
+          this, SLOT(is_opengl_valid_context(bool)));
 }
 
 MainWindow::~MainWindow() {delete ui;}
 
+void MainWindow::is_opengl_valid_context(bool is_valid_context) {
+  opengl_initialised = is_valid_context;
+  if ( opengl_initialised ) {
+    // load temporary stored environment
+    QString temp_directory = "VirtualConcierge/environment.env";
+    if ( PremisesExporter::fileExists(temp_directory) ) {
+      emit load_premises(temp_directory);
+    }
+  }
+}
+
 void MainWindow::EmitSignals() {
-    emit node_links(ui->button_link->isChecked());
-    emit place_node(ui->button_node->isChecked());
-    emit remove_nodes(ui->button_remove_node->isChecked());
-    emit place_pavement(ui->button_pavement->isChecked());
-    emit place_door(ui->button_door->isChecked());
-    emit place_wall(ui->button_wall->isChecked());
-    emit place_tree(ui->button_tree1->isChecked());
-    emit remove_trees(ui->button_remove_tree->isChecked());
-    emit place_floor_plan(ui->button_floor_plan->isChecked());
-    ui->groupBox_node_settings->setVisible(ui->button_node->isChecked());
-    ui->groupBox_floor_plan_settings->setVisible(
-                ui->button_floor_plan->isChecked());
+  emit node_links(ui->button_link->isChecked());
+  emit place_node(ui->button_node->isChecked());
+  emit remove_nodes(ui->button_remove_node->isChecked());
+  emit place_pavement(ui->button_pavement->isChecked());
+  emit place_door(ui->button_door->isChecked());
+  emit place_wall(ui->button_wall->isChecked());
+  emit place_tree(ui->button_tree1->isChecked());
+  emit remove_trees(ui->button_remove_tree->isChecked());
+  emit place_floor_plan(ui->button_floor_plan->isChecked());
+  ui->groupBox_node_settings->setVisible(ui->button_node->isChecked());
+  ui->groupBox_floor_plan_settings->setVisible(
+              ui->button_floor_plan->isChecked());
 }
 
 void MainWindow::on_button_node_clicked() {
-    ui->button_link->setChecked(false);
-    ui->button_remove_node->setChecked(false);
-    ui->button_pavement->setChecked(false);
-    ui->button_door->setChecked(false);
-    ui->button_wall->setChecked(false);
-    ui->button_tree1->setChecked(false);
-    ui->button_remove_tree->setChecked(false);
-    ui->button_floor_plan->setChecked(false);
-    ui->stackedWidget_side_add->setCurrentIndex(0);
-    EmitSignals();
+  ui->button_link->setChecked(false);
+  ui->button_remove_node->setChecked(false);
+  ui->button_pavement->setChecked(false);
+  ui->button_door->setChecked(false);
+  ui->button_wall->setChecked(false);
+  ui->button_tree1->setChecked(false);
+  ui->button_remove_tree->setChecked(false);
+  ui->button_floor_plan->setChecked(false);
+  ui->stackedWidget_side_add->setCurrentIndex(0);
+  EmitSignals();
 }
 
 void MainWindow::send_loaded_premises() {
@@ -100,69 +113,69 @@ void MainWindow::send_loaded_premises() {
                                      tr("Open Environment File"),
                                      "/home/environment",
                                      tr("Environment Files (*.env)"));
-    if ( PremisesExporter::fileExists(file_name) ) {
-        emit load_premises(file_name);
+  if ( PremisesExporter::fileExists(file_name) ) {
+      emit load_premises(file_name);
     }
 }
 
 void MainWindow::on_button_link_clicked() {
-    ui->button_node->setChecked(false);
-    ui->button_remove_node->setChecked(false);
-    ui->button_pavement->setChecked(false);
-    ui->button_door->setChecked(false);
-    ui->button_wall->setChecked(false);
-    ui->button_tree1->setChecked(false);
-    ui->button_remove_tree->setChecked(false);
-    ui->button_floor_plan->setChecked(false);
-    EmitSignals();
+  ui->button_node->setChecked(false);
+  ui->button_remove_node->setChecked(false);
+  ui->button_pavement->setChecked(false);
+  ui->button_door->setChecked(false);
+  ui->button_wall->setChecked(false);
+  ui->button_tree1->setChecked(false);
+  ui->button_remove_tree->setChecked(false);
+  ui->button_floor_plan->setChecked(false);
+  EmitSignals();
 }
 
 void MainWindow::on_button_remove_node_clicked() {
-    ui->button_node->setChecked(false);
-    ui->button_link->setChecked(false);
-    ui->button_pavement->setChecked(false);
-    ui->button_door->setChecked(false);
-    ui->button_wall->setChecked(false);
-    ui->button_tree1->setChecked(false);
-    ui->button_remove_tree->setChecked(false);
-    ui->button_floor_plan->setChecked(false);
-    EmitSignals();
+  ui->button_node->setChecked(false);
+  ui->button_link->setChecked(false);
+  ui->button_pavement->setChecked(false);
+  ui->button_door->setChecked(false);
+  ui->button_wall->setChecked(false);
+  ui->button_tree1->setChecked(false);
+  ui->button_remove_tree->setChecked(false);
+  ui->button_floor_plan->setChecked(false);
+  EmitSignals();
 }
 
 void MainWindow::on_button_pavement_clicked() {
-    ui->button_node->setChecked(false);
-    ui->button_link->setChecked(false);
-    ui->button_remove_node->setChecked(false);
-    ui->button_door->setChecked(false);
-    ui->button_wall->setChecked(false);
-    ui->button_tree1->setChecked(false);
-    ui->button_remove_tree->setChecked(false);
-    ui->button_floor_plan->setChecked(false);
-    EmitSignals();
+  ui->button_node->setChecked(false);
+  ui->button_link->setChecked(false);
+  ui->button_remove_node->setChecked(false);
+  ui->button_door->setChecked(false);
+  ui->button_wall->setChecked(false);
+  ui->button_tree1->setChecked(false);
+  ui->button_remove_tree->setChecked(false);
+  ui->button_floor_plan->setChecked(false);
+  EmitSignals();
 }
 
 void MainWindow::on_button_wall_clicked() {
-    ui->button_node->setChecked(false);
-    ui->button_link->setChecked(false);
-    ui->button_remove_node->setChecked(false);
-    ui->button_door->setChecked(false);
-    ui->button_pavement->setChecked(false);
-    ui->button_tree1->setChecked(false);
-    ui->button_remove_tree->setChecked(false);
-    ui->button_floor_plan->setChecked(false);
-    EmitSignals();
+  ui->button_node->setChecked(false);
+  ui->button_link->setChecked(false);
+  ui->button_remove_node->setChecked(false);
+  ui->button_door->setChecked(false);
+  ui->button_pavement->setChecked(false);
+  ui->button_tree1->setChecked(false);
+  ui->button_remove_tree->setChecked(false);
+  ui->button_floor_plan->setChecked(false);
+  EmitSignals();
 }
 
 void MainWindow::on_button_door_clicked() {
-    ui->button_node->setChecked(false);
-    ui->button_link->setChecked(false);
-    ui->button_remove_node->setChecked(false);
-    ui->button_pavement->setChecked(false);
-    ui->button_wall->setChecked(false);
-    ui->button_tree1->setChecked(false);
-    ui->button_remove_tree->setChecked(false);
-    ui->button_floor_plan->setChecked(false);
-    EmitSignals();
+  ui->button_node->setChecked(false);
+  ui->button_link->setChecked(false);
+  ui->button_remove_node->setChecked(false);
+  ui->button_pavement->setChecked(false);
+  ui->button_wall->setChecked(false);
+  ui->button_tree1->setChecked(false);
+  ui->button_remove_tree->setChecked(false);
+  ui->button_floor_plan->setChecked(false);
+  EmitSignals();
 }
 
 void MainWindow::on_spin_rotationY_valueChanged(double arg1) {
@@ -170,33 +183,33 @@ void MainWindow::on_spin_rotationY_valueChanged(double arg1) {
 }
 
 void MainWindow::on_checkBox_inversemouse_y_clicked(bool checked) {
-    emit invert_mouseY(checked);
+  emit invert_mouseY(checked);
 }
 
 void MainWindow::on_button_tree1_clicked() {
-    ui->button_node->setChecked(false);
-    ui->button_link->setChecked(false);
-    ui->button_remove_node->setChecked(false);
-    ui->button_pavement->setChecked(false);
-    ui->button_wall->setChecked(false);
-    ui->button_door->setChecked(false);
-    ui->button_remove_tree->setChecked(false);
-    ui->button_floor_plan->setChecked(false);
+  ui->button_node->setChecked(false);
+  ui->button_link->setChecked(false);
+  ui->button_remove_node->setChecked(false);
+  ui->button_pavement->setChecked(false);
+  ui->button_wall->setChecked(false);
+  ui->button_door->setChecked(false);
+  ui->button_remove_tree->setChecked(false);
+  ui->button_floor_plan->setChecked(false);
 
-    EmitSignals();
+  EmitSignals();
 }
 
 void MainWindow::on_button_remove_tree_clicked() {
-    ui->button_node->setChecked(false);
-    ui->button_link->setChecked(false);
-    ui->button_remove_node->setChecked(false);
-    ui->button_pavement->setChecked(false);
-    ui->button_wall->setChecked(false);
-    ui->button_door->setChecked(false);
-    ui->button_tree1->setChecked(false);
-    ui->button_floor_plan->setChecked(false);
+  ui->button_node->setChecked(false);
+  ui->button_link->setChecked(false);
+  ui->button_remove_node->setChecked(false);
+  ui->button_pavement->setChecked(false);
+  ui->button_wall->setChecked(false);
+  ui->button_door->setChecked(false);
+  ui->button_tree1->setChecked(false);
+  ui->button_floor_plan->setChecked(false);
 
-    EmitSignals();
+  EmitSignals();
 }
 
 void MainWindow::on_button_execute_virtual_concierge_clicked() {
@@ -205,45 +218,45 @@ void MainWindow::on_button_execute_virtual_concierge_clicked() {
 }
 
 void MainWindow::on_button_floor_plan_clicked() {
-    ui->button_node->setChecked(false);
-    ui->button_link->setChecked(false);
-    ui->button_remove_node->setChecked(false);
-    ui->button_pavement->setChecked(false);
-    ui->button_wall->setChecked(false);
-    ui->button_door->setChecked(false);
-    ui->button_tree1->setChecked(false);
-    ui->button_remove_tree->setChecked(false);
-    EmitSignals();
+  ui->button_node->setChecked(false);
+  ui->button_link->setChecked(false);
+  ui->button_remove_node->setChecked(false);
+  ui->button_pavement->setChecked(false);
+  ui->button_wall->setChecked(false);
+  ui->button_door->setChecked(false);
+  ui->button_tree1->setChecked(false);
+  ui->button_remove_tree->setChecked(false);
+  EmitSignals();
 
-    ui->stackedWidget_side_add->setCurrentIndex(1);
+  ui->stackedWidget_side_add->setCurrentIndex(1);
     // emit new scale for the floor plan
-    emit set_object_scale(QVector3D(
-                              ui->doubleSpinBox_floor_plan_width->value(),
+  emit set_object_scale(QVector3D(
+                            ui->doubleSpinBox_floor_plan_width->value(),
                               1,
-                              ui->doubleSpinBox_floor_plan_height->value()));
+                            ui->doubleSpinBox_floor_plan_height->value()));
 
-    if ( ui->button_floor_plan->isChecked() ) {
+  if ( ui->button_floor_plan->isChecked() ) {
         QString file_name = QFileDialog::getOpenFileName(this,
                                        tr("Open Image"),
                                         "/home/image_file",
                                        tr("Image Files (*.png *.jpg *.bmp)"));
-        if ( PremisesExporter::fileExists(file_name) ) {
-            emit add_new_texture(file_name);
-        } else {
-            emit add_new_texture("://Texture0");
-        }
+    if ( PremisesExporter::fileExists(file_name) ) {
+      emit add_new_texture(file_name);
+    } else {
+        emit add_new_texture("://Texture0");
     }
+  }
 }
 
 void MainWindow::on_doubleSpinBox_floor_plan_width_valueChanged(double arg1) {
-    emit set_object_scale(QVector3D(
+  emit set_object_scale(QVector3D(
                               arg1,
                               1,
-                              ui->doubleSpinBox_floor_plan_height->value()));
+                            ui->doubleSpinBox_floor_plan_height->value()));
 }
 
 void MainWindow::on_doubleSpinBox_floor_plan_height_valueChanged(double arg1) {
-    emit set_object_scale(QVector3D(
+  emit set_object_scale(QVector3D(
                             ui->doubleSpinBox_floor_plan_width->value(),
                             1,
                             arg1));
@@ -251,21 +264,21 @@ void MainWindow::on_doubleSpinBox_floor_plan_height_valueChanged(double arg1) {
 
 void MainWindow::on_spinBox_floor_level_valueChanged(int arg1) {
     // show whenever the ground floor is active
-    if ( arg1 == 0 ) {
-        ui->label_ground_floor->setVisible(true);
+  if ( arg1 == 0 ) {
+      ui->label_ground_floor->setVisible(true);
     } else {
-        ui->label_ground_floor->setVisible(false);
+      ui->label_ground_floor->setVisible(false);
     }
     // sends the current floor to the opengl window
-    emit change_floor_selected(static_cast<float>(arg1));
+  emit change_floor_selected(static_cast<float>(arg1));
 }
 
 void MainWindow::on_lineEdit_node_name_textChanged(const QString &arg1) {
-    emit change_node_name(arg1);
+  emit change_node_name(arg1);
 }
 
 void MainWindow::on_checkbox_significant_clicked(bool checked) {
-    emit set_node_significant(checked);
+  emit set_node_significant(checked);
 }
 
 void MainWindow::load_virtual_concierge_interface() {

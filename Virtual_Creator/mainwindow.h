@@ -38,10 +38,12 @@ class MainWindow : public QMainWindow {
     void on_checkbox_significant_clicked(bool checked);
     void send_loaded_premises();
     void load_virtual_concierge_interface();
+    void is_opengl_valid_context(bool);
 
  private:
     Ui::MainWindow *ui;
     void EmitSignals();
+    bool opengl_initialised;
 
  signals:
     void place_node(bool placable);  // allows a node to be placed

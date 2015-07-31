@@ -16,11 +16,11 @@ class DrawGL {
  public:
     DrawGL();
     ~DrawGL();
-    static void DrawModel(ModelMesh *,
+    static void DrawModel(ModelMesh*,
                           QMatrix4x4,
                           QMatrix4x4,
                           QMatrix4x4,
-                          QOpenGLTexture *,
+                          QOpenGLTexture*,
                           QVector3D,
                           QVector2D,
                           QOpenGLShaderProgram*,
@@ -35,13 +35,13 @@ class DrawGL {
                          QOpenGLShaderProgram*,
                          QMatrix4x4);
 
-    static void ShaderDraw(ModelMesh *,
+    static void ShaderDraw(ModelMesh*,
                            QOpenGLShaderProgram*);
 
     static void UpdateShaders(QMatrix4x4,
                               QMatrix4x4,
                               QMatrix4x4,
-                              QOpenGLTexture *,
+                              QOpenGLTexture*,
                               QVector3D,
                               QVector2D,
                               QOpenGLShaderProgram*,
@@ -60,11 +60,11 @@ class DrawGL {
                              QVector3D,
                              QVector3D,
                              QVector3D,
-                             QOpenGLTexture *,
+                             QOpenGLTexture*,
                              QVector3D,
                              QVector2D,
                              QMatrix4x4,
-                             QOpenGLShaderProgram *,
+                             QOpenGLShaderProgram*,
                              bool);
 };
 

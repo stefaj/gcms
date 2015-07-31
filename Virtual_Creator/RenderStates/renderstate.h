@@ -112,6 +112,9 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     void set_next_node_name(QString name);
     void set_next_node_significant(bool is_significant);
     void load_premises(QString filename);
+
+  signals:
+    void opengl_initialised(bool);
 };
 
 #endif  // VIRTUAL_CREATOR_RENDERSTATES_RENDERSTATE_H_
