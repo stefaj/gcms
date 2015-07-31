@@ -151,25 +151,26 @@ void RenderState::change_current_floor_height(float value) {
 }
 
 void RenderState::load_texture_from_file(QString value) {
-    QString val_new = "VirtualConcierge/" +
-                      QString("TEX") +
-                      QString::number(this->texture_paths.count());
-    if ( QFile::exists(val_new) )
-        QFile::remove(val_new);
+  QString val_new = "VirtualConcierge/" +
+          QString("TEX") +
+          QString::number(this->texture_paths.count());
 
-    // try to copy the texture to the drive
-    if ( !QFile::copy(value, val_new) )
+  // try to copy the texture to the drive
+  if ( !QFile::copy(value, val_new) ) {
+    if ( !QFile::exists(val_new) ) {
       QMessageBox::warning(this,
                            tr("Error file copying"),
                            tr("Texture file could not"
                               " be copied to the drive."));
+    }
+  }
 
-    // add texture to the lists
-    QOpenGLTexture* texture = new QOpenGLTexture(QImage(value).mirrored());
-    texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
-    texture->setMagnificationFilter(QOpenGLTexture::Linear);
-    this->textures_from_files.push_back(texture);
-    this->texture_paths.push_back(val_new);
+  // add texture to the lists
+  QOpenGLTexture* texture = new QOpenGLTexture(QImage(value).mirrored());
+  texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+  texture->setMagnificationFilter(QOpenGLTexture::Linear);
+  this->textures_from_files.push_back(texture);
+  this->texture_paths.push_back(val_new);
 }
 
 void RenderState::initializeGL() {
@@ -227,16 +228,16 @@ void RenderState::mouseMoveEvent(QMouseEvent *event) {
                  this->noderadius) {
                 // remove node
                 this->nodes.removeAt(l);
-                const unsigned int countConnected =
-                        this->nodes.value(i)->countConnected();
                 // remove all dependencies
                 for ( int i = 0; i < this->nodes.count(); i++ ) {
-                    for ( int z = 0; z < countConnected; z++ ) {
+                    const unsigned int countConnected =
+                            this->nodes.value(i)->countConnected();
+                    for ( unsigned int z = 0; z < countConnected; z++ ) {
                         if ( this->nodes.value(i)->getConnectedIndex(z) == l)
                             this->nodes.value(i)->RemoveLinkedFromIndex(z);
                     }
                     // move the link back after the node was deleted
-                    for ( int k = 0; k < countConnected; k++ ) {
+                    for ( unsigned int k = 0; k < countConnected; k++ ) {
                         if ( this->nodes.value(i)->getConnectedIndex(k) > l)
                             this->nodes.value(i)->MoveLinkedIndexBack(k);
                     }
@@ -382,7 +383,7 @@ void RenderState::mousePressEvent(QMouseEvent *event) {
                 const unsigned int count_connected =
                           this->nodes.value(i)->countConnected();
                 // remove all the links of the deleted node
-                for ( int z = 0; z < count_connected; z++ ) {
+                for ( unsigned int z = 0; z < count_connected; z++ ) {
                   if ( this->nodes.value(i)->getConnectedIndex(z) == l)
                     this->nodes.value(i)->RemoveLinkedFromIndex(z);
                   }
@@ -1117,56 +1118,50 @@ void RenderState::draw_circle_flat(QVector3D center,
 }
 
 void RenderState::LoadTextures(QString path) {
-    // clear the premises when not empty
-    if ( this->textures_from_files.count() > 0 ) {
-        this->textures_from_files.clear();
-        this->texture_paths.clear();
-    }
+  // clear the premises when not empty
+  if ( this->textures_from_files.count() > 0 ) {
+    this->textures_from_files.clear();
+    this->texture_paths.clear();
+  }
+  /* populate the textures from the text file */
+  if ( PremisesExporter::fileExists(path + QString("textures.tl")) ) {
+    qDebug() << (path + QString("textures.tl"));
+    // load the text file
+    QFile textfile(path + QString("textures.tl"));
+    // open the text file
+    textfile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream ascread(&textfile);
 
-    /* populate the textures from the text file */
-    if ( PremisesExporter::fileExists(path+QString("textures.tl")) ) {
-        // load the text file
-        QFile textfile(path+QString("textures.tl"));
+    if ( textfile.isOpen() ) {
+      // read each line of the file
+      QString line = ascread.readLine();
+      while ( !line.isNull() ) {
+        // break the line up in usable parts
+        QStringList list = line.split(",");
 
-        // open the text file
-        textfile.open(QIODevice::ReadOnly | QIODevice::Text);
-        QTextStream ascread(&textfile);
+        // check the type of line
+        if ( list[0] == "t" ) {
+          int texture_index = 0;
+          QString texture_path = "";
 
-        if ( textfile.isOpen() ) {
-            // read each line of the file
-            QString line = ascread.readLine();
+          // texture type
+          texture_path = list[2];
+          QStringList ls = texture_path.split("/");
 
-            while ( !line.isNull() ) {
-                // break the line up in usable parts
-                QStringList list = line.split(", ");
-
-                // check the type of line
-                /* n-> node
-                 * j-> join
-                 */
-                if ( list[0] == "t" ) {
-                    int texture_index = 0;
-                    QString texture_path = "";
-
-                    // texture type
-                    texture_path = list[2];
-                    QStringList ls = texture_path.split("/");
-
-                    // texture index
-                    QTextStream(&list[1]) >> texture_index;
-                    QString new_path = path+ls[ls.count()-1];
-                    if ( PremisesExporter::fileExists(new_path))
-                        load_texture_from_file(new_path);
-                }
-
-                // read next line
-               line = ascread.readLine();
-            }
-
-            // close the textfile
-            textfile.close();
+          // texture index
+          QTextStream(&list[1]) >> texture_index;
+          QString new_path = path + ls[ls.count()-1];
+          load_texture_from_file(new_path);
         }
+
+      // read next line
+      line = ascread.readLine();
+      }
+
+      // close the textfile
+      textfile.close();
     }
+  }
 }
 
 void RenderState::LoadObjects(QString path) {
@@ -1189,7 +1184,7 @@ void RenderState::LoadObjects(QString path) {
 
         while ( !line.isNull() ) {
             // break the line up in usable parts
-            QStringList list = line.split(", ");
+            QStringList list = line.split(",");
 
             // check the type of line
             /* n-> node
@@ -1270,7 +1265,7 @@ void RenderState::LoadNodes(QString filename) {
 
         while ( !line.isNull() ) {
             // break the line up in usable parts
-            QStringList list = line.split(", ");
+            QStringList list = line.split(",");
 
             // check the type of line
             /* n-> node

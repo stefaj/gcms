@@ -81,10 +81,10 @@ void Node::RemoveLinkedFromIndex(int index) {
 }
 
 void Node::MoveLinkedIndexBack(int index) {
-    // replace the specific index
-    if ( this->connectedindex.value(index) > 0 )
-    this->connectedindex.replace(index,
-                                 this->connectedindex.value(index) - 1);
+  // replace the specific index
+  if ( this->connectedindex.value(index) > 0 )
+  this->connectedindex.replace(index,
+                               this->connectedindex.value(index) - 1);
 }
 
 QVector3D Node::Position() {return *this->position;}

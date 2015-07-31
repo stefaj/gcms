@@ -23,13 +23,13 @@ VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent):
 }
 
 void VirtualConciergeRenderstate::find_path(int start, int end) {
-    if ( (this->handler->count() > start) &&
-         (this->handler->count() > end) )
-        this->handler->CalculateShortest(start, end);
+  if ( (this->handler->count() > start) &&
+       (this->handler->count() > end) )
+      this->handler->CalculateShortest(start, end);
 
-    // update the frame of the virtual concierge
-    paintGL();
-    update();
+  // update the frame of the virtual concierge
+  this->update();
+  this->paintGL();
 }
 
 void VirtualConciergeRenderstate::LoadTextures(QString path) {
