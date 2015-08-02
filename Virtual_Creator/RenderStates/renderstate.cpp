@@ -217,35 +217,13 @@ void RenderState::mouseMoveEvent(QMouseEvent *event) {
         this->position_camera = QVector3D(0, 0, 0);
     }
 
-    // removable dragable nodes
-    if ( this->mousedown_left && this->node_removable ) {
-        // collision detection
-        for ( int l = 0; l < this->nodes.count(); l++ ) {
-            if ( this->current_position->
-                 distanceToPoint(this->nodes.value(l)->Position()) <
-                 this->noderadius) {
-                // remove node
-                this->nodes.removeAt(l);
-                // remove all dependencies
-                for ( int i = 0; i < this->nodes.count(); i++ ) {
-                    const unsigned int countConnected =
-                            this->nodes.value(i)->countConnected();
-                    for ( unsigned int z = 0; z < countConnected; z++ ) {
-                        if ( this->nodes.value(i)->getConnectedIndex(z) == l)
-                            this->nodes.value(i)->RemoveLinkedFromIndex(z);
-                    }
-                    // move the link back after the node was deleted
-                    for ( unsigned int k = 0; k < countConnected; k++ ) {
-                        if ( this->nodes.value(i)->getConnectedIndex(k) > l)
-                            this->nodes.value(i)->MoveLinkedIndexBack(k);
-                    }
-                }
-            }
-        }
-    }
+  // removable dragable nodes
+  if ( this->mousedown_left && this->node_removable ) {
+    RemoveNodes();
+  }
 
-    // update openGL widget
-    update();
+  // update openGL widget
+  update();
 }
 
 void RenderState::mouseReleaseEvent(QMouseEvent * /*event*/) {
@@ -364,55 +342,57 @@ void RenderState::mousePressEvent(QMouseEvent *event) {
         }
     }
 
-    // left click to remove the node
-    if ( (event->button() == Qt::LeftButton) && (this->node_removable) ) {
-        // collision detection
-        for ( int l = 0; l < this->nodes.count(); l++ ) {
-            if ( this->
-                 current_position->distanceToPoint(this->
-                                                   nodes.value(l)->
-                                                   Position()) <
-                 this->noderadius ) {
-                // remove node
-                this->nodes.removeAt(l);
+  // left click to remove the node
+  if ( (event->button() == Qt::LeftButton) && (this->node_removable) ) {
+    RemoveNodes();
+  }
 
-                // remove all dependencies
-              for ( int i = 0; i < this->nodes.count(); i++ ) {
-                const unsigned int count_connected =
-                          this->nodes.value(i)->countConnected();
-                // remove all the links of the deleted node
-                for ( unsigned int z = 0; z < count_connected; z++ ) {
-                  if ( this->nodes.value(i)->getConnectedIndex(z) == l)
-                    this->nodes.value(i)->RemoveLinkedFromIndex(z);
-                  }
+  // left click to add the link
+  if ( (event->button() == Qt::LeftButton) && (this->node_linkable) ) {
+    // get position of the clicked
+    this->clicked_position = new QVector3D(this->current_position->x(),
+                                           this->current_position->y(),
+                                           this->current_position->z());
 
-                // move the links after the node was deleted
-                for ( unsigned int k = 0; k < count_connected; k++ ) {
-                  if ( this->nodes.value(i)->getConnectedIndex(k) > l )
-                    this->nodes.value(i)->MoveLinkedIndexBack(k);
-                  }
-              }
-           }
-        }
+    // collision detection
+    for ( int l = 0; l < this->nodes.count(); l++ ) {
+      if ( this->clicked_position->
+           distanceToPoint(this->nodes.value(l)->Position()) < this->noderadius)
+        this->node_index_selected = l;
     }
+  }
+}
 
-    // left click to add the link
-    if ( (event->button() == Qt::LeftButton) && (this->node_linkable) ) {
-        // get position of the clicked
-        this->clicked_position = new QVector3D(
-                    this->current_position->x(),
-                    this->current_position->y(),
-                    this->current_position->z());
+void RenderState::RemoveNodes() {
+  // collision detection
+  for ( int l = 0; l < this->nodes.count(); l++ ) {
+    if ( this->current_position->distanceToPoint(this->
+                                               nodes.value(l)->
+                                               Position()) <
+      this->noderadius ) {
+      // remove node
+      this->nodes.removeAt(l);
 
-        // collision detection
-        for ( int l = 0; l < this->nodes.count(); l++ ) {
-            if ( this->
-                 clicked_position->
-                 distanceToPoint(this->
-                                 nodes.value(l)->Position()) < this->noderadius)
-                this->node_index_selected = l;
+      // remove all dependencies
+      for ( int i = 0; i < this->nodes.count(); i++ ) {
+        const unsigned int count_connected =
+                this->nodes.value(i)->countConnected();
+        // remove all the links of the deleted node
+        for ( unsigned int z = 0; z < count_connected; z++ ) {
+          if ( this->nodes.value(i)->getConnectedIndex(z) == l)
+            this->nodes.value(i)->RemoveLinkedFromIndex(z);
         }
+
+        // move the links back after the node was deleted
+        for ( unsigned int k = 0; k < count_connected; k++ ) {
+          if ( this->nodes.value(i)->getConnectedIndex(k) > l )
+            this->nodes.value(i)->MoveLinkedIndexBack(k);
+        }
+      }
     }
+  }
+  // update the temp nodelist
+  PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
 }
 
 void RenderState::wheelEvent(QWheelEvent *event) {

@@ -91,6 +91,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     void LoadObjects(QString filename);
     void LoadTextures(QString filename);
     void LoadNodes(QString filename);
+    void RemoveNodes();
     const float tree_radius, infinte_lenght_lines;
     QLabel selected_label;
 
