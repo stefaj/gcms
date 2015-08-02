@@ -146,7 +146,7 @@ void VirtualConciergeRenderstate::LoadContent() {
   // this initializes all the opengl functions
   initializeOpenGLFunctions();
 
-   // load meshes
+  // load meshes
   this->node = new ModelMesh(":/Sphere");
   this->plane = new ModelMesh(":/Plane");
   this->door = new ModelMesh("://DoorWay01");

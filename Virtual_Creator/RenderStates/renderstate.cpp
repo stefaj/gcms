@@ -184,7 +184,7 @@ void RenderState::initializeGL() {
   }
 }
 
-void RenderState::mouseMoveEvent(QMouseEvent *event) {
+void RenderState::mouseMoveEvent(QMouseEvent* event) {
     // alert mouse event's position (x)
     this->mouse_x = event->x();
 
@@ -197,7 +197,7 @@ void RenderState::mouseMoveEvent(QMouseEvent *event) {
                                                this->width(),
                                                this->height(),
                                                this->mouse_y_inverted,
-                                               vMatrix, pMatrix);
+                                               this->vMatrix, pMatrix);
 
     if ( this->mousedown_right ) {
         this->position_camera.setX(this->clicked_position->x() -
@@ -289,7 +289,7 @@ void RenderState::mouseReleaseEvent(QMouseEvent * /*event*/) {
     update();
 }
 
-void RenderState::mousePressEvent(QMouseEvent *event) {
+void RenderState::mousePressEvent(QMouseEvent* event) {
     // make dragable from left click
     if ( event->button() == Qt::LeftButton)
     this->mousedown_left = true;
@@ -395,7 +395,7 @@ void RenderState::RemoveNodes() {
   PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
 }
 
-void RenderState::wheelEvent(QWheelEvent *event) {
+void RenderState::wheelEvent(QWheelEvent* event) {
     // camera zoom with the mouse scroll
     this->mouse_zoom -= static_cast<float>(event->delta()) / 120.0f;
 
@@ -407,7 +407,7 @@ void RenderState::wheelEvent(QWheelEvent *event) {
     update();
 }
 
-void RenderState::add_node(QString *name) {
+void RenderState::add_node(QString* name) {
     // create new nodes
     Node *newnode = new Node(new QVector3D(this->current_position->x(),
                                            this->current_position->y(),
@@ -559,7 +559,7 @@ void RenderState::LoadContent() {
 
 void RenderState::paintGL() {
   // initialise the view matrix
-  vMatrix.setToIdentity();
+  this->vMatrix.setToIdentity();
   // whenever content is not loaded, load the content
   if ( !this->program ) {
       LoadContent();
@@ -594,13 +594,12 @@ void RenderState::paintGL() {
   QVector3D cameraUpDirection = cameraTransformation *
           QVector3D(0, 1, 0);
   // implement and transform the camera
- vMatrix.lookAt(cameraPosition,
-                QVector3D(0,
-                          this->current_floor_height,
-                          0),
-                cameraUpDirection);
-  vMatrix.translate(this->camera_prev);
-
+  this->vMatrix.lookAt(cameraPosition,
+                 QVector3D(0,
+                           this->current_floor_height,
+                           0),
+                 cameraUpDirection);
+  this->vMatrix.translate(this->camera_prev);
   // return the position of the ray intersection with the y-axis
   QVector3D Pos  = Mathematics::intersectYat(this->raycast,
                                              QVector3D(0,
@@ -608,7 +607,6 @@ void RenderState::paintGL() {
                                                        0) -
                                              this->camera_prev,
                                              this->current_floor_height);
-
   // update current position
   this->current_position->setX(Pos.x());
   this->current_position->setZ(Pos.z());
@@ -621,21 +619,22 @@ void RenderState::paintGL() {
     QMatrix4x4 rotation;
     rotation.rotate(object->getRotation().y(), 0, 1, 0);
     rotation.scale(object->getScaling());
-    if ( object->getType().compare("FloorPlan") != 0 )
+    if ( object->getType().compare("FloorPlan") != 0 ) {
       DrawGL::DrawModel(object->getModelMesh(),
-                        vMatrix, translation,
+                        this->vMatrix, translation,
                         rotation, object->getTexture(),
                         QVector3D(),
                         QVector2D(object->getScaling().z(),
                                   object->getScaling().x()),
                         this->program,
                         pMatrix);
-    else
+    } else {
         DrawGL::DrawModel(object->getModelMesh(),
-                          vMatrix, translation,
+                          this->vMatrix, translation,
                           rotation, object->getTexture(),
                           QVector3D(), QVector2D(1, 1),
                           this->program, pMatrix);
+    }
       if ( this->wall_placable ) {
         if ( object->getLMidHorisontal().distanceToPoint(Pos) < 0.25f )
           *this->current_position = object->getLMidHorisontal();
@@ -643,80 +642,180 @@ void RenderState::paintGL() {
           *this->current_position = object->getUMidHorisontal();
       }
   }
+  // draw placable objects here
+  DrawPlacableItems(Pos);
+  // draw all the nodes here
+  DrawNodes();
+  // draw all the lines connected to nodes with directional arrows
+  DrawNodeLines(Pos);
+  // draw lines last
+  DrawObjectLines();
+  // draw line if right clicked
+  if ( this->mousedown_right )
+    DrawGL::DrawLine(*this->clicked_position,
+                     *this->current_position,
+                     this->vMatrix, QMatrix4x4(),
+                     QMatrix4x4(),
+                     QVector3D(0, 1, 0),
+                     this->program,
+                     pMatrix);
 
-  // draw placable node
-  DrawGL::draw_if_true(this->node, vMatrix,
-                       Pos, this->rotation,
-                       QVector3D(1, 1, 1),
-                       this->textures.value(0),
-                       QVector3D(1, 0, 0),
-                       QVector2D(1, 1),
-                       pMatrix, this->program,
-                       this->node_placable
-                       && this->node_significant);
+  // draw left clicked line(s)
+  if ( (this->node_linkable) &&
+       (this->mousedown_left) &&
+       (this->node_index_selected > -1) &&
+       (this->node_index_selected < this->nodes.count()) ) {
+    QVector3D aux_calc_one, aux_calc_two, aux_angle;
+    QMatrix4x4 aux_rotate, aux_45;
+    aux_angle = this->nodes.value(this->node_index_selected)->Position() -
+            *this->current_position;
+    aux_angle.setY(0);
 
-  // draw placable node (not significant)
-  DrawGL::draw_if_true(this->node, vMatrix,
-                       Pos, this->rotation,
-                       QVector3D(1, 1, 1),
-                       this->textures.value(0),
-                       QVector3D(), QVector2D(1, 1),
-                       pMatrix, this->program,
-                       this->node_placable
-                       && !this->node_significant);
+    // get the angle from the arccos function
+    if ( aux_angle.z() > 0 ) {
+      aux_rotate.rotate(45 - 180 *  acos(aux_angle.x() / aux_angle.length()) /
+                        (3.141592), 0, 1, 0);
+    } else {
+      aux_rotate.rotate(45 + 180 * acos(aux_angle.x() / aux_angle.length()) /
+                        (3.141592), 0, 1, 0);
+    }
+    aux_45.rotate(90, 0, 1, 0);
+    aux_calc_one = aux_rotate*(QVector3D(0, 0, 1));
+    aux_calc_two = aux_45*aux_rotate*(QVector3D(0, 0, 1));
 
-  // draw placable tile draggable mouse
-  DrawGL::draw_if_true(this->plane, vMatrix,
-                       Pos, this->rotation,
-                       QVector3D(1, 1, 1),
-                       this->textures.value(1),
-                       QVector3D(),
-                       QVector2D(this->currentscale.z(),
-                                 this->currentscale.x()),
-                       pMatrix, this->program,
-                       this->pavement_placable
-                       && (!this->mousedown_left));
-  // draw placable tile clicked
-  if ( this->mousedown_left && this->pavement_placable ) {
-    this->currentscale.setZ(pow(pow((this->clicked_position->z() -
-                                     this->current_position->z()), 2),
-                                0.5) * 2.0);
-    this->currentscale.setY(1);
-    this->currentscale.setX(pow(pow((this->clicked_position->x() -
-                                     this->current_position->x()), 2),
-                                0.5) * 2.0);
+    DrawGL::DrawLine(this->nodes.value(this->node_index_selected)->Position(),
+                     *this->current_position, this->vMatrix,
+                     QMatrix4x4(), QMatrix4x4(), QVector3D(1, 1, 0),
+                     this->program, pMatrix);
+    DrawGL::DrawLine((this-> nodes.value(this->node_index_selected)->
+                      Position() +  *this->current_position) / 2.0,
+                     aux_calc_one + (this->nodes.value(
+                                         this->node_index_selected)->
+                                     Position() +
+                                     *this->current_position) / 2.0,
+                     this->vMatrix, QMatrix4x4(), QMatrix4x4(),
+                     QVector3D(1, 1, 0), this->program, pMatrix);
+    DrawGL::DrawLine((this->nodes.value(this->node_index_selected)->
+                      Position() + *this->current_position) / 2.0,
+                     aux_calc_two +
+                     (this->nodes.value(this->node_index_selected)->
+                      Position() + *this->current_position) / 2.0,
+                     this->vMatrix, QMatrix4x4(), QMatrix4x4(),
+                     QVector3D(1, 1, 0), this->program, pMatrix);
   }
-  // draw pavement
-  DrawGL::draw_if_true(this->plane, vMatrix,
-                       *this->clicked_position,
-                       this->rotation, this->currentscale,
-                       this->textures.value(1), QVector3D(),
-                       QVector2D(this->currentscale.z(),
-                                 this->currentscale.x()),
-                       pMatrix, this->program,
-                       this->pavement_placable
-                       && (this->mousedown_left));
+  // release the program for this frame
+  this->program->release();
+  // disable the cullmode for the frame
+  glDisable(GL_CULL_FACE);
+  // disable the depthtest for the frame
+  glDisable(GL_DEPTH_TEST);
+  // finish up the opengl frame
+  glFinish();
 
-  // draw placable door
-  DrawGL::draw_if_true(this->door, vMatrix,
-                       Pos, this->rotation,
-                       QVector3D(1, 1, 1),
-                       this->textures.value(2),
-                       QVector3D(), QVector2D(1, 1),
-                       pMatrix, this->program,
-                       this->door_placeable);
+  // draw the node text to the scene
+  DrawNodeNames();
+}
 
-  // draw placable wall
-  if ( (this->mousedown_left) && (this->wall_placable) ) {
-    this->drag_middle_position = (*this->clicked_position +
-                                  *this->current_position) / 2.0;
-    this->rotation.setY(Mathematics::flat_angle_from_vectors(
-                            *this->clicked_position,
-                            *this->current_position) + 90);
+void RenderState::DrawObjectLines() {
+  // draw circles around selected objects
+  foreach(VisualObject *object, this->models) {
+      if ( (this->tree_removable)
+           && (object->getType().compare("Tree", Qt::CaseInsensitive) == 0)
+           && (object->getTranslation().distanceToPoint(Pos) < 4.0) ) {
+          // draw a circle here
+          draw_circle_flat(object->getTranslation(),
+                           this->vMatrix,
+                           QVector3D(1, 0, 0),
+                           4.0f);
+      }
+      if ( this->wall_placable ) {
+          if ( object->getLMidHorisontal().distanceToPoint(Pos) < 0.25f )
+              draw_circle_flat(object->getLMidHorisontal(),
+                               this->vMatrix,
+                               QVector3D(0, 1, 0),
+                               0.25f);
+          if ( object->getUMidHorisontal().distanceToPoint(Pos) < 0.25f )
+              draw_circle_flat(object->getUMidHorisontal(),
+                               this->vMatrix,
+                               QVector3D(0, 1, 0),
+                               0.25f);
+     }
+  }
+}
 
-    // clamp to 0 and 180 degrees
-    if ( (Mathematics::return_near_degree(this->rotation.y()) == 0.0)
-         || (Mathematics::return_near_degree(this->rotation.y()) == 180) ) {
+void RenderState::DrawPlacableItems(QVector3D Pos) {
+    // draw placable node
+    DrawGL::draw_if_true(this->node, this->vMatrix,
+                         Pos, this->rotation,
+                         QVector3D(1, 1, 1),
+                         this->textures.value(0),
+                         QVector3D(1, 0, 0),
+                         QVector2D(1, 1),
+                         pMatrix, this->program,
+                         this->node_placable
+                         && this->node_significant);
+
+    // draw placable node (not significant)
+    DrawGL::draw_if_true(this->node, this->vMatrix,
+                         Pos, this->rotation,
+                         QVector3D(1, 1, 1),
+                         this->textures.value(0),
+                         QVector3D(), QVector2D(1, 1),
+                         pMatrix, this->program,
+                         this->node_placable
+                         && !this->node_significant);
+
+    // draw placable tile draggable mouse
+    DrawGL::draw_if_true(this->plane, this->vMatrix,
+                         Pos, this->rotation,
+                         QVector3D(1, 1, 1),
+                         this->textures.value(1),
+                         QVector3D(),
+                         QVector2D(this->currentscale.z(),
+                                   this->currentscale.x()),
+                         pMatrix, this->program,
+                         this->pavement_placable
+                         && (!this->mousedown_left));
+    // draw placable tile clicked
+    if ( this->mousedown_left && this->pavement_placable ) {
+      this->currentscale.setZ(pow(pow((this->clicked_position->z() -
+                                       this->current_position->z()), 2),
+                                  0.5) * 2.0);
+      this->currentscale.setY(1);
+      this->currentscale.setX(pow(pow((this->clicked_position->x() -
+                                       this->current_position->x()), 2),
+                                  0.5) * 2.0);
+    }
+    // draw pavement
+    DrawGL::draw_if_true(this->plane, this->vMatrix,
+                         *this->clicked_position,
+                         this->rotation, this->currentscale,
+                         this->textures.value(1), QVector3D(),
+                         QVector2D(this->currentscale.z(),
+                                   this->currentscale.x()),
+                         pMatrix, this->program,
+                         this->pavement_placable
+                         && (this->mousedown_left));
+
+    // draw placable door
+    DrawGL::draw_if_true(this->door, this->vMatrix,
+                         Pos, this->rotation,
+                         QVector3D(1, 1, 1),
+                         this->textures.value(2),
+                         QVector3D(), QVector2D(1, 1),
+                         pMatrix, this->program,
+                         this->door_placeable);
+
+    // draw placable wall
+    if ( (this->mousedown_left) && (this->wall_placable) ) {
+      this->drag_middle_position = (*this->clicked_position +
+                                    *this->current_position) / 2.0;
+      this->rotation.setY(Mathematics::flat_angle_from_vectors(
+                              *this->clicked_position,
+                              *this->current_position) + 90);
+  // clamp to 0 and 180 degrees
+  if ( (Mathematics::return_near_degree(this->rotation.y()) == 0.0)
+       || (Mathematics::return_near_degree(this->rotation.y()) == 180) ) {
       // set fixed rotation for the rotation
       this->rotation.setY(Mathematics::return_near_degree(this->rotation.y()));
 
@@ -728,301 +827,173 @@ void RenderState::paintGL() {
                        QVector3D(0, 0, -infinte_lenght_lines),
                        *this->current_position +
                        QVector3D(0, 0, infinte_lenght_lines),
-                       vMatrix, QMatrix4x4(), QMatrix4x4(),
+                       this->vMatrix, QMatrix4x4(), QMatrix4x4(),
                        QVector3D(1, 1, 1), this->program, pMatrix);
     }
 
-      // clamp to 270 and 90 degrees
-      if ( (Mathematics::return_near_degree(this->rotation.y()) == 270)
-           || (Mathematics::return_near_degree(this->rotation.y()) == 90)
-           || (Mathematics::return_near_degree(this->rotation.y()) == -90) ) {
-        this->rotation.setY(Mathematics::return_near_degree(this->
-                                                              rotation.y()));
-        this->drag_middle_position.setZ(this->clicked_position->z());
-        this->current_position->setZ(this->clicked_position->z());
-        DrawGL::DrawLine(*this->clicked_position +
-                         QVector3D(-infinte_lenght_lines, 0, 0),
-                         *this->current_position +
-                         QVector3D(infinte_lenght_lines, 0, 0),
-                         vMatrix, QMatrix4x4(), QMatrix4x4(),
-                         QVector3D(1, 1, 1), this->program, pMatrix);
+        // clamp to 270 and 90 degrees
+        if ( (Mathematics::return_near_degree(this->rotation.y()) == 270)
+             || (Mathematics::return_near_degree(this->rotation.y()) == 90)
+             || (Mathematics::return_near_degree(this->rotation.y()) == -90) ) {
+          this->rotation.setY(Mathematics::return_near_degree(this->
+                                                                rotation.y()));
+          this->drag_middle_position.setZ(this->clicked_position->z());
+          this->current_position->setZ(this->clicked_position->z());
+          DrawGL::DrawLine(*this->clicked_position +
+                           QVector3D(-infinte_lenght_lines, 0, 0),
+                           *this->current_position +
+                           QVector3D(infinte_lenght_lines, 0, 0),
+                           this->vMatrix, QMatrix4x4(), QMatrix4x4(),
+                           QVector3D(1, 1, 1), this->program, pMatrix);
+        }
+        // set clickable centers
+        this->center_h_1 = *this->current_position;
+        this->center_h_2 = *this->clicked_position;
+
+        this->currentscale.setZ(this->clicked_position->
+                                  distanceToPoint(*this->current_position));
+        DrawGL::draw_if_true(this->wall,  this->vMatrix,
+                             this->drag_middle_position, this->rotation,
+                             QVector3D(1, 1, this->currentscale.z()),
+                             this->textures.value(4), QVector3D(),
+                             QVector2D(this->currentscale.z(), 1.0),
+                             pMatrix, this->program, this->wall_placable);
       }
-      // set clickable centers
-      this->center_h_1 = *this->current_position;
-      this->center_h_2 = *this->clicked_position;
 
-      this->currentscale.setZ(this->clicked_position->
-                                distanceToPoint(*this->current_position));
-      DrawGL::draw_if_true(this->wall,  vMatrix, this->drag_middle_position,
-                           this->rotation,
-                           QVector3D(1, 1, this->currentscale.z()),
-                           this->textures.value(4), QVector3D(),
-                           QVector2D(this->currentscale.z(), 1.0),
-                           pMatrix, this->program, this->wall_placable);
-    }
+    // draw placable tree
+    DrawGL::draw_if_true(this->tree, this->vMatrix, Pos,
+                         this->rotation, QVector3D(1, 1, 1),
+                         this->textures.value(3),
+                         QVector3D(), QVector2D(1, 1),
+                         pMatrix, this->program,
+                         this->tree_placable);
 
-  // draw placable tree
-  DrawGL::draw_if_true(this->tree, vMatrix, Pos,
-                       this->rotation, QVector3D(1, 1, 1),
-                       this->textures.value(3),
-                       QVector3D(), QVector2D(1, 1),
-                       pMatrix, this->program,
-                       this->tree_placable);
+    // draw placable floorplan
+    DrawGL::draw_if_true(this->plane, this->vMatrix, Pos,
+                         this->rotation, this->currentscale,
+                         this->textures_from_files.
+                         value(this->textures_from_files.count() - 1),
+                         QVector3D(), QVector2D(1, 1), pMatrix,
+                         this->program, this->placable_floor_plan
+                         && (this->textures_from_files.count() > 0));
+}
 
-  // draw placable floorplan
-  DrawGL::draw_if_true(this->plane, vMatrix, Pos,
-                       this->rotation, this->currentscale,
-                       this->textures_from_files.
-                       value(this->textures_from_files.count() - 1),
-                       QVector3D(), QVector2D(1, 1), pMatrix,
-                       this->program, this->placable_floor_plan
-                       && (this->textures_from_files.count() > 0));
-
-  // draw all the nodes here
-  foreach(Node *n, this->nodes) {
-    QMatrix4x4 translation;
-    translation.translate(n->Position());
-    if ( n->getSignificant())
-      DrawGL::DrawModel(this->node, vMatrix,
-                        translation, QMatrix4x4(),
-                        this->textures.value(0),
-                        QVector3D(1, 0, 0),
-                        QVector2D(1, 1),
-                        this->program, pMatrix);
-    else
-        DrawGL::DrawModel(this->node, vMatrix,
-                          translation, QMatrix4x4(),
-                          this->textures.value(0),
-                          QVector3D(), QVector2D(1, 1),
-                          this->program, pMatrix);
-  }
-
-    // draw all the node lines here
-    foreach(Node *n, this->nodes) {
-        if ( n->Position().distanceToPoint(Pos) < 0.5 ) {
-            // draw red circle to indicate the node will be removed
-            if ( this->node_removable)
-            draw_circle_flat(n->Position(), vMatrix, QVector3D(1, 0, 0), 0.7f);
-
-            // draw green circle to indicate a link will be added
-            if ( this->node_linkable)
-            draw_circle_flat(n->Position(), vMatrix, QVector3D(0, 1, 0), 0.7f);
-        }
-        if ( n->Position().distanceToPoint(*this->clicked_position) < 0.5 ) {
-            // draw green circle to indicate a link will be added
-            if ( this->node_linkable)
-            draw_circle_flat(n->Position(), vMatrix, QVector3D(0, 1, 0), 0.7f);
-        }
-        for ( int i = 0; i  < n->countConnected(); i++ ) {
-            if ( n->getConnectedIndex(i) < this->nodes.count() ) {
-                QVector3D aux_calc_one, aux_calc_two, aux_angle;
-                QMatrix4x4 aux_rotate, aux_45;
-                aux_angle = n->Position() -
-                            this->
-                            nodes.value(n->
-                                        getConnectedIndex(i))->
-                            Position();
-                aux_angle.setY(0);
-
-                // get the angle from the arccos function
-                if ( aux_angle.z() > 0 )
-                aux_rotate.rotate(45 - 180 *
-                                  acos(aux_angle.x() / aux_angle.length()) /
-                                  (3.141592),
-                                  0,
-                                  1,
-                                  0);
-                else
-                  aux_rotate.rotate(45 +
-                                    180 *
-                                    acos(aux_angle.x() / aux_angle.length()) /
-                                    (3.141592),
-                                    0,
-                                    1,
-                                    0);
-
-                aux_45.rotate(90, 0, 1, 0);
-                aux_calc_one = aux_rotate * (QVector3D(0, 0, 1));
-                aux_calc_two = aux_45 * aux_rotate * (QVector3D(0, 0, 1));
-
-                DrawGL::DrawLine(n->Position(),
-                                 this->nodes.value(
-                                     n->
-                                     getConnectedIndex(i))->
-                                 Position(),
-                                 vMatrix, QMatrix4x4(),
-                                 QMatrix4x4(),
-                                 QVector3D(0, 1, 0),
-                                 this->program,
-                                 pMatrix);
-                DrawGL::DrawLine((n->Position() +
-                                  this->
-                                  nodes.value(n->getConnectedIndex(i))->
-                                  Position()) / 2.0,
-                                 aux_calc_one +
-                                 (n->Position() +
-                                  this->
-                                  nodes.value(n->getConnectedIndex(i))->
-                                  Position()) / 2.0,
-                                 vMatrix,
-                                 QMatrix4x4(),
-                                 QMatrix4x4(),
-                                 QVector3D(0, 1, 0),
-                                 this->program,
-                                 pMatrix);
-                DrawGL::DrawLine((n->Position() +
-                                  this->
-                                  nodes.value(n->getConnectedIndex(i))->
-                                  Position()) / 2.0,
-                                  aux_calc_two +
-                                 (n->Position() +
-                                  this->
-                                  nodes.value(n->getConnectedIndex(i))->
-                                  Position()) / 2.0,
-                                 vMatrix,
-                                 QMatrix4x4(),
-                                 QMatrix4x4(),
-                                 QVector3D(0, 1, 0),
-                                 this->program,
-                                 pMatrix);
-            }
-        }
-    }
-
-    // draw lines last
-    foreach(VisualObject *object, this->models) {
-        if ( (this->tree_removable)
-             && (object->getType().compare("Tree", Qt::CaseInsensitive) == 0)
-             && (object->getTranslation().distanceToPoint(Pos) < 4.0) ) {
-            // draw a circle here
-            draw_circle_flat(object->getTranslation(),
-                             vMatrix,
-                             QVector3D(1, 0, 0),
-                             4.0f);
-        }
-        if ( this->wall_placable ) {
-            if ( object->getLMidHorisontal().distanceToPoint(Pos) < 0.25f )
-                draw_circle_flat(object->getLMidHorisontal(),
-                                 vMatrix,
-                                 QVector3D(0, 1, 0),
-                                 0.25f);
-            if ( object->getUMidHorisontal().distanceToPoint(Pos) < 0.25f )
-                draw_circle_flat(object->getUMidHorisontal(),
-                                 vMatrix,
-                                 QVector3D(0, 1, 0),
-                                 0.25f);
-        }
-    }
-    // draw line if right clicked
-    if ( this->mousedown_right )
-    DrawGL::DrawLine(*this->clicked_position,
-                     *this->current_position,
-                     vMatrix, QMatrix4x4(),
-                     QMatrix4x4(),
-                     QVector3D(0, 1, 0),
-                     this->program,
-                     pMatrix);
-
-    // draw left clicked line(s)
-    if ( (this->node_linkable)
-         && (this->mousedown_left)
-         && (this->node_index_selected > -1)
-         && (this->node_index_selected < this->nodes.count()) ) {
-        QVector3D aux_calc_one, aux_calc_two, aux_angle;
-        QMatrix4x4 aux_rotate, aux_45;
-        aux_angle = this->
-                nodes.value(this->node_index_selected)->Position() -
-                *this->current_position;
-        aux_angle.setY(0);
-
-        // get the angle from the arccos function
-        if ( aux_angle.z() > 0 )
-        aux_rotate.rotate(45 -
-                          180 *
-                          acos(aux_angle.x() / aux_angle.length()) /
-                          (3.141592),
-                          0,
-                          1,
-                          0);
-        else
-          aux_rotate.rotate(45 +
-                            180 *
-                            acos(aux_angle.x() / aux_angle.length()) /
-                            (3.141592),
-                            0,
-                            1,
-                            0);
-
-        aux_45.rotate(90, 0, 1, 0);
-        aux_calc_one = aux_rotate*(QVector3D(0, 0, 1));
-        aux_calc_two = aux_45*aux_rotate*(QVector3D(0, 0, 1));
-
-        DrawGL::DrawLine(this->
-                         nodes.value(this->node_index_selected)->
-                         Position(),
-                         *this->current_position,
-                         vMatrix,
-                         QMatrix4x4(),
-                         QMatrix4x4(),
-                         QVector3D(1, 1, 0),
-                         this->program,
-                         pMatrix);
-        DrawGL::DrawLine((this->
-                          nodes.value(this->node_index_selected)->
-                          Position() +
-                          *this->current_position) / 2.0,
-                          aux_calc_one +
-                          (this->
-                          nodes.value(this->node_index_selected)->
-                          Position() +
-                          *this->current_position) / 2.0,
-                          vMatrix,
-                          QMatrix4x4(),
-                          QMatrix4x4(),
-                          QVector3D(1, 1, 0),
-                          this->program,
-                          pMatrix);
-        DrawGL::DrawLine((this->
-                          nodes.value(this->node_index_selected)->
-                          Position() +
-                          *this->current_position) / 2.0,
-                          aux_calc_two +
-                          (this->
-                          nodes.value(this->node_index_selected)->
-                          Position() +
-                          *this->current_position) / 2.0,
-                          vMatrix,
-                          QMatrix4x4(),
-                          QMatrix4x4(),
-                          QVector3D(1, 1, 0),
-                          this->program,
-                          pMatrix);
-    }
-
-    // release the program for this frame
-    this->program->release();
-    // disable the cullmode for the frame
-    glDisable(GL_CULL_FACE);
-    // disable the depthtest for the frame
-    glDisable(GL_DEPTH_TEST);
-    // finish up the opengl frame
-    glFinish();
-
-  // draw the text to the scene
+void RenderState::DrawNodeNames() {
+  // draw the nodes to the scene
   QPainter painter;
   painter.begin(this);
   painter.setPen(Qt::white);
   painter.setFont(QFont("Arial", 8));
-  painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-  // draw all the nodes here
+  painter.setRenderHints(QPainter::Antialiasing |
+                         QPainter::SmoothPixmapTransform);
+  // draw all the node text here
   foreach(Node *n, this->nodes) {
     QPoint pos_x_y =
-            Mathematics::transform_3d_to_2d(vMatrix, pMatrix,
+            Mathematics::transform_3d_to_2d(this->vMatrix, this->pMatrix,
                                             n->Position(), this->width(),
                                             this->height());
     painter.drawText(pos_x_y.x(), pos_x_y.y(), n->getName());
   }
   painter.end();
+}
+
+void RenderState::DrawNodes() {
+  // draw all the nodes here
+  foreach(Node *n, this->nodes) {
+    QMatrix4x4 translation;
+    translation.translate(n->Position());
+    if ( n->getSignificant() ) {
+      DrawGL::DrawModel(this->node, this->vMatrix,
+                        translation, QMatrix4x4(),
+                        this->textures.value(0),
+                        QVector3D(1, 0, 0),
+                        QVector2D(1, 1),
+                        this->program, this->pMatrix);
+    } else {
+        DrawGL::DrawModel(this->node, this->vMatrix,
+                        translation, QMatrix4x4(),
+                        this->textures.value(0),
+                        QVector3D(), QVector2D(1, 1),
+                        this->program, this->pMatrix);
+    }
+  }
+}
+
+void RenderState::DrawNodeLines(QVector3D Pos) {
+  // draw all the node lines here
+  foreach(Node *n, this->nodes) {
+    if ( n->Position().distanceToPoint(Pos) < 0.5 ) {
+      // draw red circle to indicate the node will be removed
+      if ( this->node_removable)
+        draw_circle_flat(n->Position(), this->vMatrix,
+                         QVector3D(1, 0, 0), 0.7f);
+
+      // draw green circle to indicate a link will be added
+      if ( this->node_linkable)
+        draw_circle_flat(n->Position(), this->vMatrix,
+                         QVector3D(0, 1, 0), 0.7f);
+    }
+    if ( n->Position().distanceToPoint(*this->clicked_position) < 0.5 ) {
+      // draw green circle to indicate a link will be added
+      if ( this->node_linkable)
+        draw_circle_flat(n->Position(), this->vMatrix,
+                         QVector3D(0, 1, 0), 0.7f);
+    }
+    for ( int i = 0; i  < n->countConnected(); i++ ) {
+      if ( n->getConnectedIndex(i) < this->nodes.count() ) {
+        QVector3D aux_calc_one, aux_calc_two, aux_angle;
+        QMatrix4x4 aux_rotate, aux_45;
+        aux_angle = n->Position() -
+                this->nodes.value(n->getConnectedIndex(i))->Position();
+        aux_angle.setY(0);
+
+        // get the angle from the arccos function
+        if ( aux_angle.z() > 0 )
+          aux_rotate.rotate(45 - 180 *
+                            acos(aux_angle.x() / aux_angle.length()) /
+                            (3.141592),
+                            0,
+                            1,
+                            0);
+        else
+            aux_rotate.rotate(45 +
+                              180 *
+                              acos(aux_angle.x() / aux_angle.length()) /
+                              (3.141592),
+                              0,
+                              1,
+                              0);
+
+            aux_45.rotate(90, 0, 1, 0);
+            aux_calc_one = aux_rotate * (QVector3D(0, 0, 1));
+            aux_calc_two = aux_45 * aux_rotate * (QVector3D(0, 0, 1));
+
+            DrawGL::DrawLine(n->Position(),
+                             this->nodes.value(
+                                   n->getConnectedIndex(i))->Position(),
+                             this->vMatrix, QMatrix4x4(), QMatrix4x4(),
+                             QVector3D(0, 1, 0), this->program, pMatrix);
+            DrawGL::DrawLine((n->Position() +
+                              this->nodes.value(n->getConnectedIndex(i))->
+                              Position()) / 2.0,
+                             aux_calc_one +
+                             (n->Position() +
+                              this->nodes.value(n->getConnectedIndex(i))->
+                              Position()) / 2.0,
+                             this->vMatrix, QMatrix4x4(), QMatrix4x4(),
+                             QVector3D(0, 1, 0), this->program, pMatrix);
+            DrawGL::DrawLine((n->Position() +
+                              this->nodes.value(n->getConnectedIndex(i))->
+                              Position()) / 2.0,
+                             aux_calc_two +
+                             (n->Position() +
+                              this->nodes.value(n->getConnectedIndex(i))->
+                              Position()) / 2.0,
+                             this->vMatrix, QMatrix4x4(), QMatrix4x4(),
+                             QVector3D(0, 1, 0), this->program, pMatrix);
+      }
+    }
+  }
 }
 
 void RenderState::draw_circle_flat(QVector3D center,
