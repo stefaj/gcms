@@ -1,7 +1,7 @@
 # VCCMS
 Virtual Concierge Creator and Management System
 
-#Background
+##Background
 Visitors to multi-building premises and large buildings find it difficult to navigate without the assistance of a concierge. 
 Virtual concierges does exist to help visitors with navigation,
 but the already existing virtual concierges is mostly limited to a single building and doesn't allow navigation to other buildings on a premises.
