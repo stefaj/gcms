@@ -7,29 +7,22 @@
     <x>0</x>
     <y>0</y>
     <width>480</width>
-    <height>640</height>
+    <height>683</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Virtual Concierge</string>
   </property>
-  <widget class="VirtualConciergeRenderstate" name="openGLWidget">
+  <property name="styleSheet">
+   <string notr="true">/* Basic Palette\nborder styles: dashed | dot-dash | dot-dot-dash | dotted | double | groove | inset | outset | ridge | solid | none\n*/\n\n/* Set the selection colors for all widgets. */\nQWidget\n{\n	color: #111111;\n	border: 0px solid #737373;\n	background: transparent;\n	selection-color: #cccccc;\n	selection-background-color: transparent;\n	padding: 0px;\n	margin: 0px;\n}\nQPushButton\n{\n	font-size: 10pt;\n    font-weight: bold;\n    color: #ffffff;\n    border: 2px solid transparent;\n	background:#aaaaaa;\n	border-radius: 16px;\n	padding-left: 5px;\n	padding-right: 5px;\n}\n\n/* all types of push button */\nQPushButton:hover\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #ffffff;\n}\n\nQPushButton:pressed\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #e5e5e5;\n}\nQPushButton:checked\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #e5e5e5;\n}\n\n/* Text input box */\nQLineEdit\n{\n	font-size: 10pt;\n    font-weight: bold;\n    color: #ffffff;\n    border: 2px solid transparent;\n	background:#aaaaaa;\n	border-radius: 16px;\n	padding-left: 5px;\n	padding-right: 5px;\n}\n\nQLabel\n{\n	margin-left: 5px;\n	margin-right: 5px;\n	background: none;\n	border: 0px;\n}\n</string>
+  </property>
+  <widget class="QWidget" name="widget_directory" native="true">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>481</width>
-     <height>801</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QWidget" name="widget_directory" native="true">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>-1</y>
-     <width>150</width>
-     <height>801</height>
+     <height>681</height>
     </rect>
    </property>
    <property name="minimumSize">
@@ -109,13 +102,13 @@ QLabel
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>510</y>
-      <width>152</width>
-      <height>83</height>
+      <x>170</x>
+      <y>0</y>
+      <width>308</width>
+      <height>34</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="pushButton_send_mail">
        <property name="minimumSize">
@@ -123,6 +116,9 @@ QLabel
          <width>150</width>
          <height>32</height>
         </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">/* Basic Palette\nborder styles: dashed | dot-dash | dot-dot-dash | dotted | double | groove | inset | outset | ridge | solid | none\n*/\n\n/* Set the selection colors for all widgets. */\nQWidget\n{\n	color: #111111;\n	border: 0px solid #737373;\n	background: transparent;\n	selection-color: #cccccc;\n	selection-background-color: transparent;\n	padding: 0px;\n	margin: 0px;\n}\nQPushButton\n{\n	font-size: 10pt;\n    font-weight: bold;\n    color: #ffffff;\n    border: 2px solid transparent;\n	background:#aaaaaa;\n	border-radius: 16px;\n	padding-left: 5px;\n	padding-right: 5px;\n}\n\n/* all types of push button */\nQPushButton:hover\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #ffffff;\n}\n\nQPushButton:pressed\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #e5e5e5;\n}\nQPushButton:checked\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #e5e5e5;\n}\n\n/* Text input box */\nQLineEdit\n{\n	font-size: 10pt;\n    font-weight: bold;\n    color: #ffffff;\n    border: 2px solid transparent;\n	background:#aaaaaa;\n	border-radius: 16px;\n	padding-left: 5px;\n	padding-right: 5px;\n}\n\nQLabel\n{\n	margin-left: 5px;\n	margin-right: 5px;\n	background: none;\n	border: 0px;\n}\n</string>
        </property>
        <property name="text">
         <string>Mail</string>
@@ -137,9 +133,22 @@ QLabel
          <height>32</height>
         </size>
        </property>
+       <property name="styleSheet">
+        <string notr="true">/* Basic Palette\nborder styles: dashed | dot-dash | dot-dot-dash | dotted | double | groove | inset | outset | ridge | solid | none\n*/\n\n/* Set the selection colors for all widgets. */\nQWidget\n{\n	color: #111111;\n	border: 0px solid #737373;\n	background: transparent;\n	selection-color: #cccccc;\n	selection-background-color: transparent;\n	padding: 0px;\n	margin: 0px;\n}\nQPushButton\n{\n	font-size: 10pt;\n    font-weight: bold;\n    color: #ffffff;\n    border: 2px solid transparent;\n	background:#aaaaaa;\n	border-radius: 16px;\n	padding-left: 5px;\n	padding-right: 5px;\n}\n\n/* all types of push button */\nQPushButton:hover\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #ffffff;\n}\n\nQPushButton:pressed\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #e5e5e5;\n}\nQPushButton:checked\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #e5e5e5;\n}\n\n/* Text input box */\nQLineEdit\n{\n	font-size: 10pt;\n    font-weight: bold;\n    color: #ffffff;\n    border: 2px solid transparent;\n	background:#aaaaaa;\n	border-radius: 16px;\n	padding-left: 5px;\n	padding-right: 5px;\n}\n\nQLabel\n{\n	margin-left: 5px;\n	margin-right: 5px;\n	background: none;\n	border: 0px;\n}\n</string>
+       </property>
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="VirtualConciergeRenderstate" name="openGLWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>481</width>
+      <height>691</height>
+     </rect>
+    </property>
    </widget>
   </widget>
  </widget>

@@ -961,6 +961,9 @@ QDoubleSpinBox::down-arrow:off
    </widget>
   </widget>
   <widget class="QDockWidget" name="dockWidget_add_stuff">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="minimumSize">
     <size>
      <width>320</width>
@@ -1123,6 +1126,10 @@ QDoubleSpinBox::down-arrow:off
          <string>Node Description</string>
         </property>
        </widget>
+       <zorder>checkbox_significant</zorder>
+       <zorder>lineEdit_node_name</zorder>
+       <zorder>label</zorder>
+       <zorder>dockWidget</zorder>
       </widget>
      </widget>
      <widget class="QWidget" name="page_floor_plan">
@@ -1207,41 +1214,20 @@ QDoubleSpinBox::down-arrow:off
       </widget>
      </widget>
     </widget>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>110</width>
-       <height>199</height>
+       <x>20</x>
+       <y>110</y>
+       <width>84</width>
+       <height>80</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QPushButton" name="button_tree1">
-        <property name="text">
-         <string>Add Tree</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_node">
-        <property name="text">
-         <string>Add Node</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="button_pavement">
         <property name="text">
          <string>Add Pavement</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="button_link">
-        <property name="text">
-         <string>Add Link</string>
         </property>
        </widget>
       </item>
@@ -1253,9 +1239,9 @@ QDoubleSpinBox::down-arrow:off
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="button_floor_plan">
+       <widget class="QPushButton" name="button_tree1">
         <property name="text">
-         <string>Add Floor Plan</string>
+         <string>Add Tree</string>
         </property>
        </widget>
       </item>
@@ -1263,6 +1249,39 @@ QDoubleSpinBox::down-arrow:off
        <widget class="QPushButton" name="button_door">
         <property name="text">
          <string>Add Door</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>83</width>
+       <height>59</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_7">
+      <item>
+       <widget class="QPushButton" name="button_floor_plan">
+        <property name="text">
+         <string>Add Floor Plan</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="button_node">
+        <property name="text">
+         <string>Add Node</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="button_link">
+        <property name="text">
+         <string>Add Link</string>
         </property>
        </widget>
       </item>
@@ -1554,6 +1573,7 @@ QDoubleSpinBox::down-arrow:off
    </property>
   </action>
   <zorder>dockWidget_configuration</zorder>
+  <zorder>dockWidget</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

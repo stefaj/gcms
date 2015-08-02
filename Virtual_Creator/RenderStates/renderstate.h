@@ -13,6 +13,7 @@
 #include <QtMath>
 #include <QLabel>
 #include <QMessageBox>
+#include <QPainter>
 #include "Objects/ModelMesh.h"
 #include "Objects/Node.h"
 #include "Objects/visualobject.h"

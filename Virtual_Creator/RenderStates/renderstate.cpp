@@ -815,13 +815,6 @@ void RenderState::paintGL() {
                           this->textures.value(0),
                           QVector3D(), QVector2D(1, 1),
                           this->program, pMatrix);
-    QPoint pos_x_y =
-            Mathematics::transform_3d_to_2d(vMatrix, pMatrix,
-                                            n->Position(), this->width(),
-                                            this->height());
-    this->selected_label.setGeometry(pos_x_y.x(), pos_x_y.y(), 100, 20);
-    this->selected_label.setText(n->getName());
-    this->selected_label.setEnabled(false);
   }
 
     // draw all the node lines here
@@ -1034,6 +1027,22 @@ void RenderState::paintGL() {
     glDisable(GL_DEPTH_TEST);
     // finish up the opengl frame
     glFinish();
+
+  // draw the text to the scene
+  QPainter painter;
+  painter.begin(this);
+  painter.setPen(Qt::white);
+  painter.setFont(QFont("Arial", 8));
+  painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+  // draw all the nodes here
+  foreach(Node *n, this->nodes) {
+    QPoint pos_x_y =
+            Mathematics::transform_3d_to_2d(vMatrix, pMatrix,
+                                            n->Position(), this->width(),
+                                            this->height());
+    painter.drawText(pos_x_y.x(), pos_x_y.y(), n->getName());
+  }
+  painter.end();
 }
 
 void RenderState::draw_circle_flat(QVector3D center,

@@ -1,7 +1,8 @@
 /* Copyright 2015 Ruan Luies */
 
-#include "./virtualconciergerenderstate.h"
 #include  <QFileDialog>
+#include <QPainter>
+#include "./virtualconciergerenderstate.h"
 
 VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent):
     QOpenGLWidget(parent),

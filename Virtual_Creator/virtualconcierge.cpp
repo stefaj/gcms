@@ -13,7 +13,7 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
     ui(new Ui::VirtualConcierge) {
     ui->setupUi(this);
     load_interface("VirtualConcierge/nodes.pvc",
-                   "VirtualConcierge/directories_.dir");
+                   "VirtualConcierge/directories.dir");
     connect(this, SIGNAL(find_path(int, int)),
             ui->openGLWidget, SLOT(find_path(int, int)));
     create_interface();
