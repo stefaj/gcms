@@ -649,7 +649,7 @@ void RenderState::paintGL() {
   // draw all the lines connected to nodes with directional arrows
   DrawNodeLines(Pos);
   // draw lines last
-  DrawObjectLines();
+  DrawObjectLines(Pos);
   // draw line if right clicked
   if ( this->mousedown_right )
     DrawGL::DrawLine(*this->clicked_position,
@@ -716,7 +716,7 @@ void RenderState::paintGL() {
   DrawNodeNames();
 }
 
-void RenderState::DrawObjectLines() {
+void RenderState::DrawObjectLines(QVector3D Pos) {
   // draw circles around selected objects
   foreach(VisualObject *object, this->models) {
       if ( (this->tree_removable)

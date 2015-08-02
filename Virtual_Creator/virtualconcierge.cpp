@@ -39,20 +39,6 @@ void VirtualConcierge::show_new_interface(int value) {
       foreach(NodeButton* button, this->directories_)
           button->hide();
 
-      // add child directories
-      if ( value < this->directory_list_.count() ) {
-          QStringList dir_ls = this->directory_list_.value(value).split(";");
-          const int count = dir_ls.count();
-          for ( int x = 0; x < count; x++ ) {
-             int dir_index = dir_ls[x] != "" ? dir_ls[x].toInt() : (-1);
-              if ( dir_index > -1 ) {
-                  NodeButton* button = this->directories_.value(dir_index);
-                  button->show();
-                 this->temp.push_back(button);
-              }
-          }
-      }
-
       // add child path locations
       if ( value < this->node_list_.count() ) {
           QStringList node_ls = this->node_list_.value(value).split(";");
@@ -68,6 +54,20 @@ void VirtualConcierge::show_new_interface(int value) {
                       button->show();
                      this->temp.push_back(button);
                     }
+              }
+          }
+      }
+
+      // add child directories
+      if ( value < this->directory_list_.count() ) {
+          QStringList dir_ls = this->directory_list_.value(value).split(";");
+          const int count = dir_ls.count();
+          for ( int x = 0; x < count; x++ ) {
+             int dir_index = dir_ls[x] != "" ? dir_ls[x].toInt() : (-1);
+              if ( dir_index > -1 ) {
+                  NodeButton* button = this->directories_.value(dir_index);
+                  button->show();
+                 this->temp.push_back(button);
               }
           }
       }
