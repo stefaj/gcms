@@ -95,10 +95,13 @@ QFile file("VirtualConcierge/" + name);
     }
     // write the links to each node
     for ( int k = 0; k < nodes.count(); k++ ) {
-        for ( int j = 0; j < nodes.value(k)->countConnected(); j++ )
-        out << "j," << k << "," << nodes.value(k)->getConnectedIndex(j) << "\n";
+        for ( int j = 0; j < nodes.value(k)->countConnected(); j++ ) {
+          const int linked_node = nodes.value(k)->getConnectedIndex(j);
+          if ( k != linked_node ) {
+          out << "j," << k << "," << linked_node << "\n";
+          }
+        }
     }
-
     // optional, as QFile destructor will already do it:
     file.close();
 }
