@@ -72,7 +72,7 @@ void UserInterfaceCreator::addTreeChild(QTreeWidgetItem *parent,
     treeItem->setText(1, description);
 
     // QTreeWidgetItem::addChild(QTreeWidgetItem * child)
-    parent->addChild(treeItem);
+    parent->insertChild(parent->childCount(), treeItem);
 }
 
 void UserInterfaceCreator::OnDeleteIt() {
@@ -194,7 +194,7 @@ void UserInterfaceCreator::on_pushButton_add_child_clicked() {
         bool selected_secondlevel = false;
 
         // exit when nothing is selected
-        if ( !item) return;
+        if ( !item ) return;
 
         // check if a toplevel item was selected
         if ( ui->treeWidget->topLevelItem(selected_index)->isSelected() )
@@ -310,7 +310,6 @@ void UserInterfaceCreator::load_directories(QString filename) {
                 // get directory index
                 int index = list[1].toInt();
                 QTreeWidgetItem *item_ = ui->treeWidget->topLevelItem(index);
-
                 // get all the children nodes
                 QStringList chls = list[2].split(";");
                 // count the children nodes
@@ -318,16 +317,16 @@ void UserInterfaceCreator::load_directories(QString filename) {
                 // whenever the child node esist
                 if ( childcount > 0 ) {
                     // search for the corresponding child
-                    foreach(QString node, this->nodes) {
+                    for ( int x = 0; x < childcount; x++ ) {
+                      foreach(QString node, this->nodes) {
                         QStringList ls = node.split(",");
                         int numb = ls[1].toInt();
                         // add all the child nodes
-                        for ( int x = 0; x < childcount; x++ ) {
-                            int child_index = chls[x].toInt();
-                            if ( child_index == numb ) {
+                        int child_index = chls[x].toInt();
+                        if ( child_index == numb ) {
                                addTreeChild(item_, ls[1], ls[0]);
-                            }
                         }
+                      }
                     }
                 }
                 // add subdirectories
@@ -425,7 +424,6 @@ void UserInterfaceCreator::on_pushButton_down_clicked() {
               // get current item
               QTreeWidgetItem *item_ = ui->treeWidget->topLevelItem(i);
               // get current index
-              // int index = item_->text(0).toInt();
               for ( int k = 0; k < item_->childCount(); k++ ) {
                 if ( QString::compare(item_->child(k)->text(1),
                                       moved->text(1),
