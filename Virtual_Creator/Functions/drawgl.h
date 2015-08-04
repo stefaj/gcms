@@ -24,7 +24,7 @@ class DrawGL {
                           QVector3D,
                           QVector2D,
                           QOpenGLShaderProgram*,
-                          QMatrix4x4);
+                          QMatrix4x4, float);
 
     static void DrawLine(QVector3D,
                          QVector3D,
@@ -33,7 +33,7 @@ class DrawGL {
                          QMatrix4x4,
                          QVector3D,
                          QOpenGLShaderProgram*,
-                         QMatrix4x4);
+                         QMatrix4x4, float);
 
     static void ShaderDraw(ModelMesh*,
                            QOpenGLShaderProgram*);
@@ -45,7 +45,7 @@ class DrawGL {
                               QVector3D,
                               QVector2D,
                               QOpenGLShaderProgram*,
-                              QMatrix4x4);
+                              QMatrix4x4, float);
 
     static void UpdateShaders(QMatrix4x4,
                               QMatrix4x4,
@@ -53,7 +53,7 @@ class DrawGL {
                               QVector3D,
                               QVector2D,
                               QOpenGLShaderProgram*,
-                              QMatrix4x4);
+                              QMatrix4x4, float);
 
     static void draw_if_true(ModelMesh*,
                              QMatrix4x4,
@@ -65,7 +65,7 @@ class DrawGL {
                              QVector2D,
                              QMatrix4x4,
                              QOpenGLShaderProgram*,
-                             bool);
+                             bool, float);
 };
 
 #endif  // VIRTUAL_CREATOR_FUNCTIONS_DRAWGL_H_

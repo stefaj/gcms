@@ -36,14 +36,11 @@ uniform vec2 texture_coordinates;
 // normal vector for each pixel inherit from the vertex shader
 varying vec3 normals;
 
-// random noise generation
-float rand( float x, float y ){return fract( sin( x + y*0.192837465 )*1928374.0*cos(t * 0.01) );}
+// y-clipping, all objects above this y-value will be cut-off
+uniform float y_clipping;
 
 void main()
 {
-    // generate a random colour
-    float color = rand(gl_FragCoord.x+t, gl_FragCoord.y+t);
-
     // use a default light direction this can be changed later
     /* may change later */
     vec3 lightdir = vec3(0,-0.707,0);
@@ -55,6 +52,9 @@ void main()
     vec4 texturecol = texture2D(texture,vec2(varyingTextureCoordinate.x*texture_coordinates.x,
                                              varyingTextureCoordinate.y* texture_coordinates.y)).rgba;
 
+    if (posi.y > y_clipping + 0.5 || posi.y < y_clipping - 0.5 ) {
+        discard;
+    } else
     // set the active colour with a ambiet colour
     gl_FragColor = texturecol*ndotl+vec4(col, 1);
 

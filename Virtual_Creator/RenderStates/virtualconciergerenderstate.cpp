@@ -107,7 +107,7 @@ void VirtualConciergeRenderstate::LoadObjects(QString path) {
           QString Type = "";
           // populate the vertices
           for ( int i = 0; i < 9; i++)
-            QTextStream(&list[i+3]) >> matrix[i];
+            QTextStream(&list[i + 3]) >> matrix[i];
           // texture index
           QTextStream(&list[12]) >> texture_index;
 
@@ -237,13 +237,13 @@ void VirtualConciergeRenderstate::paintGL() {
                         QVector3D(),
                         QVector2D(object->getScaling().z(),
                                   object->getScaling().x()),
-                        this->program, pMatrix);
+                        this->program, pMatrix, 0.0f);
     else
       DrawGL::DrawModel(object->getModelMesh(),
                         vMatrix, translation,
                         rotation, object->getTexture(),
                         QVector3D(), QVector2D(1, 1),
-                        this->program, pMatrix);
+                        this->program, pMatrix, 0.0f);
   }
   for ( int o = 0; o < this->handler->pathcount() - 1; o++ )
     DrawGL::DrawLine(this->handler->
@@ -251,7 +251,8 @@ void VirtualConciergeRenderstate::paintGL() {
                      this->handler->
                      NodeFromIndex(this->handler->pathindex(o+1)).Position(),
                      vMatrix, QMatrix4x4(), QMatrix4x4(),
-                     QVector3D(0, 1, 0), this->program, pMatrix);
+                     QVector3D(0, 1, 0), this->program, pMatrix,
+                     0.0f);
   // release the program for this frame
   this->program->release();
   // disable the cullmode for the frame

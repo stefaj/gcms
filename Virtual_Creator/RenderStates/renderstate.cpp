@@ -577,7 +577,7 @@ void RenderState::paintGL() {
   // clear the background color for rendering
   glClearColor(104.0/255.0, 104.0/255.0, 104.0/255.0, 1);
   // clear the color and depth buffer
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
   // setup camera
   QMatrix4x4 cameraTransformation;
   // rotation in the y - axis
@@ -627,13 +627,15 @@ void RenderState::paintGL() {
                         QVector2D(object->getScaling().z(),
                                   object->getScaling().x()),
                         this->program,
-                        pMatrix);
+                        pMatrix,
+                        this->current_floor_height);
     } else {
         DrawGL::DrawModel(object->getModelMesh(),
                           this->vMatrix, translation,
                           rotation, object->getTexture(),
                           QVector3D(), QVector2D(1, 1),
-                          this->program, pMatrix);
+                          this->program, pMatrix,
+                          this->current_floor_height);
     }
       if ( this->wall_placable ) {
         if ( object->getLMidHorisontal().distanceToPoint(Pos) < 0.25f )
@@ -658,7 +660,7 @@ void RenderState::paintGL() {
                      QMatrix4x4(),
                      QVector3D(0, 1, 0),
                      this->program,
-                     pMatrix);
+                     pMatrix, this->current_floor_height);
 
   // draw left clicked line(s)
   if ( (this->node_linkable) &&
@@ -686,7 +688,7 @@ void RenderState::paintGL() {
     DrawGL::DrawLine(this->nodes.value(this->node_index_selected)->Position(),
                      *this->current_position, this->vMatrix,
                      QMatrix4x4(), QMatrix4x4(), QVector3D(1, 1, 0),
-                     this->program, pMatrix);
+                     this->program, pMatrix, this->current_floor_height);
     DrawGL::DrawLine((this-> nodes.value(this->node_index_selected)->
                       Position() +  *this->current_position) / 2.0,
                      aux_calc_one + (this->nodes.value(
@@ -694,14 +696,16 @@ void RenderState::paintGL() {
                                      Position() +
                                      *this->current_position) / 2.0,
                      this->vMatrix, QMatrix4x4(), QMatrix4x4(),
-                     QVector3D(1, 1, 0), this->program, pMatrix);
+                     QVector3D(1, 1, 0), this->program, pMatrix,
+                     this->current_floor_height);
     DrawGL::DrawLine((this->nodes.value(this->node_index_selected)->
                       Position() + *this->current_position) / 2.0,
                      aux_calc_two +
                      (this->nodes.value(this->node_index_selected)->
                       Position() + *this->current_position) / 2.0,
                      this->vMatrix, QMatrix4x4(), QMatrix4x4(),
-                     QVector3D(1, 1, 0), this->program, pMatrix);
+                     QVector3D(1, 1, 0), this->program, pMatrix,
+                     this->current_floor_height);
   }
   // release the program for this frame
   this->program->release();
@@ -753,7 +757,8 @@ void RenderState::DrawPlacableItems(QVector3D Pos) {
                          QVector2D(1, 1),
                          pMatrix, this->program,
                          this->node_placable
-                         && this->node_significant);
+                         && this->node_significant,
+                         this->current_floor_height);
 
     // draw placable node (not significant)
     DrawGL::draw_if_true(this->node, this->vMatrix,
@@ -763,7 +768,8 @@ void RenderState::DrawPlacableItems(QVector3D Pos) {
                          QVector3D(), QVector2D(1, 1),
                          pMatrix, this->program,
                          this->node_placable
-                         && !this->node_significant);
+                         && !this->node_significant,
+                         this->current_floor_height);
 
     // draw placable tile draggable mouse
     DrawGL::draw_if_true(this->plane, this->vMatrix,
@@ -775,7 +781,8 @@ void RenderState::DrawPlacableItems(QVector3D Pos) {
                                    this->currentscale.x()),
                          pMatrix, this->program,
                          this->pavement_placable
-                         && (!this->mousedown_left));
+                         && (!this->mousedown_left),
+                         this->current_floor_height);
     // draw placable tile clicked
     if ( this->mousedown_left && this->pavement_placable ) {
       this->currentscale.setZ(pow(pow((this->clicked_position->z() -
@@ -795,7 +802,8 @@ void RenderState::DrawPlacableItems(QVector3D Pos) {
                                    this->currentscale.x()),
                          pMatrix, this->program,
                          this->pavement_placable
-                         && (this->mousedown_left));
+                         && (this->mousedown_left),
+                         this->current_floor_height);
 
     // draw placable door
     DrawGL::draw_if_true(this->door, this->vMatrix,
@@ -804,7 +812,8 @@ void RenderState::DrawPlacableItems(QVector3D Pos) {
                          this->textures.value(2),
                          QVector3D(), QVector2D(1, 1),
                          pMatrix, this->program,
-                         this->door_placeable);
+                         this->door_placeable,
+                         this->current_floor_height);
 
     // draw placable wall
     if ( (this->mousedown_left) && (this->wall_placable) ) {
@@ -828,7 +837,8 @@ void RenderState::DrawPlacableItems(QVector3D Pos) {
                        *this->current_position +
                        QVector3D(0, 0, infinte_lenght_lines),
                        this->vMatrix, QMatrix4x4(), QMatrix4x4(),
-                       QVector3D(1, 1, 1), this->program, pMatrix);
+                       QVector3D(1, 1, 1), this->program, pMatrix,
+                       this->current_floor_height);
     }
 
         // clamp to 270 and 90 degrees
@@ -844,7 +854,8 @@ void RenderState::DrawPlacableItems(QVector3D Pos) {
                            *this->current_position +
                            QVector3D(infinte_lenght_lines, 0, 0),
                            this->vMatrix, QMatrix4x4(), QMatrix4x4(),
-                           QVector3D(1, 1, 1), this->program, pMatrix);
+                           QVector3D(1, 1, 1), this->program, pMatrix,
+                           this->current_floor_height);
         }
         // set clickable centers
         this->center_h_1 = *this->current_position;
@@ -857,7 +868,8 @@ void RenderState::DrawPlacableItems(QVector3D Pos) {
                              QVector3D(1, 1, this->currentscale.z()),
                              this->textures.value(4), QVector3D(),
                              QVector2D(this->currentscale.z(), 1.0),
-                             pMatrix, this->program, this->wall_placable);
+                             pMatrix, this->program, this->wall_placable,
+                             this->current_floor_height);
       }
 
     // draw placable tree
@@ -866,7 +878,8 @@ void RenderState::DrawPlacableItems(QVector3D Pos) {
                          this->textures.value(3),
                          QVector3D(), QVector2D(1, 1),
                          pMatrix, this->program,
-                         this->tree_placable);
+                         this->tree_placable,
+                         this->current_floor_height);
 
     // draw placable floorplan
     DrawGL::draw_if_true(this->plane, this->vMatrix, Pos,
@@ -875,7 +888,8 @@ void RenderState::DrawPlacableItems(QVector3D Pos) {
                          value(this->textures_from_files.count() - 1),
                          QVector3D(), QVector2D(1, 1), pMatrix,
                          this->program, this->placable_floor_plan
-                         && (this->textures_from_files.count() > 0));
+                         && (this->textures_from_files.count() > 0),
+                         this->current_floor_height);
 }
 
 void RenderState::DrawNodeNames() {
@@ -888,11 +902,14 @@ void RenderState::DrawNodeNames() {
                          QPainter::SmoothPixmapTransform);
   // draw all the node text here
   foreach(Node *n, this->nodes) {
-    QPoint pos_x_y =
+    if ( ( n->Position().y() < this->current_floor_height + 0.5 ) &&
+         ( n->Position().y() > this->current_floor_height - 0.5 ) ) {
+      QPoint pos_x_y =
             Mathematics::transform_3d_to_2d(this->vMatrix, this->pMatrix,
                                             n->Position(), this->width(),
                                             this->height());
-    painter.drawText(pos_x_y.x(), pos_x_y.y(), n->getName());
+      painter.drawText(pos_x_y.x(), pos_x_y.y(), n->getName());
+    }
   }
   painter.end();
 }
@@ -908,13 +925,15 @@ void RenderState::DrawNodes() {
                         this->textures.value(0),
                         QVector3D(1, 0, 0),
                         QVector2D(1, 1),
-                        this->program, this->pMatrix);
+                        this->program, this->pMatrix,
+                        this->current_floor_height);
     } else {
         DrawGL::DrawModel(this->node, this->vMatrix,
                         translation, QMatrix4x4(),
                         this->textures.value(0),
                         QVector3D(), QVector2D(1, 1),
-                        this->program, this->pMatrix);
+                        this->program, this->pMatrix,
+                          this->current_floor_height);
     }
   }
 }
@@ -972,7 +991,8 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
                              this->nodes.value(
                                    n->getConnectedIndex(i))->Position(),
                              this->vMatrix, QMatrix4x4(), QMatrix4x4(),
-                             QVector3D(0, 1, 0), this->program, pMatrix);
+                             QVector3D(0, 1, 0), this->program, pMatrix,
+                             this->current_floor_height);
             DrawGL::DrawLine((n->Position() +
                               this->nodes.value(n->getConnectedIndex(i))->
                               Position()) / 2.0,
@@ -981,7 +1001,8 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
                               this->nodes.value(n->getConnectedIndex(i))->
                               Position()) / 2.0,
                              this->vMatrix, QMatrix4x4(), QMatrix4x4(),
-                             QVector3D(0, 1, 0), this->program, pMatrix);
+                             QVector3D(0, 1, 0), this->program, pMatrix,
+                             this->current_floor_height);
             DrawGL::DrawLine((n->Position() +
                               this->nodes.value(n->getConnectedIndex(i))->
                               Position()) / 2.0,
@@ -990,7 +1011,8 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
                               this->nodes.value(n->getConnectedIndex(i))->
                               Position()) / 2.0,
                              this->vMatrix, QMatrix4x4(), QMatrix4x4(),
-                             QVector3D(0, 1, 0), this->program, pMatrix);
+                             QVector3D(0, 1, 0), this->program, pMatrix,
+                             this->current_floor_height);
       }
     }
   }
@@ -1014,7 +1036,7 @@ void RenderState::draw_circle_flat(QVector3D center,
                     QMatrix4x4(),
                     color,
                     this->program,
-                    pMatrix);
+                    pMatrix, this->current_floor_height);
     }
 }
 
