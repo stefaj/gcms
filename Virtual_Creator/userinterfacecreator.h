@@ -28,7 +28,11 @@ class UserInterfaceCreator : public QDialog {
     void on_pushButton_removedirectory_clicked();
     void on_buttonBox_accepted();
 
- private:
+    void on_pushButton_up_clicked();
+
+    void on_pushButton_down_clicked();
+
+private:
     Ui::UserInterfaceCreator *ui;
     void addTreeRoot(QString name, QString description);
     void addTreeChild(QTreeWidgetItem *parent,

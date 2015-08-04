@@ -83,7 +83,6 @@ void UserInterfaceCreator::OnDeleteIt() {
     // leave when to pointer does not exist
     if ( !item) return;
 
-
     if ( ui->treeWidget->topLevelItemCount() > removed ) {
         if ( ui->treeWidget->topLevelItem(removed)->isSelected() ) {
             ui->treeWidget->takeTopLevelItem(removed);
@@ -357,3 +356,64 @@ void UserInterfaceCreator::load_directories(QString filename) {
         textfile.close();
     }
 }
+
+void UserInterfaceCreator::on_pushButton_up_clicked() {
+  // moves the selected index up ( index - 1 )
+  bool isparent = false;
+  int selected = ui->treeWidget->currentIndex().row();
+  QTreeWidgetItem *item = ui->treeWidget->currentItem();
+  if ( ui->treeWidget->topLevelItemCount() > selected ) {
+      if ( ui->treeWidget->topLevelItem(selected)->isSelected() &&
+           (selected > 0) ) {
+        QTreeWidgetItem* replace = ui->treeWidget->takeTopLevelItem(selected);
+        QTreeWidgetItem* moved = ui->treeWidget->topLevelItem(selected - 1);
+        replace->setText(0, QString::number(selected - 1));
+        moved->setText(0, QString::number(selected));
+        ui->treeWidget->insertTopLevelItem(selected - 1, replace);
+        ui->treeWidget->setCurrentItem(replace);
+        isparent = true;
+      }
+  }
+  if ( !isparent ) {
+    if ( item && (selected > 0) ) {
+      QTreeWidgetItem* parent = item->parent();
+      int index = parent->indexOfChild(item);
+      QTreeWidgetItem* child = parent->takeChild(index);
+      parent->insertChild(index - 1, child);
+      parent->setExpanded(true);
+      child->setExpanded(true);
+    }
+    ui->treeWidget->setCurrentItem(item);
+  }
+}
+
+void UserInterfaceCreator::on_pushButton_down_clicked() {
+    // moves the selected index up ( index - 1 )
+    bool isparent = false;
+    int selected = ui->treeWidget->currentIndex().row();
+    QTreeWidgetItem *item = ui->treeWidget->currentItem();
+    if ( selected < ui->treeWidget->topLevelItemCount() ) {
+        if ( ui->treeWidget->topLevelItem(selected)->isSelected() &&
+             selected < ui->treeWidget->topLevelItemCount() - 1 ) {
+            QTreeWidgetItem* replace = ui->treeWidget->takeTopLevelItem(selected);
+            QTreeWidgetItem* moved = ui->treeWidget->topLevelItem(selected);
+            replace->setText(0, QString::number(selected + 1));
+            moved->setText(0, QString::number(selected));
+            ui->treeWidget->insertTopLevelItem(selected + 1, replace);
+            ui->treeWidget->setCurrentItem(replace);
+        }
+      isparent = true;
+    }
+
+    if (!isparent) {
+      if ( item && (selected < item->parent()->childCount() - 1) ) {
+        QTreeWidgetItem* parent = item->parent();
+        int index = parent->indexOfChild(item);
+        QTreeWidgetItem* child = parent->takeChild(index);
+        parent->insertChild(index + 1, child);
+        parent->setExpanded(true);
+        child->setExpanded(true);
+      }
+      ui->treeWidget->setCurrentItem(item);
+    }
+  }

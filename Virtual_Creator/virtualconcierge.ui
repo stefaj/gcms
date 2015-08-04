@@ -99,6 +99,16 @@ QLabel
 }
 </string>
    </property>
+   <widget class="VirtualConciergeRenderstate" name="openGLWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>481</width>
+      <height>691</height>
+     </rect>
+    </property>
+   </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
@@ -139,16 +149,6 @@ QLabel
       </widget>
      </item>
     </layout>
-   </widget>
-   <widget class="VirtualConciergeRenderstate" name="openGLWidget">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>481</width>
-      <height>691</height>
-     </rect>
-    </property>
    </widget>
   </widget>
  </widget>

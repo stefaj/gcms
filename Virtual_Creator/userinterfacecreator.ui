@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>462</height>
+    <height>476</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -728,19 +728,19 @@ QTreeView::item:selected:!active
 	background: #686868;
 }
 
-QTreeView::branch:has-siblings:!adjoins-item 
+/*QTreeView::branch:has-siblings:!adjoins-item 
 {
      border-image: url(:/vline) 0;
 }
 
 QTreeView::branch:has-siblings:adjoins-item 
 {
-     border-image: url(:/branch-more) 0;
+      border-image: url(:/branch-more) 0;
 }
 
 QTreeView::branch:!has-children:!has-siblings:adjoins-item
 {
-     border-image: url(:/branch-end) 0;
+      border-image: url(:/branch-end) 0;
 }
 
 QTreeView::branch:has-children:!has-siblings:closed,
@@ -754,7 +754,7 @@ QTreeView::branch:open:has-children:has-siblings
 {
          border-image: none;
          image: url(:/branch-open);
-}
+}*/
 
 /* The tab widget frame */
 QTabWidget::pane
@@ -939,7 +939,6 @@ QDoubleSpinBox::down-button:pressed
 
 QDoubleSpinBox::down-arrow
 {
-     image: url(:/arrow_down);
      width: 11px;
      height: 6px;
 }
@@ -947,7 +946,6 @@ QDoubleSpinBox::down-arrow
 QDoubleSpinBox::down-arrow:disabled,
 QDoubleSpinBox::down-arrow:off 
 { /* off state when value in min */
-    image: url(:/arrow_down);
 }
 </string>
   </property>
@@ -967,7 +965,7 @@ QDoubleSpinBox::down-arrow:off
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>11</x>
@@ -1006,6 +1004,24 @@ QDoubleSpinBox::down-arrow:off
         </item>
         <item>
          <widget class="QLineEdit" name="lineEdit_new_directory"/>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QPushButton" name="pushButton_up">
+            <property name="text">
+             <string>Up</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_down">
+            <property name="text">
+             <string>Down</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>
