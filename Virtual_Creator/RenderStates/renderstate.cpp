@@ -146,6 +146,8 @@ void RenderState::set_object_scale(QVector3D value) {
 
 void RenderState::change_current_floor_height(float value) {
     this->current_floor_height = value;
+    // update the opengl widget
+    update();
 }
 
 void RenderState::load_texture_from_file(QString value) {
