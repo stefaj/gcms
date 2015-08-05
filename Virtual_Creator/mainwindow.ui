@@ -1017,7 +1017,7 @@ QDoubleSpinBox::down-arrow:off
        <property name="title">
         <string>Accessible with/by/through</string>
        </property>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QWidget" name="layoutWidget1">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -1129,7 +1129,6 @@ QDoubleSpinBox::down-arrow:off
        <zorder>checkbox_significant</zorder>
        <zorder>lineEdit_node_name</zorder>
        <zorder>label</zorder>
-       <zorder>dockWidget</zorder>
       </widget>
      </widget>
      <widget class="QWidget" name="page_floor_plan">
@@ -1148,7 +1147,7 @@ QDoubleSpinBox::down-arrow:off
        <property name="title">
         <string>Floor Plan Settings</string>
        </property>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QWidget" name="layoutWidget2">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -1573,7 +1572,6 @@ QDoubleSpinBox::down-arrow:off
    </property>
   </action>
   <zorder>dockWidget_configuration</zorder>
-  <zorder>dockWidget</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
