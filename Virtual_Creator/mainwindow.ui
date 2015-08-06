@@ -1011,7 +1011,7 @@ QDoubleSpinBox::down-arrow:off
          <x>10</x>
          <y>10</y>
          <width>181</width>
-         <height>71</height>
+         <height>81</height>
         </rect>
        </property>
        <property name="title">
@@ -1126,9 +1126,6 @@ QDoubleSpinBox::down-arrow:off
          <string>Node Description</string>
         </property>
        </widget>
-       <zorder>checkbox_significant</zorder>
-       <zorder>lineEdit_node_name</zorder>
-       <zorder>label</zorder>
       </widget>
      </widget>
      <widget class="QWidget" name="page_floor_plan">
@@ -1213,13 +1210,13 @@ QDoubleSpinBox::down-arrow:off
       </widget>
      </widget>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget3">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>110</y>
-       <width>84</width>
-       <height>80</height>
+       <x>10</x>
+       <y>100</y>
+       <width>110</width>
+       <height>112</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -1253,13 +1250,13 @@ QDoubleSpinBox::down-arrow:off
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget4">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>83</width>
-       <height>59</height>
+       <width>110</width>
+       <height>83</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -1451,8 +1448,8 @@ QDoubleSpinBox::down-arrow:off
     <widget class="QLabel" name="label_rotation_y">
      <property name="geometry">
       <rect>
-       <x>22</x>
-       <y>17</y>
+       <x>20</x>
+       <y>10</y>
        <width>70</width>
        <height>16</height>
       </rect>
@@ -1464,8 +1461,8 @@ QDoubleSpinBox::down-arrow:off
     <widget class="QDoubleSpinBox" name="spin_rotationY">
      <property name="geometry">
       <rect>
-       <x>124</x>
-       <y>17</y>
+       <x>120</x>
+       <y>10</y>
        <width>78</width>
        <height>18</height>
       </rect>

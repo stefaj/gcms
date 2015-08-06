@@ -2,7 +2,8 @@
 
 #include "./nodebutton.h"
 
-NodeButton::NodeButton(QWidget *parent) :QPushButton(parent), directory(false) {
+NodeButton::NodeButton(QWidget *parent) :
+    QPushButton(parent), directory(false) {
 }
 
 void NodeButton::setIndex(int value) {

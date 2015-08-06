@@ -11,7 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
   // hide things not needed
   ui->groupBox_node_settings->setVisible(false);
-  ui->groupBox_floor_plan_settings->setVisible(false);
+  ui->groupBox_floor_plan_settings->setVisible(false);\
+  ui->groupBox_node_settings_2->setVisible(false);
 
   // set clickable buttons
   ui->button_node->setCheckable(true);
@@ -93,6 +94,7 @@ void MainWindow::EmitSignals() {
   ui->groupBox_node_settings->setVisible(ui->button_node->isChecked());
   ui->groupBox_floor_plan_settings->setVisible(
               ui->button_floor_plan->isChecked());
+  ui->groupBox_node_settings_2->setVisible(ui->button_node->isChecked());
 }
 
 void MainWindow::on_button_node_clicked() {
