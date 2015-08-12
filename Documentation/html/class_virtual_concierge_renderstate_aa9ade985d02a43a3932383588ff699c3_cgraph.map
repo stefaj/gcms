@@ -1,6 +1,0 @@
-<map id="VirtualConciergeRenderstate::VirtualConciergeRenderstate" name="VirtualConciergeRenderstate::VirtualConciergeRenderstate">
-<area shape="rect" id="node2" href="$class_premises_exporter.html#a88ee589b81442cd3896a3fb476221057" title="PremisesExporter::fileExists" alt="" coords="248,5,435,32"/>
-<area shape="rect" id="node3" href="$class_node_handler.html#a9de09ae39f58d5ba8d7296cc7b9479a6" title="NodeHandler::ReadFilePVC" alt="" coords="250,56,433,83"/>
-<area shape="rect" id="node4" href="$class_node_handler.html#a6c7bf3121983c6b71b3f695c5beb8702" title="NodeHandler::AddNode" alt="" coords="501,27,659,53"/>
-<area shape="rect" id="node5" href="$class_node_handler.html#ae40d4d280d3509d507f9f9a702f5380b" title="NodeHandler::AddNodeLinkby\lIndex" alt="" coords="483,78,677,119"/>
-</map>
