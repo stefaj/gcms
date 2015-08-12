@@ -1,0 +1,337 @@
+\hypertarget{class_visual_object}{}\section{Visual\+Object Class Reference}
+\label{class_visual_object}\index{Visual\+Object@{Visual\+Object}}
+
+
+{\ttfamily \#include $<$visualobject.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_visual_object_a0245f678c51843b881ad6a405c2fee92}{Visual\+Object} (\hyperlink{class_model_mesh}{Model\+Mesh} $\ast$modelmesh, Q\+Open\+G\+L\+Texture $\ast$texture, Q\+Vector3\+D translation, Q\+Vector3\+D rotation, Q\+String type)
+\item 
+\hyperlink{class_visual_object_a068ba11545322d81d9ad8c675c4233f9}{$\sim$\+Visual\+Object} ()
+\item 
+void \hyperlink{class_visual_object_a2eaddb04dc7308d10773fb2f31f65cda}{set\+Model} (\hyperlink{class_model_mesh}{Model\+Mesh} $\ast$modelmesh)
+\item 
+void \hyperlink{class_visual_object_a24f2c08777a07a60b99a80df23fead83}{set\+Rotation} (Q\+Vector3\+D rotation)
+\item 
+void \hyperlink{class_visual_object_ab792e48bfee0845359b2745c020388c6}{set\+Translation} (Q\+Vector3\+D translation)
+\item 
+void \hyperlink{class_visual_object_aa430ccc46042035b354846a4cf5ac227}{set\+Texture} (Q\+Open\+G\+L\+Texture $\ast$texture)
+\item 
+void \hyperlink{class_visual_object_ade6762a69a6879a3f0008e0158badd6c}{set\+Scaling} (Q\+Vector3\+D scale)
+\item 
+void \hyperlink{class_visual_object_adeee80fd1c697e4ef00e1cc254316b4e}{set\+Corner\+U\+Left} (Q\+Vector3\+D position)
+\item 
+void \hyperlink{class_visual_object_a26a9feed6b150951c216b44ae8c99490}{set\+Corner\+U\+Right} (Q\+Vector3\+D position)
+\item 
+void \hyperlink{class_visual_object_a81aa4ee45566bebe11c3b8e2782a692a}{set\+Corner\+L\+Left} (Q\+Vector3\+D position)
+\item 
+void \hyperlink{class_visual_object_ad4339a56428a82d6b1d59d78f7631016}{set\+Corner\+L\+Right} (Q\+Vector3\+D position)
+\item 
+void \hyperlink{class_visual_object_ad549b89d0ec63e529b3b05e05de0834b}{set\+U\+Mid\+Horisontal} (Q\+Vector3\+D position)
+\item 
+void \hyperlink{class_visual_object_ab04d431ba7d04c2638fd59ea60c0494a}{set\+L\+Mid\+Horisontal} (Q\+Vector3\+D position)
+\item 
+void \hyperlink{class_visual_object_a03c510fafe44590c3da1b37bd59c63e2}{set\+Texture\+I\+D} (int index)
+\item 
+void \hyperlink{class_visual_object_adb56b176fac116ce15e3052a7dfda9a5}{set\+Texture\+Path} (Q\+String filename)
+\item 
+Q\+Vector3\+D \hyperlink{class_visual_object_a4da6962d7f45f75dae8dccc7c95fcde6}{get\+Corner\+U\+Left} ()
+\item 
+Q\+Vector3\+D \hyperlink{class_visual_object_a0b6538a1ff91f4ee3656a7a59acec131}{get\+Corner\+U\+Right} ()
+\item 
+Q\+Vector3\+D \hyperlink{class_visual_object_a396157340bb6bbe35579f08f5e632771}{get\+Corner\+L\+Left} ()
+\item 
+Q\+Vector3\+D \hyperlink{class_visual_object_a03b6a5ca53a328df8d729e935ffbc501}{get\+Corner\+L\+Right} ()
+\item 
+Q\+Vector3\+D \hyperlink{class_visual_object_a58ee6a3048ae3e7d86abf8a34e909e5a}{get\+U\+Mid\+Horisontal} ()
+\item 
+Q\+Vector3\+D \hyperlink{class_visual_object_adc1c5ac4d73c139745dcb1496497127b}{get\+L\+Mid\+Horisontal} ()
+\item 
+Q\+Vector3\+D \hyperlink{class_visual_object_af12cba564798aa84e877084a4766dfaa}{get\+Rotation} ()
+\item 
+Q\+Vector3\+D \hyperlink{class_visual_object_a57dba5803c501bdca908fcc29f750b62}{get\+Translation} ()
+\item 
+Q\+Vector3\+D \hyperlink{class_visual_object_a989a2b5398e2ced7cc3ad5686b9da2ce}{get\+Scaling} ()
+\item 
+\hyperlink{class_model_mesh}{Model\+Mesh} $\ast$ \hyperlink{class_visual_object_aea5c818980cd121dec181ae07a582452}{get\+Model\+Mesh} ()
+\item 
+Q\+Open\+G\+L\+Texture $\ast$ \hyperlink{class_visual_object_a12a32b8182d34a8f2d6c40b871d644c8}{get\+Texture} ()
+\item 
+Q\+String \hyperlink{class_visual_object_a96b679b4dee487e0822722f76435a96b}{get\+Type} ()
+\item 
+Q\+String \hyperlink{class_visual_object_a0cdd5e5f6b20d12f664c46ce844f1b6e}{get\+Texture\+Path} ()
+\item 
+int \hyperlink{class_visual_object_a60f65f7cbc6e6e34a7d6c88c6902216e}{get\+Texture\+I\+D} ()
+\item 
+void \hyperlink{class_visual_object_a1ab21434d8c97643f9ff808f1bbf3703}{set\+Type} (Q\+String type)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_visual_object_a0245f678c51843b881ad6a405c2fee92}{}\index{Visual\+Object@{Visual\+Object}!Visual\+Object@{Visual\+Object}}
+\index{Visual\+Object@{Visual\+Object}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{Visual\+Object(\+Model\+Mesh $\ast$modelmesh, Q\+Open\+G\+L\+Texture $\ast$texture, Q\+Vector3\+D translation, Q\+Vector3\+D rotation, Q\+String type)}]{\setlength{\rightskip}{0pt plus 5cm}Visual\+Object\+::\+Visual\+Object (
+\begin{DoxyParamCaption}
+\item[{{\bf Model\+Mesh} $\ast$}]{modelmesh, }
+\item[{Q\+Open\+G\+L\+Texture $\ast$}]{texture, }
+\item[{Q\+Vector3\+D}]{translation, }
+\item[{Q\+Vector3\+D}]{rotation, }
+\item[{Q\+String}]{type}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a0245f678c51843b881ad6a405c2fee92}
+\hypertarget{class_visual_object_a068ba11545322d81d9ad8c675c4233f9}{}\index{Visual\+Object@{Visual\+Object}!````~Visual\+Object@{$\sim$\+Visual\+Object}}
+\index{````~Visual\+Object@{$\sim$\+Visual\+Object}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{$\sim$\+Visual\+Object()}]{\setlength{\rightskip}{0pt plus 5cm}Visual\+Object\+::$\sim$\+Visual\+Object (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a068ba11545322d81d9ad8c675c4233f9}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_visual_object_a396157340bb6bbe35579f08f5e632771}{}\index{Visual\+Object@{Visual\+Object}!get\+Corner\+L\+Left@{get\+Corner\+L\+Left}}
+\index{get\+Corner\+L\+Left@{get\+Corner\+L\+Left}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{get\+Corner\+L\+Left()}]{\setlength{\rightskip}{0pt plus 5cm}Q\+Vector3\+D Visual\+Object\+::get\+Corner\+L\+Left (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a396157340bb6bbe35579f08f5e632771}
+\hypertarget{class_visual_object_a03b6a5ca53a328df8d729e935ffbc501}{}\index{Visual\+Object@{Visual\+Object}!get\+Corner\+L\+Right@{get\+Corner\+L\+Right}}
+\index{get\+Corner\+L\+Right@{get\+Corner\+L\+Right}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{get\+Corner\+L\+Right()}]{\setlength{\rightskip}{0pt plus 5cm}Q\+Vector3\+D Visual\+Object\+::get\+Corner\+L\+Right (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a03b6a5ca53a328df8d729e935ffbc501}
+\hypertarget{class_visual_object_a4da6962d7f45f75dae8dccc7c95fcde6}{}\index{Visual\+Object@{Visual\+Object}!get\+Corner\+U\+Left@{get\+Corner\+U\+Left}}
+\index{get\+Corner\+U\+Left@{get\+Corner\+U\+Left}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{get\+Corner\+U\+Left()}]{\setlength{\rightskip}{0pt plus 5cm}Q\+Vector3\+D Visual\+Object\+::get\+Corner\+U\+Left (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a4da6962d7f45f75dae8dccc7c95fcde6}
+\hypertarget{class_visual_object_a0b6538a1ff91f4ee3656a7a59acec131}{}\index{Visual\+Object@{Visual\+Object}!get\+Corner\+U\+Right@{get\+Corner\+U\+Right}}
+\index{get\+Corner\+U\+Right@{get\+Corner\+U\+Right}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{get\+Corner\+U\+Right()}]{\setlength{\rightskip}{0pt plus 5cm}Q\+Vector3\+D Visual\+Object\+::get\+Corner\+U\+Right (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a0b6538a1ff91f4ee3656a7a59acec131}
+\hypertarget{class_visual_object_adc1c5ac4d73c139745dcb1496497127b}{}\index{Visual\+Object@{Visual\+Object}!get\+L\+Mid\+Horisontal@{get\+L\+Mid\+Horisontal}}
+\index{get\+L\+Mid\+Horisontal@{get\+L\+Mid\+Horisontal}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{get\+L\+Mid\+Horisontal()}]{\setlength{\rightskip}{0pt plus 5cm}Q\+Vector3\+D Visual\+Object\+::get\+L\+Mid\+Horisontal (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_adc1c5ac4d73c139745dcb1496497127b}
+
+
+Here is the caller graph for this function\+:
+% FIG 0
+
+
+\hypertarget{class_visual_object_aea5c818980cd121dec181ae07a582452}{}\index{Visual\+Object@{Visual\+Object}!get\+Model\+Mesh@{get\+Model\+Mesh}}
+\index{get\+Model\+Mesh@{get\+Model\+Mesh}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{get\+Model\+Mesh()}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Model\+Mesh} $\ast$ Visual\+Object\+::get\+Model\+Mesh (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_aea5c818980cd121dec181ae07a582452}
+
+
+Here is the caller graph for this function\+:
+% FIG 1
+
+
+\hypertarget{class_visual_object_af12cba564798aa84e877084a4766dfaa}{}\index{Visual\+Object@{Visual\+Object}!get\+Rotation@{get\+Rotation}}
+\index{get\+Rotation@{get\+Rotation}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{get\+Rotation()}]{\setlength{\rightskip}{0pt plus 5cm}Q\+Vector3\+D Visual\+Object\+::get\+Rotation (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_af12cba564798aa84e877084a4766dfaa}
+
+
+Here is the caller graph for this function\+:
+% FIG 2
+
+
+\hypertarget{class_visual_object_a989a2b5398e2ced7cc3ad5686b9da2ce}{}\index{Visual\+Object@{Visual\+Object}!get\+Scaling@{get\+Scaling}}
+\index{get\+Scaling@{get\+Scaling}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{get\+Scaling()}]{\setlength{\rightskip}{0pt plus 5cm}Q\+Vector3\+D Visual\+Object\+::get\+Scaling (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a989a2b5398e2ced7cc3ad5686b9da2ce}
+
+
+Here is the caller graph for this function\+:
+% FIG 3
+
+
+\hypertarget{class_visual_object_a12a32b8182d34a8f2d6c40b871d644c8}{}\index{Visual\+Object@{Visual\+Object}!get\+Texture@{get\+Texture}}
+\index{get\+Texture@{get\+Texture}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{get\+Texture()}]{\setlength{\rightskip}{0pt plus 5cm}Q\+Open\+G\+L\+Texture $\ast$ Visual\+Object\+::get\+Texture (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a12a32b8182d34a8f2d6c40b871d644c8}
+\hypertarget{class_visual_object_a60f65f7cbc6e6e34a7d6c88c6902216e}{}\index{Visual\+Object@{Visual\+Object}!get\+Texture\+I\+D@{get\+Texture\+I\+D}}
+\index{get\+Texture\+I\+D@{get\+Texture\+I\+D}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{get\+Texture\+I\+D()}]{\setlength{\rightskip}{0pt plus 5cm}int Visual\+Object\+::get\+Texture\+I\+D (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a60f65f7cbc6e6e34a7d6c88c6902216e}
+\hypertarget{class_visual_object_a0cdd5e5f6b20d12f664c46ce844f1b6e}{}\index{Visual\+Object@{Visual\+Object}!get\+Texture\+Path@{get\+Texture\+Path}}
+\index{get\+Texture\+Path@{get\+Texture\+Path}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{get\+Texture\+Path()}]{\setlength{\rightskip}{0pt plus 5cm}Q\+String Visual\+Object\+::get\+Texture\+Path (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a0cdd5e5f6b20d12f664c46ce844f1b6e}
+\hypertarget{class_visual_object_a57dba5803c501bdca908fcc29f750b62}{}\index{Visual\+Object@{Visual\+Object}!get\+Translation@{get\+Translation}}
+\index{get\+Translation@{get\+Translation}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{get\+Translation()}]{\setlength{\rightskip}{0pt plus 5cm}Q\+Vector3\+D Visual\+Object\+::get\+Translation (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a57dba5803c501bdca908fcc29f750b62}
+
+
+Here is the caller graph for this function\+:
+% FIG 4
+
+
+\hypertarget{class_visual_object_a96b679b4dee487e0822722f76435a96b}{}\index{Visual\+Object@{Visual\+Object}!get\+Type@{get\+Type}}
+\index{get\+Type@{get\+Type}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{get\+Type()}]{\setlength{\rightskip}{0pt plus 5cm}Q\+String Visual\+Object\+::get\+Type (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a96b679b4dee487e0822722f76435a96b}
+
+
+Here is the caller graph for this function\+:
+% FIG 5
+
+
+\hypertarget{class_visual_object_a58ee6a3048ae3e7d86abf8a34e909e5a}{}\index{Visual\+Object@{Visual\+Object}!get\+U\+Mid\+Horisontal@{get\+U\+Mid\+Horisontal}}
+\index{get\+U\+Mid\+Horisontal@{get\+U\+Mid\+Horisontal}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{get\+U\+Mid\+Horisontal()}]{\setlength{\rightskip}{0pt plus 5cm}Q\+Vector3\+D Visual\+Object\+::get\+U\+Mid\+Horisontal (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a58ee6a3048ae3e7d86abf8a34e909e5a}
+
+
+Here is the caller graph for this function\+:
+% FIG 6
+
+
+\hypertarget{class_visual_object_a81aa4ee45566bebe11c3b8e2782a692a}{}\index{Visual\+Object@{Visual\+Object}!set\+Corner\+L\+Left@{set\+Corner\+L\+Left}}
+\index{set\+Corner\+L\+Left@{set\+Corner\+L\+Left}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{set\+Corner\+L\+Left(\+Q\+Vector3\+D position)}]{\setlength{\rightskip}{0pt plus 5cm}void Visual\+Object\+::set\+Corner\+L\+Left (
+\begin{DoxyParamCaption}
+\item[{Q\+Vector3\+D}]{position}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a81aa4ee45566bebe11c3b8e2782a692a}
+\hypertarget{class_visual_object_ad4339a56428a82d6b1d59d78f7631016}{}\index{Visual\+Object@{Visual\+Object}!set\+Corner\+L\+Right@{set\+Corner\+L\+Right}}
+\index{set\+Corner\+L\+Right@{set\+Corner\+L\+Right}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{set\+Corner\+L\+Right(\+Q\+Vector3\+D position)}]{\setlength{\rightskip}{0pt plus 5cm}void Visual\+Object\+::set\+Corner\+L\+Right (
+\begin{DoxyParamCaption}
+\item[{Q\+Vector3\+D}]{position}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_ad4339a56428a82d6b1d59d78f7631016}
+\hypertarget{class_visual_object_adeee80fd1c697e4ef00e1cc254316b4e}{}\index{Visual\+Object@{Visual\+Object}!set\+Corner\+U\+Left@{set\+Corner\+U\+Left}}
+\index{set\+Corner\+U\+Left@{set\+Corner\+U\+Left}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{set\+Corner\+U\+Left(\+Q\+Vector3\+D position)}]{\setlength{\rightskip}{0pt plus 5cm}void Visual\+Object\+::set\+Corner\+U\+Left (
+\begin{DoxyParamCaption}
+\item[{Q\+Vector3\+D}]{position}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_adeee80fd1c697e4ef00e1cc254316b4e}
+\hypertarget{class_visual_object_a26a9feed6b150951c216b44ae8c99490}{}\index{Visual\+Object@{Visual\+Object}!set\+Corner\+U\+Right@{set\+Corner\+U\+Right}}
+\index{set\+Corner\+U\+Right@{set\+Corner\+U\+Right}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{set\+Corner\+U\+Right(\+Q\+Vector3\+D position)}]{\setlength{\rightskip}{0pt plus 5cm}void Visual\+Object\+::set\+Corner\+U\+Right (
+\begin{DoxyParamCaption}
+\item[{Q\+Vector3\+D}]{position}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a26a9feed6b150951c216b44ae8c99490}
+\hypertarget{class_visual_object_ab04d431ba7d04c2638fd59ea60c0494a}{}\index{Visual\+Object@{Visual\+Object}!set\+L\+Mid\+Horisontal@{set\+L\+Mid\+Horisontal}}
+\index{set\+L\+Mid\+Horisontal@{set\+L\+Mid\+Horisontal}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{set\+L\+Mid\+Horisontal(\+Q\+Vector3\+D position)}]{\setlength{\rightskip}{0pt plus 5cm}void Visual\+Object\+::set\+L\+Mid\+Horisontal (
+\begin{DoxyParamCaption}
+\item[{Q\+Vector3\+D}]{position}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_ab04d431ba7d04c2638fd59ea60c0494a}
+\hypertarget{class_visual_object_a2eaddb04dc7308d10773fb2f31f65cda}{}\index{Visual\+Object@{Visual\+Object}!set\+Model@{set\+Model}}
+\index{set\+Model@{set\+Model}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{set\+Model(\+Model\+Mesh $\ast$modelmesh)}]{\setlength{\rightskip}{0pt plus 5cm}void Visual\+Object\+::set\+Model (
+\begin{DoxyParamCaption}
+\item[{{\bf Model\+Mesh} $\ast$}]{modelmesh}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a2eaddb04dc7308d10773fb2f31f65cda}
+\hypertarget{class_visual_object_a24f2c08777a07a60b99a80df23fead83}{}\index{Visual\+Object@{Visual\+Object}!set\+Rotation@{set\+Rotation}}
+\index{set\+Rotation@{set\+Rotation}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{set\+Rotation(\+Q\+Vector3\+D rotation)}]{\setlength{\rightskip}{0pt plus 5cm}void Visual\+Object\+::set\+Rotation (
+\begin{DoxyParamCaption}
+\item[{Q\+Vector3\+D}]{rotation}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a24f2c08777a07a60b99a80df23fead83}
+\hypertarget{class_visual_object_ade6762a69a6879a3f0008e0158badd6c}{}\index{Visual\+Object@{Visual\+Object}!set\+Scaling@{set\+Scaling}}
+\index{set\+Scaling@{set\+Scaling}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{set\+Scaling(\+Q\+Vector3\+D scale)}]{\setlength{\rightskip}{0pt plus 5cm}void Visual\+Object\+::set\+Scaling (
+\begin{DoxyParamCaption}
+\item[{Q\+Vector3\+D}]{scale}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_ade6762a69a6879a3f0008e0158badd6c}
+\hypertarget{class_visual_object_aa430ccc46042035b354846a4cf5ac227}{}\index{Visual\+Object@{Visual\+Object}!set\+Texture@{set\+Texture}}
+\index{set\+Texture@{set\+Texture}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{set\+Texture(\+Q\+Open\+G\+L\+Texture $\ast$texture)}]{\setlength{\rightskip}{0pt plus 5cm}void Visual\+Object\+::set\+Texture (
+\begin{DoxyParamCaption}
+\item[{Q\+Open\+G\+L\+Texture $\ast$}]{texture}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_aa430ccc46042035b354846a4cf5ac227}
+\hypertarget{class_visual_object_a03c510fafe44590c3da1b37bd59c63e2}{}\index{Visual\+Object@{Visual\+Object}!set\+Texture\+I\+D@{set\+Texture\+I\+D}}
+\index{set\+Texture\+I\+D@{set\+Texture\+I\+D}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{set\+Texture\+I\+D(int index)}]{\setlength{\rightskip}{0pt plus 5cm}void Visual\+Object\+::set\+Texture\+I\+D (
+\begin{DoxyParamCaption}
+\item[{int}]{index}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a03c510fafe44590c3da1b37bd59c63e2}
+\hypertarget{class_visual_object_adb56b176fac116ce15e3052a7dfda9a5}{}\index{Visual\+Object@{Visual\+Object}!set\+Texture\+Path@{set\+Texture\+Path}}
+\index{set\+Texture\+Path@{set\+Texture\+Path}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{set\+Texture\+Path(\+Q\+String filename)}]{\setlength{\rightskip}{0pt plus 5cm}void Visual\+Object\+::set\+Texture\+Path (
+\begin{DoxyParamCaption}
+\item[{Q\+String}]{filename}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_adb56b176fac116ce15e3052a7dfda9a5}
+\hypertarget{class_visual_object_ab792e48bfee0845359b2745c020388c6}{}\index{Visual\+Object@{Visual\+Object}!set\+Translation@{set\+Translation}}
+\index{set\+Translation@{set\+Translation}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{set\+Translation(\+Q\+Vector3\+D translation)}]{\setlength{\rightskip}{0pt plus 5cm}void Visual\+Object\+::set\+Translation (
+\begin{DoxyParamCaption}
+\item[{Q\+Vector3\+D}]{translation}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_ab792e48bfee0845359b2745c020388c6}
+\hypertarget{class_visual_object_a1ab21434d8c97643f9ff808f1bbf3703}{}\index{Visual\+Object@{Visual\+Object}!set\+Type@{set\+Type}}
+\index{set\+Type@{set\+Type}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{set\+Type(\+Q\+String type)}]{\setlength{\rightskip}{0pt plus 5cm}void Visual\+Object\+::set\+Type (
+\begin{DoxyParamCaption}
+\item[{Q\+String}]{type}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_a1ab21434d8c97643f9ff808f1bbf3703}
+\hypertarget{class_visual_object_ad549b89d0ec63e529b3b05e05de0834b}{}\index{Visual\+Object@{Visual\+Object}!set\+U\+Mid\+Horisontal@{set\+U\+Mid\+Horisontal}}
+\index{set\+U\+Mid\+Horisontal@{set\+U\+Mid\+Horisontal}!Visual\+Object@{Visual\+Object}}
+\subsubsection[{set\+U\+Mid\+Horisontal(\+Q\+Vector3\+D position)}]{\setlength{\rightskip}{0pt plus 5cm}void Visual\+Object\+::set\+U\+Mid\+Horisontal (
+\begin{DoxyParamCaption}
+\item[{Q\+Vector3\+D}]{position}
+\end{DoxyParamCaption}
+)}\label{class_visual_object_ad549b89d0ec63e529b3b05e05de0834b}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Objects/\hyperlink{visualobject_8h}{visualobject.\+h}\item 
+Objects/\hyperlink{visualobject_8cpp}{visualobject.\+cpp}\end{DoxyCompactItemize}
