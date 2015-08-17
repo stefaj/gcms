@@ -41,6 +41,8 @@ class MainWindow : public QMainWindow {
     void is_opengl_valid_context(bool);
     void on_button_remove_floor_plan_clicked();
 
+    void on_button_remove_link_clicked();
+
 private:
     Ui::MainWindow *ui;
     void EmitSignals();
@@ -69,6 +71,7 @@ private:
     void load_premises(QString file_name);  // load premises from file
     // allows the floorplans to be removed
     void remove_floorplan(bool removable);
+    void remove_link(bool removeable); // allows links to be broken
 };
 
 #endif  // VIRTUAL_CREATOR_MAINWINDOW_H_
