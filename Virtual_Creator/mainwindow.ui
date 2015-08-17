@@ -952,8 +952,8 @@ QDoubleSpinBox::down-arrow:off
    <widget class="RenderState" name="openGLWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
+      <x>10</x>
+      <y>10</y>
       <width>681</width>
       <height>581</height>
      </rect>
@@ -1355,7 +1355,7 @@ QDoubleSpinBox::down-arrow:off
        <x>11</x>
        <y>11</y>
        <width>106</width>
-       <height>54</height>
+       <height>59</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -1370,6 +1370,16 @@ QDoubleSpinBox::down-arrow:off
        <widget class="QPushButton" name="button_remove_tree">
         <property name="text">
          <string>Remove Tree</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="button_remove_floor_plan">
+        <property name="text">
+         <string>Remove Floor Plan</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

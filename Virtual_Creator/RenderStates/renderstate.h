@@ -66,7 +66,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     bool mousedown_right, mousedown_left, node_placable,
     node_removable, tree_removable, node_linkable, pavement_placable,
     door_placeable, wall_placable, tree_placable, placable_floor_plan,
-    node_significant;
+    node_significant, floor_plan_removable;
     QString floor_plan_path, next_node_name;
     QVector<QOpenGLTexture *> textures_from_files;
     void add_pavement(QVector3D rotation,
@@ -97,6 +97,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     void DrawNodeLines(QVector3D Pos);
     void DrawPlacableItems(QVector3D Pos);
     void DrawObjectLines(QVector3D Pos);
+    void remove_floorplan();
     const float tree_radius, infinte_lenght_lines;
     QLabel selected_label;
 
@@ -119,6 +120,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     void set_next_node_name(QString name);
     void set_next_node_significant(bool is_significant);
     void load_premises(QString filename);
+    void allow_remove_floor_plan(bool allow);
 
   signals:
     void opengl_initialised(bool);

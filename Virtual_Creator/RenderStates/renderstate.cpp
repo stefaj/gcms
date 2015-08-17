@@ -37,14 +37,14 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     selected_label(this) {
     // enable antialiasing (set the format of the widget)
     QSurfaceFormat format;
-    format.setSamples(4);
+    // format.setSamples(4);
     this->setFormat(format);
 
     // initialize the clicked position
-    this->clicked_position = new QVector3D();
+    this->clicked_position = new QVector3D(-4445.3,-3455,-345555);
 
     // set the current mouse position in 3D
-    this->current_position = new QVector3D();
+    this->current_position = new QVector3D(0,-2033,-93345);
 
     // clear the textures
     this->textures.clear();
@@ -69,6 +69,10 @@ void RenderState::invert_mouseY(bool value) {
         this->mouse_y_inverted = -1.0f;
     else
         this->mouse_y_inverted = 1.0f;
+}
+
+void RenderState::allow_remove_floor_plan(bool allow) {
+    floor_plan_removable = allow;
 }
 
 void RenderState::load_premises(QString value) {
@@ -349,6 +353,12 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
     RemoveNodes();
   }
 
+  // left click to remove the node
+  if ( (event->button() == Qt::LeftButton) && (this->floor_plan_removable) ) {
+    remove_floorplan();
+  }
+
+
   // left click to add the link
   if ( (event->button() == Qt::LeftButton) && (this->node_linkable) ) {
     // get position of the clicked
@@ -365,8 +375,30 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
   }
 }
 
+void RenderState::remove_floorplan() {
+  /* floor plans are 2d rectangulars
+   * that can be rotated only about the y-axis.
+   * thus the rotation along with the scale of
+   * the floor plan can be used to detect
+   * the intersection of a point or a ray
+   */
+  for ( int l = 0; l < this->models.count(); l++ ) {
+      if ( Mathematics::detect_point_in_plan_on_y(
+               this->models.value(l)->getTranslation(),
+               this->models.value(l)->getScaling(),
+               this->models.value(l)->getRotation().y(),
+               QVector3D(this->current_position->x(),
+                         this->current_position->y(),
+                         this->current_position->z()))) {
+          if ( this->models.value(l)->getType() == "FloorPlan") {
+              this->models.removeAt(l);
+          }
+      }
+  }
+}
+
 void RenderState::RemoveNodes() {
-  // collision detection
+
   for ( int l = 0; l < this->nodes.count(); l++ ) {
     if ( this->current_position->distanceToPoint(this->
                                                nodes.value(l)->
@@ -900,8 +932,8 @@ void RenderState::DrawNodeNames() {
   painter.begin(this);
   painter.setPen(Qt::white);
   painter.setFont(QFont("Arial", 8));
-  painter.setRenderHints(QPainter::Antialiasing |
-                         QPainter::SmoothPixmapTransform);
+  // painter.setRenderHints(QPainter::Antialiasing |
+  //                        QPainter::SmoothPixmapTransform);
   // draw all the node text here
   foreach(Node *n, this->nodes) {
     if ( ( n->Position().y() < this->current_floor_height + 0.5 ) &&

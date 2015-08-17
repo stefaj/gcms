@@ -39,8 +39,9 @@ class MainWindow : public QMainWindow {
     void send_loaded_premises();
     void load_virtual_concierge_interface();
     void is_opengl_valid_context(bool);
+    void on_button_remove_floor_plan_clicked();
 
- private:
+private:
     Ui::MainWindow *ui;
     void EmitSignals();
     bool opengl_initialised;
@@ -66,6 +67,8 @@ class MainWindow : public QMainWindow {
     // set whether the node should be a button or not
     void set_node_significant(bool add_button);
     void load_premises(QString file_name);  // load premises from file
+    // allows the floorplans to be removed
+    void remove_floorplan(bool removable);
 };
 
 #endif  // VIRTUAL_CREATOR_MAINWINDOW_H_

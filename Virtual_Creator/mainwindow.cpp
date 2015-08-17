@@ -66,6 +66,8 @@ MainWindow::MainWindow(QWidget *parent) :
           this, SLOT(load_virtual_concierge_interface()));
   connect(ui->openGLWidget, SIGNAL(opengl_initialised(bool)),
           this, SLOT(is_opengl_valid_context(bool)));
+  connect(this, SIGNAL(remove_floorplan(bool)),
+          ui->openGLWidget, SLOT(allow_remove_floor_plan(bool)));
 }
 
 MainWindow::~MainWindow() {delete ui;}
@@ -91,6 +93,7 @@ void MainWindow::EmitSignals() {
   emit place_tree(ui->button_tree1->isChecked());
   emit remove_trees(ui->button_remove_tree->isChecked());
   emit place_floor_plan(ui->button_floor_plan->isChecked());
+  emit remove_floorplan(ui->button_remove_floor_plan->isChecked());
   ui->groupBox_node_settings->setVisible(ui->button_node->isChecked());
   ui->groupBox_floor_plan_settings->setVisible(
               ui->button_floor_plan->isChecked());
@@ -129,6 +132,7 @@ void MainWindow::on_button_link_clicked() {
   ui->button_tree1->setChecked(false);
   ui->button_remove_tree->setChecked(false);
   ui->button_floor_plan->setChecked(false);
+  ui->button_remove_floor_plan->setChecked(false);
   EmitSignals();
 }
 
@@ -141,6 +145,7 @@ void MainWindow::on_button_remove_node_clicked() {
   ui->button_tree1->setChecked(false);
   ui->button_remove_tree->setChecked(false);
   ui->button_floor_plan->setChecked(false);
+  ui->button_remove_floor_plan->setChecked(false);
   EmitSignals();
 }
 
@@ -153,6 +158,7 @@ void MainWindow::on_button_pavement_clicked() {
   ui->button_tree1->setChecked(false);
   ui->button_remove_tree->setChecked(false);
   ui->button_floor_plan->setChecked(false);
+  ui->button_remove_floor_plan->setChecked(false);
   EmitSignals();
 }
 
@@ -165,6 +171,7 @@ void MainWindow::on_button_wall_clicked() {
   ui->button_tree1->setChecked(false);
   ui->button_remove_tree->setChecked(false);
   ui->button_floor_plan->setChecked(false);
+  ui->button_remove_floor_plan->setChecked(false);
   EmitSignals();
 }
 
@@ -177,6 +184,7 @@ void MainWindow::on_button_door_clicked() {
   ui->button_tree1->setChecked(false);
   ui->button_remove_tree->setChecked(false);
   ui->button_floor_plan->setChecked(false);
+  ui->button_remove_floor_plan->setChecked(false);
   EmitSignals();
 }
 
@@ -197,7 +205,7 @@ void MainWindow::on_button_tree1_clicked() {
   ui->button_door->setChecked(false);
   ui->button_remove_tree->setChecked(false);
   ui->button_floor_plan->setChecked(false);
-
+  ui->button_remove_floor_plan->setChecked(false);
   EmitSignals();
 }
 
@@ -210,7 +218,7 @@ void MainWindow::on_button_remove_tree_clicked() {
   ui->button_door->setChecked(false);
   ui->button_tree1->setChecked(false);
   ui->button_floor_plan->setChecked(false);
-
+  ui->button_remove_floor_plan->setChecked(false);
   EmitSignals();
 }
 
@@ -228,6 +236,7 @@ void MainWindow::on_button_floor_plan_clicked() {
   ui->button_door->setChecked(false);
   ui->button_tree1->setChecked(false);
   ui->button_remove_tree->setChecked(false);
+  ui->button_remove_floor_plan->setChecked(false);
   EmitSignals();
 
   ui->stackedWidget_side_add->setCurrentIndex(1);
@@ -286,4 +295,18 @@ void MainWindow::on_checkbox_significant_clicked(bool checked) {
 void MainWindow::load_virtual_concierge_interface() {
     UserInterfaceCreator *v = new UserInterfaceCreator();
     v->show();
+}
+
+void MainWindow::on_button_remove_floor_plan_clicked()
+{
+    ui->button_node->setChecked(false);
+    ui->button_link->setChecked(false);
+    ui->button_remove_node->setChecked(false);
+    ui->button_pavement->setChecked(false);
+    ui->button_wall->setChecked(false);
+    ui->button_door->setChecked(false);
+    ui->button_tree1->setChecked(false);
+    ui->button_remove_tree->setChecked(false);
+    ui->button_floor_plan->setChecked(false);
+    EmitSignals();
 }

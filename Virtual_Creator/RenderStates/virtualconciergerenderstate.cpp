@@ -10,7 +10,7 @@ VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent):
     start(0),
     end(0) {
     // enable antialiasing (set the format of the widget)
-    format.setSamples(4);
+    // format.setSamples(4);
     this->setFormat(format);
 
     // clear the textures
