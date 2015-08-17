@@ -219,6 +219,40 @@ bool Mathematics::detect_point_in_plan_on_y(QVector3D position,
   return false;
 }
 
+bool Mathematics::detect_point_near_line(QVector3D point_a,
+                                   QVector3D point_b,
+                                   QVector3D position,
+                                   float threshhold) {
+    // this is to enable alternative (exeption) calculation when division by zero will happen
+    bool vertical = false;
+    float m, c, z;
+    m = (round(point_a.x() - point_b.x()) == 0) ?
+                (point_a.z() - point_b.z())/(point_a.x() - point_b.x()) :
+                9999999.0;
+    if(m > 999999.0) {
+        vertical = true;
+    } else {
+        c = point_a.z() - m * point_a.x();
+        z = m * position.x() + c;
+        // qDebug() << z << position.z();
+        if ( abs(z - position.z()) < threshhold ) {
+            return true;
+        }
+    }
+    // for vertical case
+    if ( vertical ) {
+        if ( abs(position.x() - point_a.x() ) < threshhold ) {
+            float top = point_a.z() > point_b.z() ? point_a.z() : point_b.z(),
+                  bottom = point_a.z() < point_b.z() ? point_a.z() : point_b.z();
+            if ( position.z() > bottom &&
+                 position.z() < top) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 Mathematics::~Mathematics() {
 }
 

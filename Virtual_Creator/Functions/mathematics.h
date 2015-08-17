@@ -38,6 +38,10 @@ class Mathematics {
                                           QVector3D scale,
                                           float rotation_z,
                                           QVector3D intersection_point);
+    static bool detect_point_near_line(QVector3D point_a,
+                                       QVector3D point_b,
+                                       QVector3D position,
+                                       float threshhold);
 };
 
 #endif  // VIRTUAL_CREATOR_FUNCTIONS_MATHEMATICS_H_
