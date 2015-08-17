@@ -366,7 +366,7 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
 
   // left click to remove the link
   if ( (event->button() == Qt::LeftButton) && (this->link_removable) ) {
-    // do link removal here
+    remove_link();
   }
 
   // left click to add the link
@@ -383,6 +383,11 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
         this->node_index_selected = l;
     }
   }
+}
+
+void RenderState::remove_link() {
+
+    // do remove node code here
 }
 
 void RenderState::remove_floorplan() {
