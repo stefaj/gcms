@@ -1,6 +1,7 @@
 /* Copyright 2015 Ruan Luies */
 
 #include <QtMath>
+#include <QDebug>
 #include "./mathematics.h"
 
 Mathematics::Mathematics() {
@@ -119,6 +120,103 @@ QPoint Mathematics::transform_3d_to_2d(QMatrix4x4 view,
     int x = static_cast<int>(qRound((((p.x() + 1.0)/2.0) * width)));
     int y = static_cast<int>(qRound((((1.0 - p.y())/2.0) * height)));
     return QPoint(x, y);
+}
+
+bool Mathematics::detect_point_in_plan_on_y(QVector3D position,
+                                            QVector3D scale,
+                                            float rotation_y,
+                                            QVector3D intersection_point) {
+  const float pi = 3.141592653589798;
+  float rotation_in_radians_t_l = (rotation_y + 135) * (pi / 180.0) ;
+  float rotation_in_radians_t_r = (rotation_y + 45) * (pi / 180.0) ;
+  float rotation_in_radians_b_l = (rotation_y - 135) * (pi / 180.0) ;
+  float rotation_in_radians_b_r = (rotation_y - 45) * (pi / 180.0) ;
+  float distance = pow(scale.x()*scale.x() + scale.z()*scale.z(), 0.5) / 2.0;
+  bool no_rotation = false;
+  float z_1, z_2, z_3, z_4;
+  QVector3D position_top_left,
+          position_top_right,
+          position_bot_left,
+          position_bot_right;
+  position_top_left = position +
+          QVector3D(distance * cos(rotation_in_radians_t_l),
+                    0,
+                    distance * sin(rotation_in_radians_t_l) );
+  position_top_right = position +
+          QVector3D(distance * cos(rotation_in_radians_t_r),
+                    0,
+                    distance * sin(rotation_in_radians_t_r));
+  position_bot_left = position +
+          QVector3D(distance * cos(rotation_in_radians_b_l),
+                    0,
+                    distance * sin(rotation_in_radians_b_l));
+  position_bot_right = position +
+          QVector3D(distance * cos(rotation_in_radians_b_r),
+                    0,
+                    distance * sin(rotation_in_radians_b_r));
+  if ( (round ( position_top_left.x() - position_top_right.x() ) == 0)||
+       (round ( position_bot_left.x() - position_bot_right.x() ) == 0)||
+       (round ( position_bot_right.x() - position_top_right.x() ) == 0)||
+       (round ( position_top_left.x() - position_bot_left.x() ) == 0) ) {
+    no_rotation = true;
+  } else {
+    // calculate the constants ( there are 4 in total )
+      float c_1, c_2, c_3, c_4;
+      // slopes ( 2 of the four slopes are the same )
+      float m_1 = (position_top_left.z() - position_top_right.z())
+              / (position_top_left.x() - position_top_right.x()),
+            m_2 = (position_top_left.z() - position_bot_left.z())
+              / (position_top_left.x() - position_bot_left.x());
+      // calculate the first constant this is for the equation
+      // involving the top left and top right point (initially)
+      c_1 = - m_1 * position_top_left.x()
+              + position_top_left.z();
+      // calculate the second constant this is for the equation
+      // involving the bot left and bot right point (initially)
+      c_2 = - m_1 * position_bot_right.x()
+              + position_bot_right.z();
+
+      // calculate the third constant, this is for the
+      // initially vertical lines
+      c_3 = - m_2 * position_top_left.x()
+              + position_top_left.z();
+      // calculate the fourth constant, this is for the
+      // initially vertical lines
+      c_4 = - m_2 * position_bot_right.x()
+              + position_bot_right.z();
+
+      // calculate all the straigth line equations
+      z_1 = c_1 + m_1 * intersection_point.x();
+      z_2 = c_2 + m_1 * intersection_point.x();
+      z_3 = c_3 + m_2 * intersection_point.x();
+      z_4 = c_4 + m_2 * intersection_point.x();
+
+      // order the previously calculated z values
+      float largest_one = z_1 > z_2 ? z_1 : z_2,
+            smallest_one = z_1 < z_2 ? z_1 : z_2,
+            largest_two = z_3 > z_4 ? z_3 : z_4,
+            smallest_two = z_3 < z_4 ? z_3 : z_4;
+
+      // check if the point is within the plane
+      if ( (largest_one >  intersection_point.z()) &&
+           (smallest_one < intersection_point.z()) &&
+           (largest_two >  intersection_point.z()) &&
+           (smallest_two < intersection_point.z()) &&
+           (round(position.y()) == round(intersection_point.y())) ) {
+          return true;
+      }
+  }
+  if ( no_rotation ) {
+      if ( ( position.x() + scale.x() / 2.0 > intersection_point.x() ) &&
+           ( position.x() - scale.x() / 2.0 < intersection_point.x() ) &&
+           ( position.z() + scale.z() / 2.0 > intersection_point.z() ) &&
+           ( position.z() - scale.z() / 2.0 < intersection_point.z() ) &&
+           ( round(position.y()) == round(intersection_point.y()) ) ) {
+          // check non rotated collision
+          return true;
+      }
+  }
+  return false;
 }
 
 Mathematics::~Mathematics() {

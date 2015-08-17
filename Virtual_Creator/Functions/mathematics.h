@@ -34,6 +34,10 @@ class Mathematics {
                                      QVector3D point,
                                      int screen_width,
                                      int screen_height);
+    static bool detect_point_in_plan_on_y(QVector3D position,
+                                          QVector3D scale,
+                                          float rotation_z,
+                                          QVector3D intersection_point);
 };
 
 #endif  // VIRTUAL_CREATOR_FUNCTIONS_MATHEMATICS_H_
