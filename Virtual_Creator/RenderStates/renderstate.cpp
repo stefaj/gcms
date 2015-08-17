@@ -62,7 +62,13 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     setMouseTracking(true);
 }
 
-void RenderState::allow_node(bool value) {this->node_placable = value;}
+void RenderState::allow_node(bool value) {
+    this->node_placable = value;
+}
+
+void RenderState::allow_remove_link(bool allow) {
+    link_removable = allow;
+}
 
 void RenderState::invert_mouseY(bool value) {
     if (value)
@@ -358,6 +364,10 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
     remove_floorplan();
   }
 
+  // left click to remove the link
+  if ( (event->button() == Qt::LeftButton) && (this->link_removable) ) {
+    // do link removal here
+  }
 
   // left click to add the link
   if ( (event->button() == Qt::LeftButton) && (this->node_linkable) ) {
