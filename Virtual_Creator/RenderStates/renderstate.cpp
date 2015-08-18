@@ -407,6 +407,8 @@ void RenderState::remove_link() {
       }
     }
   }
+  // update the working files
+  PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
 }
 
 void RenderState::remove_floorplan() {
@@ -429,6 +431,8 @@ void RenderState::remove_floorplan() {
           }
       }
   }
+  PremisesExporter::export_environment(this->models, "environment.env");
+  PremisesExporter::export_texture(this->texture_paths, "textures.tl");
 }
 
 void RenderState::RemoveNodes() {
