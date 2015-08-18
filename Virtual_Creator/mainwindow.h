@@ -19,18 +19,10 @@ class MainWindow : public QMainWindow {
     ~MainWindow();
 
  private slots:
-    void on_button_node_clicked();
-    void on_button_link_clicked();
-    void on_button_pavement_clicked();
-    void on_button_wall_clicked();
-    void on_button_door_clicked();
+
     void on_spin_rotationY_valueChanged(double arg1);
     void on_checkBox_inversemouse_y_clicked(bool checked);
-    void on_button_tree1_clicked();
-    void on_button_remove_node_clicked();
-    void on_button_remove_tree_clicked();
     void on_button_execute_virtual_concierge_clicked();
-    void on_button_floor_plan_clicked();
     void on_doubleSpinBox_floor_plan_width_valueChanged(double arg1);
     void on_doubleSpinBox_floor_plan_height_valueChanged(double arg1);
     void on_spinBox_floor_level_valueChanged(int arg1);
@@ -39,13 +31,14 @@ class MainWindow : public QMainWindow {
     void send_loaded_premises();
     void load_virtual_concierge_interface();
     void is_opengl_valid_context(bool);
-    void on_button_remove_floor_plan_clicked();
-
-    void on_button_remove_link_clicked();
+    void on_button_add_basic_clicked(bool checked);
+    void on_button_remove_basic_clicked();
+    void on_comboBox_basic_adds_activated(const QString &arg1);
 
 private:
     Ui::MainWindow *ui;
     void EmitSignals();
+    void drop_down_emit();
     bool opengl_initialised;
 
  signals:

@@ -647,7 +647,8 @@ void RenderState::paintGL() {
   // enable cullmode CCW (counter clockwise)
   glEnable(GL_CULL_FACE);
   // clear the background color for rendering
-  glClearColor(104.0/255.0, 104.0/255.0, 104.0/255.0, 1);
+  // cornflower blue 659CEF
+  glClearColor(210.0/255.0, 210.0/255.0, 210.0/255.0, 1);
   // clear the color and depth buffer
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
   // setup camera

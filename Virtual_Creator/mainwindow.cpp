@@ -9,21 +9,8 @@ MainWindow::MainWindow(QWidget *parent) :
   ui(new Ui::MainWindow) {
   ui->setupUi(this);
 
-  // hide things not needed
-  ui->groupBox_node_settings->setVisible(false);
-  ui->groupBox_floor_plan_settings->setVisible(false);\
-  ui->groupBox_node_settings_2->setVisible(false);
-
-  // set clickable buttons
-  ui->button_node->setCheckable(true);
-  ui->button_link->setCheckable(true);
-  ui->button_remove_node->setCheckable(true);
-  ui->button_remove_tree->setCheckable(true);
-  ui->button_pavement->setCheckable(true);
-  ui->button_door->setCheckable(true);
-  ui->button_wall->setCheckable(true);
-  ui->button_tree1->setCheckable(true);
-  ui->button_floor_plan->setCheckable(true);
+  // set current page to floor plan
+  ui->stackedWidget_side_add->setCurrentIndex(1);
 
   // connections to all the slots of the opengl widget
   connect(this, SIGNAL(place_node(bool)),
@@ -86,36 +73,70 @@ void MainWindow::is_opengl_valid_context(bool is_valid_context) {
 }
 
 void MainWindow::EmitSignals() {
-  emit node_links(ui->button_link->isChecked());
-  emit place_node(ui->button_node->isChecked());
-  emit remove_nodes(ui->button_remove_node->isChecked());
-  emit place_pavement(ui->button_pavement->isChecked());
-  emit place_door(ui->button_door->isChecked());
-  emit place_wall(ui->button_wall->isChecked());
-  emit place_tree(ui->button_tree1->isChecked());
-  emit remove_trees(ui->button_remove_tree->isChecked());
-  emit place_floor_plan(ui->button_floor_plan->isChecked());
-  emit remove_floorplan(ui->button_remove_floor_plan->isChecked());
-  emit remove_link(ui->button_remove_link->isChecked());
-  ui->groupBox_node_settings->setVisible(ui->button_node->isChecked());
-  ui->groupBox_floor_plan_settings->setVisible(
-              ui->button_floor_plan->isChecked());
-  ui->groupBox_node_settings_2->setVisible(ui->button_node->isChecked());
 }
 
-void MainWindow::on_button_node_clicked() {
-  ui->button_link->setChecked(false);
-  ui->button_remove_node->setChecked(false);
-  ui->button_pavement->setChecked(false);
-  ui->button_door->setChecked(false);
-  ui->button_wall->setChecked(false);
-  ui->button_tree1->setChecked(false);
-  ui->button_remove_tree->setChecked(false);
-  ui->button_floor_plan->setChecked(false);
-  ui->button_remove_link->setChecked(false);
-  ui->stackedWidget_side_add->setCurrentIndex(0);
-  EmitSignals();
+void MainWindow::drop_down_emit() {
+ if ( QString::compare(ui->comboBox_basic_adds->currentText(),
+                       "Floor Plan",
+                       Qt::CaseInsensitive) == 0 ) {
+
+    emit place_floor_plan(ui->button_add_basic->isChecked());
+    emit remove_floorplan(ui->button_remove_basic->isChecked());
+    emit place_node(false);
+    emit remove_nodes(false);
+    emit node_links(false);
+    emit remove_link(false);
+    // the edit nodes, links and floorplans are still needed here
+    ui->stackedWidget_side_add->setCurrentIndex(1);
+    // emit new scale for the floor plan
+    emit set_object_scale(QVector3D(
+                              ui->doubleSpinBox_floor_plan_width->value(),
+                              1,
+                              ui->doubleSpinBox_floor_plan_height->value()));
+
+    if ( ui->button_add_basic->isChecked() ) {
+         QString file_name = QFileDialog::getOpenFileName(this,
+                                        tr("Open Image"),
+                                         "/home/image_file",
+                                        tr("Image Files (*.png *.jpg *.bmp)"));
+      if ( PremisesExporter::fileExists(file_name) ) {
+       emit add_new_texture(file_name);
+      } else {
+         emit add_new_texture("://Texture0");
+      }
+    }
+ }
+ if ( QString::compare(ui->comboBox_basic_adds->currentText(),
+                       "Node",
+                       Qt::CaseInsensitive) == 0 ) {
+     emit place_floor_plan(false);
+     emit remove_floorplan(false);
+     emit place_node(ui->button_add_basic->isChecked());
+     emit remove_nodes(ui->button_remove_basic->isChecked());
+     emit node_links(false);
+     emit remove_link(false);
+     if ( ui->button_add_basic->isChecked() ||
+          ui->button_edit_basic->isChecked() ) {
+       ui->stackedWidget_side_add->setCurrentIndex(0);
+     } else {
+       ui->stackedWidget_side_add->setCurrentIndex(2);
+     }
+     // the edit nodes, links and floorplans are still needed here
+ }
+ if ( QString::compare(ui->comboBox_basic_adds->currentText(),
+                       "Link",
+                       Qt::CaseInsensitive) == 0 ) {
+     emit place_floor_plan(false);
+     emit remove_floorplan(false);
+     emit place_node(false);
+     emit remove_nodes(false);
+     emit node_links(ui->button_add_basic->isChecked());
+     emit remove_link(ui->button_remove_basic->isChecked());
+     ui->stackedWidget_side_add->setCurrentIndex(2);
+     // the edit nodes, links and floorplans are still needed here
+ }
 }
+
 
 void MainWindow::send_loaded_premises() {
     QString file_name = QFileDialog::getOpenFileName(this,
@@ -127,76 +148,6 @@ void MainWindow::send_loaded_premises() {
     }
 }
 
-void MainWindow::on_button_link_clicked() {
-  ui->button_node->setChecked(false);
-  ui->button_remove_node->setChecked(false);
-  ui->button_pavement->setChecked(false);
-  ui->button_door->setChecked(false);
-  ui->button_wall->setChecked(false);
-  ui->button_tree1->setChecked(false);
-  ui->button_remove_tree->setChecked(false);
-  ui->button_floor_plan->setChecked(false);
-  ui->button_remove_floor_plan->setChecked(false);
-  ui->button_remove_link->setChecked(false);
-  EmitSignals();
-}
-
-void MainWindow::on_button_remove_node_clicked() {
-  ui->button_node->setChecked(false);
-  ui->button_link->setChecked(false);
-  ui->button_pavement->setChecked(false);
-  ui->button_door->setChecked(false);
-  ui->button_wall->setChecked(false);
-  ui->button_tree1->setChecked(false);
-  ui->button_remove_tree->setChecked(false);
-  ui->button_floor_plan->setChecked(false);
-  ui->button_remove_floor_plan->setChecked(false);
-  ui->button_remove_link->setChecked(false);
-  EmitSignals();
-}
-
-void MainWindow::on_button_pavement_clicked() {
-  ui->button_node->setChecked(false);
-  ui->button_link->setChecked(false);
-  ui->button_remove_node->setChecked(false);
-  ui->button_door->setChecked(false);
-  ui->button_wall->setChecked(false);
-  ui->button_tree1->setChecked(false);
-  ui->button_remove_tree->setChecked(false);
-  ui->button_floor_plan->setChecked(false);
-  ui->button_remove_floor_plan->setChecked(false);
-  ui->button_remove_link->setChecked(false);
-  EmitSignals();
-}
-
-void MainWindow::on_button_wall_clicked() {
-  ui->button_node->setChecked(false);
-  ui->button_link->setChecked(false);
-  ui->button_remove_node->setChecked(false);
-  ui->button_door->setChecked(false);
-  ui->button_pavement->setChecked(false);
-  ui->button_tree1->setChecked(false);
-  ui->button_remove_tree->setChecked(false);
-  ui->button_floor_plan->setChecked(false);
-  ui->button_remove_floor_plan->setChecked(false);
-  ui->button_remove_link->setChecked(false);
-  EmitSignals();
-}
-
-void MainWindow::on_button_door_clicked() {
-  ui->button_node->setChecked(false);
-  ui->button_link->setChecked(false);
-  ui->button_remove_node->setChecked(false);
-  ui->button_pavement->setChecked(false);
-  ui->button_wall->setChecked(false);
-  ui->button_tree1->setChecked(false);
-  ui->button_remove_tree->setChecked(false);
-  ui->button_floor_plan->setChecked(false);
-  ui->button_remove_floor_plan->setChecked(false);
-  ui->button_remove_link->setChecked(false);
-  EmitSignals();
-}
-
 void MainWindow::on_spin_rotationY_valueChanged(double arg1) {
     change_rotationY(arg1);
 }
@@ -205,70 +156,9 @@ void MainWindow::on_checkBox_inversemouse_y_clicked(bool checked) {
   emit invert_mouseY(checked);
 }
 
-void MainWindow::on_button_tree1_clicked() {
-  ui->button_node->setChecked(false);
-  ui->button_link->setChecked(false);
-  ui->button_remove_node->setChecked(false);
-  ui->button_pavement->setChecked(false);
-  ui->button_wall->setChecked(false);
-  ui->button_door->setChecked(false);
-  ui->button_remove_tree->setChecked(false);
-  ui->button_floor_plan->setChecked(false);
-  ui->button_remove_floor_plan->setChecked(false);
-  ui->button_remove_link->setChecked(false);
-  EmitSignals();
-}
-
-void MainWindow::on_button_remove_tree_clicked() {
-  ui->button_node->setChecked(false);
-  ui->button_link->setChecked(false);
-  ui->button_remove_node->setChecked(false);
-  ui->button_pavement->setChecked(false);
-  ui->button_wall->setChecked(false);
-  ui->button_door->setChecked(false);
-  ui->button_tree1->setChecked(false);
-  ui->button_floor_plan->setChecked(false);
-  ui->button_remove_floor_plan->setChecked(false);
-  ui->button_remove_link->setChecked(false);
-  EmitSignals();
-}
-
 void MainWindow::on_button_execute_virtual_concierge_clicked() {
     VirtualConcierge *co = new VirtualConcierge();
     co->show();
-}
-
-void MainWindow::on_button_floor_plan_clicked() {
-  ui->button_node->setChecked(false);
-  ui->button_link->setChecked(false);
-  ui->button_remove_node->setChecked(false);
-  ui->button_pavement->setChecked(false);
-  ui->button_wall->setChecked(false);
-  ui->button_door->setChecked(false);
-  ui->button_tree1->setChecked(false);
-  ui->button_remove_tree->setChecked(false);
-  ui->button_remove_floor_plan->setChecked(false);
-  ui->button_remove_link->setChecked(false);
-  EmitSignals();
-
-  ui->stackedWidget_side_add->setCurrentIndex(1);
-    // emit new scale for the floor plan
-  emit set_object_scale(QVector3D(
-                            ui->doubleSpinBox_floor_plan_width->value(),
-                              1,
-                            ui->doubleSpinBox_floor_plan_height->value()));
-
-  if ( ui->button_floor_plan->isChecked() ) {
-        QString file_name = QFileDialog::getOpenFileName(this,
-                                       tr("Open Image"),
-                                        "/home/image_file",
-                                       tr("Image Files (*.png *.jpg *.bmp)"));
-    if ( PremisesExporter::fileExists(file_name) ) {
-      emit add_new_texture(file_name);
-    } else {
-        emit add_new_texture("://Texture0");
-    }
-  }
 }
 
 void MainWindow::on_doubleSpinBox_floor_plan_width_valueChanged(double arg1) {
@@ -309,32 +199,20 @@ void MainWindow::load_virtual_concierge_interface() {
     v->show();
 }
 
-void MainWindow::on_button_remove_floor_plan_clicked()
-{
-    ui->button_node->setChecked(false);
-    ui->button_link->setChecked(false);
-    ui->button_remove_node->setChecked(false);
-    ui->button_pavement->setChecked(false);
-    ui->button_wall->setChecked(false);
-    ui->button_door->setChecked(false);
-    ui->button_tree1->setChecked(false);
-    ui->button_remove_tree->setChecked(false);
-    ui->button_floor_plan->setChecked(false);
-    ui->button_remove_link->setChecked(false);
-    EmitSignals();
+void MainWindow::on_button_add_basic_clicked(bool /*checked*/) {
+
+  ui->button_remove_basic->setChecked(false);
+  ui->button_edit_basic->setChecked(false);
+  drop_down_emit();
 }
 
-void MainWindow::on_button_remove_link_clicked()
-{
-    ui->button_node->setChecked(false);
-    ui->button_link->setChecked(false);
-    ui->button_remove_node->setChecked(false);
-    ui->button_pavement->setChecked(false);
-    ui->button_wall->setChecked(false);
-    ui->button_door->setChecked(false);
-    ui->button_tree1->setChecked(false);
-    ui->button_remove_tree->setChecked(false);
-    ui->button_floor_plan->setChecked(false);
-    ui->button_remove_floor_plan->setChecked(false);
-    EmitSignals();
+void MainWindow::on_button_remove_basic_clicked() {
+
+  ui->button_add_basic->setChecked(false);
+  ui->button_edit_basic->setChecked(false);
+  drop_down_emit();
+}
+
+void MainWindow::on_comboBox_basic_adds_activated(const QString &/*&arg1*/) {
+  drop_down_emit();
 }
