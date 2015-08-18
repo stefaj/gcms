@@ -386,8 +386,26 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
 }
 
 void RenderState::remove_link() {
-
-    // do remove node code here
+  // do remove node code here
+  for ( int k = 0; k < this->nodes.count(); k++ ) {
+    const unsigned int count_connected =
+            this->nodes.value(k)->countConnected();
+    QVector3D node_position_current = this->nodes.value(k)->Position();
+    // remove all the links of the deleted node
+    for ( unsigned int z = 0; z < count_connected; z++ ) {
+      int connected_index = this->nodes.value(k)->getConnectedIndex(z);
+      QVector3D alt_node_position =
+              this->nodes.value(connected_index)->Position();
+      if ( Mathematics::detect_point_near_line(node_position_current,
+                                  alt_node_position,
+                                  QVector3D(this->current_position->x(),
+                                            this->current_position->y(),
+                                            this->current_position->z()),
+                                  0.4) ) {
+          this->nodes.value(k)->RemoveLinkedFromIndex(z);
+      }
+    }
+  }
 }
 
 void RenderState::remove_floorplan() {

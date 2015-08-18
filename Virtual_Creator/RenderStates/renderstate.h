@@ -98,6 +98,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     void DrawPlacableItems(QVector3D Pos);
     void DrawObjectLines(QVector3D Pos);
     void remove_floorplan();
+    void remove_link();
     const float tree_radius, infinte_lenght_lines;
     QLabel selected_label;
 
