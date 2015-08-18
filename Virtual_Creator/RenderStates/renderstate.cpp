@@ -603,8 +603,8 @@ void RenderState::LoadContent() {
     initializeOpenGLFunctions();
 
     // load meshes
-    this->node = new ModelMesh(":/Sphere");
-    this->plane = new ModelMesh(":/Plane");
+    this->node = new ModelMesh("://Sphere");
+    this->plane = new ModelMesh("://Plane");
     this->door = new ModelMesh("://DoorWay01");
     this->wall = new ModelMesh("://Wall01");
     this->tree = new ModelMesh("://Tree01");
@@ -682,6 +682,7 @@ void RenderState::paintGL() {
 
   // draw other objects first
   foreach(VisualObject *object, this->models) {
+    QVector3D color = QVector3D();
     QMatrix4x4 translation;
     translation.translate(object->getTranslation());
     QMatrix4x4 rotation;
@@ -698,12 +699,24 @@ void RenderState::paintGL() {
                         pMatrix,
                         this->current_floor_height);
     } else {
-        DrawGL::DrawModel(object->getModelMesh(),
-                          this->vMatrix, translation,
-                          rotation, object->getTexture(),
-                          QVector3D(), QVector2D(1, 1),
-                          this->program, pMatrix,
-                          this->current_floor_height);
+      if ( Mathematics::detect_point_in_plan_on_y(
+               object->getTranslation(),
+               object->getScaling(),
+                     object->getRotation().y(),
+                     QVector3D(this->current_position->x(),
+                               this->current_position->y(),
+                               this->current_position->z())) &&
+           floor_plan_removable) {
+          color = QVector3D(1, 0, 0);
+      } else {
+          color = QVector3D();
+      }
+      DrawGL::DrawModel(object->getModelMesh(),
+                        this->vMatrix, translation,
+                        rotation, object->getTexture(),
+                        color, QVector2D(1, 1),
+                        this->program, pMatrix,
+                        this->current_floor_height);
     }
       if ( this->wall_placable ) {
         if ( object->getLMidHorisontal().distanceToPoint(Pos) < 0.25f )
