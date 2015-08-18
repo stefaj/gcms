@@ -74,8 +74,10 @@ void Node::AddLink(QString *Name, int index) {
 }
 
 void Node::RemoveLinkedFromIndex(int index) {
-    this->connected.removeAt(index);
-    this->connectedindex.removeAt(index);
+    if ( index > this->connected.count() ) {
+      this->connected.removeAt(index);
+      this->connectedindex.removeAt(index);
+    }
     if ( this->connected.count() < 1 )
         this->links = false;
 }
