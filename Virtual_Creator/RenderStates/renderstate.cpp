@@ -387,6 +387,7 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
 
 void RenderState::remove_link() {
   // do remove node code here
+
   for ( int k = 0; k < this->nodes.count(); k++ ) {
     const unsigned int count_connected =
             this->nodes.value(k)->countConnected();
@@ -401,8 +402,8 @@ void RenderState::remove_link() {
                                   QVector3D(this->current_position->x(),
                                             this->current_position->y(),
                                             this->current_position->z()),
-                                  0.4) ) {
-          this->nodes.value(k)->RemoveLinkedFromIndex(z);
+                                  0.5) ) {
+        this->nodes.value(k)->RemoveLinkedFromIndex(z);
       }
     }
   }
@@ -1026,6 +1027,18 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
                          QVector3D(0, 1, 0), 0.7f);
     }
     for ( int i = 0; i  < n->countConnected(); i++ ) {
+        QVector3D color = QVector3D(0, 1, 0);
+        if ( Mathematics::detect_point_near_line(n->Position(),
+             this->nodes.value(n->getConnectedIndex(i))->Position(),
+             QVector3D(this->current_position->x(),
+                       this->current_position->y(),
+                       this->current_position->z()),
+                                                 0.5) &&
+             this->link_removable) {
+            color = QVector3D(1, 0, 0);
+        } else {
+            color = QVector3D(0, 1, 0);
+        }
       if ( n->getConnectedIndex(i) < this->nodes.count() ) {
         QVector3D aux_calc_one, aux_calc_two, aux_angle;
         QMatrix4x4 aux_rotate, aux_45;
@@ -1058,7 +1071,7 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
                              this->nodes.value(
                                    n->getConnectedIndex(i))->Position(),
                              this->vMatrix, QMatrix4x4(), QMatrix4x4(),
-                             QVector3D(0, 1, 0), this->program, pMatrix,
+                             color, this->program, pMatrix,
                              this->current_floor_height);
             DrawGL::DrawLine((n->Position() +
                               this->nodes.value(n->getConnectedIndex(i))->
@@ -1068,7 +1081,7 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
                               this->nodes.value(n->getConnectedIndex(i))->
                               Position()) / 2.0,
                              this->vMatrix, QMatrix4x4(), QMatrix4x4(),
-                             QVector3D(0, 1, 0), this->program, pMatrix,
+                             color, this->program, pMatrix,
                              this->current_floor_height);
             DrawGL::DrawLine((n->Position() +
                               this->nodes.value(n->getConnectedIndex(i))->
@@ -1078,7 +1091,7 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
                               this->nodes.value(n->getConnectedIndex(i))->
                               Position()) / 2.0,
                              this->vMatrix, QMatrix4x4(), QMatrix4x4(),
-                             QVector3D(0, 1, 0), this->program, pMatrix,
+                             color, this->program, pMatrix,
                              this->current_floor_height);
       }
     }

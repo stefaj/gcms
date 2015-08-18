@@ -226,7 +226,7 @@ bool Mathematics::detect_point_near_line(QVector3D point_a,
     // this is to enable alternative (exeption) calculation when division by zero will happen
     bool vertical = false;
     float m, c, z;
-    m = (round(point_a.x() - point_b.x()) == 0) ?
+    m = (round(point_a.x() - point_b.x()) != 0) ?
                 (point_a.z() - point_b.z())/(point_a.x() - point_b.x()) :
                 9999999.0;
     if(m > 999999.0) {
@@ -235,7 +235,11 @@ bool Mathematics::detect_point_near_line(QVector3D point_a,
         c = point_a.z() - m * point_a.x();
         z = m * position.x() + c;
         // qDebug() << z << position.z();
-        if ( abs(z - position.z()) < threshhold ) {
+        float large_x = point_a.x() > point_b.x() ? point_a.x() : point_b.x();
+        float small_x = point_a.x() < point_b.x() ? point_a.x() : point_b.x();
+        if ( abs(z - position.z()) < threshhold &&
+             large_x > position.x() &&
+             small_x < position.x() ) {
             return true;
         }
     }

@@ -4,6 +4,7 @@
 #include <QVector2D>
 #include <QVector3D>
 #include <QString>
+#include <QDebug>
 
 Node::Node() {
     this->position = new QVector3D(0, 0, 0);
@@ -74,7 +75,7 @@ void Node::AddLink(QString *Name, int index) {
 }
 
 void Node::RemoveLinkedFromIndex(int index) {
-    if ( index > this->connected.count() ) {
+    if ( index < this->connected.count() ) {
       this->connected.removeAt(index);
       this->connectedindex.removeAt(index);
     }
