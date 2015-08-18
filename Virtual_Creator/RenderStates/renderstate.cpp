@@ -221,11 +221,11 @@ void RenderState::mouseMoveEvent(QMouseEvent* event) {
 
         // pan view
         this->camera_prev.setX(this->camera_prev.x() -
-                               this->position_camera.x());
+                               this->position_camera.x() * 0.1);
         this->camera_prev.setY(this->camera_prev.y() -
-                               this->position_camera.y());
+                               this->position_camera.y() * 0.1);
         this->camera_prev.setZ(this->camera_prev.z() -
-                               this->position_camera.z());
+                               this->position_camera.z() * 0.1);
         this->position_camera = QVector3D(0, 0, 0);
     }
 
