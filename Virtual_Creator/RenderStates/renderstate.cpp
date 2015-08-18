@@ -221,11 +221,11 @@ void RenderState::mouseMoveEvent(QMouseEvent* event) {
 
         // pan view
         this->camera_prev.setX(this->camera_prev.x() -
-                               this->position_camera.x() * 0.1);
+                               this->position_camera.x() * 0.5);
         this->camera_prev.setY(this->camera_prev.y() -
-                               this->position_camera.y() * 0.1);
+                               this->position_camera.y() * 0.5);
         this->camera_prev.setZ(this->camera_prev.z() -
-                               this->position_camera.z() * 0.1);
+                               this->position_camera.z() * 0.5);
         this->position_camera = QVector3D(0, 0, 0);
     }
 
@@ -737,16 +737,6 @@ void RenderState::paintGL() {
   DrawNodeLines(Pos);
   // draw lines last
   DrawObjectLines(Pos);
-  // draw line if right clicked
-  if ( this->mousedown_right )
-    DrawGL::DrawLine(*this->clicked_position,
-                     *this->current_position,
-                     this->vMatrix, QMatrix4x4(),
-                     QMatrix4x4(),
-                     QVector3D(0, 1, 0),
-                     this->program,
-                     pMatrix, this->current_floor_height);
-
   // draw left clicked line(s)
   if ( (this->node_linkable) &&
        (this->mousedown_left) &&
