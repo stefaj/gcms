@@ -1,6 +1,7 @@
 /* Copyright 2015 Ruan Luies */
 
 #include <algorithm>
+#include <QDir>
 #include "./renderstate.h"
 #include "Functions/mathematics.h"
 
@@ -167,23 +168,24 @@ void RenderState::load_texture_from_file(QString value) {
   QString val_new = "VirtualConcierge/" +
           QString("TEX") +
           QString::number(this->texture_paths.count());
-
-  if ( QFile::exists(val_new) && !start_up_load_tex ) {
-     if ( !QFile::remove(val_new) ) {
-         // QMessageBox::warning(this,
-         //                      tr("Error file deleting"),
-         //                      tr("Texture file could not"
-         //                        " be deleted from the drive."));
-     }
-  }
-
+  QDir dir;
   // try to copy the texture to the drive
-  if ( !QFile::copy(value, val_new) ) {
-    if ( !QFile::exists(val_new) ) {
-      QMessageBox::warning(this,
-                           tr("Error file copying"),
-                           tr("Texture file could not"
-                              " be copied to the drive."));
+  if ( !QString::compare(dir.absolutePath() + "/" + val_new, value, Qt::CaseInsensitive) == 0 ) {
+    if ( QFile::exists(val_new) && !start_up_load_tex ) {
+     if ( !QFile::remove(val_new) ) {
+        // QMessageBox::warning(this,
+        //                      tr("Error file deleting"),
+        //                      tr("Texture file could not"
+        //                        " be deleted from the drive."));
+     }
+    }
+    if ( !QFile::copy(value, val_new) ) {
+      if ( !QFile::exists(val_new) ) {
+        QMessageBox::warning(this,
+                             tr("Error file copying"),
+                             tr("Texture file could not"
+                                " be copied to the drive."));
+      }
     }
   }
 
