@@ -91,6 +91,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     void LoadObjects(QString filename);
     void LoadTextures(QString filename);
     void LoadNodes(QString filename);
+    void CopyDirectories(QString filename);
     void RemoveNodes();
     void DrawNodes();
     void DrawNodeNames();
