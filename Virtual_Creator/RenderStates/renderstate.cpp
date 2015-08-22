@@ -62,6 +62,9 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
 
     // set mouse tracking
     setMouseTracking(true);
+
+    // create directory
+    PremisesExporter::create_director();
 }
 
 void RenderState::allow_node(bool value) {
@@ -96,10 +99,11 @@ void RenderState::load_premises(QString value) {
     directory_path += ls[k]+"/";
   }
   // load textures and objects
+  LoadNodes(directory_path);
   LoadTextures(directory_path);
   LoadObjects(value);
-  LoadNodes(directory_path);
-  // export the files afterwards
+
+  // exort the files afterwards
   PremisesExporter::export_environment(this->models,
                                        "environment.env");
   PremisesExporter::export_texture(this->texture_paths,
@@ -170,7 +174,7 @@ void RenderState::load_texture_from_file(QString value) {
           QString::number(this->texture_paths.count());
   QDir dir;
   // try to copy the texture to the drive
-  if ( !QString::compare(dir.absolutePath() + "/" + val_new, value, Qt::CaseInsensitive) == 0 ) {
+  if ( QString::compare(dir.absolutePath() + "/" + val_new, value, Qt::CaseInsensitive) != 0 ) {
     if ( QFile::exists(val_new) && !start_up_load_tex ) {
      if ( !QFile::remove(val_new) ) {
         // QMessageBox::warning(this,
@@ -1174,7 +1178,7 @@ void RenderState::LoadTextures(QString path) {
 
           // texture index
           QTextStream(&list[1]) >> texture_index;
-          QString new_path = path + ls[ls.count()-1];
+          QString new_path = path + ls[ls.count() - 1];
           load_texture_from_file(new_path);
         }
 

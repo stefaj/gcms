@@ -139,6 +139,15 @@ void PremisesExporter::export_directories(QVector<QString> directory,
         file.close();
 }
 
+void PremisesExporter::create_director() {
+  if ( QDir().mkdir("VirtualConcierge") )
+    qDebug() << "Success in Creating Directory 'VirtualConcierge'";
+
+  if ( !QDir().cd("VirtualConcierge") )
+    qDebug() << "Directory 'VirtualConcierge' does not exists";
+
+}
+
 bool PremisesExporter::fileExists(QString path) {
     QFileInfo checkFile(path);
     // check if file exists and if yes: Is it really a file and no directory?
