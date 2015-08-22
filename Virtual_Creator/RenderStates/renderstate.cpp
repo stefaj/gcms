@@ -170,10 +170,10 @@ void RenderState::load_texture_from_file(QString value) {
 
   if ( QFile::exists(val_new) && !start_up_load_tex ) {
      if ( !QFile::remove(val_new) ) {
-         QMessageBox::warning(this,
-                              tr("Error file deleting"),
-                              tr("Texture file could not"
-                                 " be deleted from the drive."));
+         // QMessageBox::warning(this,
+         //                      tr("Error file deleting"),
+         //                      tr("Texture file could not"
+         //                        " be deleted from the drive."));
      }
   }
 
