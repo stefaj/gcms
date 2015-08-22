@@ -57,9 +57,20 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->openGLWidget, SLOT(allow_remove_floor_plan(bool)));
   connect(this, SIGNAL(remove_link(bool)),
           ui->openGLWidget, SLOT(allow_remove_link(bool)));
+  connect(this, SIGNAL(edit_floorplan(bool)),
+          ui->openGLWidget, SLOT(allow_edit_floor(bool)));
+  connect(this, SIGNAL(edit_node(bool)),
+          ui->openGLWidget, SLOT(allow_edit_node(bool)));
+  connect(ui->openGLWidget, SIGNAL(send_edit_node(QString, bool)),
+          this, SLOT(edit_node_settings(QString, bool)));
 }
 
 MainWindow::~MainWindow() {delete ui;}
+
+void MainWindow::edit_node_settings(QString name, bool significant) {
+  ui->checkbox_significant->setChecked(significant);
+  ui->lineEdit_node_name->setText(name);
+}
 
 void MainWindow::is_opengl_valid_context(bool is_valid_context) {
   opengl_initialised = is_valid_context;
@@ -79,14 +90,14 @@ void MainWindow::drop_down_emit() {
  if ( QString::compare(ui->comboBox_basic_adds->currentText(),
                        "Floor Plan",
                        Qt::CaseInsensitive) == 0 ) {
-
     emit place_floor_plan(ui->button_add_basic->isChecked());
     emit remove_floorplan(ui->button_remove_basic->isChecked());
     emit place_node(false);
     emit remove_nodes(false);
     emit node_links(false);
     emit remove_link(false);
-    // the edit nodes, links and floorplans are still needed here
+    emit edit_node(false);
+    emit edit_floorplan(ui->button_edit_basic->isChecked());
     ui->stackedWidget_side_add->setCurrentIndex(1);
     // emit new scale for the floor plan
     emit set_object_scale(QVector3D(
@@ -121,7 +132,8 @@ void MainWindow::drop_down_emit() {
      } else {
        ui->stackedWidget_side_add->setCurrentIndex(2);
      }
-     // the edit nodes, links and floorplans are still needed here
+     emit edit_node(ui->button_edit_basic->isChecked());
+     emit edit_floorplan(false);
  }
  if ( QString::compare(ui->comboBox_basic_adds->currentText(),
                        "Link",
@@ -133,10 +145,10 @@ void MainWindow::drop_down_emit() {
      emit node_links(ui->button_add_basic->isChecked());
      emit remove_link(ui->button_remove_basic->isChecked());
      ui->stackedWidget_side_add->setCurrentIndex(2);
-     // the edit nodes, links and floorplans are still needed here
+     emit edit_node(false);
+     emit edit_floorplan(false);
  }
 }
-
 
 void MainWindow::send_loaded_premises() {
     QString file_name = QFileDialog::getOpenFileName(this,
@@ -149,7 +161,7 @@ void MainWindow::send_loaded_premises() {
 }
 
 void MainWindow::on_spin_rotationY_valueChanged(double arg1) {
-    change_rotationY(arg1);
+  change_rotationY(arg1);
 }
 
 void MainWindow::on_checkBox_inversemouse_y_clicked(bool checked) {
@@ -200,19 +212,23 @@ void MainWindow::load_virtual_concierge_interface() {
 }
 
 void MainWindow::on_button_add_basic_clicked(bool /*checked*/) {
-
   ui->button_remove_basic->setChecked(false);
   ui->button_edit_basic->setChecked(false);
   drop_down_emit();
 }
 
 void MainWindow::on_button_remove_basic_clicked() {
-
   ui->button_add_basic->setChecked(false);
   ui->button_edit_basic->setChecked(false);
   drop_down_emit();
 }
 
 void MainWindow::on_comboBox_basic_adds_activated(const QString &/*&arg1*/) {
+  drop_down_emit();
+}
+
+void MainWindow::on_button_edit_basic_clicked() {
+  ui->button_add_basic->setChecked(false);
+  ui->button_remove_basic->setChecked(false);
   drop_down_emit();
 }

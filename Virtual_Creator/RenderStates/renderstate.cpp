@@ -34,6 +34,8 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     placable_floor_plan(false),
     node_significant(true),
     start_up_load_tex(true),
+    edit_floorplan(false),
+    edit_node(false),
     tree_radius(4.0f),
     infinte_lenght_lines(100.0f),
     selected_label(this) {
@@ -65,6 +67,14 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
 
     // create directory
     PremisesExporter::create_director();
+}
+
+void RenderState::allow_edit_floor(bool allow) {
+ edit_floorplan = allow;
+}
+
+void RenderState::allow_edit_node(bool allow) {
+  edit_node = allow;
 }
 
 void RenderState::allow_node(bool value) {
@@ -116,11 +126,19 @@ void RenderState::load_premises(QString value) {
 }
 
 void RenderState::set_next_node_name(QString value) {
-    this->next_node_name = value;
+  this->next_node_name = value;
+  nodes.value(this->node_index_selected)->setName(value);
+  // exort nodes
+  PremisesExporter::export_nodes(this->nodes,
+                                 "nodes.pvc");
 }
 
 void RenderState::set_next_node_significant(bool value) {
-    this->node_significant = value;
+  this->node_significant = value;
+  nodes.value(this->node_index_selected)->setSignificant(value);
+  // exort nodes
+  PremisesExporter::export_nodes(this->nodes,
+                                 "nodes.pvc");
 }
 
 void RenderState::allow_remove_node(bool value) {
@@ -216,21 +234,21 @@ void RenderState::initializeGL() {
 }
 
 void RenderState::mouseMoveEvent(QMouseEvent* event) {
-    // alert mouse event's position (x)
-    this->mouse_x = event->x();
+  // alert mouse event's position (x)
+  this->mouse_x = event->x();
 
-    // alert mouse event's position (x)
-    this->mouse_y = event->y();
+  // alert mouse event's position (x)
+  this->mouse_y = event->y();
 
-    // update raycast vector
-    this->raycast = Mathematics::mouse_raycast(this->mouse_x,
+  // update raycast vector
+  this->raycast = Mathematics::mouse_raycast(this->mouse_x,
                                                this->mouse_y,
                                                this->width(),
                                                this->height(),
                                                this->mouse_y_inverted,
                                                this->vMatrix, pMatrix);
 
-    if ( this->mousedown_right ) {
+  if ( this->mousedown_right ) {
         this->position_camera.setX(this->clicked_position->x() -
                                    this->current_position->x());
         this->position_camera.setY(this->clicked_position->y() -
@@ -326,8 +344,11 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
     this->mousedown_left = true;
 
     // right click to move the camara around
-    if ( event->button() == Qt::RightButton)
-        this->mousedown_right = true;
+    if ( event->button() == Qt::RightButton) {
+      this->mousedown_right = true;
+        if ( !this->edit_node )
+          this->node_index_selected = -1;
+    }
 
     // left click to add the node
     if ( (event->button() == Qt::LeftButton) && (this->node_placable) ) {
@@ -402,6 +423,23 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
         this->node_index_selected = l;
     }
   }
+
+  // left click to edit the node
+  if ( (event->button() == Qt::LeftButton) && (this->edit_node) ) {
+    // get position of the clicked
+    this->clicked_position = new QVector3D(this->current_position->x(),
+                                             this->current_position->y(),
+                                             this->current_position->z());
+    // collision detection
+    for ( int l = 0; l < this->nodes.count(); l++ ) {
+      if ( this->clicked_position->
+        distanceToPoint(this->nodes.value(l)->Position()) < this->noderadius) {
+        this->node_index_selected = l;
+        send_edit_node(this->nodes.value(l)->getName(),
+                  this->nodes.value(l)->getSignificant());
+      }
+    }
+  }
 }
 
 void RenderState::remove_link() {
@@ -455,7 +493,6 @@ void RenderState::remove_floorplan() {
 }
 
 void RenderState::RemoveNodes() {
-
   for ( int l = 0; l < this->nodes.count(); l++ ) {
     if ( this->current_position->distanceToPoint(this->
                                                nodes.value(l)->
@@ -993,7 +1030,7 @@ void RenderState::DrawNodeNames() {
   painter.begin(this);
   painter.setPen(Qt::white);
   painter.setFont(QFont("Arial", 8));
-  // painter.setRenderHints(QPainter::Antialiasing |
+  //painter.setRenderHints(QPainter::Antialiasing |
   //                        QPainter::SmoothPixmapTransform);
   // draw all the node text here
   foreach(Node *n, this->nodes) {
@@ -1034,6 +1071,12 @@ void RenderState::DrawNodes() {
 }
 
 void RenderState::DrawNodeLines(QVector3D Pos) {
+    if ( this->node_index_selected != -1 &&
+         this->node_index_selected < nodes.count()) {
+        draw_circle_flat(nodes.value(this->node_index_selected)->Position(),
+                         this->vMatrix, QVector3D(1, 1, 1), 0.7f);
+
+    }
   // draw all the node lines here
   foreach(Node *n, this->nodes) {
     if ( n->Position().distanceToPoint(Pos) < 0.5 ) {
@@ -1046,6 +1089,11 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
       if ( this->node_linkable)
         draw_circle_flat(n->Position(), this->vMatrix,
                          QVector3D(0, 1, 0), 0.7f);
+
+      // draw green circle to indicate a link will be added
+      if ( this->edit_node )
+        draw_circle_flat(n->Position(), this->vMatrix,
+                         QVector3D(1, 0.5, 0.25), 0.7f);
     }
     if ( n->Position().distanceToPoint(*this->clicked_position) < 0.5 ) {
       // draw green circle to indicate a link will be added

@@ -34,6 +34,8 @@ class MainWindow : public QMainWindow {
     void on_button_add_basic_clicked(bool checked);
     void on_button_remove_basic_clicked();
     void on_comboBox_basic_adds_activated(const QString &arg1);
+    void on_button_edit_basic_clicked();
+    void edit_node_settings(QString, bool);
 
 private:
     Ui::MainWindow *ui;
@@ -65,6 +67,8 @@ private:
     // allows the floorplans to be removed
     void remove_floorplan(bool removable);
     void remove_link(bool removeable); // allows links to be broken
+    void edit_floorplan(bool edit); // allows links to be edited
+    void edit_node(bool edit); // allows nodes to be edited
 };
 
 #endif  // VIRTUAL_CREATOR_MAINWINDOW_H_
