@@ -32,6 +32,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     tree_placable(false),
     placable_floor_plan(false),
     node_significant(true),
+    start_up_load_tex(true),
     tree_radius(4.0f),
     infinte_lenght_lines(100.0f),
     selected_label(this) {
@@ -104,6 +105,8 @@ void RenderState::load_premises(QString value) {
                                    "textures.tl");
   PremisesExporter::export_nodes(this->nodes,
                                  "nodes.pvc");
+  // set startup load
+  start_up_load_tex = false;
 }
 
 void RenderState::set_next_node_name(QString value) {
@@ -164,6 +167,15 @@ void RenderState::load_texture_from_file(QString value) {
   QString val_new = "VirtualConcierge/" +
           QString("TEX") +
           QString::number(this->texture_paths.count());
+
+  if ( QFile::exists(val_new) && !start_up_load_tex ) {
+     if ( !QFile::remove(val_new) ) {
+         QMessageBox::warning(this,
+                              tr("Error file deleting"),
+                              tr("Texture file could not"
+                                 " be deleted from the drive."));
+     }
+  }
 
   // try to copy the texture to the drive
   if ( !QFile::copy(value, val_new) ) {

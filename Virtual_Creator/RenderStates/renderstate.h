@@ -66,7 +66,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     bool mousedown_right, mousedown_left, node_placable,
     node_removable, tree_removable, node_linkable, pavement_placable,
     door_placeable, wall_placable, tree_placable, placable_floor_plan,
-    node_significant, floor_plan_removable, link_removable;
+    node_significant, floor_plan_removable, link_removable, start_up_load_tex;
     QString floor_plan_path, next_node_name;
     QVector<QOpenGLTexture *> textures_from_files;
     void add_pavement(QVector3D rotation,
