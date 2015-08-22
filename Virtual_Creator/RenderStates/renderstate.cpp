@@ -346,8 +346,8 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
     // right click to move the camara around
     if ( event->button() == Qt::RightButton) {
       this->mousedown_right = true;
-        if ( !this->edit_node )
-          this->node_index_selected = -1;
+        // if ( !this->edit_node )
+          // this->node_index_selected = -1;
     }
 
     // left click to add the node
