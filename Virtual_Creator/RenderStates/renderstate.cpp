@@ -130,7 +130,8 @@ void RenderState::load_premises(QString value) {
 
 void RenderState::set_next_node_name(QString value) {
   this->next_node_name = value;
-  if ( this->node_index_selected < this->nodes.count() )
+  if ( this->node_index_selected < this->nodes.count() &&
+       this->node_index_selected > -1 )
     nodes.value(this->node_index_selected)->setName(value);
   // exort nodes
   PremisesExporter::export_nodes(this->nodes,
