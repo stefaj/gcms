@@ -1496,6 +1496,7 @@ void RenderState::CopyDirectories(QString value) {
           //                        " be deleted from the drive."));
        }
       }
+      if ( QFile::exists(value) )
       if ( !QFile::copy(value, val_new) ) {
         if ( !QFile::exists(val_new) ) {
           QMessageBox::warning(this,
