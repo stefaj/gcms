@@ -33,6 +33,7 @@ class Node {
     void setVehicle(bool can_use_vehicle);
     void setBike(bool can_use_bike);
     void setSignificant(bool is_significant);
+    void setPosition(QVector3D position);
     bool getWalk();
     bool getWheelChair();
     bool getVehicle();

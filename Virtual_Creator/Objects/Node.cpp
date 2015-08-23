@@ -36,6 +36,12 @@ Node::Node(QVector3D * Position) {
     this->g = 99999999999999.0;
 }
 
+void Node::setPosition(QVector3D new_position) {
+    this->position->setX(new_position.x());
+    this->position->setY(new_position.y());
+    this->position->setZ(new_position.z());
+}
+
 void Node::setName(QString value) {*this->name = value;}
 
 QVector3D Node::getColor() {return *this->color;}
