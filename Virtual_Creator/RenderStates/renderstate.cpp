@@ -10,6 +10,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     mouse_x(0),
     mouse_y(0),
     node_index_selected(-1),
+    selected_floor_plan(-1),
     mouse_zoom(60.0f),
     noderadius(0.5f),
     mouse_y_inverted(1.0f),
@@ -79,6 +80,8 @@ void RenderState::allow_edit_node(bool allow) {
 
 void RenderState::allow_node(bool value) {
     this->node_placable = value;
+    if ( value )
+      this->node_index_selected = -1;
 }
 
 void RenderState::allow_remove_link(bool allow) {
@@ -127,7 +130,8 @@ void RenderState::load_premises(QString value) {
 
 void RenderState::set_next_node_name(QString value) {
   this->next_node_name = value;
-  nodes.value(this->node_index_selected)->setName(value);
+  if ( this->node_index_selected < this->nodes.count() )
+    nodes.value(this->node_index_selected)->setName(value);
   // exort nodes
   PremisesExporter::export_nodes(this->nodes,
                                  "nodes.pvc");
@@ -135,7 +139,10 @@ void RenderState::set_next_node_name(QString value) {
 
 void RenderState::set_next_node_significant(bool value) {
   this->node_significant = value;
-  nodes.value(this->node_index_selected)->setSignificant(value);
+  if ( this->node_index_selected > -1 &&
+       this->edit_node &&
+       this->node_index_selected < this->nodes.count() )
+    nodes.value(this->node_index_selected)->setSignificant(value);
   // exort nodes
   PremisesExporter::export_nodes(this->nodes,
                                  "nodes.pvc");
@@ -175,10 +182,23 @@ void RenderState::allow_floor_plan(bool value) {
 
 void RenderState::change_rotY(double value) {
     this->rotation.setY(value);
+    if ( this->edit_floorplan &&
+         this->selected_floor_plan < this->models.count() &&
+         this->selected_floor_plan > -1)
+      this->models.value(this->selected_floor_plan)->setRotation(
+                QVector3D(0, value, 0));
+    PremisesExporter::export_environment(this->models,
+                                         "environment.env");
 }
 
 void RenderState::set_object_scale(QVector3D value) {
     this->currentscale = value;
+    if ( this->edit_floorplan &&
+         this->selected_floor_plan < this->models.count() &&
+         this->selected_floor_plan > -1)
+      this->models.value(this->selected_floor_plan)->setScaling(value);
+    PremisesExporter::export_environment(this->models,
+                                         "environment.env");
 }
 
 void RenderState::change_current_floor_height(float value) {
@@ -338,6 +358,31 @@ void RenderState::mouseReleaseEvent(QMouseEvent * /*event*/) {
     update();
 }
 
+void RenderState::edit_node_position(QVector2D position) {
+    if ( this->node_index_selected > -1 &&
+         this->edit_node &&
+         this->node_index_selected < this->nodes.count() )
+      nodes.value(this->node_index_selected)->setPosition(
+                  QVector3D(position.x(),
+                            nodes.value(this->node_index_selected)->Position().y(),
+                            position.y()));
+    // exort nodes
+    PremisesExporter::export_nodes(this->nodes,
+                                   "nodes.pvc");
+}
+
+void RenderState::edit_floorplan_position(QVector2D position) {
+    if ( this->edit_floorplan &&
+         this->selected_floor_plan < this->models.count() &&
+         this->selected_floor_plan > -1)
+      this->models.value(this->selected_floor_plan)->setTranslation(
+      QVector3D(position.x(),
+                models.value(this->selected_floor_plan)->getTranslation().y(),
+                position.y()));
+    PremisesExporter::export_environment(this->models,
+                                         "environment.env");
+}
+
 void RenderState::mousePressEvent(QMouseEvent* event) {
     // make dragable from left click
     if ( event->button() == Qt::LeftButton)
@@ -400,8 +445,13 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
   }
 
   // left click to remove the node
+  if ( (event->button() == Qt::LeftButton) && (this->edit_floorplan) ) {
+    remove_select_floorplan();
+  }
+
+  // left click to remove the node
   if ( (event->button() == Qt::LeftButton) && (this->floor_plan_removable) ) {
-    remove_floorplan();
+    remove_select_floorplan();
   }
 
   // left click to remove the link
@@ -436,7 +486,9 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
         distanceToPoint(this->nodes.value(l)->Position()) < this->noderadius) {
         this->node_index_selected = l;
         send_edit_node(this->nodes.value(l)->getName(),
-                  this->nodes.value(l)->getSignificant());
+                       QVector2D(this->nodes.value(l)->Position().x(),
+                                 this->nodes.value(l)->Position().z()),
+                       this->nodes.value(l)->getSignificant());
       }
     }
   }
@@ -468,7 +520,7 @@ void RenderState::remove_link() {
   PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
 }
 
-void RenderState::remove_floorplan() {
+void RenderState::remove_select_floorplan() {
   /* floor plans are 2d rectangulars
    * that can be rotated only about the y-axis.
    * thus the rotation along with the scale of
@@ -484,7 +536,32 @@ void RenderState::remove_floorplan() {
                          this->current_position->y(),
                          this->current_position->z()))) {
           if ( this->models.value(l)->getType() == "FloorPlan") {
-              this->models.removeAt(l);
+              if ( this->floor_plan_removable ) {
+                this->models.removeAt(l);
+              } else {
+                  if ( this->edit_floorplan ) {
+                    this->selected_floor_plan = l;
+                    if ( this->selected_floor_plan != -1 &&
+                      this->selected_floor_plan < this->models.count() ) {
+                      // get the translation of the
+                      QVector2D pos_floor =
+                      QVector2D(this->models.value(this->selected_floor_plan)->
+                                getTranslation().x(),
+                                this->models.value(this->selected_floor_plan)->
+                                getTranslation().z());
+                      QVector2D scale_floor =
+                      QVector2D(this-> models.value(this->selected_floor_plan)->
+                                getScaling().x(),
+                                this->models.value(this->selected_floor_plan)->
+                                getScaling().z());
+                          emit send_edit_floorplan(
+                                  pos_floor,
+                                  this->models.value(this->selected_floor_plan)->
+                                  getRotation().y(),
+                                  scale_floor);
+                    }
+                  }
+              }
           }
       }
   }
@@ -760,16 +837,27 @@ void RenderState::paintGL() {
                         pMatrix,
                         this->current_floor_height);
     } else {
+
       if ( Mathematics::detect_point_in_plan_on_y(
                object->getTranslation(),
                object->getScaling(),
                      object->getRotation().y(),
                      QVector3D(this->current_position->x(),
                                this->current_position->y(),
-                               this->current_position->z())) &&
-           floor_plan_removable) {
-          color = QVector3D(1, 0, 0);
+                               this->current_position->z())) ) {
+          if ( this->floor_plan_removable )
+            color = QVector3D(1, 0, 0);
+          if ( this->edit_floorplan )
+            color = QVector3D(1, 0.5, 0.25);
+
       } else {
+          if ( this->selected_floor_plan > -1 &&
+               this->selected_floor_plan < this->models.count() &&
+               this->edit_floorplan &&
+              (this->models.value(this->selected_floor_plan) ==
+               object) )
+              color = QVector3D(1, 0.5, 0.25);
+          else
           color = QVector3D();
       }
       DrawGL::DrawModel(object->getModelMesh(),
@@ -786,6 +874,7 @@ void RenderState::paintGL() {
           *this->current_position = object->getUMidHorisontal();
       }
   }
+
   // draw placable objects here
   DrawPlacableItems(Pos);
   // draw all the nodes here

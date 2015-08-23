@@ -47,7 +47,6 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui \
     virtualconcierge.ui \
-    texturedialog.ui \
     userinterfacecreator.ui
 
 RESOURCES += \

@@ -71,11 +71,11 @@ void VirtualConciergeRenderstate::LoadTextures(QString path) {
         texture->setMagnificationFilter(QOpenGLTexture::Linear);
         this->textures.push_back(texture);
       }
-            // read next line
-           line = ascread.readLine();
+      // read next line
+      line = ascread.readLine();
     }
-        // close the textfile
-        textfile.close();
+    // close the textfile
+    textfile.close();
   }
 }
 

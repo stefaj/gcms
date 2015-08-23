@@ -48,7 +48,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     ModelMesh *node, *plane, *wall, *door, *tree;
 
     // internal integers used for mousemovement, counters etc.
-    int mouse_x, mouse_y, dmouse_x, dmouse_y, node_index_selected;
+    int mouse_x, mouse_y, dmouse_x, dmouse_y, node_index_selected, selected_floor_plan;
     float mouse_zoom, noderadius, mouse_y_inverted, current_floor_height;
     QVector3D *current_position;
     QVector3D position_camera,
@@ -99,7 +99,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     void DrawNodeLines(QVector3D Pos);
     void DrawPlacableItems(QVector3D Pos);
     void DrawObjectLines(QVector3D Pos);
-    void remove_floorplan();
+    void remove_select_floorplan();
     void remove_link();
     const float tree_radius, infinte_lenght_lines;
     QLabel selected_label;
@@ -127,10 +127,15 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     void allow_remove_link(bool allow);
     void allow_edit_floor(bool allow);
     void allow_edit_node(bool allow);
+    void edit_node_position(QVector2D);
+    void edit_floorplan_position(QVector2D);
 
   signals:
     void opengl_initialised(bool);
-    void send_edit_node(QString name, bool button);
+    void send_edit_node(QString name, QVector2D position, bool button);
+    void send_edit_floorplan(QVector2D position,
+                             float rotation,
+                             QVector2D scale);
 };
 
 #endif  // VIRTUAL_CREATOR_RENDERSTATES_RENDERSTATE_H_
