@@ -10,8 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->setupUi(this);
 
   // set current page to floor plan
-  ui->stackedWidget_side_add->setCurrentIndex(1);
-
+  ui->stackedWidget_side_add->setCurrentIndex(2);
   // connections to all the slots of the opengl widget
   connect(this, SIGNAL(place_node(bool)),
           ui->openGLWidget, SLOT(allow_node(bool)));
@@ -61,15 +60,25 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->openGLWidget, SLOT(allow_edit_floor(bool)));
   connect(this, SIGNAL(edit_node(bool)),
           ui->openGLWidget, SLOT(allow_edit_node(bool)));
-  connect(ui->openGLWidget, SIGNAL(send_edit_node(QString, bool)),
-          this, SLOT(edit_node_settings(QString, bool)));
+  connect(ui->openGLWidget, SIGNAL(send_edit_node(QString, QVector2D, bool)),
+          this, SLOT(edit_node_settings(QString, QVector2D, bool)));
+  connect(this, SIGNAL(edit_node_position(QVector2D)),
+          ui->openGLWidget, SLOT(edit_node_position(QVector2D)));
+  connect(ui->openGLWidget, SIGNAL(send_edit_floorplan(QVector2D,float,QVector2D)),
+          this, SLOT(receive_edit_floorplan(QVector2D, float, QVector2D)));
+  connect(this, SIGNAL(edit_floorplan_position(QVector2D)),
+          ui->openGLWidget, SLOT(edit_floorplan_position(QVector2D)));
 }
 
 MainWindow::~MainWindow() {delete ui;}
 
-void MainWindow::edit_node_settings(QString name, bool significant) {
+void MainWindow::edit_node_settings(QString name,
+                                    QVector2D position,
+                                    bool significant) {
   ui->checkbox_significant->setChecked(significant);
   ui->lineEdit_node_name->setText(name);
+  ui->doubleSpinBox_node_x->setValue(position.x());
+  ui->doubleSpinBox_node_y->setValue(position.y());
 }
 
 void MainWindow::is_opengl_valid_context(bool is_valid_context) {
@@ -98,7 +107,11 @@ void MainWindow::drop_down_emit() {
     emit remove_link(false);
     emit edit_node(false);
     emit edit_floorplan(ui->button_edit_basic->isChecked());
-    ui->stackedWidget_side_add->setCurrentIndex(1);
+    if ( ui->button_remove_basic->isChecked() )
+      ui->stackedWidget_side_add->setCurrentIndex(2);
+    if ( ui->button_add_basic->isChecked() ||
+         ui->button_edit_basic->isChecked() )
+      ui->stackedWidget_side_add->setCurrentIndex(1);
     // emit new scale for the floor plan
     emit set_object_scale(QVector3D(
                               ui->doubleSpinBox_floor_plan_width->value(),
@@ -231,4 +244,30 @@ void MainWindow::on_button_edit_basic_clicked() {
   ui->button_add_basic->setChecked(false);
   ui->button_remove_basic->setChecked(false);
   drop_down_emit();
+}
+
+void MainWindow::on_doubleSpinBox_node_x_valueChanged(double arg1) {
+  emit edit_node_position(QVector2D(arg1, this->ui->doubleSpinBox_node_y->value()));
+}
+
+void MainWindow::on_doubleSpinBox_node_y_valueChanged(double arg1) {
+  emit edit_node_position(QVector2D(this->ui->doubleSpinBox_node_x->value(), arg1));
+}
+
+void MainWindow::on_doubleSpinBox_floor_x_valueChanged(double arg1) {
+  emit edit_floorplan_position(QVector2D(arg1, ui->doubleSpinBox_floor_y->value()));
+}
+
+void MainWindow::on_doubleSpinBox_floor_y_valueChanged(double arg1) {
+  emit edit_floorplan_position(QVector2D(ui->doubleSpinBox_floor_x->value(), arg1));
+}
+
+void MainWindow::receive_edit_floorplan(QVector2D position,
+                                        float rotation,
+                                        QVector2D scale) {
+  ui->doubleSpinBox_floor_x->setValue(position.x());
+  ui->doubleSpinBox_floor_y->setValue(position.y());
+  ui->doubleSpinBox_floor_plan_height->setValue(scale.y());
+  ui->doubleSpinBox_floor_plan_width->setValue(scale.x());
+  ui->spin_rotationY->setValue(rotation);
 }

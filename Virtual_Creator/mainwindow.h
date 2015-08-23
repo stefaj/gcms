@@ -35,7 +35,18 @@ class MainWindow : public QMainWindow {
     void on_button_remove_basic_clicked();
     void on_comboBox_basic_adds_activated(const QString &arg1);
     void on_button_edit_basic_clicked();
-    void edit_node_settings(QString, bool);
+    void edit_node_settings(QString name, QVector2D position, bool isbutton);
+    void receive_edit_floorplan(QVector2D position,
+                             float rotation,
+                             QVector2D scale);
+
+    void on_doubleSpinBox_node_x_valueChanged(double arg1);
+
+    void on_doubleSpinBox_node_y_valueChanged(double arg1);
+
+    void on_doubleSpinBox_floor_x_valueChanged(double arg1);
+
+    void on_doubleSpinBox_floor_y_valueChanged(double arg1);
 
 private:
     Ui::MainWindow *ui;
@@ -69,6 +80,8 @@ private:
     void remove_link(bool removeable); // allows links to be broken
     void edit_floorplan(bool edit); // allows links to be edited
     void edit_node(bool edit); // allows nodes to be edited
+    void edit_node_position(QVector2D); // sends the new coordinates to the renderstate
+    void edit_floorplan_position(QVector2D); // sends the edited positions for the floor back
 };
 
 #endif  // VIRTUAL_CREATOR_MAINWINDOW_H_
