@@ -40,8 +40,10 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     tree_radius(4.0f),
     infinte_lenght_lines(100.0f),
     selected_label(this) {
-    door_placeable = false;
-    wall_placable = false;
+    this->door_placeable = false;
+    this->wall_placable = false;
+    this->floor_plan_removable = false;
+    this->link_removable = false;
     // enable antialiasing (set the format of the widget)
     QSurfaceFormat format;
     format.setSamples(4);
