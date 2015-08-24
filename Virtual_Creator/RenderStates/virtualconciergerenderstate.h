@@ -6,6 +6,7 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLTexture>
 #include <QOpenGLShaderProgram>
+#include <QTimer>
 #include "Objects/ModelMesh.h"
 #include "Objects/NodeHandler.h"
 #include "Functions/drawgl.h"
@@ -35,6 +36,7 @@ class VirtualConciergeRenderstate :
     QVector<VisualObject *> objects;
     int start, end;
     QSurfaceFormat format;
+    QTimer *frame_update;
 
  protected:
     void initializeGL();
@@ -43,6 +45,7 @@ class VirtualConciergeRenderstate :
 
  private slots:
     void find_path(int start, int end);
+    void update_frame();
 };
 
 #endif  // VIRTUAL_CREATOR_RENDERSTATES_VIRTUALCONCIERGERENDERSTATE_H_

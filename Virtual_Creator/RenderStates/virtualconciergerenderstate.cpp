@@ -21,6 +21,16 @@ VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent):
 
     if ( PremisesExporter::fileExists("VirtualConcierge/nodes.pvc") )
         this->handler->ReadFilePVC("VirtualConcierge/nodes.pvc");
+    frame_update = new QTimer(this);
+
+    connect(frame_update, SIGNAL(timeout()),
+            this, SLOT(update_frame()));
+    frame_update->start(5);
+}
+
+void VirtualConciergeRenderstate::update_frame() {
+    // update the frame of the virtual concierge
+    this->update();
 }
 
 void VirtualConciergeRenderstate::find_path(int start, int end) {
@@ -30,7 +40,6 @@ void VirtualConciergeRenderstate::find_path(int start, int end) {
 
   // update the frame of the virtual concierge
   this->update();
-  this->paintGL();
 }
 
 void VirtualConciergeRenderstate::LoadTextures(QString path) {
@@ -177,7 +186,7 @@ void VirtualConciergeRenderstate::initializeGL() {
     texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
     texture->setMagnificationFilter(QOpenGLTexture::Linear);
     this->textures_predefined.append(texture);
-    glReadBuffer(GL_FRONT);
+    // glReadBuffer(GL_FRONT);
 }
 
 void VirtualConciergeRenderstate::resizeGL(int w, int h) {
