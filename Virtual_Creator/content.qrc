@@ -18,5 +18,7 @@
         <file alias="Wall01">Content/wall.obj</file>
         <file alias="DoorWay01">Content/doorway.obj</file>
         <file alias="Texture4">Content/one_brick.png</file>
+        <file alias="Icon">Content/penimg.png</file>
+        <file>Content/icon.png</file>
     </qresource>
 </RCC>
