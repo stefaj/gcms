@@ -96,6 +96,10 @@ void MainWindow::EmitSignals() {
 }
 
 void MainWindow::drop_down_emit() {
+    emit place_door(false);
+    emit place_pavement(false);
+    emit place_tree(false);
+    emit place_wall(false);
  if ( QString::compare(ui->comboBox_basic_adds->currentText(),
                        "Floor Plan",
                        Qt::CaseInsensitive) == 0 ) {

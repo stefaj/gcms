@@ -42,7 +42,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     selected_label(this) {
     // enable antialiasing (set the format of the widget)
     QSurfaceFormat format;
-    // format.setSamples(4);
+    format.setSamples(4);
     this->setFormat(format);
 
     // initialize the clicked position
