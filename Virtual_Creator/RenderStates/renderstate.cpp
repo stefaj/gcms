@@ -41,6 +41,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     infinte_lenght_lines(100.0f),
     selected_label(this) {
     door_placeable = false;
+    wall_placable = false;
     // enable antialiasing (set the format of the widget)
     QSurfaceFormat format;
     format.setSamples(4);
