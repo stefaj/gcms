@@ -2,21 +2,33 @@
 #define LOGIN_H
 
 #include <QWidget>
-
+#include "./Network/client.h"
+#include "./mainwindow.h"
 namespace Ui {
 class login;
 }
 
-class login : public QWidget
-{
-    Q_OBJECT
+class login : public QWidget {
+  Q_OBJECT
 
 public:
-    explicit login(QWidget *parent = 0);
-    ~login();
+  explicit login(QWidget *parent = 0);
+  ~login();
+  bool get_logged();
+
+private slots:
+  void on_pushButton_login_clicked();
+  void logged_in(QString, bool);
+
+  void on_pushButton_terminate_clicked();
+
+  void on_pushButton_close_clicked();
 
 private:
-    Ui::login *ui;
+  bool logged_in_;
+  Ui::login *ui;
+  Client *client_logging;
+
 };
 
 #endif // LOGIN_H
