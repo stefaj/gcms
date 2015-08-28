@@ -18,7 +18,7 @@ public:
 
 private slots:
   void on_pushButton_login_clicked();
-  void logged_in(QString, bool);
+  void logged_in(QByteArray, bool);
 
   void on_pushButton_terminate_clicked();
 
@@ -26,6 +26,7 @@ private slots:
 
 private:
   bool logged_in_;
+  QByteArray session_;
   Ui::login *ui;
   Client *client_logging;
 

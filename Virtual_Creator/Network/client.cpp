@@ -1,20 +1,25 @@
 #include "client.h"
+#include <QFileDialog>
 
-Client::Client():blockSize(0),networkSession(0),m_session(""),m_username("") {
+Client::Client():blockSize(0),networkSession(0),session_(""),username_("") {
     tcpSocket = new QTcpSocket(this);
+    data_to_send = new QByteArray("");
     connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readData()));
     ConnectToHost("127.0.0.1", 23);
     ConfigureNetwork();
 }
 
 void Client::Login(QString username, QString password) {
-    QString logindetails = QString("log,%1,%2").arg(username).arg(password);
-    m_username = username;
+    this->username_ = username;
+    QString logindetails = QString("<data>log,%1,%2</data>").arg(username).arg(password);
     SendData(logindetails);
+    // wait for bytes to be written,
+    // this is not good practice, it should be removed in the future
+    //tcpSocket->waitForBytesWritten(1000);
 }
 
 QString Client::GetSession() {
-   return m_session;
+   return this->session_;
 }
 
 void Client::ConfigureNetwork() {
@@ -44,16 +49,15 @@ void Client::ConnectToHost(QString hostaddress, int port) {
     if(address.setAddress(hostaddress))
     tcpSocket->connectToHost(hostaddress,port);
 
-    if(tcpSocket->isOpen())
-    qDebug()<<"connected to "<<hostaddress;
-    else
-        qDebug()<<"failed to connect to "<<hostaddress;
+    // if(tcpSocket->isOpen())
+    //  qDebug()<<"connected to "<<hostaddress;
+    // else
+    // qDebug()<<"failed to connect to "<<hostaddress;
 
 }
 
 void Client::readData() {
    QByteArray array = tcpSocket->readAll();
-   qDebug() << array;
    QList<QByteArray> data = array.split(',');
    if ( data.count() > 2 )
    {
@@ -63,18 +67,36 @@ void Client::readData() {
            (QString::compare(QString::fromLocal8Bit(data.value(1).constData()),
                              "true",
                              Qt::CaseInsensitive))==0) {
-           m_session = QString::fromLocal8Bit(data.value(2).constData());
-           emit logged_in(m_session, true);
+           this->session_ = data.value(2).constData();
+           emit logged_in(this->session_, true);
        } else {
            emit logged_in("", false);
        }
-       qDebug() << "current session:"
-                << m_session.toUtf8().toHex();
    }
 }
 
 void Client::SendData(QString data) {
     tcpSocket->write(data.toLocal8Bit().constData());
+}
+
+void Client::send_file(QString session, QString file_name) {
+  QString session_login = QString("<data>session_file,%1,%2,").arg(session).arg(file_name);
+  tcpSocket->write(session_login.toLocal8Bit());
+  QByteArray ba;              // Construct a QByteArray object
+  QImage image(file_name);
+  if ( !image.isNull() ) {
+    QBuffer buffer(&ba);        // Construct a QBuffer object using the QbyteArray
+    image.save(&buffer, "PNG"); // Save the QImage data into the QBuffer
+  } else {
+    QFile file(file_name/*QFileDialog::getOpenFileName(NULL, tr("Upload a file"))*/);
+    file.open(QIODevice::ReadOnly);
+    ba = file.readAll();
+    file.close();
+  }
+  qDebug() << session_login;
+  tcpSocket->write(ba);
+  QString end = "</data>";
+  tcpSocket->write(end.toLocal8Bit());
 }
 
 void Client::sessionOpened() {

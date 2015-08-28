@@ -7,7 +7,7 @@ int main(int argc, char *argv[]) {
     login login_;
     login_.setWindowFlags(Qt::WindowStaysOnTopHint);
     login_.show();
-    MainWindow w;
-    w.showMaximized();
+    //MainWindow w;
+    //w.showMaximized();
     return a.exec();
 }

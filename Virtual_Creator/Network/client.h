@@ -19,21 +19,23 @@ public:
     ~Client();
     void ConnectToHost(QString,int);
     void SendData(QString);
-    void Login(QString,QString);
+    void Login(QString, QString);
+    void send_file(QString, QString);
     QString GetSession();
 private:
     void ConfigureNetwork();
     QTcpSocket *tcpSocket;
     quint16 blockSize;
     QNetworkSession *networkSession;
-    QString m_session,m_username;
-
+    QByteArray session_;
+    QString username_;
+    QByteArray *data_to_send;
 private slots:
     void readData();
     void sessionOpened();
 
 signals:
-    void logged_in(QString, bool);
+    void logged_in(QByteArray, bool);
 };
 
 #endif // CLIENT_H
