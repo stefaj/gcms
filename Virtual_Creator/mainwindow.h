@@ -39,13 +39,9 @@ class MainWindow : public QMainWindow {
     void receive_edit_floorplan(QVector2D position,
                              float rotation,
                              QVector2D scale);
-
     void on_doubleSpinBox_node_x_valueChanged(double arg1);
-
     void on_doubleSpinBox_node_y_valueChanged(double arg1);
-
     void on_doubleSpinBox_floor_x_valueChanged(double arg1);
-
     void on_doubleSpinBox_floor_y_valueChanged(double arg1);
 
 private:

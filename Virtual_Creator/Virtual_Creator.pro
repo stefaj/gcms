@@ -27,7 +27,9 @@ SOURCES += main.cpp\
     Functions/drawgl.cpp \
     Objects/nodebutton.cpp \
     SMTP/smtp.cpp \
-    userinterfacecreator.cpp
+    userinterfacecreator.cpp \
+    login.cpp \
+    Network/client.cpp
 
 HEADERS  += mainwindow.h \
     Objects/ModelMesh.h \
@@ -43,11 +45,14 @@ HEADERS  += mainwindow.h \
     Objects/nodebutton.h \
     SMTP/smtp.h \
     userinterfacecreator.h \
-    main.h
+    main.h \
+    login.h \
+    Network/client.h
 
 FORMS    += mainwindow.ui \
     virtualconcierge.ui \
-    userinterfacecreator.ui
+    userinterfacecreator.ui \
+    login.ui
 
 RESOURCES += \
     content.qrc
