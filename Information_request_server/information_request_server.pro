@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += gui core
+QT += gui core
 QT += network
 QT += sql
 TARGET = information_request_client

@@ -25,10 +25,13 @@ private:
     QString m_host,m_dbname,m_user,m_pass;
     QTcpServer *m_tcpserver;
     QNetworkSession *m_networksession;
-    QList<TcpSocket*> *m_clientconnection;
+    QList<TcpSocket*> *client_connection;
+    QList<QByteArray *> *user_data;
+    int get_tcp_index(TcpSocket * point);
     int blocksize;
-    bool login(QByteArray, QByteArray,TcpSocket*);
+    bool login(QByteArray, QByteArray, TcpSocket*);
     QByteArray generateSessionID(QByteArray);
+    void process(QByteArray userdata, TcpSocket* socket);
 
 private slots:
     void sessionOpened();
