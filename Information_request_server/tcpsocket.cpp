@@ -22,6 +22,10 @@ QByteArray TcpSocket::readAll()
 {
     return Socket->readAll();
 }
+void TcpSocket::flush() {
+    Socket->flush();
+}
+
 void TcpSocket::write(QByteArray data)
 {
     Socket->write(data);

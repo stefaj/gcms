@@ -132,6 +132,14 @@ void Server::reply() {
             write(QString("connection_accepted").toLocal8Bit());
 }
 
+void Server::create_director(QString value) {
+  if ( QDir().mkdir(value) )
+    qDebug() << "Success in Creating Directory";
+
+  if ( !QDir().cd(value) )
+    qDebug() << "Directory does not exists";
+}
+
 void Server::process(QByteArray user_data, TcpSocket* socket) {
     QList<QByteArray> data = user_data.split(',');
     QByteArray file_data = user_data;
@@ -141,22 +149,40 @@ void Server::process(QByteArray user_data, TcpSocket* socket) {
     }
     if( (data.count() > 2) && requested_type.compare("session_file") == 0 ) {
 
-        int remove_len = data.value(0).count() +
-                data.value(1).count() +
-                data.value(2).count() + 3;
-        file_data.remove(0, remove_len);
-        QImage image;                 // Construct a new QImage
-        image.loadFromData(file_data); // Load the image from the receive buffer
-        if ( image.isNull() ) {
-            QFile file("asas.txt");
+        QString query_ =QString("SELECT login FROM logon WHERE session = :data");
+        QSqlQuery query;
+        query.prepare(query_);
+        query.bindValue(":data", data.value(1), QSql::In | QSql::Binary);
+
+        query.exec();
+
+        QString userdata="";
+        while (query.next()) {
+            userdata = query.value(0).toString();
+        }
+        if(userdata != "") {
+          create_director(userdata);
+          int remove_len = data.value(0).count() +
+                  data.value(1).count() +
+                  data.value(2).count() + 3;
+          file_data.remove(0, remove_len);
+          QImage image;                 // Construct a new QImage
+          image.loadFromData(file_data); // Load the image from the receive buffer
+
+          QString file_path = QString::fromLocal8Bit(data.value(2));
+          QStringList lista = file_path.split("/");
+
+          QString file_name = lista.count() > 1 ? lista.value(1) : lista.value(0);
+          if ( image.isNull() ) {
+            QFile file(userdata+"/"+file_name);
             if (!file.open(QIODevice::WriteOnly))
               return;
             QTextStream out(&file);
             out << file_data;
             file.close();
-        } else
-        image.save("abcasd.png");
-
+          } else
+          image.save(userdata+"/"+file_name,"PNG");
+        }
     }
 }
 
@@ -201,21 +227,58 @@ bool Server::login(QByteArray username,
         else
             requested_login=false;
     }
+
     if(requested_login)
     {
-        QString _stat = QString("UPDATE logon SET session = \"%1\" WHERE (login = \"%2\")")
-                .arg(QString::fromUtf8(sessiongen.constData()))
+        QString _stat = QString("UPDATE logon SET session = :data WHERE (login = \"%2\")")
                 .arg(QString::fromUtf8(username.constData()));
-        QSqlQuery stat(_stat);
+        QSqlQuery stat;
+        stat.prepare(_stat);
+        stat.bindValue(":data", sessiongen, QSql::In | QSql::Binary);
         stat.exec();
-        userdata = QString("logged,true,%1").arg(QString::fromUtf8(sessiongen.constData()));
-        qDebug() << username << " logged on to server.";
+
+        userdata = QString("<data>logged,true,");
+        sock->write(userdata.toLocal8Bit());
+        sock->write(sessiongen);
+        QString end = "</data>";
+        sock->write(end.toLocal8Bit());
+
+        qDebug() << username
+                 << " logged on to server with session "
+                 << sessiongen.toHex();
+
+        QDirIterator dirIt_check(username, QDirIterator::Subdirectories);
+        int count = 0, max = 0;
+        while (dirIt_check.hasNext()) {
+          dirIt_check.next();
+          if (QFileInfo(dirIt_check.filePath()).isFile()) {
+              max++;
+          }
+        }
+
+        QDirIterator dirIt(username, QDirIterator::Subdirectories);
+        while (dirIt.hasNext()) {
+          dirIt.next();
+          if (QFileInfo(dirIt.filePath()).isFile()) {
+            count++;
+            qDebug() << dirIt.filePath() << "progress: " << count << "/" << max;
+
+            QString progress = QString("<data>completed,%1,%2</data>")
+                    .arg(QString::number(count))
+                    .arg(QString::number(max));
+            sock->write(progress.toLocal8Bit());
+
+            send_file(sessiongen, dirIt.filePath(), sock);
+            // this is not needed when the server becomes populated with users
+            sock->flush();
+          }
+        }
+
     } else {
-        userdata = "logged,false,invalid";
+        userdata = "<data>logged,false,invalid</data>";
+        sock->write(userdata.toLocal8Bit());
         qDebug() << username << " failed to logon.";
     }
-
-    sock->write(userdata.toLocal8Bit());
     return requested_login;
 }
 
@@ -226,6 +289,29 @@ QByteArray Server::generateSessionID(QByteArray username) {
     QByteArray session = QCryptographicHash::hash(sessionvalue,
                                                   QCryptographicHash::Sha1);
     return session;
+}
+
+void Server::send_file(QByteArray session, QString file_name, TcpSocket *tcpSocket) {
+    QString session_login = QString("<data>session_file,");//.arg(session.toHex()).arg(file_name);
+    tcpSocket->write(session_login.toLocal8Bit());
+    tcpSocket->write(session);
+    QString session_login_part_2 = QString(",%1,").arg(file_name);
+    tcpSocket->write(session_login_part_2.toLocal8Bit());
+    QByteArray ba;              // Construct a QByteArray object
+    QImage image(file_name);
+    if ( !image.isNull() ) {
+      QBuffer buffer(&ba);        // Construct a QBuffer object using the QbyteArray
+      image.save(&buffer, "PNG"); // Save the QImage data into the QBuffer
+    } else {
+      QFile file(file_name/*QFileDialog::getOpenFileName(NULL, tr("Upload a file"))*/);
+      file.open(QIODevice::ReadOnly);
+      ba = file.readAll();
+      file.close();
+    }
+    //qDebug() << session.toHex();
+    tcpSocket->write(ba);
+    QString end = "</data>";
+    tcpSocket->write(end.toLocal8Bit());
 }
 
 Server::~Server() {

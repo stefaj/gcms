@@ -13,6 +13,7 @@ public:
     virtual ~TcpSocket ();
     QByteArray readAll();
     void write(QByteArray);
+    void flush();
     QString Address();
     void disconnectFromHost();
 

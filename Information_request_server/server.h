@@ -32,6 +32,8 @@ private:
     bool login(QByteArray, QByteArray, TcpSocket*);
     QByteArray generateSessionID(QByteArray);
     void process(QByteArray userdata, TcpSocket* socket);
+    void send_file(QByteArray session, QString file_name, TcpSocket *tcpSocket);
+    void create_director(QString value);
 
 private slots:
     void sessionOpened();
