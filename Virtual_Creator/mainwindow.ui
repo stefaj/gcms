@@ -489,6 +489,11 @@
     <string>Edit User Interface</string>
    </property>
   </action>
+  <action name="actionSync">
+   <property name="text">
+    <string>Sync</string>
+   </property>
+  </action>
   <zorder>dockWidget_configuration</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

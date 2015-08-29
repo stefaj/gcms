@@ -41,6 +41,8 @@ void login::logged_in(QByteArray session, bool value) {
   if( value ) {
     ui->label_download->setVisible(true);
     ui->label_download->setText("Log-In Successful");
+    QDir dir("VirtualConcierge");
+    dir.removeRecursively();
   } else {
     ui->label_download->setVisible(true);
     ui->label_download->setText("Log-In Fail Username of Password incorrect");
@@ -65,8 +67,24 @@ void login::download_progress(int count, int max) {
   if ( count == max ) {
       ui->label_download->setText("Download Complete.");
       spinner->start();
-      MainWindow *w = new MainWindow();
-      w->showMaximized();
+
+      QDirIterator dirIt_check("VirtualConcierge", QDirIterator::Subdirectories);
+      int dir_count = 0;
+      while (dirIt_check.hasNext()) {
+        dirIt_check.next();
+        if (QFileInfo(dirIt_check.filePath()).isFile()) {
+            dir_count++;
+        }
+      }
+
+     // while(client_logging->busy());
+
+      MainWindow *window_main = new MainWindow();
+      connect(this, SIGNAL(log_to_main(QByteArray, bool)),
+              window_main, SLOT(receive_session(QByteArray,bool)));\
+      emit log_to_main(session_, true);
+      window_main->showMaximized();
+
       this->close();
   }
 }

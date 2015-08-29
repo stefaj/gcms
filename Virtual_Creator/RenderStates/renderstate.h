@@ -14,11 +14,12 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QPainter>
-#include "Objects/ModelMesh.h"
-#include "Objects/Node.h"
-#include "Objects/visualobject.h"
-#include "Functions/premises_exporter.h"
-#include "Functions/drawgl.h"
+#include "./Objects/ModelMesh.h"
+#include "./Objects/Node.h"
+#include "./Objects/visualobject.h"
+#include "./Functions/premises_exporter.h"
+#include "./Functions/drawgl.h"
+#include "./Network/client.h"
 
 class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
      Q_OBJECT
@@ -46,6 +47,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     QVector<VisualObject *> models;
     QVector<QString> texture_paths;
     ModelMesh *node, *plane, *wall, *door, *tree;
+    Client *user_client;
 
     // internal integers used for mousemovement, counters etc.
     int mouse_x, mouse_y, dmouse_x, dmouse_y, node_index_selected, selected_floor_plan;
@@ -70,6 +72,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     edit_floorplan, edit_node;
     QString floor_plan_path, next_node_name;
     QVector<QOpenGLTexture *> textures_from_files;
+    QByteArray *session_logged;
     void add_pavement(QVector3D rotation,
                       QVector3D position,
                       QVector3D scale);
@@ -129,6 +132,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     void allow_edit_node(bool allow);
     void edit_node_position(QVector2D);
     void edit_floorplan_position(QVector2D);
+    void receive_session(QByteArray session);
 
   signals:
     void opengl_initialised(bool);

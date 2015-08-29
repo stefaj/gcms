@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
   ui(new Ui::MainWindow) {
   ui->setupUi(this);
-
+  network_session = new QByteArray("");
   // set current page to floor plan
   ui->stackedWidget_side_add->setCurrentIndex(2);
   // connections to all the slots of the opengl widget
@@ -68,6 +68,8 @@ MainWindow::MainWindow(QWidget *parent) :
           this, SLOT(receive_edit_floorplan(QVector2D, float, QVector2D)));
   connect(this, SIGNAL(edit_floorplan_position(QVector2D)),
           ui->openGLWidget, SLOT(edit_floorplan_position(QVector2D)));
+  connect(this, SIGNAL(notify_session(QByteArray)),
+          ui->openGLWidget, SLOT(receive_session(QByteArray)));
 }
 
 MainWindow::~MainWindow() {delete ui;}
@@ -274,4 +276,12 @@ void MainWindow::receive_edit_floorplan(QVector2D position,
   ui->doubleSpinBox_floor_plan_height->setValue(scale.y());
   ui->doubleSpinBox_floor_plan_width->setValue(scale.x());
   ui->spin_rotationY->setValue(rotation);
+}
+
+void MainWindow::receive_session(QByteArray session, bool logged) {
+  if ( logged ) {
+    *network_session = session;
+    qDebug() << session.toHex();
+    emit notify_session(session);
+  }
 }

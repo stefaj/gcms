@@ -21,6 +21,7 @@ public:
     void SendData(QString);
     void Login(QString, QString);
     void send_file(QByteArray, QString);
+    bool busy();
     QString GetSession();
 private:
     void ConfigureNetwork();
@@ -29,6 +30,7 @@ private:
     QNetworkSession *networkSession;
     QByteArray session_;
     QString username_;
+    bool busy_flag;
     QByteArray *data_to_send, *received_data;
     void process(QByteArray user_data);
 

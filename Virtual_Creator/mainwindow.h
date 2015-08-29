@@ -43,12 +43,14 @@ class MainWindow : public QMainWindow {
     void on_doubleSpinBox_node_y_valueChanged(double arg1);
     void on_doubleSpinBox_floor_x_valueChanged(double arg1);
     void on_doubleSpinBox_floor_y_valueChanged(double arg1);
+    void receive_session(QByteArray session, bool logged);
 
 private:
     Ui::MainWindow *ui;
     void EmitSignals();
     void drop_down_emit();
     bool opengl_initialised;
+    QByteArray *network_session;
 
  signals:
     void place_node(bool placable);  // allows a node to be placed
@@ -78,6 +80,7 @@ private:
     void edit_node(bool edit); // allows nodes to be edited
     void edit_node_position(QVector2D); // sends the new coordinates to the renderstate
     void edit_floorplan_position(QVector2D); // sends the edited positions for the floor back
+    void notify_session(QByteArray); // sends the current session to renderstate
 };
 
 #endif  // VIRTUAL_CREATOR_MAINWINDOW_H_

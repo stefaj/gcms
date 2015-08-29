@@ -2,13 +2,21 @@
 #include "./Functions/premises_exporter.h"
 #include <QFileDialog>
 
-Client::Client():blockSize(0),networkSession(0),session_(""),username_("") {
+Client::Client():blockSize(0),
+    networkSession(0),
+    session_(""),
+    username_(""),
+    busy_flag(false) {
     tcpSocket = new QTcpSocket(this);
     data_to_send = new QByteArray("");
     received_data = new QByteArray("");
     connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readData()));
     ConnectToHost("127.0.0.1", 23);
     ConfigureNetwork();
+}
+
+bool Client::busy() {
+  return busy_flag;
 }
 
 void Client::Login(QString username, QString password) {
@@ -66,11 +74,13 @@ void Client::readData() {
   while ( begin_index > -1 && end_index > -1 && begin_index < end_index ) {
     // process data here
     QByteArray data_needed = received_data->mid(begin_index + 6,end_index - begin_index - 6 );
+      busy_flag = true;
     process(data_needed);
     received_data->remove(begin_index, end_index - begin_index + 7);
     begin_index = received_data->indexOf("<data>");
     end_index = received_data->indexOf("</data>");
   }
+  busy_flag = false;
 }
 
 void Client::SendData(QString data) {
@@ -114,11 +124,12 @@ void Client::sessionOpened() {
 }
 
 void Client::process(QByteArray user_data) {
-    QList<QByteArray> data = user_data.split(',');
-    QByteArray file_data = user_data;
-    QString requested_type = QString::fromUtf8(data.value(0).constData());
 
-    if ( data.count() > 2 )
+  QList<QByteArray> data = user_data.split(',');
+  QByteArray file_data = user_data;
+  QString requested_type = QString::fromUtf8(data.value(0).constData());
+
+  if ( data.count() > 2 )
     {
         if((QString::compare(QString::fromLocal8Bit(data.value(0).constData()),
                              "logged",
@@ -139,8 +150,7 @@ void Client::process(QByteArray user_data) {
         }
     }
 
-    if( (data.count() > 2) && requested_type.compare("session_file") == 0 ) {
-
+  if( (data.count() > 2) && requested_type.compare("session_file") == 0 ) {
         int remove_len = data.value(0).count() +
                 data.value(1).count() +
                 data.value(2).count() + 3;
@@ -152,18 +162,20 @@ void Client::process(QByteArray user_data) {
         QStringList lista = file_path.split("/");
         QString file_name = lista.count() > 1 ? lista.value(1) : lista.value(0);
         if ( image.isNull() ) {
-            QFile file("VirtualConcierge/"+file_name);
+            QFile file("VirtualConcierge/" + file_name);
             if (!file.open(QIODevice::WriteOnly))
               return;
             QTextStream out(&file);
             out << file_data;
             file.close();
         } else
-        image.save("VirtualConcierge/" + file_name,"PNG");
+        image.save("VirtualConcierge/" + file_name, "PNG");
     }
-    if( (data.count() > 2) && requested_type.compare("completed") == 0 ) {
-        emit download_progress(data.value(1).toInt(),data.value(2).toInt());
+  if( (data.count() > 2) && requested_type.compare("completed") == 0 ) {
+        emit download_progress(data.value(1).toInt(),
+                               data.value(2).toInt());
     }
+
 }
 
 Client::~Client(){

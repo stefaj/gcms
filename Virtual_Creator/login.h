@@ -33,6 +33,10 @@ private:
   Ui::login *ui;
   Client *client_logging;
   WaitingSpinnerWidget* spinner;
+
+signals:
+  void log_to_main(QByteArray, bool);
+
 };
 
 #endif // LOGIN_H
