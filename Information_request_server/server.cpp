@@ -153,13 +153,13 @@ void Server::process(QByteArray user_data, TcpSocket* socket) {
         QSqlQuery query;
         query.prepare(query_);
         query.bindValue(":data", data.value(1), QSql::In | QSql::Binary);
-
         query.exec();
 
         QString userdata="";
         while (query.next()) {
             userdata = query.value(0).toString();
         }
+        qDebug() << userdata << data.value(1);
         if(userdata != "") {
           create_director(userdata);
           int remove_len = data.value(0).count() +
@@ -174,14 +174,14 @@ void Server::process(QByteArray user_data, TcpSocket* socket) {
 
           QString file_name = lista.count() > 1 ? lista.value(1) : lista.value(0);
           if ( image.isNull() ) {
-            QFile file(userdata+"/"+file_name);
+            QFile file(userdata + "/" + file_name);
             if (!file.open(QIODevice::WriteOnly))
               return;
             QTextStream out(&file);
             out << file_data;
             file.close();
           } else
-          image.save(userdata+"/"+file_name,"PNG");
+          image.save(userdata + "/" + file_name,"PNG");
         }
     }
 }
@@ -260,18 +260,26 @@ bool Server::login(QByteArray username,
         while (dirIt.hasNext()) {
           dirIt.next();
           if (QFileInfo(dirIt.filePath()).isFile()) {
+            send_file(sessiongen, dirIt.filePath(), sock);
+            sock->flush();
             count++;
             qDebug() << dirIt.filePath() << "progress: " << count << "/" << max;
-
             QString progress = QString("<data>completed,%1,%2</data>")
                     .arg(QString::number(count))
                     .arg(QString::number(max));
+            if ( max > count )
             sock->write(progress.toLocal8Bit());
-
-            send_file(sessiongen, dirIt.filePath(), sock);
             // this is not needed when the server becomes populated with users
-            sock->flush();
           }
+        }
+        QString progress = QString("<data>completed,%1,%2</data>")
+                .arg(QString::number(max))
+                .arg(QString::number(max));
+
+        if ( max == count ) {
+          sock->write(progress.toLocal8Bit());
+          sock->flush();
+          sock->flush();
         }
 
     } else {
