@@ -264,6 +264,9 @@ void RenderState::load_texture_from_file(QString value) {
   texture->setMagnificationFilter(QOpenGLTexture::Linear);
   this->textures_from_files.push_back(texture);
   this->texture_paths.push_back(val_new);
+  if( !session_logged->isNull() ) {
+    user_client->send_file(*this->session_logged, val_new);
+  }
 }
 
 void RenderState::initializeGL() {

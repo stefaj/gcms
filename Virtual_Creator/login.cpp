@@ -33,7 +33,40 @@ void login::on_pushButton_login_clicked() {
     //client_logging->send_file("session", "VirtualConcierge/TEX0");
     spinner->start(); // starts spinning
 }
+bool login::clearDir( const QString path )
+{
+    QDir dir( path );
 
+    dir.setFilter( QDir::NoDotAndDotDot | QDir::Files );
+    foreach( QString dirItem, dir.entryList() )
+    {
+        if( dir.remove( dirItem ) )
+        {
+            qDebug() << ( "Cleanup", "Deleted - " + path + QDir::separator() + dirItem );
+        }
+        else
+        {
+            qDebug() << ( "Cleanup", "Fail to delete - " + path+ QDir::separator() + dirItem);
+        }
+    }
+
+
+    dir.setFilter( QDir::NoDotAndDotDot | QDir::Dirs );
+    foreach( QString dirItem, dir.entryList() )
+    {
+        QDir subDir( dir.absoluteFilePath( dirItem ) );
+        if( subDir.removeRecursively() )
+        {
+            qDebug() << ("Cleanup","Deleted - All files under " + dirItem );
+        }
+        else
+        {
+            qDebug() << ("Cleanup","Fail to delete - Files under " + dirItem);
+        }
+    }
+
+    return true;
+}
 void login::logged_in(QByteArray session, bool value) {
   this->logged_in_ = value;
   this->session_ = session;
@@ -41,8 +74,7 @@ void login::logged_in(QByteArray session, bool value) {
   if( value ) {
     ui->label_download->setVisible(true);
     ui->label_download->setText("Log-In Successful");
-    QDir dir("VirtualConcierge");
-    dir.removeRecursively();
+    //while(!clearDir("VirtualConcierge"));
   } else {
     ui->label_download->setVisible(true);
     ui->label_download->setText("Log-In Fail Username of Password incorrect");

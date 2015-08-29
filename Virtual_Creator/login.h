@@ -28,6 +28,7 @@ private slots:
   void on_pushButton_close_clicked();
 
 private:
+  bool clearDir( const QString path );
   bool logged_in_;
   QByteArray session_;
   Ui::login *ui;
