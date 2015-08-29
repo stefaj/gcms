@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     SMTP/smtp.cpp \
     userinterfacecreator.cpp \
     login.cpp \
-    Network/client.cpp
+    Network/client.cpp \
+    LoadingBar/waitingspinnerwidget.cpp
 
 HEADERS  += mainwindow.h \
     Objects/ModelMesh.h \
@@ -47,7 +48,8 @@ HEADERS  += mainwindow.h \
     userinterfacecreator.h \
     main.h \
     login.h \
-    Network/client.h
+    Network/client.h \
+    LoadingBar/waitingspinnerwidget.h
 
 FORMS    += mainwindow.ui \
     virtualconcierge.ui \

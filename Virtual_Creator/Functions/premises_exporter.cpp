@@ -145,7 +145,6 @@ void PremisesExporter::create_director() {
 
   if ( !QDir().cd("VirtualConcierge") )
     qDebug() << "Directory 'VirtualConcierge' does not exists";
-
 }
 
 bool PremisesExporter::fileExists(QString path) {

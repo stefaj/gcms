@@ -1,9 +1,11 @@
-#include "client.h"
+#include "./Network/client.h"
+#include "./Functions/premises_exporter.h"
 #include <QFileDialog>
 
 Client::Client():blockSize(0),networkSession(0),session_(""),username_("") {
     tcpSocket = new QTcpSocket(this);
     data_to_send = new QByteArray("");
+    received_data = new QByteArray("");
     connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readData()));
     ConnectToHost("127.0.0.1", 23);
     ConfigureNetwork();
@@ -57,31 +59,30 @@ void Client::ConnectToHost(QString hostaddress, int port) {
 }
 
 void Client::readData() {
-   QByteArray array = tcpSocket->readAll();
-   QList<QByteArray> data = array.split(',');
-   if ( data.count() > 2 )
-   {
-       if((QString::compare(QString::fromLocal8Bit(data.value(0).constData()),
-                            "logged",
-                            Qt::CaseInsensitive)==0) &&
-           (QString::compare(QString::fromLocal8Bit(data.value(1).constData()),
-                             "true",
-                             Qt::CaseInsensitive))==0) {
-           this->session_ = data.value(2).constData();
-           emit logged_in(this->session_, true);
-       } else {
-           emit logged_in("", false);
-       }
-   }
+  QByteArray array = tcpSocket->readAll();
+  received_data->append(array);
+  int begin_index = received_data->indexOf("<data>");
+  int end_index = received_data->indexOf("</data>");
+  while ( begin_index > -1 && end_index > -1 && begin_index < end_index ) {
+    // process data here
+    QByteArray data_needed = received_data->mid(begin_index + 6,end_index - begin_index - 6 );
+    process(data_needed);
+    received_data->remove(begin_index, end_index - begin_index + 7);
+    begin_index = received_data->indexOf("<data>");
+    end_index = received_data->indexOf("</data>");
+  }
 }
 
 void Client::SendData(QString data) {
     tcpSocket->write(data.toLocal8Bit().constData());
 }
 
-void Client::send_file(QString session, QString file_name) {
-  QString session_login = QString("<data>session_file,%1,%2,").arg(session).arg(file_name);
+void Client::send_file(QByteArray session, QString file_name) {
+  QString session_login = QString("<data>session_file,");//.arg(session.toHex()).arg(file_name);
   tcpSocket->write(session_login.toLocal8Bit());
+  tcpSocket->write(session);
+  QString session_login_part_2 = QString(",%1,").arg(file_name);
+  tcpSocket->write(session_login_part_2.toLocal8Bit());
   QByteArray ba;              // Construct a QByteArray object
   QImage image(file_name);
   if ( !image.isNull() ) {
@@ -93,7 +94,6 @@ void Client::send_file(QString session, QString file_name) {
     ba = file.readAll();
     file.close();
   }
-  qDebug() << session_login;
   tcpSocket->write(ba);
   QString end = "</data>";
   tcpSocket->write(end.toLocal8Bit());
@@ -111,6 +111,59 @@ void Client::sessionOpened() {
     settings.beginGroup(QLatin1String("QtNetwork"));
     settings.setValue(QLatin1String("DefaultNetworkConfiguration"), id);
     settings.endGroup();
+}
+
+void Client::process(QByteArray user_data) {
+    QList<QByteArray> data = user_data.split(',');
+    QByteArray file_data = user_data;
+    QString requested_type = QString::fromUtf8(data.value(0).constData());
+
+    if ( data.count() > 2 )
+    {
+        if((QString::compare(QString::fromLocal8Bit(data.value(0).constData()),
+                             "logged",
+                             Qt::CaseInsensitive)==0) &&
+            (QString::compare(QString::fromLocal8Bit(data.value(1).constData()),
+                              "true",
+                              Qt::CaseInsensitive))==0) {
+            this->session_ = data.value(2).constData();
+            emit logged_in(this->session_, true);
+        }
+        if((QString::compare(QString::fromLocal8Bit(data.value(0).constData()),
+                               "logged",
+                               Qt::CaseInsensitive)==0) &&
+              (QString::compare(QString::fromLocal8Bit(data.value(1).constData()),
+                                "false",
+                                Qt::CaseInsensitive))==0) {
+            emit logged_in("", false);
+        }
+    }
+
+    if( (data.count() > 2) && requested_type.compare("session_file") == 0 ) {
+
+        int remove_len = data.value(0).count() +
+                data.value(1).count() +
+                data.value(2).count() + 3;
+        file_data.remove(0, remove_len);
+        QImage image;                 // Construct a new QImage
+        image.loadFromData(file_data); // Load the image from the receive buffer
+        PremisesExporter::create_director();
+        QString file_path = QString::fromLocal8Bit(data.value(2));
+        QStringList lista = file_path.split("/");
+        QString file_name = lista.count() > 1 ? lista.value(1) : lista.value(0);
+        if ( image.isNull() ) {
+            QFile file("VirtualConcierge/"+file_name);
+            if (!file.open(QIODevice::WriteOnly))
+              return;
+            QTextStream out(&file);
+            out << file_data;
+            file.close();
+        } else
+        image.save("VirtualConcierge/" + file_name,"PNG");
+    }
+    if( (data.count() > 2) && requested_type.compare("completed") == 0 ) {
+        emit download_progress(data.value(1).toInt(),data.value(2).toInt());
+    }
 }
 
 Client::~Client(){

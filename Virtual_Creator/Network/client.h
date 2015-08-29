@@ -20,7 +20,7 @@ public:
     void ConnectToHost(QString,int);
     void SendData(QString);
     void Login(QString, QString);
-    void send_file(QString, QString);
+    void send_file(QByteArray, QString);
     QString GetSession();
 private:
     void ConfigureNetwork();
@@ -29,13 +29,16 @@ private:
     QNetworkSession *networkSession;
     QByteArray session_;
     QString username_;
-    QByteArray *data_to_send;
+    QByteArray *data_to_send, *received_data;
+    void process(QByteArray user_data);
+
 private slots:
     void readData();
     void sessionOpened();
 
 signals:
     void logged_in(QByteArray, bool);
+    void download_progress(int count, int max);
 };
 
 #endif // CLIENT_H
