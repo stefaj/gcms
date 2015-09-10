@@ -1,6 +1,7 @@
 #include "./login.h"
 #include "./ui_login.h"
 #include <QProgressBar>
+#include <QThread>
 
 login::login(QWidget *parent) :
     QWidget(parent),
@@ -15,6 +16,8 @@ login::login(QWidget *parent) :
     spinner = new WaitingSpinnerWidget(this, Qt::ApplicationModal, true);
     ui->progressBar->setVisible(false);
     ui->label_download->setVisible(false);
+    main_program = new MainWindow();
+    main_program->showMinimized();
 }
 
 login::~login() {
@@ -42,26 +45,23 @@ bool login::clearDir( const QString path )
     {
         if( dir.remove( dirItem ) )
         {
-            qDebug() << ( "Cleanup", "Deleted - " + path + QDir::separator() + dirItem );
+            qDebug() << "Deleted - " + path + QDir::separator() + dirItem ;
         }
         else
         {
-            qDebug() << ( "Cleanup", "Fail to delete - " + path+ QDir::separator() + dirItem);
+            qDebug() << "Fail to delete - " + path+ QDir::separator() + dirItem;
         }
     }
 
 
     dir.setFilter( QDir::NoDotAndDotDot | QDir::Dirs );
-    foreach( QString dirItem, dir.entryList() )
-    {
+    foreach( QString dirItem, dir.entryList() ) {
         QDir subDir( dir.absoluteFilePath( dirItem ) );
-        if( subDir.removeRecursively() )
-        {
-            qDebug() << ("Cleanup","Deleted - All files under " + dirItem );
+        if( subDir.removeRecursively() ) {
+            qDebug() << "Deleted - All files under " + dirItem ;
         }
-        else
-        {
-            qDebug() << ("Cleanup","Fail to delete - Files under " + dirItem);
+        else {
+            qDebug() << "Fail to delete - Files under " + dirItem;
         }
     }
 
@@ -110,7 +110,7 @@ void login::download_progress(int count, int max) {
       }
 
      // while(client_logging->busy());
-
+      main_program->close();
       MainWindow *window_main = new MainWindow();
       connect(this, SIGNAL(log_to_main(QByteArray, bool)),
               window_main, SLOT(receive_session(QByteArray,bool)));\
@@ -127,11 +127,12 @@ void login::on_pushButton_terminate_clicked() {
 }
 
 void login::on_pushButton_close_clicked() {
-  // close the window
+
   spinner->start();
-  MainWindow *w = new MainWindow();
-  w->showMaximized();
+ // spinner->show();
+  //MainWindow *w = new MainWindow();
+  main_program->showMaximized();
+
+  // close the window
   this->close();
-  //client_logging->send_file(this->session_, "VirtualConcierge/Nodes.pvc");
-  //client_logging->send_file(this->session_, "VirtualConcierge/TEX0");
 }

@@ -79,12 +79,13 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     //connect to the server
     user_client = new Client();
 }
+
 void RenderState::receive_session(QByteArray session) {
   *session_logged = session;
 }
 
 void RenderState::allow_edit_floor(bool allow) {
- edit_floorplan = allow;
+  edit_floorplan = allow;
 }
 
 void RenderState::allow_edit_node(bool allow) {
@@ -92,20 +93,20 @@ void RenderState::allow_edit_node(bool allow) {
 }
 
 void RenderState::allow_node(bool value) {
-    this->node_placable = value;
-    if ( value )
-      this->node_index_selected = -1;
+  this->node_placable = value;
+  if ( value )
+    this->node_index_selected = -1;
 }
 
 void RenderState::allow_remove_link(bool allow) {
-    link_removable = allow;
+  link_removable = allow;
 }
 
 void RenderState::invert_mouseY(bool value) {
-    if (value)
-        this->mouse_y_inverted = -1.0f;
-    else
-        this->mouse_y_inverted = 1.0f;
+  if (value)
+    this->mouse_y_inverted = -1.0f;
+  else
+    this->mouse_y_inverted = 1.0f;
 }
 
 void RenderState::allow_remove_floor_plan(bool allow) {
@@ -167,50 +168,50 @@ void RenderState::set_next_node_significant(bool value) {
 }
 
 void RenderState::allow_remove_node(bool value) {
-    this->node_removable = value;
+  this->node_removable = value;
 }
 
 void RenderState::allow_remove_tree(bool value) {
-    this->tree_removable = value;
+  this->tree_removable = value;
 }
 
 void RenderState::allow_link(bool value) {
-    this->node_linkable = value;
+  this->node_linkable = value;
 }
 
 void RenderState::allow_pavement(bool value) {
-    this->pavement_placable = value;
+  this->pavement_placable = value;
 }
 
 void RenderState::allow_door(bool value) {
-    this->door_placeable = value;
+  this->door_placeable = value;
 }
 
 void RenderState::allow_wall(bool value) {
-    this->wall_placable = value;
+  this->wall_placable = value;
 }
 
 void RenderState::allow_tree(bool value) {
-    this->tree_placable = value;
+  this->tree_placable = value;
 }
 
 void RenderState::allow_floor_plan(bool value) {
-    this->placable_floor_plan = value;
+  this->placable_floor_plan = value;
 }
 
 void RenderState::change_rotY(double value) {
-    this->rotation.setY(value);
-    if ( this->edit_floorplan &&
-         this->selected_floor_plan < this->models.count() &&
-         this->selected_floor_plan > -1)
+  this->rotation.setY(value);
+  if ( this->edit_floorplan &&
+       this->selected_floor_plan < this->models.count() &&
+       this->selected_floor_plan > -1 )
       this->models.value(this->selected_floor_plan)->setRotation(
-                QVector3D(0, value, 0));
-    PremisesExporter::export_environment(this->models,
+              QVector3D(0, value, 0));
+  PremisesExporter::export_environment(this->models,
                                          "environment.env");
-    if( !session_logged->isNull() ) {
-      user_client->send_file(*session_logged, "VirtualConcierge/environment.env");
-      user_client->send_file(*session_logged, "VirtualConcierge/textures.tl");
-    }
+  if( !session_logged->isNull() ) {
+    user_client->send_file(*session_logged, "VirtualConcierge/environment.env");
+    user_client->send_file(*session_logged, "VirtualConcierge/textures.tl");
+  }
 }
 
 void RenderState::set_object_scale(QVector3D value) {

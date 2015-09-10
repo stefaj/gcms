@@ -281,7 +281,6 @@ void MainWindow::receive_edit_floorplan(QVector2D position,
 void MainWindow::receive_session(QByteArray session, bool logged) {
   if ( logged ) {
     *network_session = session;
-    qDebug() << session.toHex();
     emit notify_session(session);
   }
 }

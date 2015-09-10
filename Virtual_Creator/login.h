@@ -34,6 +34,7 @@ private:
   Ui::login *ui;
   Client *client_logging;
   WaitingSpinnerWidget* spinner;
+  MainWindow *main_program;
 
 signals:
   void log_to_main(QByteArray, bool);
