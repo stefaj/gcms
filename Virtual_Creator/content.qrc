@@ -14,5 +14,8 @@
         <file>Content/run_icon_white.png</file>
         <file>Content/open_icon_white.png</file>
         <file>Content/invert_icon_white.png</file>
+        <file>Content/file_icon_white.png</file>
+        <file>Content/build_icon_white.png</file>
+        <file>Content/config_icon_white.png</file>
     </qresource>
 </RCC>

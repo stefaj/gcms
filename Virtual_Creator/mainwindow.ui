@@ -10,21 +10,22 @@
     <height>646</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Virtual Concierge Creator</string>
   </property>
-  <property name="windowIcon">
-   <iconset>
-    <normaloff>:/Content/icon.png</normaloff>:/Content/icon.png</iconset>
-  </property>
   <property name="windowOpacity">
-   <double>4.000000000000000</double>
+   <double>1.000000000000000</double>
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
   background: #3C3F41;
 }
-
 /* Button Styles*/
 QPushButton {
   border: 1px solid #2D2E30;
@@ -36,6 +37,36 @@ QPushButton:hover:!pressed {
   border: 2px solid #0073C7;
   background: #0073C7;
 }
+QMenuBar {
+    background-color:#3C3F41;
+}
+
+QMenuBar::item {
+    spacing: 3px; /* spacing between menu bar items */
+    padding: 10px 32px 10px 32px;
+    background: transparent;
+    border-radius: 4px;
+    color: white;
+}
+
+QMenuBar::item:selected { /* when selected using mouse or keyboard */
+    background: #0073C7;
+}
+QMenuBar::item:hover:!pressed{
+  border: 2px solid #0073C7;
+  background: #0073C7;
+}
+
+QMenu::item { 
+padding: 10px 32px 2px 20px;
+font: 14px;
+ }
+QMenu::item:selected { 
+background: #0073C7; 
+border-radius: 4px;
+color: white;
+}
+
 </string>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -153,7 +184,7 @@ QPushButton:hover:!pressed {
         <number>0</number>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="page_add_node">
         <layout class="QGridLayout" name="gridLayout_3">
@@ -391,14 +422,17 @@ QPushButton:hover:!pressed {
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>22</height>
+     <height>37</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
-     <width>0</width>
-     <height>22</height>
+     <width>32</width>
+     <height>16</height>
     </size>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::NoContextMenu</enum>
    </property>
    <property name="defaultUp">
     <bool>false</bool>
@@ -407,21 +441,65 @@ QPushButton:hover:!pressed {
     <bool>true</bool>
    </property>
    <widget class="QMenu" name="menu_File">
+    <property name="geometry">
+     <rect>
+      <x>297</x>
+      <y>116</y>
+      <width>170</width>
+      <height>117</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>32</width>
+      <height>32</height>
+     </size>
+    </property>
+    <property name="tearOffEnabled">
+     <bool>false</bool>
+    </property>
     <property name="title">
      <string>&amp;File</string>
+    </property>
+    <property name="icon">
+     <iconset resource="content.qrc">
+      <normaloff>:/Content/file_icon_white.png</normaloff>:/Content/file_icon_white.png</iconset>
+    </property>
+    <property name="separatorsCollapsible">
+     <bool>false</bool>
     </property>
     <addaction name="actionOpen_Premises_File"/>
     <addaction name="actionEdit_User_Interface"/>
    </widget>
    <widget class="QMenu" name="menuBuild">
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>32</height>
+     </size>
+    </property>
     <property name="title">
      <string>Build</string>
+    </property>
+    <property name="icon">
+     <iconset resource="content.qrc">
+      <normaloff>:/Content/build_icon_white.png</normaloff>:/Content/build_icon_white.png</iconset>
     </property>
     <addaction name="actionRun"/>
    </widget>
    <widget class="QMenu" name="menuConfiguration">
     <property name="title">
      <string>Configuration</string>
+    </property>
+    <property name="icon">
+     <iconset resource="content.qrc">
+      <normaloff>:/Content/config_icon_white.png</normaloff>:/Content/config_icon_white.png</iconset>
     </property>
     <addaction name="actionInvert_Mouse_Y"/>
    </widget>
@@ -566,6 +644,9 @@ QPushButton:hover:!pressed {
    <property name="text">
     <string>Invert Mouse Y</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionOpen_Premises_File">
    <property name="icon">
@@ -574,6 +655,11 @@ QPushButton:hover:!pressed {
    </property>
    <property name="text">
     <string>Open Premises File</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
   </action>
   <action name="actionEdit_User_Interface">
