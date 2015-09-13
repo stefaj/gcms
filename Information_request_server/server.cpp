@@ -146,6 +146,7 @@ void Server::process(QByteArray user_data, TcpSocket* socket) {
     QString requested_type = QString::fromUtf8(data.value(0).constData());
     if ( (data.count() > 2) && requested_type.compare("log") == 0) {
     login(data.value(1), data.value(2), socket);
+    create_director(data.value(1));
     }
     if( (data.count() > 2) && requested_type.compare("session_file") == 0 ) {
 
