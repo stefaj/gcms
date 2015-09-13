@@ -1,24 +1,18 @@
 <RCC>
     <qresource prefix="/">
-        <file>Content/background.png</file>
-        <file>Content/background.xcf</file>
-        <file>Content/blueback.png</file>
-        <file alias="Cube">Content/cube.obj</file>
         <file alias="Fragment">Content/mainFrag.frag</file>
         <file alias="Vertex">Content/mainVert.vert</file>
         <file alias="Plane">Content/plane.obj</file>
         <file alias="Sky">Content/sky.obj</file>
         <file alias="Texture0">Content/sky.png</file>
         <file alias="Sphere">Content/sphere.obj</file>
-        <file>Content/untitled.obj</file>
-        <file alias="Tree01">Content/tree.obj</file>
-        <file alias="Texture1">Content/tile.png</file>
-        <file alias="Texture2">Content/brick_wall_basic.jpg</file>
-        <file alias="Texture3">Content/stone-wall-basic.jpg</file>
-        <file alias="Wall01">Content/wall.obj</file>
         <file alias="DoorWay01">Content/doorway.obj</file>
-        <file alias="Texture4">Content/one_brick.png</file>
         <file alias="Icon">Content/penimg.png</file>
-        <file>Content/icon.png</file>
+        <file>Content/plus_icon_white.png</file>
+        <file>Content/edit_icon_white.png</file>
+        <file>Content/delete_icon_white.png</file>
+        <file>Content/run_icon_white.png</file>
+        <file>Content/open_icon_white.png</file>
+        <file>Content/invert_icon_white.png</file>
     </qresource>
 </RCC>

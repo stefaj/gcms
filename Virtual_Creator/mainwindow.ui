@@ -14,14 +14,29 @@
    <string>Virtual Concierge Creator</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="content.qrc">
+   <iconset>
     <normaloff>:/Content/icon.png</normaloff>:/Content/icon.png</iconset>
   </property>
   <property name="windowOpacity">
    <double>4.000000000000000</double>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">QWidget {
+  background: #3C3F41;
+}
+
+/* Button Styles*/
+QPushButton {
+  border: 1px solid #2D2E30;
+  background: #2D2E30;
+  color: white;
+  font: bold;
+}
+QPushButton:hover:!pressed { 
+  border: 2px solid #0073C7;
+  background: #0073C7;
+}
+</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -46,6 +61,15 @@
      <height>320</height>
     </size>
    </property>
+   <property name="windowIcon">
+    <iconset resource="content.qrc">
+     <normaloff>:/Content/delete_icon_white.png</normaloff>
+     <normalon>:/Content/run_icon_white.png</normalon>
+     <disabledoff>:/Content/plus_icon_white.png</disabledoff>
+     <disabledon>:/Content/delete_icon_white.png</disabledon>
+     <activeoff>:/Content/delete_icon_white.png</activeoff>
+     <activeon>:/Content/delete_icon_white.png</activeon>:/Content/delete_icon_white.png</iconset>
+   </property>
    <property name="accessibleName">
     <string/>
    </property>
@@ -59,8 +83,24 @@
     <layout class="QGridLayout" name="gridLayout_5">
      <item row="1" column="0">
       <widget class="QPushButton" name="button_add_basic">
+       <property name="minimumSize">
+        <size>
+         <width>18</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string>Add</string>
+       </property>
+       <property name="icon">
+        <iconset resource="content.qrc">
+         <normaloff>:/Content/plus_icon_white.png</normaloff>:/Content/plus_icon_white.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -69,8 +109,18 @@
      </item>
      <item row="1" column="1">
       <widget class="QPushButton" name="button_edit_basic">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string>Edit</string>
+       </property>
+       <property name="icon">
+        <iconset resource="content.qrc">
+         <normaloff>:/Content/edit_icon_white.png</normaloff>:/Content/edit_icon_white.png</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -79,8 +129,18 @@
      </item>
      <item row="1" column="2">
       <widget class="QPushButton" name="button_remove_basic">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string>Remove</string>
+       </property>
+       <property name="icon">
+        <iconset resource="content.qrc">
+         <normaloff>:/Content/delete_icon_white.png</normaloff>:/Content/delete_icon_white.png</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -403,13 +463,29 @@
       <layout class="QGridLayout" name="gridLayout_9">
        <item row="2" column="0">
         <widget class="QPushButton" name="button_execute_virtual_concierge">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>24</height>
+          </size>
+         </property>
          <property name="text">
           <string>Show Virtual Conciege</string>
+         </property>
+         <property name="icon">
+          <iconset resource="content.qrc">
+           <normaloff>:/Content/run_icon_white.png</normaloff>:/Content/run_icon_white.png</iconset>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QCheckBox" name="checkBox_inversemouse_y">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>18</height>
+          </size>
+         </property>
          <property name="maximumSize">
           <size>
            <width>200</width>
@@ -418,6 +494,10 @@
          </property>
          <property name="text">
           <string>Invert Mouse Y</string>
+         </property>
+         <property name="icon">
+          <iconset resource="content.qrc">
+           <normaloff>:/Content/invert_icon_white.png</normaloff>:/Content/invert_icon_white.png</iconset>
          </property>
         </widget>
        </item>
@@ -467,6 +547,10 @@
    </property>
   </action>
   <action name="actionRun">
+   <property name="icon">
+    <iconset resource="content.qrc">
+     <normaloff>:/Content/run_icon_white.png</normaloff>:/Content/run_icon_white.png</iconset>
+   </property>
    <property name="text">
     <string>Run</string>
    </property>
@@ -475,16 +559,28 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="content.qrc">
+     <normaloff>:/Content/invert_icon_white.png</normaloff>:/Content/invert_icon_white.png</iconset>
+   </property>
    <property name="text">
     <string>Invert Mouse Y</string>
    </property>
   </action>
   <action name="actionOpen_Premises_File">
+   <property name="icon">
+    <iconset resource="content.qrc">
+     <normaloff>:/Content/open_icon_white.png</normaloff>:/Content/open_icon_white.png</iconset>
+   </property>
    <property name="text">
     <string>Open Premises File</string>
    </property>
   </action>
   <action name="actionEdit_User_Interface">
+   <property name="icon">
+    <iconset resource="content.qrc">
+     <normaloff>:/Content/edit_icon_white.png</normaloff>:/Content/edit_icon_white.png</iconset>
+   </property>
    <property name="text">
     <string>Edit User Interface</string>
    </property>
