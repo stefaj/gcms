@@ -17,5 +17,9 @@
         <file>Content/file_icon_white.png</file>
         <file>Content/build_icon_white.png</file>
         <file>Content/config_icon_white.png</file>
+        <file>Content/spin_arrow_up_white.png</file>
+        <file>Content/spin_arrow_down_white.png</file>
+        <file>Content/spin_arrow_down_blue.png</file>
+        <file>Content/spin_arrow_up_blue.png</file>
     </qresource>
 </RCC>

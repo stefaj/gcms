@@ -25,6 +25,7 @@
   <property name="styleSheet">
    <string notr="true">QWidget {
   background: #3C3F41;
+  color: white;
 }
 /* Button Styles*/
 QPushButton {
@@ -37,6 +38,7 @@ QPushButton:hover:!pressed {
   border: 2px solid #0073C7;
   background: #0073C7;
 }
+/* Menu Bar Styles */
 QMenuBar {
     background-color:#3C3F41;
 }
@@ -58,16 +60,102 @@ QMenuBar::item:hover:!pressed{
 }
 
 QMenu::item { 
-padding: 10px 32px 2px 20px;
-font: 14px;
+  padding: 10px 32px 2px 20px;
+  font: 14px;
  }
 QMenu::item:selected { 
-background: #0073C7; 
-border-radius: 4px;
-color: white;
+  background: #0073C7; 
+  border-radius: 4px;
+  color: white;
+}
+/* Spin Box Styles */
+QAbstractSpinBox {
+    background-color:#2D2E30;
+    border-radius: 4px;
 }
 
-</string>
+QAbstractSpinBox::up-button { 
+  border: 1px solid #2D2E30;
+}
+QAbstractSpinBox::down-button { 
+  border: 1px solid #2D2E30;
+}
+QAbstractSpinBox::up-arrow { 
+  image:url(:/Content/spin_arrow_up_white.png);
+  width:8;
+  height:8;
+  border-width: 2;
+}
+QAbstractSpinBox::down-arrow { 
+  image:url(:/Content/spin_arrow_down_white.png);
+  width:8;
+  height:8;
+  border-width: 2;
+}
+QAbstractSpinBox::up-arrow:hover:!pressed { 
+  image:url(:/Content/spin_arrow_up_blue.png);
+  width:8;
+  height:8;
+  border-width: 2;
+}
+QAbstractSpinBox::down-arrow:hover:!pressed { 
+  image:url(:/Content/spin_arrow_down_blue.png);
+  width:8;
+  height:8;
+  border-width: 2;
+}
+
+xample where the drop down button of a QComboBox appears &quot;merged&quot; with the combo box frame.
+
+QComboBox {
+    border: 1px solid gray;
+    border-radius: 3px;
+    padding: 1px 18px 1px 3px;
+    min-width: 6em;
+}
+
+QComboBox:editable {
+    background: white;
+}
+
+QComboBox:!editable, QComboBox::drop-down:editable {
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
+                                 stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
+}
+
+/* QComboBox gets the &quot;on&quot; state when the popup is open */
+QComboBox:!editable:on, QComboBox::drop-down:editable:on {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #D3D3D3, stop: 0.4 #D8D8D8,
+                                stop: 0.5 #DDDDDD, stop: 1.0 #E1E1E1);
+}
+
+QComboBox:on { /* shift the text when the popup opens */
+    padding-top: 3px;
+    padding-left: 4px;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+
+    border-left-width: 1px;
+    border-left-color: darkgray;
+    border-left-style: solid; /* just a single line */
+    border-top-right-radius: 3px; /* same radius as the QComboBox */
+    border-bottom-right-radius: 3px;
+}
+
+QComboBox::down-arrow {
+    image: url(/usr/share/icons/crystalsvg/16x16/actions/1downarrow.png);
+}
+
+QComboBox::down-arrow:on { /* shift the arrow when popup is open */
+    top: 1px;
+    left: 1px;
+}</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -172,6 +260,12 @@ color: white;
        <property name="icon">
         <iconset resource="content.qrc">
          <normaloff>:/Content/delete_icon_white.png</normaloff>:/Content/delete_icon_white.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -293,6 +387,12 @@ color: white;
             </item>
             <item row="1" column="1" colspan="2">
              <widget class="QDoubleSpinBox" name="doubleSpinBox_floor_plan_height">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>30</height>
+               </size>
+              </property>
               <property name="prefix">
                <string/>
               </property>
@@ -312,6 +412,12 @@ color: white;
             </item>
             <item row="2" column="1" colspan="2">
              <widget class="QDoubleSpinBox" name="spin_rotationY">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>30</height>
+               </size>
+              </property>
               <property name="minimum">
                <double>-180.000000000000000</double>
               </property>
@@ -332,6 +438,12 @@ color: white;
             </item>
             <item row="0" column="1" colspan="2">
              <widget class="QDoubleSpinBox" name="doubleSpinBox_floor_plan_width">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>30</height>
+               </size>
+              </property>
               <property name="suffix">
                <string>m</string>
               </property>
@@ -348,6 +460,12 @@ color: white;
             </item>
             <item row="3" column="1" colspan="2">
              <widget class="QDoubleSpinBox" name="doubleSpinBox_floor_x">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>30</height>
+               </size>
+              </property>
               <property name="minimum">
                <double>-9999.000000000000000</double>
               </property>
@@ -361,6 +479,15 @@ color: white;
             </item>
             <item row="4" column="1" colspan="2">
              <widget class="QDoubleSpinBox" name="doubleSpinBox_floor_y">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::UpDownArrows</enum>
+              </property>
               <property name="minimum">
                <double>-9999.000000000000000</double>
               </property>
@@ -422,7 +549,7 @@ color: white;
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>37</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="minimumSize">
@@ -445,8 +572,8 @@ color: white;
      <rect>
       <x>297</x>
       <y>116</y>
-      <width>170</width>
-      <height>117</height>
+      <width>176</width>
+      <height>132</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -554,6 +681,12 @@ color: white;
           <iconset resource="content.qrc">
            <normaloff>:/Content/run_icon_white.png</normaloff>:/Content/run_icon_white.png</iconset>
          </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
         </widget>
        </item>
        <item row="1" column="0">
@@ -601,6 +734,12 @@ color: white;
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
            </property>
           </widget>
          </item>
