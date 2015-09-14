@@ -6,7 +6,7 @@
 #include <QSurfaceFormat>
 #include "./virtualconcierge.h"
 #include "./ui_virtualconcierge.h"
-#include "SMTP/smtp.h"
+#include "./SMTP/smtp.h"
 
 VirtualConcierge::VirtualConcierge(QWidget *parent) :
     QWidget(parent),

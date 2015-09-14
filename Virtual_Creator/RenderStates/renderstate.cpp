@@ -273,7 +273,7 @@ void RenderState::load_texture_from_file(QString value) {
 void RenderState::initializeGL() {
   initializeOpenGLFunctions();
   // texture test
-  for ( int i = 0; i < 5; i++ ) {
+  for ( int i = 0; i < 1; i++ ) {
   QOpenGLTexture *texture =
           new QOpenGLTexture(QImage("://Texture" +
                                     QString::number(i)).mirrored());

@@ -549,7 +549,7 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>41</height>
+     <height>37</height>
     </rect>
    </property>
    <property name="minimumSize">
@@ -572,8 +572,8 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
      <rect>
       <x>297</x>
       <y>116</y>
-      <width>176</width>
-      <height>132</height>
+      <width>170</width>
+      <height>117</height>
      </rect>
     </property>
     <property name="sizePolicy">
