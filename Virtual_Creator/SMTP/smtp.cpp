@@ -9,15 +9,17 @@ Smtp::Smtp(const QString &user,
            int port,
            int timeout) {
     this->socket_ = new QSslSocket(this);
-    QNetworkProxy proxy;
 
+    // Hierdie glo ek is nie meer nodig nie
+    /*QNetworkProxy proxy;
     proxy.setType(QNetworkProxy::HttpProxy);
     proxy.setHostName("cache10.p.nwu.ac.za");
     proxy.setPort(80);
     proxy.setUser("23511354");
     proxy.setPassword("lolipop");
+    this->socket_->setProxy(proxy);*/
 
-    this->socket_->setProxy(proxy);
+
     connect(this->socket_, SIGNAL(readyRead()),
             this, SLOT(readyRead()));
     connect(this->socket_, SIGNAL(connected()),
