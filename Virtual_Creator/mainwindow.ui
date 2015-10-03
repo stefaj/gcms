@@ -16,6 +16,14 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>-1</pointsize>
+    <weight>75</weight>
+    <italic>false</italic>
+    <bold>true</bold>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Virtual Concierge Creator</string>
   </property>
@@ -26,6 +34,18 @@
    <string notr="true">QWidget {
   background: #3C3F41;
   color: white;
+  font: bold;
+font-size: 12px;
+}
+QLineEdit{
+  background: #2D2E30;
+background-color: #2D2E30;
+border-radius: 4px;
+}
+QLineEdit:focus{
+  background: #0073C7;
+background-color: #0073C7;
+border-radius: 4px;
 }
 /* Button Styles*/
 QPushButton {
@@ -33,10 +53,17 @@ QPushButton {
   background: #2D2E30;
   color: white;
   font: bold;
+    border-radius: 4px;
 }
 QPushButton:hover:!pressed { 
   border: 2px solid #0073C7;
   background: #0073C7;
+    border-radius: 4px;
+}
+QPushButton:checked { 
+  border: 2px solid #0073C7;
+  background: #0073C7;
+    border-radius: 4px;
 }
 /* Menu Bar Styles */
 QMenuBar {
@@ -73,36 +100,40 @@ QAbstractSpinBox {
     background-color:#2D2E30;
     border-radius: 4px;
 }
-
+QAbstractSpinBox:focus{
+  background: #0073C7;
+background-color: #0073C7;
+border-radius: 4px;
+}
 QAbstractSpinBox::up-button { 
-  border: 1px solid #2D2E30;
+  border: 0px solid #2D2E30;
 }
 QAbstractSpinBox::down-button { 
-  border: 1px solid #2D2E30;
+  border: 0px solid #2D2E30;
 }
 QAbstractSpinBox::up-arrow { 
   image:url(:/Content/spin_arrow_up_white.png);
   width:8;
   height:8;
-  border-width: 2;
+  border-width: 0;
 }
 QAbstractSpinBox::down-arrow { 
   image:url(:/Content/spin_arrow_down_white.png);
   width:8;
   height:8;
-  border-width: 2;
+  border-width: 0;
 }
 QAbstractSpinBox::up-arrow:hover:!pressed { 
   image:url(:/Content/spin_arrow_up_blue.png);
   width:8;
   height:8;
-  border-width: 2;
+  border-width: 0;
 }
 QAbstractSpinBox::down-arrow:hover:!pressed { 
   image:url(:/Content/spin_arrow_down_blue.png);
   width:8;
   height:8;
-  border-width: 2;
+  border-width: 0;
 }
 
 xample where the drop down button of a QComboBox appears &quot;merged&quot; with the combo box frame.
@@ -278,7 +309,7 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
         <number>0</number>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="page_add_node">
         <layout class="QGridLayout" name="gridLayout_3">
@@ -310,6 +341,12 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
             </item>
             <item row="1" column="2">
              <widget class="QLineEdit" name="lineEdit_node_name">
+              <property name="minimumSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
               <property name="text">
                <string>default_node</string>
               </property>
@@ -324,6 +361,12 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
             </item>
             <item row="2" column="1" colspan="2">
              <widget class="QDoubleSpinBox" name="doubleSpinBox_node_x">
+              <property name="minimumSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
               <property name="minimum">
                <double>-9999.000000000000000</double>
               </property>
@@ -344,6 +387,12 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
             </item>
             <item row="3" column="1" colspan="2">
              <widget class="QDoubleSpinBox" name="doubleSpinBox_node_y">
+              <property name="minimumSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
               <property name="minimum">
                <double>-9999.000000000000000</double>
               </property>
@@ -523,6 +572,12 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
      </item>
      <item row="0" column="0" colspan="3">
       <widget class="QComboBox" name="comboBox_basic_adds">
+       <property name="minimumSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
        <item>
         <property name="text">
          <string>Floor Plan</string>

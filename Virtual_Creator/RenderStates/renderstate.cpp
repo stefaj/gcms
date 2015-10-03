@@ -40,6 +40,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     tree_radius(4.0f),
     infinte_lenght_lines(100.0f),
     selected_label(this) {
+    selected_label.move(100000,0);
     this->door_placeable = false;
     this->wall_placable = false;
     this->floor_plan_removable = false;
