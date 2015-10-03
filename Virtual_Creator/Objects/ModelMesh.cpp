@@ -25,24 +25,30 @@ bool ModelMesh::LoadOBJ(QString file) {
       QStringList list = line.split(" ");
       const unsigned int ListCount = list.count();
       if ( list[0] == "v" ) {
-        float vertex[ListCount];
+        float *vertex = (float*)malloc(sizeof(float) * ListCount);
+        //float vertex[ListCount];
         for ( unsigned int i = 0; i < ListCount - 1; i++ )
-          QTextStream(&list[i + 1]) >> vertex[i];
+            QTextStream(&list[i + 1]) >> vertex[i];
           temp_vertices.push_back(QVector3D(vertex[0],
                                             vertex[1],
                                             vertex[2]));
+          free(vertex);
         } else if ( list[0] == "vt" ) {
-                float uv[ListCount];
+                float *uv = (float*)malloc(sizeof(float) * ListCount);
+                //float uv[ListCount];
                 for ( unsigned int i = 0; i < ListCount - 1; i++ )
                   QTextStream(&list[i+1]) >> uv[i];
                   temp_uvs.push_back(QVector2D(uv[0], uv[1]));
+                free(uv);
         } else if ( list[0] == "vn" ) {
-                float vertexnormal[ListCount];
+                //float vertexnormal[ListCount];
+                float *vertexnormal = (float*)malloc(sizeof(float) * ListCount);
                 for ( unsigned int i = 0; i < ListCount - 1; i++ )
                   QTextStream(&list[i+1]) >> vertexnormal[i];
                   temp_normals.push_back(QVector3D(vertexnormal[0],
                                                    vertexnormal[1],
                                                    vertexnormal[2]));
+                free(vertexnormal);
         } else if ( list[0] == "f" ) {
                 unsigned int vertexIndex[3],
                              uvIndex[3],
