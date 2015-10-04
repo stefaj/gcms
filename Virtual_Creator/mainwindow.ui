@@ -309,7 +309,7 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
         <number>0</number>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="page_add_node">
         <layout class="QGridLayout" name="gridLayout_3">
@@ -457,6 +457,9 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
               <property name="singleStep">
                <double>0.100000000000000</double>
               </property>
+              <property name="value">
+               <double>35.000000000000000</double>
+              </property>
              </widget>
             </item>
             <item row="2" column="1" colspan="2">
@@ -504,6 +507,9 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
               </property>
               <property name="singleStep">
                <double>0.100000000000000</double>
+              </property>
+              <property name="value">
+               <double>35.000000000000000</double>
               </property>
              </widget>
             </item>
@@ -627,7 +633,7 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
      <rect>
       <x>297</x>
       <y>116</y>
-      <width>170</width>
+      <width>165</width>
       <height>117</height>
      </rect>
     </property>
