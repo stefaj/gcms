@@ -1221,7 +1221,7 @@ void RenderState::DrawNodes() {
       QMatrix4x4 translate_first;
 
       translate_first.translate(this->nodes.value(0)->Position());
-      translate_first.scale(2.0);
+      translate_first.scale(1.01);
       DrawGL::DrawModel(this->node, this->vMatrix,
                         translate_first, QMatrix4x4(),
                         this->textures.value(0),
