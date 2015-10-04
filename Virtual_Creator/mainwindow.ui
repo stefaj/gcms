@@ -135,9 +135,6 @@ QAbstractSpinBox::down-arrow:hover:!pressed {
   height:8;
   border-width: 0;
 }
-
-xample where the drop down button of a QComboBox appears &quot;merged&quot; with the combo box frame.
-
 QComboBox {
     border: 1px solid gray;
     border-radius: 3px;
@@ -150,16 +147,12 @@ QComboBox:editable {
 }
 
 QComboBox:!editable, QComboBox::drop-down:editable {
-     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                 stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
-                                 stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
+     background: #2D2E30;
 }
 
 /* QComboBox gets the &quot;on&quot; state when the popup is open */
 QComboBox:!editable:on, QComboBox::drop-down:editable:on {
-    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                stop: 0 #D3D3D3, stop: 0.4 #D8D8D8,
-                                stop: 0.5 #DDDDDD, stop: 1.0 #E1E1E1);
+    background:#0073C7;
 }
 
 QComboBox:on { /* shift the text when the popup opens */
@@ -180,12 +173,18 @@ QComboBox::drop-down {
 }
 
 QComboBox::down-arrow {
-    image: url(/usr/share/icons/crystalsvg/16x16/actions/1downarrow.png);
+    image: url(:/Content/spin_arrow_down_white.png);
+  width: 8;
+height: 8;
 }
 
 QComboBox::down-arrow:on { /* shift the arrow when popup is open */
     top: 1px;
     left: 1px;
+}
+QComboBox QAbstractItemView {
+    border: 2px solid darkgray;
+    selection-background-color:  #0073C7;
 }</string>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -580,7 +579,7 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
       <widget class="QComboBox" name="comboBox_basic_adds">
        <property name="minimumSize">
         <size>
-         <width>32</width>
+         <width>125</width>
          <height>32</height>
         </size>
        </property>
