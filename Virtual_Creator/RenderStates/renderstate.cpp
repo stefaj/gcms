@@ -856,6 +856,9 @@ void RenderState::paintGL() {
   glEnable(GL_DEPTH_TEST);
   // enable cullmode CCW (counter clockwise)
   glEnable(GL_CULL_FACE);
+  // enable transparency
+  glEnable (GL_BLEND);
+  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   // clear the background color for rendering
   // cornflower blue 659CEF
   glClearColor(210.0/255.0, 210.0/255.0, 210.0/255.0, 1);
@@ -1213,10 +1216,24 @@ void RenderState::DrawNodeNames() {
 }
 
 void RenderState::DrawNodes() {
+  // draw the first node (this is the virtual concierge)
+    if ( this->nodes.count() > 0 ) {
+      QMatrix4x4 translate_first;
+
+      translate_first.translate(this->nodes.value(0)->Position());
+      translate_first.scale(2.0);
+      DrawGL::DrawModel(this->node, this->vMatrix,
+                        translate_first, QMatrix4x4(),
+                        this->textures.value(0),
+                        QVector3D(0, 1, 0), QVector2D(1, 1),
+                        this->program, this->pMatrix,
+                        this->current_floor_height);
+    }
   // draw all the nodes here
   foreach(Node *n, this->nodes) {
     QMatrix4x4 translation;
     translation.translate(n->Position());
+
     if ( n->getSignificant() ) {
       DrawGL::DrawModel(this->node, this->vMatrix,
                         translation, QMatrix4x4(),
