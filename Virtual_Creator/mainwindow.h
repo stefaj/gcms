@@ -44,6 +44,7 @@ class MainWindow : public QMainWindow {
     void on_doubleSpinBox_floor_x_valueChanged(double arg1);
     void on_doubleSpinBox_floor_y_valueChanged(double arg1);
     void receive_session(QByteArray session, bool logged);
+    void error_message(QString error);
 
 private:
     Ui::MainWindow *ui;

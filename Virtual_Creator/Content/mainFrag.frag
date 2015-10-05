@@ -53,9 +53,9 @@ void main()
                                              varyingTextureCoordinate.y* texture_coordinates.y)).rgba;
 
     if (posi.y > y_clipping + 0.5 || posi.y < y_clipping - 0.5 ) {
-        gl_FragColor = vec4(texturecol.xyz, 0.15)*ndotl;
+        gl_FragColor = vec4(texturecol.xyz, 0.075)*ndotl + vec4(col, 0.075);
     } else
     // set the active colour with a ambiet colour
-    gl_FragColor = texturecol*ndotl+vec4(col, 1);
+    gl_FragColor = ndotl*texturecol + vec4(col, 1);
 
 }

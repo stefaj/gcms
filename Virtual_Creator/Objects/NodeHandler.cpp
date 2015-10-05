@@ -10,6 +10,26 @@ NodeHandler::NodeHandler() {
     this->premises.clear();
 }
 
+QString NodeHandler::DisplayError() {
+  QString error_list = "";
+  for ( int k = 1; k < premises.count()-1; k++ ) {
+      if ( this->premises.value(k)->getSignificant() ) {
+      int error = CalculateShortest(0, k);
+      if ( error > -1 )
+      error_list += "Loop/Inaccessible Warning for node: '" +
+              premises.value(error)->getName() +
+              "', Index:" + QString::number(error) + "\n";
+      qDebug() << k;
+      }
+  }
+  return error_list;
+}
+
+void NodeHandler::AddNodes(QVector<Node*> nodes) {
+    this->premises.clear();
+    this->premises = nodes;
+}
+
 void NodeHandler::AddNode(Node* node) {
     this->premises.push_back(node);
 }
@@ -36,7 +56,7 @@ void NodeHandler::AddNodeLinkbyIndex(int index1, int index2) {
         qDebug()<< "Node can't be linked to itself";
 }
 
-void NodeHandler::CalculateShortest(int start, int goal) {
+int NodeHandler::CalculateShortest(int start, int goal) {
   /* this is the main implementation of Dijkstra's Algorithm
    for shortest paths from one node to another
    for more details on the algorithm see the final report
@@ -132,18 +152,40 @@ void NodeHandler::CalculateShortest(int start, int goal) {
     } else {
         break;
     }
+
   }
 
   // list path
   int _back_node = goal;
-     if ( this->premises.value(_back_node)->getShortestIndex() > -1 ) {
+  if ( this->premises.value(_back_node)->getShortestIndex() > -1 ) {
+    // add the first node to the list
+    this->shortest.push_back(_back_node);
+    // assign the loop control variable.
+    // this variable checks for loops within the mesh
+    _back_node = this->premises.value(_back_node)->getShortestIndex();
+    int loop_var = _back_node;
+
+    if ( this->premises.value(_back_node)->getShortestIndex() > -1 ) {
+      // add another index
       this->shortest.push_back(_back_node);
       while ( _back_node != start ) {
-          // backwards trace the shortest path
-          _back_node = this->premises.value(_back_node)->getShortestIndex();
+        // backwards trace the shortest path
+        if ( this->premises.value(_back_node)->getShortestIndex() > -1 ) {
+        _back_node = this->premises.value(_back_node)->getShortestIndex();
+        } else {
+          //  return _back_node;
+            break;
+        }
+        if ( _back_node == loop_var ) {
+            return loop_var;
+            break;
+        }
+        if ( ( _back_node > -1 ) && ( _back_node != goal ) )
           this->shortest.push_back(_back_node);
       }
-     }
+    }
+  }
+  return -1;
 }
 
 int NodeHandler::pathcount() {

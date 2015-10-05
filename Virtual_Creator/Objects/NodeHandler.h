@@ -15,11 +15,13 @@ class NodeHandler {
     Node NodeFromIndex(unsigned int index);
     void AddNodeLink(int index, QString* name);
     void AddNodeLinkbyIndex(int index1, int index2);
-    void CalculateShortest(int start, int finish);
+    int CalculateShortest(int start, int finish);
     void ReadFilePVC(QString filename);
     int count();
     int pathcount();
     int pathindex(int shortest_index);
+    QString DisplayError();
+    void AddNodes(QVector<Node*> nodes);
 
  private:
     QVector<Node*> premises;

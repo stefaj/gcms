@@ -43,8 +43,13 @@ background-color: #2D2E30;
 border-radius: 4px;
 }
 QLineEdit:focus{
-  background: #0073C7;
-background-color: #0073C7;
+  background: #0073C7; 
+  background-color: #0073C7;
+  border-radius: 4px;
+}
+QTextBrowser{
+  background: #2D2E30;
+background-color: #2D2E30;
 border-radius: 4px;
 }
 /* Button Styles*/
@@ -189,7 +194,7 @@ QComboBox QAbstractItemView {
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+    <item row="0" column="1">
      <widget class="RenderState" name="openGLWidget"/>
     </item>
    </layout>
@@ -579,7 +584,7 @@ QComboBox QAbstractItemView {
       <widget class="QComboBox" name="comboBox_basic_adds">
        <property name="minimumSize">
         <size>
-         <width>125</width>
+         <width>107</width>
          <height>32</height>
         </size>
        </property>
@@ -632,7 +637,7 @@ QComboBox QAbstractItemView {
      <rect>
       <x>297</x>
       <y>116</y>
-      <width>165</width>
+      <width>177</width>
       <height>117</height>
      </rect>
     </property>
@@ -818,6 +823,26 @@ QComboBox QAbstractItemView {
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="dockWidget_debug">
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_3">
+    <layout class="QGridLayout" name="gridLayout_8">
+     <item row="0" column="0">
+      <widget class="QTextBrowser" name="textBrowser">
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:12px; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12px;&quot;&gt;----Debug----&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <action name="actionOpen_nodes_file">
    <property name="text">
     <string>Open Nodes File</string>
@@ -876,6 +901,8 @@ QComboBox QAbstractItemView {
    </property>
   </action>
   <zorder>dockWidget_configuration</zorder>
+  <zorder>dockWidget</zorder>
+  <zorder>dockWidget_debug</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

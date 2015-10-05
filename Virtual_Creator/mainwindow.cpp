@@ -70,6 +70,8 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->openGLWidget, SLOT(edit_floorplan_position(QVector2D)));
   connect(this, SIGNAL(notify_session(QByteArray)),
           ui->openGLWidget, SLOT(receive_session(QByteArray)));
+  connect(ui->openGLWidget, SIGNAL(debug_results(QString)),
+          this, SLOT(error_message(QString)));
 }
 
 MainWindow::~MainWindow() {delete ui;}
@@ -95,6 +97,11 @@ void MainWindow::is_opengl_valid_context(bool is_valid_context) {
 }
 
 void MainWindow::EmitSignals() {
+}
+
+void MainWindow::error_message(QString error) {
+    // show error message
+    ui->textBrowser->append(error);
 }
 
 void MainWindow::drop_down_emit() {
@@ -188,8 +195,9 @@ void MainWindow::on_checkBox_inversemouse_y_clicked(bool checked) {
 }
 
 void MainWindow::on_button_execute_virtual_concierge_clicked() {
-    VirtualConcierge *co = new VirtualConcierge();
-    co->show();
+  VirtualConcierge *co = new VirtualConcierge();
+  co->show();
+  ui->textBrowser->append("Virtual Concierge Executed");
 }
 
 void MainWindow::on_doubleSpinBox_floor_plan_width_valueChanged(double arg1) {

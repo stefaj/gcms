@@ -39,8 +39,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     edit_node(false),
     tree_radius(4.0f),
     infinte_lenght_lines(100.0f),
-    selected_label(this) {
-    selected_label.move(100000,0);
+    handler(){
     this->door_placeable = false;
     this->wall_placable = false;
     this->floor_plan_removable = false;
@@ -79,6 +78,10 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
 
     //connect to the server
     user_client = new Client();
+
+    // initialized successfully
+    emit debug_results("Premises Visualizer Initialized");
+
 }
 
 void RenderState::receive_session(QByteArray session) {
@@ -87,6 +90,13 @@ void RenderState::receive_session(QByteArray session) {
 
 void RenderState::allow_edit_floor(bool allow) {
   edit_floorplan = allow;
+  // display debugging message
+  QString floor_plan = "Edit Floor Plans: ";
+  if ( allow )
+    floor_plan += "true";
+  else
+    floor_plan += "false";
+  emit debug_results(floor_plan);
 }
 
 void RenderState::allow_edit_node(bool allow) {
@@ -673,6 +683,9 @@ void RenderState::add_node(QString* name) {
 
     // add new node to vector
     this->nodes.push_back(newnode);
+
+    // add nodes for debugging
+    handler.AddNodes(this->nodes);
 
     // update the working files
     PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
@@ -1573,6 +1586,9 @@ void RenderState::LoadNodes(QString filename) {
         // close the textfile
         textfile.close();
     }
+    // add nodes for debugging
+    handler.AddNodes(this->nodes);
+    qDebug() << handler.DisplayError();
 }
 
 void RenderState::CopyDirectories(QString value) {
