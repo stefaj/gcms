@@ -13,6 +13,7 @@ class NodeHandler {
     NodeHandler();
     void AddNode(Node* node);
     Node NodeFromIndex(unsigned int index);
+
     void AddNodeLink(int index, QString* name);
     void AddNodeLinkbyIndex(int index1, int index2);
     int CalculateShortest(int start, int finish);
@@ -22,7 +23,7 @@ class NodeHandler {
     int pathindex(int shortest_index);
     QString DisplayError();
     void AddNodes(QVector<Node*> nodes);
-
+    QVector<int> error_nodes_indices();
  private:
     QVector<Node*> premises;
     QVector<int> shortest;

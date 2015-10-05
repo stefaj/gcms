@@ -19,7 +19,7 @@ Node::Node() {
     this->vehicle = false;
     this->wheelchair = false;
     this->significant = true;
-    this->nshortest = 0;
+    this->nshortest = -1;
     this->g = 99999999999999.0;
     this->lastindex = 0;
 }

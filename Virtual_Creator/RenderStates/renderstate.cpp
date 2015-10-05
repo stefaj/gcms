@@ -91,12 +91,12 @@ void RenderState::receive_session(QByteArray session) {
 void RenderState::allow_edit_floor(bool allow) {
   edit_floorplan = allow;
   // display debugging message
-  QString floor_plan = "Edit Floor Plans: ";
+  /*QString floor_plan = "Edit Floor Plans: ";
   if ( allow )
     floor_plan += "true";
   else
     floor_plan += "false";
-  emit debug_results(floor_plan);
+  emit debug_results(floor_plan);*/
 }
 
 void RenderState::allow_edit_node(bool allow) {
@@ -568,6 +568,8 @@ void RenderState::remove_link() {
       }
     }
   }
+  // update errors
+  update_node_errors();
   // update the working files
   PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
   if( !session_logged->isNull() )
@@ -654,6 +656,8 @@ void RenderState::RemoveNodes() {
       }
     }
   }
+  // show node errors
+  update_node_errors();
   // update the temp nodelist
   PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
   if( !session_logged->isNull() )
@@ -672,6 +676,17 @@ void RenderState::wheelEvent(QWheelEvent* event) {
     update();
 }
 
+void RenderState::update_node_errors() {
+    // add nodes for debugging
+    handler.AddNodes(this->nodes);
+    // displayed debugged nodes
+    if( handler.count() > 0 ) {
+      QString error_msg = handler.DisplayError();
+      if ( !error_msg.isEmpty() )
+      emit debug_results(error_msg);
+    }
+}
+
 void RenderState::add_node(QString* name) {
     // create new nodes
     Node *newnode = new Node(new QVector3D(this->current_position->x(),
@@ -684,8 +699,8 @@ void RenderState::add_node(QString* name) {
     // add new node to vector
     this->nodes.push_back(newnode);
 
-    // add nodes for debugging
-    handler.AddNodes(this->nodes);
+    // show node errors
+    update_node_errors();
 
     // update the working files
     PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
@@ -1273,6 +1288,20 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
                          this->vMatrix, QVector3D(1, 1, 1), 0.7f);
 
     }
+    // draw a list of all the indices that error
+    QVector<int> error_nodes = handler.error_nodes_indices();
+    for ( int k = 0; k < error_nodes.count(); k++ ) {
+
+        draw_circle_flat(this->nodes.value(error_nodes.value(k))->Position(),
+                         this->vMatrix,
+                         QVector3D(1, 0, 0), 1.15 / 2.0);
+        draw_circle_flat(this->nodes.value(error_nodes.value(k))->Position(),
+                         this->vMatrix,
+                         QVector3D(1, 0, 0), 1.3 / 2.0);
+        draw_circle_flat(this->nodes.value(error_nodes.value(k))->Position(),
+                         this->vMatrix,
+                         QVector3D(1, 0, 0), 1.45 / 2.0);
+    }
   // draw all the node lines here
   foreach(Node *n, this->nodes) {
     if ( n->Position().distanceToPoint(Pos) < 0.5 ) {
@@ -1586,9 +1615,8 @@ void RenderState::LoadNodes(QString filename) {
         // close the textfile
         textfile.close();
     }
-    // add nodes for debugging
-    handler.AddNodes(this->nodes);
-    qDebug() << handler.DisplayError();
+  // show node errors
+  update_node_errors();
 }
 
 void RenderState::CopyDirectories(QString value) {

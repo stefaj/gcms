@@ -12,17 +12,30 @@ NodeHandler::NodeHandler() {
 
 QString NodeHandler::DisplayError() {
   QString error_list = "";
-  for ( int k = 1; k < premises.count()-1; k++ ) {
+  for ( int k = 1; k < premises.count(); k++ ) {
       if ( this->premises.value(k)->getSignificant() ) {
       int error = CalculateShortest(0, k);
       if ( error > -1 )
-      error_list += "Loop/Inaccessible Warning for node: '" +
+      error_list += "\n Loop/Inaccessible Warning for node: '" +
               premises.value(error)->getName() +
-              "', Index:" + QString::number(error) + "\n";
-      qDebug() << k;
+              "', Index:" + QString::number(error);
       }
   }
   return error_list;
+}
+
+QVector<int> NodeHandler::error_nodes_indices() {
+    // list of all the error indices
+    QVector<int> list_of_error_nodes;
+    list_of_error_nodes.clear();
+    for ( int k = 1; k < premises.count(); k++ ) {
+        if ( this->premises.value(k)->getSignificant() ) {
+        int error = CalculateShortest(0, k);
+        if ( error > -1 )
+        list_of_error_nodes.push_back(error);
+        }
+    }
+    return list_of_error_nodes;
 }
 
 void NodeHandler::AddNodes(QVector<Node*> nodes) {
@@ -87,7 +100,7 @@ int NodeHandler::CalculateShortest(int start, int goal) {
   QVector<int> que;
 
   // fill que
-  for ( int k = 0; k< this->premises.count(); k++ ) {
+  for ( int k = 0; k < this->premises.count(); k++ ) {
         que.push_back(k);
   }
   // wait while the whole que is empty ( this may be ineffective )
@@ -165,7 +178,7 @@ int NodeHandler::CalculateShortest(int start, int goal) {
     _back_node = this->premises.value(_back_node)->getShortestIndex();
     int loop_var = _back_node;
 
-    if ( this->premises.value(_back_node)->getShortestIndex() > -1 ) {
+    if ( _back_node > -1 ) {
       // add another index
       this->shortest.push_back(_back_node);
       while ( _back_node != start ) {
@@ -173,19 +186,23 @@ int NodeHandler::CalculateShortest(int start, int goal) {
         if ( this->premises.value(_back_node)->getShortestIndex() > -1 ) {
         _back_node = this->premises.value(_back_node)->getShortestIndex();
         } else {
-          //  return _back_node;
-            break;
+          return _back_node;
+          break;
         }
         if ( _back_node == loop_var ) {
             return loop_var;
             break;
         }
-        if ( ( _back_node > -1 ) && ( _back_node != goal ) )
+        if ( ( _back_node > -1 ) )
           this->shortest.push_back(_back_node);
       }
     }
   }
-  return -1;
+  if ( _back_node == start )
+   return -1;
+  else {
+   return _back_node;
+  }
 }
 
 int NodeHandler::pathcount() {
