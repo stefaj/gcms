@@ -11,15 +11,17 @@ NodeHandler::NodeHandler() {
 }
 
 QString NodeHandler::DisplayError() {
-  QString error_list = "";
-  for ( int k = 1; k < premises.count(); k++ ) {
-      if ( this->premises.value(k)->getSignificant() ) {
+  QString error_list = " ";
+  for ( int k = 0; k < premises.count(); k++ ) {
+    if ( this->premises.value(k)->getSignificant() ) {
       int error = CalculateShortest(0, k);
-      if ( error > -1 )
-      error_list += "\n Loop/Inaccessible Warning for node: '" +
-              premises.value(error)->getName() +
-              "', Index:" + QString::number(error);
+      if ( error > -1 && error < premises.count() ) {
+        error_list += "\n Loop/Inaccessible Warning for node: '" +
+             premises.value(error)->getName() +
+            "', Index:" + QString::number(error);
+        }
       }
+   // break;
   }
   return error_list;
 }
@@ -28,7 +30,7 @@ QVector<int> NodeHandler::error_nodes_indices() {
     // list of all the error indices
     QVector<int> list_of_error_nodes;
     list_of_error_nodes.clear();
-    for ( int k = 1; k < premises.count(); k++ ) {
+    for ( int k = 0; k < premises.count(); k++ ) {
         if ( this->premises.value(k)->getSignificant() ) {
         int error = CalculateShortest(0, k);
         if ( error > -1 )
@@ -39,8 +41,12 @@ QVector<int> NodeHandler::error_nodes_indices() {
 }
 
 void NodeHandler::AddNodes(QVector<Node*> nodes) {
-    this->premises.clear();
-    this->premises = nodes;
+  this->premises.clear();
+  for( int l = 0; l < nodes.count(); l++ ) {
+    Node * node = new Node();
+    *node = *nodes.value(l);
+    this->premises.push_back(node);
+  }
 }
 
 void NodeHandler::AddNode(Node* node) {
@@ -177,26 +183,27 @@ int NodeHandler::CalculateShortest(int start, int goal) {
     // this variable checks for loops within the mesh
     _back_node = this->premises.value(_back_node)->getShortestIndex();
     int loop_var = _back_node;
-
     if ( _back_node > -1 ) {
       // add another index
       this->shortest.push_back(_back_node);
-      while ( _back_node != start ) {
-        // backwards trace the shortest path
-        if ( this->premises.value(_back_node)->getShortestIndex() > -1 ) {
-        _back_node = this->premises.value(_back_node)->getShortestIndex();
-        } else {
-          return _back_node;
-          break;
-        }
-        if ( _back_node == loop_var ) {
-            return loop_var;
-            break;
-        }
-        if ( ( _back_node > -1 ) )
-          this->shortest.push_back(_back_node);
-      }
     }
+    while ( _back_node != start ) {
+      int error = _back_node;
+      // backwards trace the shortest path
+      _back_node = this->premises.value(_back_node)->getShortestIndex();
+      if ( _back_node > -1 ) {
+        if ( this->shortest.value(this->shortest.count() - 1 ) != _back_node) {
+          this->shortest.push_back(_back_node);
+        } else {
+          return -1;
+        }
+      } else {
+        return error;
+      }
+      if ( _back_node == loop_var)
+          return loop_var;
+    }
+
   }
   if ( _back_node == start )
    return -1;

@@ -377,6 +377,8 @@ void RenderState::mouseReleaseEvent(QMouseEvent * /*event*/) {
                                            "nodes.pvc");
             if( !session_logged->isNull() )
               user_client->send_file(*session_logged, "VirtualConcierge/nodes.pvc");
+            // update errors
+            update_node_errors();
         }
 
         if ( this->wall_placable ) {
@@ -656,12 +658,13 @@ void RenderState::RemoveNodes() {
       }
     }
   }
-  // show node errors
-  update_node_errors();
+
   // update the temp nodelist
   PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
   if( !session_logged->isNull() )
     user_client->send_file(*session_logged, "VirtualConcierge/nodes.pvc");
+  // show node errors
+  update_node_errors();
 }
 
 void RenderState::wheelEvent(QWheelEvent* event) {
@@ -682,9 +685,12 @@ void RenderState::update_node_errors() {
     // displayed debugged nodes
     if( handler.count() > 0 ) {
       QString error_msg = handler.DisplayError();
-      if ( !error_msg.isEmpty() )
+      if ( !error_msg.isEmpty() ) {
       emit debug_results(error_msg);
+      error_nodes = handler.error_nodes_indices();
+      }
     }
+
 }
 
 void RenderState::add_node(QString* name) {
@@ -1092,7 +1098,7 @@ void RenderState::DrawPlacableItems(QVector3D Pos) {
     // draw placable node (not significant)
     DrawGL::draw_if_true(this->node, this->vMatrix,
                          Pos, this->rotation,
-                         QVector3D(1, 1, 1),
+                         QVector3D(0.5, 0.5, 0.5),
                          this->textures.value(0),
                          QVector3D(), QVector2D(1, 1),
                          pMatrix, this->program,
@@ -1260,9 +1266,10 @@ void RenderState::DrawNodes() {
   // draw all the nodes here
   foreach(Node *n, this->nodes) {
     QMatrix4x4 translation;
-    translation.translate(n->Position());
+
 
     if ( n->getSignificant() ) {
+      translation.translate(n->Position());
       DrawGL::DrawModel(this->node, this->vMatrix,
                         translation, QMatrix4x4(),
                         this->textures.value(0),
@@ -1271,6 +1278,9 @@ void RenderState::DrawNodes() {
                         this->program, this->pMatrix,
                         this->current_floor_height);
     } else {
+
+        translation.translate(n->Position());
+        translation.scale(0.5);
         DrawGL::DrawModel(this->node, this->vMatrix,
                         translation, QMatrix4x4(),
                         this->textures.value(0),
@@ -1289,7 +1299,6 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
 
     }
     // draw a list of all the indices that error
-    QVector<int> error_nodes = handler.error_nodes_indices();
     for ( int k = 0; k < error_nodes.count(); k++ ) {
 
         draw_circle_flat(this->nodes.value(error_nodes.value(k))->Position(),
@@ -1302,6 +1311,8 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
                          this->vMatrix,
                          QVector3D(1, 0, 0), 1.45 / 2.0);
     }
+
+
   // draw all the node lines here
   foreach(Node *n, this->nodes) {
     if ( n->Position().distanceToPoint(Pos) < 0.5 ) {
@@ -1402,7 +1413,7 @@ void RenderState::draw_circle_flat(QVector3D center,
                                    QMatrix4x4 wvp,
                                    QVector3D color,
                                    float radius) {
-    const int slices = 36;
+    const int slices = 6;
     for ( int k = 0; k < slices; k++ ) {
         DrawGL::DrawLine(
                     radius * QVector3D(cos(2 * 3.14 * k / slices),
