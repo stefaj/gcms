@@ -182,13 +182,26 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
     <layout class="QGridLayout" name="gridLayout">
      <item row="1" column="4">
       <widget class="QPushButton" name="pushButton_add_child">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string>Add to Directory</string>
        </property>
       </widget>
      </item>
      <item row="1" column="2" rowspan="2">
-      <widget class="QLineEdit" name="lineEdit_new_directory"/>
+      <widget class="QLineEdit" name="lineEdit_new_directory">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>24</height>
+        </size>
+       </property>
+      </widget>
      </item>
      <item row="0" column="0" colspan="4">
       <widget class="QTreeWidget" name="treeWidget">
@@ -201,6 +214,12 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
      </item>
      <item row="1" column="0" rowspan="2">
       <widget class="QPushButton" name="pushButton_removedirectory">
+       <property name="minimumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string>-</string>
        </property>
@@ -208,6 +227,12 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
      </item>
      <item row="1" column="5">
       <widget class="QPushButton" name="pushButton_add_display">
+       <property name="minimumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string>+</string>
        </property>
@@ -215,6 +240,12 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
      </item>
      <item row="1" column="6">
       <widget class="QPushButton" name="pushButton_remove_display">
+       <property name="minimumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string>-</string>
        </property>
@@ -222,6 +253,12 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
      </item>
      <item row="2" column="3">
       <widget class="QPushButton" name="pushButton_down">
+       <property name="minimumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string>Down</string>
        </property>
@@ -229,6 +266,12 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
      </item>
      <item row="3" column="7">
       <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -239,6 +282,12 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
      </item>
      <item row="1" column="3">
       <widget class="QPushButton" name="pushButton_up">
+       <property name="minimumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string>Up</string>
        </property>
@@ -246,6 +295,12 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
      </item>
      <item row="1" column="1" rowspan="2">
       <widget class="QPushButton" name="pushButton_adddirectory">
+       <property name="minimumSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="text">
         <string>+</string>
        </property>

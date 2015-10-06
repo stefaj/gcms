@@ -21,5 +21,6 @@
         <file>Content/spin_arrow_down_white.png</file>
         <file>Content/spin_arrow_down_blue.png</file>
         <file>Content/spin_arrow_up_blue.png</file>
+        <file>Content/wizard_white.png</file>
     </qresource>
 </RCC>

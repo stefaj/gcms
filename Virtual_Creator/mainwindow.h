@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include "./virtualconcierge.h"
 #include "Functions/premises_exporter.h"
+#include "./directory_wizard.h"
 
 namespace Ui {
 class MainWindow;
@@ -45,6 +46,8 @@ class MainWindow : public QMainWindow {
     void on_doubleSpinBox_floor_y_valueChanged(double arg1);
     void receive_session(QByteArray session, bool logged);
     void error_message(QString error);
+
+    void on_pushButton_wizard_clicked();
 
 private:
     Ui::MainWindow *ui;

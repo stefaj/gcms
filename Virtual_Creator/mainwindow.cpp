@@ -292,3 +292,8 @@ void MainWindow::receive_session(QByteArray session, bool logged) {
     emit notify_session(session);
   }
 }
+
+void MainWindow::on_pushButton_wizard_clicked() {
+ Directory_Wizard *wizard = new Directory_Wizard();
+ wizard->show();
+}

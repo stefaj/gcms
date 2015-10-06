@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     userinterfacecreator.cpp \
     login.cpp \
     Network/client.cpp \
-    LoadingBar/waitingspinnerwidget.cpp
+    LoadingBar/waitingspinnerwidget.cpp \
+    directory_wizard.cpp
 
 HEADERS  += mainwindow.h \
     Objects/ModelMesh.h \
@@ -49,12 +50,14 @@ HEADERS  += mainwindow.h \
     main.h \
     login.h \
     Network/client.h \
-    LoadingBar/waitingspinnerwidget.h
+    LoadingBar/waitingspinnerwidget.h \
+    directory_wizard.h
 
 FORMS    += mainwindow.ui \
     virtualconcierge.ui \
     userinterfacecreator.ui \
-    login.ui
+    login.ui \
+    directory_wizard.ui
 
 RESOURCES += \
     content.qrc

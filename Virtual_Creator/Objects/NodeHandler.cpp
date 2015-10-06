@@ -21,7 +21,6 @@ QString NodeHandler::DisplayError() {
             "', Index:" + QString::number(error);
         }
       }
-   // break;
   }
   return error_list;
 }

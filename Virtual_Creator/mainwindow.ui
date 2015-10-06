@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1024</width>
-    <height>646</height>
+    <height>697</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -635,7 +635,7 @@ QComboBox QAbstractItemView {
    <widget class="QMenu" name="menu_File">
     <property name="geometry">
      <rect>
-      <x>297</x>
+      <x>-1302</x>
       <y>116</y>
       <width>177</width>
       <height>117</height>
@@ -694,6 +694,7 @@ QComboBox QAbstractItemView {
       <normaloff>:/Content/config_icon_white.png</normaloff>:/Content/config_icon_white.png</iconset>
     </property>
     <addaction name="actionInvert_Mouse_Y"/>
+    <addaction name="actionDirectory_Wizard"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuBuild"/>
@@ -706,13 +707,13 @@ QComboBox QAbstractItemView {
    <property name="minimumSize">
     <size>
      <width>320</width>
-     <height>150</height>
+     <height>175</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
      <width>320</width>
-     <height>150</height>
+     <height>175</height>
     </size>
    </property>
    <property name="contextMenuPolicy">
@@ -731,52 +732,6 @@ QComboBox QAbstractItemView {
     <layout class="QGridLayout" name="gridLayout_10">
      <item row="0" column="0">
       <layout class="QGridLayout" name="gridLayout_9">
-       <item row="2" column="0">
-        <widget class="QPushButton" name="button_execute_virtual_concierge">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>24</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Show Virtual Conciege</string>
-         </property>
-         <property name="icon">
-          <iconset resource="content.qrc">
-           <normaloff>:/Content/run_icon_white.png</normaloff>:/Content/run_icon_white.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="checkBox_inversemouse_y">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>18</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>13</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Invert Mouse Y</string>
-         </property>
-         <property name="icon">
-          <iconset resource="content.qrc">
-           <normaloff>:/Content/invert_icon_white.png</normaloff>:/Content/invert_icon_white.png</iconset>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <layout class="QGridLayout" name="gridLayout_7">
          <item row="0" column="0">
@@ -816,6 +771,69 @@ QComboBox QAbstractItemView {
           </widget>
          </item>
         </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="checkBox_inversemouse_y">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>18</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>13</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Invert Mouse Y</string>
+         </property>
+         <property name="icon">
+          <iconset resource="content.qrc">
+           <normaloff>:/Content/invert_icon_white.png</normaloff>:/Content/invert_icon_white.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="button_execute_virtual_concierge">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Show Virtual Conciege</string>
+         </property>
+         <property name="icon">
+          <iconset resource="content.qrc">
+           <normaloff>:/Content/run_icon_white.png</normaloff>:/Content/run_icon_white.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="pushButton_wizard">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>24</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Directory Wizard</string>
+         </property>
+         <property name="icon">
+          <iconset resource="content.qrc">
+           <normaloff>:/Content/wizard_white.png</normaloff>:/Content/wizard_white.png</iconset>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -900,8 +918,16 @@ p, li { white-space: pre-wrap; }
     <string>Sync</string>
    </property>
   </action>
+  <action name="actionDirectory_Wizard">
+   <property name="icon">
+    <iconset resource="content.qrc">
+     <normaloff>:/Content/wizard_white.png</normaloff>:/Content/wizard_white.png</iconset>
+   </property>
+   <property name="text">
+    <string>Directory Wizard</string>
+   </property>
+  </action>
   <zorder>dockWidget_configuration</zorder>
-  <zorder>dockWidget</zorder>
   <zorder>dockWidget_debug</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
