@@ -12,8 +12,9 @@ Directory_Wizard::Directory_Wizard(QWidget *parent) :
     this->directories.clear();
     this->directorylist.clear();
     this->display.clear();
-
     ui->setupUi(this);
+    ui->button_back->hide();
+
     load_directories("VirtualConcierge/directories.dir");
     load_nodes("VirtualConcierge/nodes.pvc");
 }
@@ -70,6 +71,9 @@ void Directory_Wizard::on_buttonCancel_clicked() {
 }
 
 void Directory_Wizard::on_buttonNext_clicked() {
+  if ( ui->stackedWidget->currentIndex() > 0) {
+      ui->button_back->show();
+  }
   // go to next wizard item
   if ( ui->stackedWidget->count() > ui->stackedWidget->currentIndex() + 1 )
     ui->stackedWidget->setCurrentIndex(ui->stackedWidget->currentIndex() + 1);
@@ -197,4 +201,10 @@ void Directory_Wizard::on_button_remove_2_clicked() {
         if ( item->isSelected())
             delete item;
     }
+}
+
+void Directory_Wizard::on_button_back_clicked() {
+  if ( ui->stackedWidget->currentIndex() > 0 ) {
+    ui->stackedWidget->setCurrentIndex(ui->stackedWidget->currentIndex() - 1);
+  }
 }

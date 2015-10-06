@@ -31,6 +31,8 @@ private slots:
     void load_nodes(QString filename);
     void add_directory_list();
     void add_this_directory_to_other();
+    void on_button_back_clicked();
+
 private:
     Ui::Directory_Wizard *ui;
     QVector<QString> directories, directorylist, display;

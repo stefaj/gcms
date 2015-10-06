@@ -155,6 +155,7 @@ void MainWindow::drop_down_emit() {
          emit add_new_texture("://Texture0");
       }
     }
+    ui->button_edit_basic->setEnabled(true);
  }
  if ( QString::compare(ui->comboBox_basic_adds->currentText(),
                        "Node",
@@ -179,6 +180,7 @@ void MainWindow::drop_down_emit() {
      }
      emit edit_node(ui->button_edit_basic->isChecked());
      emit edit_floorplan(false);
+     ui->button_edit_basic->setEnabled(true);
  }
  if ( QString::compare(ui->comboBox_basic_adds->currentText(),
                        "Link",
@@ -192,6 +194,8 @@ void MainWindow::drop_down_emit() {
      ui->stackedWidget_side_add->setCurrentIndex(2);
      emit edit_node(false);
      emit edit_floorplan(false);
+     ui->button_edit_basic->setEnabled(false);
+     ui->button_edit_basic->setChecked(false);
  }
 }
 

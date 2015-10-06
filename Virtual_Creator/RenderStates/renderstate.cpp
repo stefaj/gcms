@@ -1319,7 +1319,7 @@ void RenderState::DrawNodes() {
       DrawGL::DrawModel(this->node, this->vMatrix,
                         translation, QMatrix4x4(),
                         this->textures.value(0),
-                        QVector3D(1, 0, 0),
+                        QVector3D(0.25, 0.5, 0.74),
                         QVector2D(1, 1),
                         this->program, this->pMatrix,
                         this->current_floor_height);
