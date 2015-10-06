@@ -76,6 +76,7 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->pushButton_wizard, SIGNAL(clicked()));
   connect(this, SIGNAL(edit_node_access(bool, bool, bool, bool)),
           ui->openGLWidget, SLOT(edit_node_access(bool, bool, bool, bool)));
+  emit
 }
 
 MainWindow::~MainWindow() {delete ui;}
@@ -164,6 +165,11 @@ void MainWindow::drop_down_emit() {
      emit remove_nodes(ui->button_remove_basic->isChecked());
      emit node_links(false);
      emit remove_link(false);
+     emit set_node_significant(ui->checkbox_significant->isChecked());
+     emit edit_node_access(ui->checkBox_feet->isChecked(),
+                           ui->checkBox_wheelchair->isChecked(),
+                           ui->checkBox_vehicle->isChecked(),
+                           ui->checkBox_bicycle->isChecked());
      if ( ui->button_add_basic->isChecked() ||
           ui->button_edit_basic->isChecked() ) {
        ui->stackedWidget_side_add->setCurrentIndex(0);
