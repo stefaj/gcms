@@ -70,7 +70,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     node_removable, tree_removable, node_linkable, pavement_placable,
     door_placeable, wall_placable, tree_placable, placable_floor_plan,
     node_significant, floor_plan_removable, link_removable, start_up_load_tex,
-    edit_floorplan, edit_node;
+    edit_floorplan, edit_node, node_walk, node_wheelchair, node_vehicle, node_bicycle;
     QString floor_plan_path, next_node_name;
     QVector<QOpenGLTexture *> textures_from_files;
     QByteArray *session_logged;
@@ -135,10 +135,17 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     void edit_node_position(QVector2D);
     void edit_floorplan_position(QVector2D);
     void receive_session(QByteArray session);
+    void edit_node_access(bool walk, bool wheelchair, bool vehicle, bool bicycle);
 
   signals:
     void opengl_initialised(bool);
-    void send_edit_node(QString name, QVector2D position, bool button);
+    void send_edit_node(QString name,
+                        QVector2D position,
+                        bool button,
+                        bool walk,
+                        bool wheelchair,
+                        bool bicycle,
+                        bool vehicle);
     void send_edit_floorplan(QVector2D position,
                              float rotation,
                              QVector2D scale);

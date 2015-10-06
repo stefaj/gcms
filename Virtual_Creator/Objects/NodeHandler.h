@@ -16,7 +16,12 @@ class NodeHandler {
 
     void AddNodeLink(int index, QString* name);
     void AddNodeLinkbyIndex(int index1, int index2);
-    int CalculateShortest(int start, int finish);
+    int CalculateShortest(int start,
+                          int finish,
+                          bool walk,
+                          bool wheelchair,
+                          bool vehicle,
+                          bool bicycle);
     void ReadFilePVC(QString filename);
     int count();
     int pathcount();

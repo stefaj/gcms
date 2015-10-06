@@ -36,7 +36,7 @@ void VirtualConciergeRenderstate::update_frame() {
 void VirtualConciergeRenderstate::find_path(int start, int end) {
   if ( (this->handler->count() > start) &&
        (this->handler->count() > end) )
-      this->handler->CalculateShortest(start, end);
+      this->handler->CalculateShortest(start, end, true, true, true, true);
 
   // update the frame of the virtual concierge
   this->update();

@@ -60,8 +60,8 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->openGLWidget, SLOT(allow_edit_floor(bool)));
   connect(this, SIGNAL(edit_node(bool)),
           ui->openGLWidget, SLOT(allow_edit_node(bool)));
-  connect(ui->openGLWidget, SIGNAL(send_edit_node(QString, QVector2D, bool)),
-          this, SLOT(edit_node_settings(QString, QVector2D, bool)));
+  connect(ui->openGLWidget, SIGNAL(send_edit_node(QString, QVector2D, bool, bool, bool, bool, bool)),
+          this, SLOT(edit_node_settings(QString, QVector2D, bool, bool, bool, bool, bool)));
   connect(this, SIGNAL(edit_node_position(QVector2D)),
           ui->openGLWidget, SLOT(edit_node_position(QVector2D)));
   connect(ui->openGLWidget, SIGNAL(send_edit_floorplan(QVector2D,float,QVector2D)),
@@ -72,14 +72,26 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->openGLWidget, SLOT(receive_session(QByteArray)));
   connect(ui->openGLWidget, SIGNAL(debug_results(QString)),
           this, SLOT(error_message(QString)));
+  connect(ui->actionDirectory_Wizard, SIGNAL(triggered()),
+          ui->pushButton_wizard, SIGNAL(clicked()));
+  connect(this, SIGNAL(edit_node_access(bool, bool, bool, bool)),
+          ui->openGLWidget, SLOT(edit_node_access(bool, bool, bool, bool)));
 }
 
 MainWindow::~MainWindow() {delete ui;}
 
 void MainWindow::edit_node_settings(QString name,
                                     QVector2D position,
-                                    bool significant) {
-  ui->checkbox_significant->setChecked(significant);
+                                    bool isbutton,
+                                    bool walk,
+                                    bool wheelchair,
+                                    bool bicycle,
+                                    bool vehicle) {
+  ui->checkbox_significant->setChecked(isbutton);
+  ui->checkBox_bicycle->setChecked(bicycle);
+  ui->checkBox_feet->setChecked(walk);
+  ui->checkBox_vehicle->setChecked(vehicle);
+  ui->checkBox_wheelchair->setChecked(wheelchair);
   ui->lineEdit_node_name->setText(name);
   ui->doubleSpinBox_node_x->setValue(position.x());
   ui->doubleSpinBox_node_y->setValue(position.y());
@@ -296,4 +308,32 @@ void MainWindow::receive_session(QByteArray session, bool logged) {
 void MainWindow::on_pushButton_wizard_clicked() {
  Directory_Wizard *wizard = new Directory_Wizard();
  wizard->show();
+}
+
+void MainWindow::on_checkBox_wheelchair_clicked() {
+  emit edit_node_access(ui->checkBox_feet->isChecked(),
+                        ui->checkBox_wheelchair->isChecked(),
+                        ui->checkBox_vehicle->isChecked(),
+                        ui->checkBox_bicycle->isChecked());
+}
+
+void MainWindow::on_checkBox_feet_clicked() {
+    emit edit_node_access(ui->checkBox_feet->isChecked(),
+                          ui->checkBox_wheelchair->isChecked(),
+                          ui->checkBox_vehicle->isChecked(),
+                          ui->checkBox_bicycle->isChecked());
+}
+
+void MainWindow::on_checkBox_bicycle_clicked() {
+    emit edit_node_access(ui->checkBox_feet->isChecked(),
+                          ui->checkBox_wheelchair->isChecked(),
+                          ui->checkBox_vehicle->isChecked(),
+                          ui->checkBox_bicycle->isChecked());
+}
+
+void MainWindow::on_checkBox_vehicle_clicked() {
+    emit edit_node_access(ui->checkBox_feet->isChecked(),
+                          ui->checkBox_wheelchair->isChecked(),
+                          ui->checkBox_vehicle->isChecked(),
+                          ui->checkBox_bicycle->isChecked());
 }

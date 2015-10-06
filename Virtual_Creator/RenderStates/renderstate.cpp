@@ -37,6 +37,10 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     start_up_load_tex(true),
     edit_floorplan(false),
     edit_node(false),
+    node_walk(false),
+    node_wheelchair(false),
+    node_vehicle(false),
+    node_bicycle(false),
     tree_radius(4.0f),
     infinte_lenght_lines(100.0f),
     handler(){
@@ -44,6 +48,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     this->wall_placable = false;
     this->floor_plan_removable = false;
     this->link_removable = false;
+    this->node_removable = false;
     // enable antialiasing (set the format of the widget)
     QSurfaceFormat format;
     format.setSamples(4);
@@ -419,6 +424,30 @@ void RenderState::edit_node_position(QVector2D position) {
 
 }
 
+void RenderState::edit_node_access(bool walk, bool wheelchair, bool vehicle, bool bicycle) {
+    this->node_walk = walk;
+    this->node_wheelchair = wheelchair;
+    this->node_vehicle = vehicle;
+    this->node_bicycle = bicycle;
+    if ( this->node_index_selected > -1 &&
+         this->edit_node &&
+         this->node_index_selected < this->nodes.count() ) {
+      nodes.value(this->node_index_selected)->setWalk(walk);
+      nodes.value(this->node_index_selected)->setBike(bicycle);
+      nodes.value(this->node_index_selected)->setWheelChair(wheelchair);
+      nodes.value(this->node_index_selected)->setVehicle(vehicle);
+    }
+    // exort nodes
+    PremisesExporter::export_nodes(this->nodes,
+                                   "nodes.pvc");
+    if( !session_logged->isNull() )
+      user_client->send_file(*session_logged, "VirtualConcierge/nodes.pvc");
+
+    //LoadNodes("VirtualConcierge/");
+    // update errors
+    update_node_errors();
+}
+
 void RenderState::edit_floorplan_position(QVector2D position) {
     if ( this->edit_floorplan &&
          this->selected_floor_plan < this->models.count() &&
@@ -542,7 +571,11 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
         send_edit_node(this->nodes.value(l)->getName(),
                        QVector2D(this->nodes.value(l)->Position().x(),
                                  this->nodes.value(l)->Position().z()),
-                       this->nodes.value(l)->getSignificant());
+                       this->nodes.value(l)->getSignificant(),
+                       this->nodes.value(l)->getWalk(),
+                       this->nodes.value(l)->getWheelChair(),
+                       this->nodes.value(l)->getBike(),
+                       this->nodes.value(l)->getVehicle());
       }
     }
   }
@@ -661,6 +694,7 @@ void RenderState::RemoveNodes() {
 
   // update the temp nodelist
   PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
+  //handler.AddNodes(this->nodes);
   if( !session_logged->isNull() )
     user_client->send_file(*session_logged, "VirtualConcierge/nodes.pvc");
   // show node errors
@@ -685,10 +719,16 @@ void RenderState::update_node_errors() {
     // displayed debugged nodes
     if( handler.count() > 0 ) {
       QString error_msg = handler.DisplayError();
-      if ( !error_msg.isEmpty() ) {
+      if ( !error_msg.isEmpty() && (error_msg[0] != ' ') ) {
       emit debug_results(error_msg);
+      error_nodes.clear();
       error_nodes = handler.error_nodes_indices();
       }
+    }
+    for ( int i = 0; i < error_nodes.count(); i++ ) {
+        if (error_nodes.value(i) < 0 || error_nodes.value(i) > this->nodes.count() - 1) {
+            error_nodes.remove(i);
+        }
     }
 
 }
@@ -701,6 +741,12 @@ void RenderState::add_node(QString* name) {
                                            name);
     // set significance
     newnode->setSignificant(this->node_significant);
+
+    // accessibility
+    newnode->setWalk(this->node_walk);
+    newnode->setWheelChair(this->node_wheelchair);
+    newnode->setVehicle(this->node_vehicle);
+    newnode->setBike(this->node_bicycle);
 
     // add new node to vector
     this->nodes.push_back(newnode);
@@ -1559,6 +1605,7 @@ void RenderState::LoadObjects(QString path) {
 }
 
 void RenderState::LoadNodes(QString filename) {
+    QVector<int> walk, wheelchair, vehice, bicycle;
     // clear the premises when not empty
     if ( this->nodes.count() > 0 )
         this->nodes.clear();
@@ -1602,6 +1649,7 @@ void RenderState::LoadNodes(QString filename) {
                                                  vertex[2]));
                 // set node's significance
                 n->setSignificant((signi == 1));
+
                 // set node's name
                 n->setName(display_name);
                 // add the node to the premises
@@ -1618,13 +1666,41 @@ void RenderState::LoadNodes(QString filename) {
                     QString p = this->nodes.value(uv[1])->getName();
                     // add the links
                     this->nodes.value(uv[0])->AddLink(&p, uv[1]);
-             }
+             } else if ( list[0] == "wc" ) {
+                if(list.count() > 1)
+                wheelchair.append(list[1].toInt());
+            } else if ( list[0] == "vi" ) {
+                if(list.count() > 1)
+                vehice.append(list[1].toInt());
+            } else if ( list[0] == "ft" ) {
+                if(list.count() > 1)
+                walk.append(list[1].toInt());
+            } else if ( list[0] == "by" ) {
+                if(list.count() > 1)
+                bicycle.append(list[1].toInt());
+            }
             // read next line
            line = ascread.readLine();
         }
 
         // close the textfile
         textfile.close();
+    }
+    // add walkable nodes
+    for ( int i = 0; i < walk.count(); i++) {
+        this->nodes.value(walk.value(i))->setWalk(true);
+    }
+    // add wheelchair nodes
+    for ( int i = 0; i < wheelchair.count(); i++) {
+        this->nodes.value(wheelchair.value(i))->setWheelChair(true);
+    }
+    // add vehicle nodes
+    for ( int i = 0; i < vehice.count(); i++) {
+        this->nodes.value(vehice.value(i))->setVehicle(true);
+    }
+    // add bicycle nodes
+    for ( int i = 0; i < bicycle.count(); i++) {
+        this->nodes.value(bicycle.value(i))->setBike(true);
     }
   // show node errors
   update_node_errors();

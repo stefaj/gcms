@@ -36,7 +36,13 @@ class MainWindow : public QMainWindow {
     void on_button_remove_basic_clicked();
     void on_comboBox_basic_adds_activated(const QString &arg1);
     void on_button_edit_basic_clicked();
-    void edit_node_settings(QString name, QVector2D position, bool isbutton);
+    void edit_node_settings(QString name,
+                            QVector2D position,
+                            bool isbutton,
+                            bool walk,
+                            bool wheelchair,
+                            bool bicycle,
+                            bool vehicle);
     void receive_edit_floorplan(QVector2D position,
                              float rotation,
                              QVector2D scale);
@@ -48,6 +54,14 @@ class MainWindow : public QMainWindow {
     void error_message(QString error);
 
     void on_pushButton_wizard_clicked();
+
+    void on_checkBox_wheelchair_clicked();
+
+    void on_checkBox_feet_clicked();
+
+    void on_checkBox_bicycle_clicked();
+
+    void on_checkBox_vehicle_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -85,6 +99,8 @@ private:
     void edit_node_position(QVector2D); // sends the new coordinates to the renderstate
     void edit_floorplan_position(QVector2D); // sends the edited positions for the floor back
     void notify_session(QByteArray); // sends the current session to renderstate
+    // sends the node's new values
+    void edit_node_access(bool walk, bool wheelchair, bool vehicle, bool bicycle);
 };
 
 #endif  // VIRTUAL_CREATOR_MAINWINDOW_H_

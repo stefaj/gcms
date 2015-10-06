@@ -206,13 +206,13 @@ QComboBox QAbstractItemView {
    <property name="minimumSize">
     <size>
      <width>320</width>
-     <height>320</height>
+     <height>360</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
      <width>320</width>
-     <height>320</height>
+     <height>360</height>
     </size>
    </property>
    <property name="windowIcon">
@@ -313,7 +313,7 @@ QComboBox QAbstractItemView {
         <number>0</number>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="page_add_node">
         <layout class="QGridLayout" name="gridLayout_3">
@@ -326,33 +326,53 @@ QComboBox QAbstractItemView {
             <string>Node Settings</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_2">
-            <item row="0" column="0" colspan="2">
-             <widget class="QCheckBox" name="checkbox_significant">
-              <property name="text">
-               <string>Add Button</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0" colspan="2">
+            <item row="1" column="0">
              <widget class="QLabel" name="label">
               <property name="text">
-               <string>Node Description</string>
+               <string>Node Name</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="2">
-             <widget class="QLineEdit" name="lineEdit_node_name">
+            <item row="3" column="1" colspan="2">
+             <widget class="QDoubleSpinBox" name="doubleSpinBox_node_y">
               <property name="minimumSize">
                <size>
                 <width>32</width>
                 <height>32</height>
                </size>
               </property>
+              <property name="minimum">
+               <double>-9999.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>9999.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QCheckBox" name="checkBox_wheelchair">
               <property name="text">
-               <string>default_node</string>
+               <string>WheelChair</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="2">
+             <widget class="QCheckBox" name="checkBox_feet">
+              <property name="text">
+               <string>Feet</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QCheckBox" name="checkBox_bicycle">
+              <property name="text">
+               <string>Bicycle</string>
               </property>
              </widget>
             </item>
@@ -382,6 +402,19 @@ QComboBox QAbstractItemView {
               </property>
              </widget>
             </item>
+            <item row="1" column="1" colspan="2">
+             <widget class="QLineEdit" name="lineEdit_node_name">
+              <property name="minimumSize">
+               <size>
+                <width>32</width>
+                <height>32</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>default_node</string>
+              </property>
+             </widget>
+            </item>
             <item row="3" column="0">
              <widget class="QLabel" name="label_node_pos_y">
               <property name="text">
@@ -389,22 +422,43 @@ QComboBox QAbstractItemView {
               </property>
              </widget>
             </item>
-            <item row="3" column="1" colspan="2">
-             <widget class="QDoubleSpinBox" name="doubleSpinBox_node_y">
-              <property name="minimumSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
+            <item row="6" column="2">
+             <widget class="QCheckBox" name="checkBox_vehicle">
+              <property name="text">
+               <string>Vehicle</string>
               </property>
-              <property name="minimum">
-               <double>-9999.000000000000000</double>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QCheckBox" name="checkbox_significant">
+              <property name="text">
+               <string>Add Button</string>
               </property>
-              <property name="maximum">
-               <double>9999.000000000000000</double>
+              <property name="checked">
+               <bool>true</bool>
               </property>
-              <property name="singleStep">
-               <double>0.100000000000000</double>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Significance</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0" colspan="3">
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Accessibiliy</string>
+              </property>
+              <property name="scaledContents">
+               <bool>false</bool>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -842,6 +896,12 @@ QComboBox QAbstractItemView {
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockWidget_debug">
+   <property name="minimumSize">
+    <size>
+     <width>87</width>
+     <height>100</height>
+    </size>
+   </property>
    <attribute name="dockWidgetArea">
     <number>8</number>
    </attribute>

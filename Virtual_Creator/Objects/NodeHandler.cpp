@@ -11,14 +11,14 @@ NodeHandler::NodeHandler() {
 }
 
 QString NodeHandler::DisplayError() {
-  QString error_list = " ";
+  QString error_list = "";
   for ( int k = 0; k < premises.count(); k++ ) {
     if ( this->premises.value(k)->getSignificant() ) {
-      int error = CalculateShortest(0, k);
+      int error = CalculateShortest(0, k, true, true, true, true);
       if ( error > -1 && error < premises.count() ) {
-        error_list += "\n Loop/Inaccessible Warning for node: '" +
+        error_list.append( "Loop/Inaccessiblity Warning for node: '" +
              premises.value(error)->getName() +
-            "', Index:" + QString::number(error);
+            "', Index:" + QString::number(error) + "\n");
         }
       }
   }
@@ -31,7 +31,7 @@ QVector<int> NodeHandler::error_nodes_indices() {
     list_of_error_nodes.clear();
     for ( int k = 0; k < premises.count(); k++ ) {
         if ( this->premises.value(k)->getSignificant() ) {
-        int error = CalculateShortest(0, k);
+        int error = CalculateShortest(0, k, true, true, true, true);
         if ( error > -1 )
         list_of_error_nodes.push_back(error);
         }
@@ -40,12 +40,13 @@ QVector<int> NodeHandler::error_nodes_indices() {
 }
 
 void NodeHandler::AddNodes(QVector<Node*> nodes) {
-  this->premises.clear();
-  for( int l = 0; l < nodes.count(); l++ ) {
+    this->premises.clear();
+    for( int l = 0; l < nodes.count(); l++ ) {
     Node * node = new Node();
     *node = *nodes.value(l);
     this->premises.push_back(node);
   }
+
 }
 
 void NodeHandler::AddNode(Node* node) {
@@ -74,7 +75,7 @@ void NodeHandler::AddNodeLinkbyIndex(int index1, int index2) {
         qDebug()<< "Node can't be linked to itself";
 }
 
-int NodeHandler::CalculateShortest(int start, int goal) {
+int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelchair, bool vehicle, bool bicycle) {
   /* this is the main implementation of Dijkstra's Algorithm
    for shortest paths from one node to another
    for more details on the algorithm see the final report
@@ -106,6 +107,11 @@ int NodeHandler::CalculateShortest(int start, int goal) {
 
   // fill que
   for ( int k = 0; k < this->premises.count(); k++ ) {
+    Node *node_access = this->premises.value(k);
+    if ((node_access->getWalk() && walk) ||
+        (node_access->getVehicle() && vehicle) ||
+        (node_access->getWheelChair() && wheelchair) ||
+        (node_access->getBike() && bicycle) )
         que.push_back(k);
   }
   // wait while the whole que is empty ( this may be ineffective )
@@ -157,6 +163,7 @@ int NodeHandler::CalculateShortest(int start, int goal) {
                               getConnectedIndex(p))->
                               getG() ) {
             // update the g value and shortest path of the neighbor
+
             this->premises.value(this->premises.value(current_index)->
                                  getConnectedIndex(p))->
                                  setG(nodedist + this->
@@ -220,6 +227,7 @@ int NodeHandler::pathindex(int index) {
 }
 
 void NodeHandler::ReadFilePVC(QString filename) {
+  QVector<int> walk, wheelchair, vehice, bicycle;
   // clear the premises when not empty
   if ( this->premises.count() > 0 )
     this->premises.clear();
@@ -248,7 +256,8 @@ void NodeHandler::ReadFilePVC(QString filename) {
         for ( int i = 0; i < 3; i++ )
           QTextStream(&list[i+2]) >> vertex[i];
           // add the node to the premises
-          AddNode(new Node(new QVector3D(vertex[0], vertex[1], vertex[2])));
+          Node * current_node = new Node(new QVector3D(vertex[0], vertex[1], vertex[2]));
+          AddNode(current_node);
       } else if ( list[0] == "j" ) {
                 // this is only the indices that should be join
                 int uv[2];
@@ -257,11 +266,39 @@ void NodeHandler::ReadFilePVC(QString filename) {
                   QTextStream(&list[i+1]) >> uv[i];
                 // add the links
                 AddNodeLinkbyIndex(uv[0], uv[1]);
-              }
-            // read next line
-            line = ascread.readLine();
+      } else if ( list[0] == "wc" ) {
+          if(list.count() > 1)
+          wheelchair.append(list[1].toInt());
+      } else if ( list[0] == "vi" ) {
+          if(list.count() > 1)
+          vehice.append(list[1].toInt());
+      } else if ( list[0] == "ft" ) {
+          if(list.count() > 1)
+          walk.append(list[1].toInt());
+      } else if ( list[0] == "by" ) {
+          if(list.count() > 1)
+          bicycle.append(list[1].toInt());
+      }
+      // read next line
+      line = ascread.readLine();
     }
-        // close the textfile
-        textfile.close();
+    // close the textfile
+    textfile.close();
+  }
+  // add walkable nodes
+  for ( int i = 0; i < walk.count(); i++) {
+      this->premises.value(walk.value(i))->setWalk(true);
+  }
+  // add wheelchair nodes
+  for ( int i = 0; i < wheelchair.count(); i++) {
+      this->premises.value(wheelchair.value(i))->setWheelChair(true);
+  }
+  // add vehicle nodes
+  for ( int i = 0; i < vehice.count(); i++) {
+      this->premises.value(vehice.value(i))->setVehicle(true);
+  }
+  // add bicycle nodes
+  for ( int i = 0; i < bicycle.count(); i++) {
+      this->premises.value(bicycle.value(i))->setBike(true);
   }
 }
