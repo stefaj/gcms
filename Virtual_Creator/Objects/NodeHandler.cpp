@@ -206,8 +206,8 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
       } else {
         return error;
       }
-      if ( _back_node == loop_var)
-          return loop_var;
+      if ( _back_node == loop_var) {
+          return loop_var;      }
     }
 
   }

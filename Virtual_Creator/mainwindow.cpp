@@ -165,6 +165,7 @@ void MainWindow::drop_down_emit() {
      emit remove_nodes(ui->button_remove_basic->isChecked());
      emit node_links(false);
      emit remove_link(false);
+     emit change_node_name(ui->lineEdit_node_name->text());
      emit set_node_significant(ui->checkbox_significant->isChecked());
      emit edit_node_access(ui->checkBox_feet->isChecked(),
                            ui->checkBox_wheelchair->isChecked(),

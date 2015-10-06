@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1024</width>
-    <height>697</height>
+    <height>701</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -899,8 +899,14 @@ QComboBox QAbstractItemView {
    <property name="minimumSize">
     <size>
      <width>87</width>
-     <height>100</height>
+     <height>109</height>
     </size>
+   </property>
+   <property name="accessibleName">
+    <string>Debugging Window</string>
+   </property>
+   <property name="windowTitle">
+    <string>Debugging Window</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>8</number>
