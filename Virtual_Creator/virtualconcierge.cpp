@@ -12,6 +12,9 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::VirtualConcierge) {
     ui->setupUi(this);
+    QPalette* palette = new QPalette();
+    palette->setBrush(QPalette::Background,*(new QBrush(*(new QPixmap(":/BackGround_Virtual_Concierge")))));
+    setPalette(*palette);
     load_interface("VirtualConcierge/nodes.pvc",
                    "VirtualConcierge/directories.dir");
     connect(this, SIGNAL(find_path(int, int)),
@@ -84,7 +87,7 @@ int VirtualConcierge::get_index_from_index(QVector<NodeButton* > list,
 }
 
 void VirtualConcierge::create_interface() {
-    const int width = 150, height = 32;
+    const int width = 256, height = 48;
     // reconstruct the directories_
     for ( int k = 0; k < this->catagory_.count(); k++ )
        this->catagory_.value(k)->setGeometry(0,

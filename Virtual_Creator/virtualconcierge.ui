@@ -6,151 +6,201 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>480</width>
-    <height>683</height>
+    <width>844</width>
+    <height>731</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Virtual Concierge</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">/* Basic Palette\nborder styles: dashed | dot-dash | dot-dot-dash | dotted | double | groove | inset | outset | ridge | solid | none\n*/\n\n/* Set the selection colors for all widgets. */\nQWidget\n{\n	color: #111111;\n	border: 0px solid #737373;\n	background: transparent;\n	selection-color: #cccccc;\n	selection-background-color: transparent;\n	padding: 0px;\n	margin: 0px;\n}\nQPushButton\n{\n	font-size: 10pt;\n    font-weight: bold;\n    color: #ffffff;\n    border: 2px solid transparent;\n	background:#aaaaaa;\n	border-radius: 16px;\n	padding-left: 5px;\n	padding-right: 5px;\n}\n\n/* all types of push button */\nQPushButton:hover\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #ffffff;\n}\n\nQPushButton:pressed\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #e5e5e5;\n}\nQPushButton:checked\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #e5e5e5;\n}\n\n/* Text input box */\nQLineEdit\n{\n	font-size: 10pt;\n    font-weight: bold;\n    color: #ffffff;\n    border: 2px solid transparent;\n	background:#aaaaaa;\n	border-radius: 16px;\n	padding-left: 5px;\n	padding-right: 5px;\n}\n\nQLabel\n{\n	margin-left: 5px;\n	margin-right: 5px;\n	background: none;\n	border: 0px;\n}\n</string>
-  </property>
-  <widget class="QWidget" name="widget_directory" native="true">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>481</width>
-     <height>681</height>
-    </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>150</width>
-     <height>0</height>
-    </size>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">/* Basic Palette
-border styles: dashed | dot-dash | dot-dot-dash | dotted | double | groove | inset | outset | ridge | solid | none
-*/
-
-/* Set the selection colors for all widgets. */
-QWidget
-{
-	color: #111111;
-	border: 0px solid #737373;
-	background: transparent;
-	selection-color: #cccccc;
-	selection-background-color: transparent;
-	padding: 0px;
-	margin: 0px;
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="label">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>100</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial Narrow</family>
+       <pointsize>48</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Faculty of Engineering</string>
+     </property>
+     <property name="scaledContents">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QWidget" name="widget_directory" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>150</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>256</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+  font-size: 10pt;
+  font-weight: bold;
+  color: #ffffff;
+  border-image:url(:/Content/panel_button.png) 0 0 0 0 stretch stretch;
 }
-QPushButton
-{
-	font-size: 10pt;
-    font-weight: bold;
-    color: #ffffff;
-    border: 2px solid transparent;
-	background:#aaaaaa;
-	border-radius: 16px;
-	padding-left: 5px;
-	padding-right: 5px;
-}
 
-/* all types of push button */
-QPushButton:hover
-{
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);
-	color: #ffffff;
+QPushButton:hover {
+  font-size: 10pt;
+  font-weight: bold;
+  color: #ffffff;
+  border-image:url(:/Content/panel_button1.png) 0 0 0 0 stretch stretch;
 }
 
 QPushButton:pressed
 {
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);
-	color: #e5e5e5;
+  font-size: 10pt;
+  font-weight: bold;
+  color: #ffffff;
+  border-image:url(:/Content/panel_button1.png) 0 0 0 0 stretch stretch;
 }
 QPushButton:checked
 {
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);
 	color: #e5e5e5;
-}
-
-/* Text input box */
-QLineEdit
-{
-	font-size: 10pt;
-    font-weight: bold;
-    color: #ffffff;
-    border: 2px solid transparent;
-	background:#aaaaaa;
-	border-radius: 16px;
-	padding-left: 5px;
-	padding-right: 5px;
-}
-
-QLabel
-{
-	margin-left: 5px;
-	margin-right: 5px;
-	background: none;
-	border: 0px;
-}
-</string>
-   </property>
-   <widget class="VirtualConciergeRenderstate" name="openGLWidget">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>481</width>
-      <height>691</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>170</x>
-      <y>0</y>
-      <width>308</width>
-      <height>34</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="pushButton_send_mail">
-       <property name="minimumSize">
-        <size>
-         <width>150</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">/* Basic Palette\nborder styles: dashed | dot-dash | dot-dot-dash | dotted | double | groove | inset | outset | ridge | solid | none\n*/\n\n/* Set the selection colors for all widgets. */\nQWidget\n{\n	color: #111111;\n	border: 0px solid #737373;\n	background: transparent;\n	selection-color: #cccccc;\n	selection-background-color: transparent;\n	padding: 0px;\n	margin: 0px;\n}\nQPushButton\n{\n	font-size: 10pt;\n    font-weight: bold;\n    color: #ffffff;\n    border: 2px solid transparent;\n	background:#aaaaaa;\n	border-radius: 16px;\n	padding-left: 5px;\n	padding-right: 5px;\n}\n\n/* all types of push button */\nQPushButton:hover\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #ffffff;\n}\n\nQPushButton:pressed\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #e5e5e5;\n}\nQPushButton:checked\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #e5e5e5;\n}\n\n/* Text input box */\nQLineEdit\n{\n	font-size: 10pt;\n    font-weight: bold;\n    color: #ffffff;\n    border: 2px solid transparent;\n	background:#aaaaaa;\n	border-radius: 16px;\n	padding-left: 5px;\n	padding-right: 5px;\n}\n\nQLabel\n{\n	margin-left: 5px;\n	margin-right: 5px;\n	background: none;\n	border: 0px;\n}\n</string>
-       </property>
-       <property name="text">
-        <string>Mail</string>
+}</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_email">
-       <property name="minimumSize">
-        <size>
-         <width>150</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">/* Basic Palette\nborder styles: dashed | dot-dash | dot-dot-dash | dotted | double | groove | inset | outset | ridge | solid | none\n*/\n\n/* Set the selection colors for all widgets. */\nQWidget\n{\n	color: #111111;\n	border: 0px solid #737373;\n	background: transparent;\n	selection-color: #cccccc;\n	selection-background-color: transparent;\n	padding: 0px;\n	margin: 0px;\n}\nQPushButton\n{\n	font-size: 10pt;\n    font-weight: bold;\n    color: #ffffff;\n    border: 2px solid transparent;\n	background:#aaaaaa;\n	border-radius: 16px;\n	padding-left: 5px;\n	padding-right: 5px;\n}\n\n/* all types of push button */\nQPushButton:hover\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #ffffff;\n}\n\nQPushButton:pressed\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #e5e5e5;\n}\nQPushButton:checked\n{\n	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);\n	color: #e5e5e5;\n}\n\n/* Text input box */\nQLineEdit\n{\n	font-size: 10pt;\n    font-weight: bold;\n    color: #ffffff;\n    border: 2px solid transparent;\n	background:#aaaaaa;\n	border-radius: 16px;\n	padding-left: 5px;\n	padding-right: 5px;\n}\n\nQLabel\n{\n	margin-left: 5px;\n	margin-right: 5px;\n	background: none;\n	border: 0px;\n}\n</string>
-       </property>
-      </widget>
+      <widget class="VirtualConciergeRenderstate" name="openGLWidget"/>
      </item>
     </layout>
-   </widget>
-  </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QLineEdit" name="lineEdit_email">
+     <property name="minimumSize">
+      <size>
+       <width>150</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLineEdit {
+  font-size: 10pt;
+  font-weight: bold;
+  color: #ffffff;
+  border-image:url(:/Content/narEmail.png) 0 0 0 0 stretch stretch;
+}
+
+QLineEdit:hover {
+  font-size: 10pt;
+  font-weight: bold;
+  color: #ffffff;
+  border-image:url(:/Content/narEmail.png) 0 0 0 0 stretch stretch;
+}
+
+QLineEdit:pressed
+{
+  font-size: 10pt;
+  font-weight: bold;
+  color: #ffffff;
+  border-image:url(:/Content/narEmail.png) 0 0 0 0 stretch stretch;
+}
+QLineEdit:checked
+{
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);
+	color: #e5e5e5;
+}</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QPushButton" name="pushButton_send_mail">
+     <property name="minimumSize">
+      <size>
+       <width>150</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+  font-size: 10pt;
+  font-weight: bold;
+  color: #ffffff;
+  border-image:url(:/Content/panel_button.png) 0 0 0 0 stretch stretch;
+}
+
+QPushButton:hover {
+  font-size: 10pt;
+  font-weight: bold;
+  color: #ffffff;
+  border-image:url(:/Content/panel_button1.png) 0 0 0 0 stretch stretch;
+}
+
+QPushButton:pressed
+{
+  font-size: 10pt;
+  font-weight: bold;
+  color: #ffffff;
+  border-image:url(:/Content/panel_button1.png) 0 0 0 0 stretch stretch;
+}
+QPushButton:checked
+{
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);
+	color: #e5e5e5;
+}</string>
+     </property>
+     <property name="text">
+      <string>Mail</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLabel" name="label_2">
+     <property name="maximumSize">
+      <size>
+       <width>1024</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <family>Monotype Corsiva</family>
+       <pointsize>24</pointsize>
+       <italic>true</italic>
+      </font>
+     </property>
+     <property name="text">
+      <string>Virtual Concierge                         </string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <customwidgets>
   <customwidget>

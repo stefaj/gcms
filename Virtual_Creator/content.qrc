@@ -22,5 +22,14 @@
         <file>Content/spin_arrow_down_blue.png</file>
         <file>Content/spin_arrow_up_blue.png</file>
         <file>Content/wizard_white.png</file>
+        <file>Content/splash.png</file>
+        <file>Content/panel_output.png</file>
+        <file>Content/panel_button1.png</file>
+        <file alias="BackGround_Virtual_Concierge">Content/Categories.png</file>
+        <file>Content/panel_button.png</file>
+        <file>Content/narEmail.png</file>
+        <file>Content/you_are_here.png</file>
+        <file>Content/arrow.bmp</file>
+        <file>Content/arrow.obj</file>
     </qresource>
 </RCC>

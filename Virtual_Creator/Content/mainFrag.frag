@@ -49,12 +49,15 @@ void main()
     float ndotl = -dot(normalize(normals),lightdir)+0.5;
 
     // set texture value
-    vec4 texturecol = texture2D(texture,vec2(varyingTextureCoordinate.x*texture_coordinates.x,
+    vec4 texturecol = vec4(0,0,0,1);
+    texturecol = texture2D(texture, vec2(varyingTextureCoordinate.x*texture_coordinates.x,
                                              varyingTextureCoordinate.y* texture_coordinates.y)).rgba;
 
     if (posi.y > y_clipping + 0.5 || posi.y < y_clipping - 0.5 ) {
         gl_FragColor = vec4(texturecol.xyz, 0.075)*ndotl + vec4(col, 0.075);
-    } else
+    } else if ((texturecol.x >0.99) && (texturecol.y > 0.99) && (texturecol.z > 0.99))
+      discard;
+     else
     // set the active colour with a ambiet colour
     gl_FragColor = ndotl*texturecol + vec4(col, 1);
 

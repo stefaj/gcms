@@ -2,6 +2,8 @@
 
 #include  <QFileDialog>
 #include <QPainter>
+#include <QtMath>
+#include <math.h>
 #include "./virtualconciergerenderstate.h"
 
 VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent):
@@ -10,7 +12,7 @@ VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent):
     start(0),
     end(0) {
     // enable antialiasing (set the format of the widget)
-    // format.setSamples(4);
+    format.setSamples(4);
     this->setFormat(format);
 
     // clear the textures
@@ -161,6 +163,7 @@ void VirtualConciergeRenderstate::LoadContent() {
   this->door = new ModelMesh("://DoorWay01");
   this->wall = new ModelMesh("://Wall01");
   this->tree = new ModelMesh("://Tree01");
+  this->arrow = new ModelMesh(":/Content/arrow.obj");
 
   // load environment and textures
   if ( PremisesExporter::fileExists("VirtualConcierge/textures.tl"))
@@ -175,6 +178,12 @@ void VirtualConciergeRenderstate::LoadContent() {
   this->program->addShaderFromSourceFile(QOpenGLShader::Fragment,
                                          ":/Fragment");
   this->program->link();
+
+  // load texture
+  texture_you_are_here =
+          new QOpenGLTexture(QImage(":/Content/arrow.bmp").mirrored());
+  texture_you_are_here->setMinificationFilter(QOpenGLTexture::Linear);
+  texture_you_are_here->setMagnificationFilter(QOpenGLTexture::Linear);
 }
 
 void VirtualConciergeRenderstate::initializeGL() {
@@ -203,10 +212,16 @@ void VirtualConciergeRenderstate::resizeGL(int w, int h) {
 }
 
 void VirtualConciergeRenderstate::paintGL() {
+  QVector3D middel;
+  if ( this->handler->count() > 0 )
+      middel = this->handler->NodeFromIndex(0).Position();
+
+
   // define a view matrix
   QMatrix4x4 vMatrix;
   // whenever content is not loaded, load the content
   if ( !this->program ) { LoadContent();}
+  // enable the scene's depth mask
   glDepthMask(GL_TRUE);
   // clear the depth z = 0.0f -> 1.0f
   glClearDepth(1.0f);
@@ -214,10 +229,14 @@ void VirtualConciergeRenderstate::paintGL() {
   glEnable(GL_DEPTH_TEST);
   // enable cullmode CCW (counter clockwise)
   glEnable(GL_CULL_FACE);
+  // enable transparency
+  glEnable (GL_BLEND);
+  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   // clear the background color for rendering
-  glClearColor(0.97f, 0.97f, 0.97f, 1);
+  // cornflower blue 659CEF
+  glClearColor(210.0/255.0, 210.0/255.0, 210.0/255.0, 1);
   // clear the color and depth buffer
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
   // setup camera
   QMatrix4x4 cameraTransformation;
   // rotation in the y - axis
@@ -225,12 +244,61 @@ void VirtualConciergeRenderstate::paintGL() {
   // rotation in the x - axis
   cameraTransformation.rotate(-90, 1, 0, 0);
   // transform the camera's position with respect to the rotation matrix
-  QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, 80.0);
+  QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, 40.0);
   // define the direction of the camera's up vector
   QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
   // implement and transform the camera
-  vMatrix.lookAt(cameraPosition, QVector3D(), cameraUpDirection);
+  vMatrix.lookAt(cameraPosition + middel, middel, cameraUpDirection);
+
+  double sum_rotate = 0;
+  // draw node lines and arrows
+  for ( int o = 0; o < this->handler->pathcount() - 1; o++ ) {
+    QVector3D first_position = this->handler->
+              NodeFromIndex(this->handler->pathindex(o)).Position();
+    QVector3D second_position = this->handler->
+              NodeFromIndex(this->handler->pathindex(o+1)).Position();
+  DrawGL::DrawLine(first_position + QVector3D(0, 0.1, 0),
+                   second_position + QVector3D(0, 0.1, 0),
+                   vMatrix, QMatrix4x4(), QMatrix4x4(),
+                   QVector3D(0, 0.98, 0), this->program, pMatrix,
+                   0.0f);
+
+  QMatrix4x4 translation;
+  translation.translate((first_position + second_position)/2.0);
+  QMatrix4x4 rotation;
+  float distance = first_position.distanceToPoint(second_position);
+  sum_rotate = (180.0 / M_PI) * sin((first_position.z() - second_position.z())/distance) + 180;
+  if ( first_position.x() - second_position.x() > 0) {
+    sum_rotate = -(180.0 / M_PI) * sin((first_position.z() - second_position.z())/distance);
+  }
+  rotation.rotate(sum_rotate, 0, 1, 0);
+  rotation.scale(0.5);
+
+  DrawGL::DrawModel(this->arrow,
+                    vMatrix,
+                    translation,
+                    rotation,
+                    texture_you_are_here,
+                    QVector3D(),
+                    QVector2D(1, 1),
+                    this->program, pMatrix, 0.0f);
+  }
+  QMatrix4x4 translation;
+  if ( this->handler->count() > 0 )
+  translation.translate(middel);
+  QMatrix4x4 rotation;
+  rotation.rotate(0, 0, 1, 0);
+  rotation.scale(1);
+  DrawGL::DrawModel(this->plane,
+                    vMatrix,
+                    translation,
+                    rotation,
+                    texture_you_are_here,
+                    QVector3D(),
+                    QVector2D(1, 1),
+                    this->program, pMatrix, 0.0f);
   // draw other objects first
+
   foreach(VisualObject *object, this->objects) {
     QMatrix4x4 translation;
     translation.translate(object->getTranslation());
@@ -254,14 +322,7 @@ void VirtualConciergeRenderstate::paintGL() {
                         QVector3D(), QVector2D(1, 1),
                         this->program, pMatrix, 0.0f);
   }
-  for ( int o = 0; o < this->handler->pathcount() - 1; o++ )
-    DrawGL::DrawLine(this->handler->
-                     NodeFromIndex(this->handler->pathindex(o)).Position(),
-                     this->handler->
-                     NodeFromIndex(this->handler->pathindex(o+1)).Position(),
-                     vMatrix, QMatrix4x4(), QMatrix4x4(),
-                     QVector3D(0, 1, 0), this->program, pMatrix,
-                     0.0f);
+
   // release the program for this frame
   this->program->release();
   // disable the cullmode for the frame
