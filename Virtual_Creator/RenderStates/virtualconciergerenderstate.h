@@ -30,11 +30,11 @@ class VirtualConciergeRenderstate :
     QMatrix4x4 pMatrix;
     QSize viewportSize;
     QOpenGLShaderProgram *program;
-    QVector3D *position;
+    QVector3D *position, movement_position;
     NodeHandler *handler;
     QVector<QOpenGLTexture *> textures, textures_predefined;
     QVector<VisualObject *> objects;
-    int start, end;
+    int start, end, movement_index;
     QSurfaceFormat format;
     QTimer *frame_update;
     QOpenGLTexture *texture_you_are_here;

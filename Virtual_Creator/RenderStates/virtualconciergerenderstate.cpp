@@ -10,7 +10,10 @@ VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent):
     QOpenGLWidget(parent),
     program(0),
     start(0),
-    end(0) {
+    end(0),
+    movement_index(-1),
+    movement_position(QVector3D(0,0,0)){
+
     // enable antialiasing (set the format of the widget)
     format.setSamples(4);
     this->setFormat(format);
@@ -31,14 +34,36 @@ VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent):
 }
 
 void VirtualConciergeRenderstate::update_frame() {
+
+    if ( (this->handler->pathcount() > 0) && (this->handler->pathcount() > movement_index) && (movement_index > - 1) ) {
+      QVector3D temp = this->handler->NodeFromIndex(this->handler->pathindex(movement_index)).Position() - movement_position;
+      temp.normalize();
+
+      movement_position += temp * 0.025f;
+      if (movement_position.distanceToPoint(this->handler->NodeFromIndex(this->handler->pathindex(movement_index)).Position()) < 0.5f)
+      movement_index--;
+    }
     // update the frame of the virtual concierge
     this->update();
 }
 
 void VirtualConciergeRenderstate::find_path(int start, int end) {
   if ( (this->handler->count() > start) &&
-       (this->handler->count() > end) )
+       (this->handler->count() > end) ) {
+      movement_index = this->handler->pathcount() - 1;
+      //movement_position = this->handler->NodeFromIndex(0).Position();
       this->handler->CalculateShortest(start, end, true, true, true, true);
+  }
+
+  // update the frame of the virtual concierge
+  this->update();
+
+  if ( (this->handler->count() > start) &&
+       (this->handler->count() > end) ) {
+      movement_index = this->handler->pathcount() - 1;
+      //movement_position = this->handler->NodeFromIndex(0).Position();
+      this->handler->CalculateShortest(start, end, true, true, true, true);
+  }
 
   // update the frame of the virtual concierge
   this->update();
@@ -212,9 +237,8 @@ void VirtualConciergeRenderstate::resizeGL(int w, int h) {
 }
 
 void VirtualConciergeRenderstate::paintGL() {
-  QVector3D middel;
-  if ( this->handler->count() > 0 )
-      middel = this->handler->NodeFromIndex(0).Position();
+  //if ( this->handler->count() > 0 )
+   //   middel = this->handler->NodeFromIndex(0).Position();
 
 
   // define a view matrix
@@ -248,7 +272,7 @@ void VirtualConciergeRenderstate::paintGL() {
   // define the direction of the camera's up vector
   QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
   // implement and transform the camera
-  vMatrix.lookAt(cameraPosition + middel, middel, cameraUpDirection);
+  vMatrix.lookAt(cameraPosition  + movement_position, movement_position, cameraUpDirection);
 
   double sum_rotate = 0;
   // draw node lines and arrows
@@ -273,19 +297,28 @@ void VirtualConciergeRenderstate::paintGL() {
   }
   rotation.rotate(sum_rotate, 0, 1, 0);
   rotation.scale(0.5);
-
+  if ( movement_index < o)
   DrawGL::DrawModel(this->arrow,
                     vMatrix,
                     translation,
                     rotation,
                     texture_you_are_here,
-                    QVector3D(),
+                    QVector3D(0, 1, 0),
                     QVector2D(1, 1),
-                    this->program, pMatrix, 0.0f);
+                    this->program, pMatrix, movement_position.y());
+  else
+      DrawGL::DrawModel(this->arrow,
+                        vMatrix,
+                        translation,
+                        rotation,
+                        texture_you_are_here,
+                        QVector3D(),
+                        QVector2D(1, 1),
+                        this->program, pMatrix, movement_position.y());
   }
   QMatrix4x4 translation;
   if ( this->handler->count() > 0 )
-  translation.translate(middel);
+  translation.translate(this->handler->NodeFromIndex(0).Position());
   QMatrix4x4 rotation;
   rotation.rotate(0, 0, 1, 0);
   rotation.scale(1);
@@ -296,7 +329,7 @@ void VirtualConciergeRenderstate::paintGL() {
                     texture_you_are_here,
                     QVector3D(),
                     QVector2D(1, 1),
-                    this->program, pMatrix, 0.0f);
+                    this->program, pMatrix, movement_position.y());
   // draw other objects first
 
   foreach(VisualObject *object, this->objects) {
@@ -314,13 +347,13 @@ void VirtualConciergeRenderstate::paintGL() {
                         QVector3D(),
                         QVector2D(object->getScaling().z(),
                                   object->getScaling().x()),
-                        this->program, pMatrix, 0.0f);
+                        this->program, pMatrix, movement_position.y());
     else
       DrawGL::DrawModel(object->getModelMesh(),
                         vMatrix, translation,
                         rotation, object->getTexture(),
                         QVector3D(), QVector2D(1, 1),
-                        this->program, pMatrix, 0.0f);
+                        this->program, pMatrix, movement_position.y());
   }
 
   // release the program for this frame
