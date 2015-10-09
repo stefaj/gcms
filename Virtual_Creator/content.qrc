@@ -31,5 +31,7 @@
         <file>Content/you_are_here.png</file>
         <file>Content/arrow.bmp</file>
         <file>Content/arrow.obj</file>
+        <file>Content/youarehere.obj</file>
+        <file>Content/destination.obj</file>
     </qresource>
 </RCC>

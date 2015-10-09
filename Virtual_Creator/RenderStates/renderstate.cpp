@@ -139,7 +139,7 @@ void RenderState::load_premises(QString value) {
 
   // create new file path from previous
   for ( int k = 0; k < append-1; k++ ) {
-    directory_path += ls[k]+"/";
+    directory_path += ls[k] + "/";
   }
   // load textures and objects
   LoadNodes(directory_path);

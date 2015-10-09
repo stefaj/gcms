@@ -61,7 +61,7 @@ void VirtualConciergeRenderstate::find_path(int start, int end) {
   if ( (this->handler->count() > start) &&
        (this->handler->count() > end) ) {
       movement_index = this->handler->pathcount() - 1;
-      //movement_position = this->handler->NodeFromIndex(0).Position();
+      movement_position = this->handler->NodeFromIndex(0).Position();
       this->handler->CalculateShortest(start, end, true, true, true, true);
   }
 
@@ -189,7 +189,8 @@ void VirtualConciergeRenderstate::LoadContent() {
   this->wall = new ModelMesh("://Wall01");
   this->tree = new ModelMesh("://Tree01");
   this->arrow = new ModelMesh(":/Content/arrow.obj");
-
+  this->youarehere = new ModelMesh(":/Content/youarehere.obj");
+  this->destination = new ModelMesh(":/Content/destination.obj");
   // load environment and textures
   if ( PremisesExporter::fileExists("VirtualConcierge/textures.tl"))
      LoadTextures("VirtualConcierge/textures.tl");
@@ -273,7 +274,6 @@ void VirtualConciergeRenderstate::paintGL() {
   QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
   // implement and transform the camera
   vMatrix.lookAt(cameraPosition  + movement_position, movement_position, cameraUpDirection);
-
   double sum_rotate = 0;
   // draw node lines and arrows
   for ( int o = 0; o < this->handler->pathcount() - 1; o++ ) {
@@ -318,11 +318,11 @@ void VirtualConciergeRenderstate::paintGL() {
   }
   QMatrix4x4 translation;
   if ( this->handler->count() > 0 )
-  translation.translate(this->handler->NodeFromIndex(0).Position());
+  translation.translate(this->handler->NodeFromIndex(0).Position()+QVector3D(0, 0.2, 0));
   QMatrix4x4 rotation;
   rotation.rotate(0, 0, 1, 0);
-  rotation.scale(1);
-  DrawGL::DrawModel(this->plane,
+  rotation.scale(0.75, 0.1, 0.75);
+  DrawGL::DrawModel(this->youarehere,
                     vMatrix,
                     translation,
                     rotation,
@@ -330,9 +330,23 @@ void VirtualConciergeRenderstate::paintGL() {
                     QVector3D(),
                     QVector2D(1, 1),
                     this->program, pMatrix, movement_position.y());
+  QMatrix4x4 translation_destination;
+  if ( this->handler->count() > 0 )
+  translation_destination.translate(this->handler->NodeFromIndex(this->handler->count() - 1).Position()+QVector3D(0, 0.2, 0));
+  QMatrix4x4 rotation_destination;
+  rotation_destination.rotate(0, 0, 1, 0);
+  rotation_destination.scale(0.75, 0.1, 0.75);
+  DrawGL::DrawModel(this->destination,
+                    vMatrix,
+                    translation_destination,
+                    rotation_destination,
+                    texture_you_are_here,
+                    QVector3D(),
+                    QVector2D(1, 1),
+                    this->program, pMatrix, movement_position.y());
   // draw other objects first
 
-  foreach(VisualObject *object, this->objects) {
+    foreach(VisualObject *object, this->objects) {
     QMatrix4x4 translation;
     translation.translate(object->getTranslation());
     QMatrix4x4 rotation;

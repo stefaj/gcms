@@ -26,7 +26,7 @@ class VirtualConciergeRenderstate :
     void LoadContent();
     void LoadObjects(QString);
     void LoadTextures(QString);
-    ModelMesh *node, *plane, *wall, *door, *tree, *arrow;
+    ModelMesh *node, *plane, *wall, *door, *tree, *arrow, *youarehere, *destination;
     QMatrix4x4 pMatrix;
     QSize viewportSize;
     QOpenGLShaderProgram *program;
