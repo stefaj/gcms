@@ -63,6 +63,20 @@ void PremisesExporter::export_texture(QVector<QString> textures,
         file.close();
 }
 
+void PremisesExporter::export_config(QString content, QString filename) {
+    if ( QDir().mkdir("VirtualConcierge") )
+        qDebug() << "Success in Creating Directory 'VirtualConcierge'";
+
+    if ( !QDir().cd("VirtualConcierge") )
+        qDebug() << "Directory 'VirtualConcierge' does not exists";
+
+    QFile file("VirtualConcierge/" + filename);
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
+        QTextStream out(&file);
+        out << content;
+        file.close();
+}
+
 void PremisesExporter::export_nodes(QVector<Node *> nodes,
                                     QString name) {
 if ( QDir().mkdir("VirtualConcierge") )

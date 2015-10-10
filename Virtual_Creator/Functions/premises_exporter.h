@@ -19,6 +19,7 @@ class PremisesExporter {
                                    QVector<QString> startup_menu,
                                    QString filename);
     static bool fileExists(QString filename);
+    static void export_config(QString content, QString filename);
     static void create_director();
 };
 
