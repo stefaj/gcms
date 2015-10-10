@@ -10,7 +10,9 @@
 
 VirtualConcierge::VirtualConcierge(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::VirtualConcierge) {
+    ui(new Ui::VirtualConcierge),
+    show_email(false),
+    show_access(false){
     ui->setupUi(this);
     QPalette* palette = new QPalette();
     palette->setBrush(QPalette::Background,*(new QBrush(*(new QPixmap(":/BackGround_Virtual_Concierge")))));
@@ -19,7 +21,85 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
                    "VirtualConcierge/directories.dir");
     connect(this, SIGNAL(find_path(int, int)),
             ui->openGLWidget, SLOT(find_path(int, int)));
+    connect(this, SIGNAL(send_access(bool,bool,bool,bool)),
+            ui->openGLWidget, SLOT(receive_access(bool,bool,bool,bool)));
     create_interface();
+
+
+    load_config("config.config");
+}
+
+void VirtualConcierge::load_config(QString file_name) {
+    if ( PremisesExporter::fileExists("VirtualConcierge/" + file_name) ) {
+
+      // load the text file
+      QFile textfile("VirtualConcierge/" + file_name);
+      // open the text file
+      textfile.open(QIODevice::ReadOnly | QIODevice::Text);
+      QTextStream ascread(&textfile);
+
+      if ( textfile.isOpen() ) {
+        // read each line of the file
+        QString line = ascread.readLine();
+        while ( !line.isNull() ) {
+          // break the line up in usable parts
+          QStringList list = line.split("=");
+
+          // check the type of line
+          if ( list[0] == "email" ) {
+            QString result = "no";
+
+            // add email access
+            if ( list.count() > 1 )
+            result = list[1];
+            if ( result == "yes") {
+              show_email = true;
+            }
+          } else if ( list[0] == "accessibility" ) {
+              QString result = "no";
+
+              // add email access
+              if ( list.count() > 1 )
+              result = list[1];
+              if ( result == "yes") {
+                show_access = true;
+              }
+            } else if ( list[0] == "name" ) {
+            QString result = "";
+
+            // add email access
+            if ( list.count() > 1 )
+            result = list[1];
+            ui->label_name->setText(result);
+          }
+
+        // read next line
+        line = ascread.readLine();
+        }
+
+        // close the textfile
+        textfile.close();
+      }
+    }
+    if ( !show_email ) {
+        ui->lineEdit_email->hide();
+        ui->pushButton_send_mail->hide();
+    } else {
+        ui->lineEdit_email->show();
+        ui->pushButton_send_mail->show();
+    }
+
+    if ( !show_access ) {
+        ui->button_bicycle->hide();
+        ui->button_feet->hide();
+        ui->button_other_vehicle->hide();
+        ui->button_wheelchair->hide();
+    } else {
+        ui->button_bicycle->show();
+        ui->button_feet->show();
+        ui->button_other_vehicle->show();
+        ui->button_wheelchair->show();
+    }
 }
 
 void VirtualConcierge::get_button_value(int value, bool findvalue) {
@@ -91,14 +171,14 @@ void VirtualConcierge::create_interface() {
     // reconstruct the directories_
     for ( int k = 0; k < this->catagory_.count(); k++ )
        this->catagory_.value(k)->setGeometry(0,
-                                            k * height,
+                                            k * (height+5),
                                             width,
                                             height);
 
     // reconstruct temp buttons
     for (  int z = 0; z <this->temp.count(); z++ )
        this->temp.value(z)->setGeometry(0,
-                                        z * height,
+                                        z *  (height+5),
                                         width,
                                         height);
 }
@@ -251,4 +331,32 @@ void VirtualConcierge::on_pushButton_send_mail_clicked() {
 
 VirtualConcierge::~VirtualConcierge() {
     delete ui;
+}
+
+void VirtualConcierge::on_button_wheelchair_clicked() {
+    emit send_access(ui->button_wheelchair->isChecked(),
+                     ui->button_feet->isChecked(),
+                     ui->button_bicycle->isChecked(),
+                     ui->button_other_vehicle->isChecked());
+}
+
+void VirtualConcierge::on_button_feet_clicked(){
+    emit send_access(ui->button_wheelchair->isChecked(),
+                     ui->button_feet->isChecked(),
+                     ui->button_bicycle->isChecked(),
+                     ui->button_other_vehicle->isChecked());
+}
+
+void VirtualConcierge::on_button_bicycle_clicked() {
+    emit send_access(ui->button_wheelchair->isChecked(),
+                     ui->button_feet->isChecked(),
+                     ui->button_bicycle->isChecked(),
+                     ui->button_other_vehicle->isChecked());
+}
+
+void VirtualConcierge::on_button_other_vehicle_clicked() {
+    emit send_access(ui->button_wheelchair->isChecked(),
+                     ui->button_feet->isChecked(),
+                     ui->button_bicycle->isChecked(),
+                     ui->button_other_vehicle->isChecked());
 }

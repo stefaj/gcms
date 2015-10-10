@@ -26,13 +26,24 @@ class VirtualConcierge : public QWidget {
     int get_index_from_index(QVector<NodeButton* > node_list, int index);
     QVector<NodeButton *> buttons_, directories_, catagory_, temp;
     QVector<QString> directory_list_, node_list_;
+    void load_config(QString file_name);
+    bool show_email, show_access;
 
  private slots:
     void get_button_value(int index, bool significant);
     void on_pushButton_send_mail_clicked();
     void show_new_interface(int selected_node);
 
- signals:
+    void on_button_wheelchair_clicked();
+
+    void on_button_feet_clicked();
+
+    void on_button_bicycle_clicked();
+
+    void on_button_other_vehicle_clicked();
+
+signals:
+    void send_access(bool wheelchair, bool feet, bool bicycle, bool vehicle);
     void find_path(int start, int goal);
 };
 

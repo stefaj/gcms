@@ -278,6 +278,7 @@ void UserInterfaceCreator::on_buttonBox_accepted() {
                                          this->directorylist,
                                          this->display,
                                          "directories.dir");
+    emit accepted();
 }
 
 void UserInterfaceCreator::load_directories(QString filename) {

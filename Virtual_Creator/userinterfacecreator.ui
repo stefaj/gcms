@@ -264,22 +264,6 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
        </property>
       </widget>
      </item>
-     <item row="3" column="7">
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="3">
       <widget class="QPushButton" name="pushButton_up">
        <property name="minimumSize">
@@ -311,6 +295,22 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
      </item>
      <item row="0" column="4">
       <widget class="QListWidget" name="listWidget_nodes_directories"/>
+     </item>
+     <item row="2" column="7">
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

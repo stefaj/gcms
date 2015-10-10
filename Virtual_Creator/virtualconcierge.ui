@@ -14,8 +14,8 @@
    <string>Virtual Concierge</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="2">
-    <widget class="QLabel" name="label">
+   <item row="0" column="0" colspan="7">
+    <widget class="QLabel" name="label_name">
      <property name="maximumSize">
       <size>
        <width>16777215</width>
@@ -44,7 +44,177 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2">
+   <item row="3" column="2">
+    <widget class="QPushButton" name="button_wheelchair">
+     <property name="minimumSize">
+      <size>
+       <width>128</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>128</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">/* Button Styles*/
+QPushButton {
+  background: rgba(45, 46, 48, 50%);
+  color: white;
+  font: bold;
+  border-radius: 4px;
+}
+QPushButton:hover:!pressed { 
+  border: 0px solid  rgba(0, 115, 199, 50%);
+  background: rgba(0, 115, 199, 50%);
+  border-radius: 4px;
+}
+QPushButton:checked { 
+  border: 0px solid  rgba(0, 115, 199, 50%);
+  background:  rgba(0, 115, 199, 50%);
+    border-radius: 4px;
+}</string>
+     </property>
+     <property name="text">
+      <string>Wheelchair</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="3">
+    <widget class="QPushButton" name="button_feet">
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">/* Button Styles*/
+QPushButton {
+  background: rgba(45, 46, 48, 50%);
+  color: white;
+  font: bold;
+  border-radius: 4px;
+}
+QPushButton:hover:!pressed { 
+  border: 0px solid  rgba(0, 115, 199, 50%);
+  background: rgba(0, 115, 199, 50%);
+  border-radius: 4px;
+}
+QPushButton:checked { 
+  border: 0px solid  rgba(0, 115, 199, 50%);
+  background:  rgba(0, 115, 199, 50%);
+    border-radius: 4px;
+}</string>
+     </property>
+     <property name="text">
+      <string>Feet</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="4">
+    <widget class="QPushButton" name="button_bicycle">
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">/* Button Styles*/
+QPushButton {
+  background: rgba(45, 46, 48, 50%);
+  color: white;
+  font: bold;
+  border-radius: 4px;
+}
+QPushButton:hover:!pressed { 
+  border: 0px solid  rgba(0, 115, 199, 50%);
+  background: rgba(0, 115, 199, 50%);
+  border-radius: 4px;
+}
+QPushButton:checked { 
+  border: 0px solid  rgba(0, 115, 199, 50%);
+  background:  rgba(0, 115, 199, 50%);
+    border-radius: 4px;
+}</string>
+     </property>
+     <property name="text">
+      <string>Bicycle</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="5">
+    <widget class="QPushButton" name="button_other_vehicle">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>128</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>128</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">/* Button Styles*/
+QPushButton {
+  background: rgba(45, 46, 48, 50%);
+  color: white;
+  font: bold;
+  border-radius: 4px;
+}
+QPushButton:hover:!pressed { 
+  border: 0px solid  rgba(0, 115, 199, 50%);
+  background: rgba(0, 115, 199, 50%);
+  border-radius: 4px;
+}
+QPushButton:checked { 
+  border: 0px solid  rgba(0, 115, 199, 50%);
+  background:  rgba(0, 115, 199, 50%);
+    border-radius: 4px;
+}</string>
+     </property>
+     <property name="text">
+      <string>Other Vehicle</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="7">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QWidget" name="widget_directory" native="true">
@@ -60,35 +230,33 @@
          <height>16777215</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="autoFillBackground">
         <bool>false</bool>
        </property>
        <property name="styleSheet">
-        <string notr="true">QPushButton {
-  font-size: 10pt;
-  font-weight: bold;
-  color: #ffffff;
-  border-image:url(:/Content/panel_button.png) 0 0 0 0 stretch stretch;
+        <string notr="true">/* Button Styles*/
+QPushButton {
+  background: rgba(45, 46, 48, 25%);
+  color: white;
+  font: bold;
+  border-radius: 4px;
 }
-
-QPushButton:hover {
-  font-size: 10pt;
-  font-weight: bold;
-  color: #ffffff;
-  border-image:url(:/Content/panel_button1.png) 0 0 0 0 stretch stretch;
+QPushButton:hover:!pressed { 
+  border: 0px solid  rgba(0, 115, 199, 25%);
+  background: rgba(0, 115, 199, 25%);
+  border-radius: 4px;
 }
-
-QPushButton:pressed
-{
-  font-size: 10pt;
-  font-weight: bold;
-  color: #ffffff;
-  border-image:url(:/Content/panel_button1.png) 0 0 0 0 stretch stretch;
-}
-QPushButton:checked
-{
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);
-	color: #e5e5e5;
+QPushButton:checked { 
+  border: 0px solid  rgba(0, 115, 199, 25%);
+  background:  rgba(0, 115, 199, 25%);
+    border-radius: 4px;
 }</string>
        </property>
       </widget>
@@ -98,7 +266,39 @@ QPushButton:checked
      </item>
     </layout>
    </item>
-   <item row="5" column="1">
+   <item row="3" column="0">
+    <widget class="QPushButton" name="pushButton_send_mail">
+     <property name="minimumSize">
+      <size>
+       <width>150</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">/* Button Styles*/
+QPushButton {
+  background: rgba(45, 46, 48, 50%);
+  color: white;
+  font: bold;
+  border-radius: 4px;
+}
+QPushButton:hover:!pressed { 
+  border: 0px solid  rgba(0, 115, 199, 50%);
+  background: rgba(0, 115, 199, 50%);
+  border-radius: 4px;
+}
+QPushButton:checked { 
+  border: 0px solid  rgba(0, 115, 199, 50%);
+  background:  rgba(0, 115, 199, 50%);
+    border-radius: 4px;
+}</string>
+     </property>
+     <property name="text">
+      <string>Mail</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
     <widget class="QLineEdit" name="lineEdit_email">
      <property name="minimumSize">
       <size>
@@ -108,76 +308,29 @@ QPushButton:checked
      </property>
      <property name="styleSheet">
       <string notr="true">QLineEdit {
-  font-size: 10pt;
-  font-weight: bold;
-  color: #ffffff;
-  border-image:url(:/Content/narEmail.png) 0 0 0 0 stretch stretch;
+  background: rgba(45, 46, 48, 50%);
+  color: white;
+  font: bold;
+  border-radius: 4px;
 }
 
 QLineEdit:hover {
-  font-size: 10pt;
-  font-weight: bold;
-  color: #ffffff;
-  border-image:url(:/Content/narEmail.png) 0 0 0 0 stretch stretch;
+  border: 0px solid  rgba(0, 115, 199, 50%);
+  background: rgba(0, 115, 199, 50%);
+  border-radius: 4px;
 }
 
 QLineEdit:pressed
 {
-  font-size: 10pt;
-  font-weight: bold;
-  color: #ffffff;
-  border-image:url(:/Content/narEmail.png) 0 0 0 0 stretch stretch;
+  border: 0px solid  rgba(0, 115, 199, 50%);
+  background: rgba(0, 115, 199, 50%);
+  border-radius: 4px;
 }
-QLineEdit:checked
-{
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);
-	color: #e5e5e5;
-}</string>
+</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QPushButton" name="pushButton_send_mail">
-     <property name="minimumSize">
-      <size>
-       <width>150</width>
-       <height>32</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
-  font-size: 10pt;
-  font-weight: bold;
-  color: #ffffff;
-  border-image:url(:/Content/panel_button.png) 0 0 0 0 stretch stretch;
-}
-
-QPushButton:hover {
-  font-size: 10pt;
-  font-weight: bold;
-  color: #ffffff;
-  border-image:url(:/Content/panel_button1.png) 0 0 0 0 stretch stretch;
-}
-
-QPushButton:pressed
-{
-  font-size: 10pt;
-  font-weight: bold;
-  color: #ffffff;
-  border-image:url(:/Content/panel_button1.png) 0 0 0 0 stretch stretch;
-}
-QPushButton:checked
-{
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #565656, stop:1 #464646);
-	color: #e5e5e5;
-}</string>
-     </property>
-     <property name="text">
-      <string>Mail</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
+   <item row="1" column="4" colspan="2">
     <widget class="QLabel" name="label_2">
      <property name="maximumSize">
       <size>
@@ -193,7 +346,7 @@ QPushButton:checked
       </font>
      </property>
      <property name="text">
-      <string>Virtual Concierge                         </string>
+      <string>Virtual Concierge </string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
