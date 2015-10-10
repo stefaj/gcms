@@ -83,6 +83,8 @@ MainWindow::MainWindow(QWidget *parent) :
           this, SLOT(new_premises()));
   connect(this, SIGNAL(clear_premises()),
           ui->openGLWidget, SLOT(clear_premises()));
+  connect(ui->actionSave_Premises, SIGNAL(triggered()),
+          this, SLOT(save_premises()));
 }
 
 void MainWindow::open_config_editor() {
@@ -231,7 +233,7 @@ void MainWindow::on_spin_rotationY_valueChanged(double arg1) {
 }
 
 void MainWindow::new_premises() {
-    QString path = "VirtualConcierge/";
+    QString path = "VirtualConcierge";
     QDir dir( path );
 
     dir.setFilter( QDir::NoDotAndDotDot | QDir::Files );
@@ -343,6 +345,30 @@ void MainWindow::on_doubleSpinBox_node_y_valueChanged(double arg1) {
 
 void MainWindow::on_doubleSpinBox_floor_x_valueChanged(double arg1) {
   emit edit_floorplan_position(QVector2D(arg1, ui->doubleSpinBox_floor_y->value()));
+}
+
+void MainWindow::copyPath(QString src, QString dst) {
+    QDir dir(src);
+    if (! dir.exists())
+        return;
+
+    foreach (QString d, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        QString dst_path = dst + QDir::separator() + d;
+        dir.mkpath(dst_path);
+        copyPath(src+ QDir::separator() + d, dst_path);
+    }
+
+    foreach (QString f, dir.entryList(QDir::Files)) {
+        QFile::copy(src + QDir::separator() + f, dst + QDir::separator() + f);
+    }
+}
+
+void MainWindow::save_premises() {
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                                 "/home",
+                                                 QFileDialog::ShowDirsOnly
+                                                 | QFileDialog::DontResolveSymlinks);
+    copyPath("VirtualConcierge/", dir);
 }
 
 void MainWindow::on_doubleSpinBox_floor_y_valueChanged(double arg1) {

@@ -692,7 +692,7 @@ QComboBox QAbstractItemView {
       <x>-1302</x>
       <y>116</y>
       <width>177</width>
-      <height>145</height>
+      <height>173</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -721,6 +721,7 @@ QComboBox QAbstractItemView {
      <bool>false</bool>
     </property>
     <addaction name="actionNew"/>
+    <addaction name="actionSave_Premises"/>
     <addaction name="actionOpen_Premises_File"/>
     <addaction name="actionEdit_User_Interface"/>
    </widget>
@@ -1011,6 +1012,15 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="text">
     <string>New</string>
+   </property>
+  </action>
+  <action name="actionSave_Premises">
+   <property name="icon">
+    <iconset resource="content.qrc">
+     <normaloff>:/Content/save_icon_white.png</normaloff>:/Content/save_icon_white.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save Premises</string>
    </property>
   </action>
   <zorder>dockWidget_configuration</zorder>

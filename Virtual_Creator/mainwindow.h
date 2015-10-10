@@ -20,7 +20,6 @@ class MainWindow : public QMainWindow {
     ~MainWindow();
 
  private slots:
-
     void on_spin_rotationY_valueChanged(double arg1);
     void on_checkBox_inversemouse_y_clicked(bool checked);
     void on_button_execute_virtual_concierge_clicked();
@@ -60,11 +59,13 @@ class MainWindow : public QMainWindow {
     void open_config_editor();
     void send_config();
     void new_premises();
+    void save_premises(); // saves the premises to a directory
 
 private:
     Ui::MainWindow *ui;
     void EmitSignals();
     void drop_down_emit();
+    void copyPath(QString src, QString dst);
     bool opengl_initialised;
     QByteArray *network_session;
 
@@ -101,6 +102,7 @@ private:
     void edit_node_access(bool walk, bool wheelchair, bool vehicle, bool bicycle);
     void send_config_data(QString data);
     void clear_premises(); // sends clear signal to renderstate
+
 };
 
 #endif  // VIRTUAL_CREATOR_MAINWINDOW_H_

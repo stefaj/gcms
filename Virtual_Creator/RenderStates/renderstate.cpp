@@ -146,7 +146,7 @@ void RenderState::load_premises(QString value) {
   LoadTextures(directory_path);
   LoadObjects(directory_path);
   CopyDirectories(directory_path + "/directories.dir");
-
+  CopyConfig(directory_path + "/config.config");
   // exort the files afterwards
   PremisesExporter::export_environment(this->models,
                                        "environment.env");
@@ -1736,8 +1736,34 @@ void RenderState::LoadNodes(QString filename) {
   update_node_errors();
 }
 
+void RenderState::CopyConfig(QString value) {
+    QString val_new = "VirtualConcierge/config.config";
+
+    QDir dir;
+    // try to copy the texture to the drive
+    if ( QString::compare(dir.absolutePath() + "/" + val_new,
+                          value,
+                          Qt::CaseInsensitive) != 0 ) {
+      if ( QFile::exists(val_new) ) {
+       if ( !QFile::remove(val_new) ) {
+
+       }
+      }
+      if ( QFile::exists(value) )
+      if ( !QFile::copy(value, val_new) ) {
+        if ( !QFile::exists(val_new) ) {
+          QMessageBox::warning(this,
+                               tr("Error file copying"),
+                               tr("Texture file could not"
+                                  " be copied to the drive."));
+        }
+      }
+    }
+}
+
 void RenderState::CopyDirectories(QString value) {
     QString val_new = "VirtualConcierge/directories.dir";
+
     QDir dir;
     // try to copy the texture to the drive
     if ( QString::compare(dir.absolutePath() + "/" + val_new,
