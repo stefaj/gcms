@@ -27,7 +27,16 @@ class VirtualConcierge : public QWidget {
     QVector<NodeButton *> buttons_, directories_, catagory_, temp;
     QVector<QString> directory_list_, node_list_;
     void load_config(QString file_name);
-    bool show_email, show_access;
+    bool show_email,
+    show_access,
+    enable_feet,
+    enable_vehicle,
+    enable_wheelchair,
+    enable_bicycle,
+    display_feet,
+    display_vehicle,
+    display_wheelchair,
+    display_bicycle;
 
  private slots:
     void get_button_value(int index, bool significant);

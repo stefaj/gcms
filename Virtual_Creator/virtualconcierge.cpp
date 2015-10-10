@@ -12,7 +12,15 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::VirtualConcierge),
     show_email(false),
-    show_access(false){
+    show_access(false),
+    enable_feet(false),
+    enable_vehicle(false),
+    enable_wheelchair(false),
+    enable_bicycle(false),
+    display_feet(false),
+    display_vehicle(false),
+    display_wheelchair(false),
+    display_bicycle(false){
     ui->setupUi(this);
     QPalette* palette = new QPalette();
     palette->setBrush(QPalette::Background,*(new QBrush(*(new QPixmap(":/BackGround_Virtual_Concierge")))));
@@ -64,13 +72,85 @@ void VirtualConcierge::load_config(QString file_name) {
               if ( result == "yes") {
                 show_access = true;
               }
-            } else if ( list[0] == "name" ) {
+          } else if ( list[0] == "name" ) {
             QString result = "";
 
             // add email access
             if ( list.count() > 1 )
             result = list[1];
             ui->label_name->setText(result);
+          } else if ( list[0] == "enable_feet" ) {
+              QString result = "no";
+
+              // add email access
+              if ( list.count() > 1 )
+              result = list[1];
+              if ( result == "yes") {
+                enable_feet = true;
+              }
+          } else if ( list[0] == "enable_vehicle" ) {
+              QString result = "no";
+
+              // add email access
+              if ( list.count() > 1 )
+              result = list[1];
+              if ( result == "yes") {
+                enable_vehicle = true;
+              }
+          } else if ( list[0] == "enable_wheelchair" ) {
+              QString result = "no";
+
+              // add email access
+              if ( list.count() > 1 )
+              result = list[1];
+              if ( result == "yes") {
+                enable_wheelchair = true;
+              }
+          } else if ( list[0] == "enable_bicycle" ) {
+              QString result = "no";
+
+              // add email access
+              if ( list.count() > 1 )
+              result = list[1];
+              if ( result == "yes") {
+                enable_bicycle = true;
+              }
+          } else if ( list[0] == "display_bicycle" ) {
+              QString result = "no";
+
+              // add email access
+              if ( list.count() > 1 )
+              result = list[1];
+              if ( result == "yes") {
+                display_bicycle = true;
+              }
+          } else if ( list[0] == "display_vehicle" ) {
+              QString result = "no";
+
+              // add email access
+              if ( list.count() > 1 )
+              result = list[1];
+              if ( result == "yes") {
+                display_vehicle = true;
+              }
+          } else if ( list[0] == "display_wheelchair" ) {
+              QString result = "no";
+
+              // add email access
+              if ( list.count() > 1 )
+              result = list[1];
+              if ( result == "yes") {
+                display_wheelchair = true;
+              }
+          } else if ( list[0] == "display_feet" ) {
+              QString result = "no";
+
+              // add email access
+              if ( list.count() > 1 )
+              result = list[1];
+              if ( result == "yes") {
+                display_feet = true;
+              }
           }
 
         // read next line
@@ -88,18 +168,32 @@ void VirtualConcierge::load_config(QString file_name) {
         ui->lineEdit_email->show();
         ui->pushButton_send_mail->show();
     }
+    // hide all the buttons initially
+    ui->button_bicycle->hide();
+    ui->button_feet->hide();
+    ui->button_other_vehicle->hide();
+    ui->button_wheelchair->hide();
 
-    if ( !show_access ) {
-        ui->button_bicycle->hide();
-        ui->button_feet->hide();
-        ui->button_other_vehicle->hide();
-        ui->button_wheelchair->hide();
-    } else {
-        ui->button_bicycle->show();
-        ui->button_feet->show();
-        ui->button_other_vehicle->show();
-        ui->button_wheelchair->show();
+    if ( show_access ) {
+        // enable the buttons from the config file
+        ui->button_bicycle->setChecked(this->enable_bicycle);
+        ui->button_other_vehicle->setChecked(this->enable_vehicle);
+        ui->button_feet->setChecked(this->enable_feet);
+        ui->button_wheelchair->setChecked(this->enable_wheelchair);
+
+        if ( this->display_bicycle )
+         ui->button_bicycle->show();
+        if ( this->display_feet )
+          ui->button_feet->show();
+        if ( this->display_vehicle )
+          ui->button_other_vehicle->show();
+        if ( this->display_wheelchair )
+          ui->button_wheelchair->show();
     }
+    // set the access paths from the config file
+    emit send_access(this->enable_wheelchair, this->enable_feet, this->enable_bicycle, this->enable_vehicle);
+
+
 }
 
 void VirtualConcierge::get_button_value(int value, bool findvalue) {

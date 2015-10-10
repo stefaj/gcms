@@ -98,6 +98,7 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
   // set all distances to inf
   foreach(Node *n, this->premises) {
       n->setG(inf);
+      n->setShortest(-1);
   }
   // set start G value to  0.0
   this->premises.value(start)->setG(0.0);
@@ -107,11 +108,6 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
 
   // fill que
   for ( int k = 0; k < this->premises.count(); k++ ) {
-    Node *node_access = this->premises.value(k);
-    if ((node_access->getWalk() && walk) ||
-        (node_access->getVehicle() && vehicle) ||
-        (node_access->getWheelChair() && wheelchair) ||
-        (node_access->getBike() && bicycle) )
         que.push_back(k);
   }
   // wait while the whole que is empty ( this may be ineffective )
@@ -150,19 +146,23 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
                            premises.value(current_index)->
                            Position();
         double nodedist = this->
-                          premises.value(this->
+                premises.value(this->
                                premises.value(current_index)->
                                getConnectedIndex(p))->
-                               Position().distanceToPoint(point);
+                Position().distanceToPoint(point);
 
           // replace the node's shortest current path if needed.
           // (dist(v,u) + g(v)< g(u))
-          if ( nodedist + this->premises.value(current_index)->getG()
-             <= this->premises.value(this->
-                              premises.value(current_index)->
-                              getConnectedIndex(p))->
-                              getG() ) {
-            // update the g value and shortest path of the neighbor
+        // update the g value and shortest path of the neighbor
+        Node *node_access = this->premises.value(this->premises.value(current_index)->
+                                                 getConnectedIndex(p));
+        if (!((node_access->getWalk() && walk) ||
+              (node_access->getVehicle() && vehicle) ||
+              (node_access->getWheelChair() && wheelchair) ||
+              (node_access->getBike() && bicycle) ) )
+            nodedist = inf;
+
+        if ( nodedist + this->premises.value(current_index)->getG() <= node_access->getG() ) {
 
             this->premises.value(this->premises.value(current_index)->
                                  getConnectedIndex(p))->
@@ -172,6 +172,7 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
             this->premises.value(this->premises.value(current_index)->
                                  getConnectedIndex(p))->
                                  setShortest(current_index);
+
           }
        }
     } else {
@@ -182,40 +183,55 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
 
   // list path
   int _back_node = goal;
-  if ( this->premises.value(_back_node)->getShortestIndex() > -1 ) {
-    // add the first node to the list
-    this->shortest.push_back(_back_node);
-    // assign the loop control variable.
-    // this variable checks for loops within the mesh
-    _back_node = this->premises.value(_back_node)->getShortestIndex();
-    int loop_var = _back_node;
-    if ( _back_node > -1 ) {
-      // add another index
-      this->shortest.push_back(_back_node);
-    }
-    while ( _back_node != start ) {
-      int error = _back_node;
-      // backwards trace the shortest path
-      _back_node = this->premises.value(_back_node)->getShortestIndex();
-      if ( _back_node > -1 ) {
-        if ( this->shortest.value(this->shortest.count() - 1 ) != _back_node) {
-          this->shortest.push_back(_back_node);
-        } else {
-          return -1;
-        }
-      } else {
-        return error;
-      }
-      if ( _back_node == loop_var) {
-          return loop_var;      }
-    }
+  int step_counter = 0;
+  if ( _back_node > 0 && _back_node < this->premises.count()) {
+       if ( this->premises.value(_back_node)->getShortestIndex() > -1 ) {
+           // add the first node to the list
+           this->shortest.push_back(_back_node);
+           // assign the loop control variable.
+           // this variable checks for loops within the mesh
+           _back_node = this->premises.value(_back_node)->getShortestIndex();
+           int loop_var = _back_node;
+           if ( _back_node > -1 ) {
+               // add another index
+               this->shortest.push_back(_back_node);
+           }
+           while ( _back_node != start ) {
+               step_counter ++;
+               if ( step_counter > this->premises.count()) {
+                   break;
+               }
+             int error = _back_node;
+             if ( _back_node > 0 && _back_node < this->premises.count()) {
+               // backwards trace the shortest path
+               _back_node = this->premises.value(_back_node)->getShortestIndex();
+               if ( _back_node > -1 ) {
+                   if ( this->shortest.count() > 0 && this->shortest.count() - 1 < this->premises.count()) {
+                   if ( this->shortest.value(this->shortest.count() - 1 ) != _back_node) {
+                       this->shortest.push_back(_back_node);
+                   } else {
+                       return -1;
+                   }
+               } else {
+                   return error;
+               }
+               if ( _back_node == loop_var) {
+                   return loop_var;      }
+             }else {
+                 return -1;
+             }
+             }
+           }
 
-  }
-  if ( _back_node == start )
-   return -1;
-  else {
-   return _back_node;
-  }
+       }
+   }
+   if ( _back_node == start )
+    return -1;
+   else {
+     if (_back_node < this->premises.count())
+        return _back_node;
+     else return -1;
+   }
 }
 
 int NodeHandler::pathcount() {
