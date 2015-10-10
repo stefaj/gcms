@@ -1368,7 +1368,8 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
     }
     // draw a list of all the indices that error
     for ( int k = 0; k < error_nodes.count(); k++ ) {
-
+        if (error_nodes.value(k) > -1 &&
+                error_nodes.value(k) < this->nodes.count()) {
         draw_circle_flat(this->nodes.value(error_nodes.value(k))->Position(),
                          this->vMatrix,
                          QVector3D(1, 0, 0), 1.15 / 2.0);
@@ -1378,6 +1379,7 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
         draw_circle_flat(this->nodes.value(error_nodes.value(k))->Position(),
                          this->vMatrix,
                          QVector3D(1, 0, 0), 1.45 / 2.0);
+        }
     }
 
 

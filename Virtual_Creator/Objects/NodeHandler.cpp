@@ -36,6 +36,9 @@ QVector<int> NodeHandler::error_nodes_indices() {
         list_of_error_nodes.push_back(error);
         }
     }
+    if ( list_of_error_nodes.count() == 0) {
+        list_of_error_nodes.clear();
+    }
     return list_of_error_nodes;
 }
 
