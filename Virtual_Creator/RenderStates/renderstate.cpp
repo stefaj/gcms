@@ -577,6 +577,7 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
                        this->nodes.value(l)->getWheelChair(),
                        this->nodes.value(l)->getBike(),
                        this->nodes.value(l)->getVehicle());
+        emit debug_results("Selected node index:" + QString::number(l));
       }
     }
   }
@@ -727,7 +728,7 @@ void RenderState::update_node_errors() {
       }
     }
     for ( int i = 0; i < error_nodes.count(); i++ ) {
-        if (error_nodes.value(i) < 0 || error_nodes.value(i) > this->nodes.count() - 1) {
+        if (error_nodes.value(i) < 0 && error_nodes.value(i) > this->nodes.count() - 1) {
             error_nodes.remove(i);
         }
     }
@@ -1430,8 +1431,8 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
                               0);
 
             aux_45.rotate(90, 0, 1, 0);
-            aux_calc_one = aux_rotate * (QVector3D(0, 0, 1));
-            aux_calc_two = aux_45 * aux_rotate * (QVector3D(0, 0, 1));
+            aux_calc_one = aux_rotate * (QVector3D(0, 0, 0.25));
+            aux_calc_two = aux_45 * aux_rotate * (QVector3D(0, 0, 0.25));
 
             DrawGL::DrawLine(n->Position(),
                              this->nodes.value(
@@ -1614,7 +1615,11 @@ void RenderState::LoadObjects(QString path) {
 }
 
 void RenderState::LoadNodes(QString filename) {
-    QVector<int> walk, wheelchair, vehice, bicycle;
+    QVector<int> walk, wheelchair, vehicle, bicycle;
+    walk.clear();
+    wheelchair.clear();
+    vehicle.clear();
+    bicycle.clear();
     // clear the premises when not empty
     if ( this->nodes.count() > 0 )
         this->nodes.clear();
@@ -1656,14 +1661,17 @@ void RenderState::LoadNodes(QString filename) {
                 Node* n = new Node(new QVector3D(vertex[0],
                                                  vertex[1],
                                                  vertex[2]));
+                // initialize node paths
+                n->setWheelChair(false);
+                n->setBike(false);
+                n->setWalk(false);
+                n->setVehicle(false);
                 // set node's significance
                 n->setSignificant((signi == 1));
-
                 // set node's name
                 n->setName(display_name);
                 // add the node to the premises
                 this->nodes.push_back(n);
-
             } else if ( list[0] == "j" ) {
                    // this is only the indices that should be join
                     int uv[2];
@@ -1675,12 +1683,13 @@ void RenderState::LoadNodes(QString filename) {
                     QString p = this->nodes.value(uv[1])->getName();
                     // add the links
                     this->nodes.value(uv[0])->AddLink(&p, uv[1]);
+
              } else if ( list[0] == "wc" ) {
                 if(list.count() > 1)
                 wheelchair.append(list[1].toInt());
             } else if ( list[0] == "vi" ) {
                 if(list.count() > 1)
-                vehice.append(list[1].toInt());
+                vehicle.append(list[1].toInt());
             } else if ( list[0] == "ft" ) {
                 if(list.count() > 1)
                 walk.append(list[1].toInt());
@@ -1704,8 +1713,8 @@ void RenderState::LoadNodes(QString filename) {
         this->nodes.value(wheelchair.value(i))->setWheelChair(true);
     }
     // add vehicle nodes
-    for ( int i = 0; i < vehice.count(); i++) {
-        this->nodes.value(vehice.value(i))->setVehicle(true);
+    for ( int i = 0; i < vehicle.count(); i++) {
+        this->nodes.value(vehicle.value(i))->setVehicle(true);
     }
     // add bicycle nodes
     for ( int i = 0; i < bicycle.count(); i++) {
