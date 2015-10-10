@@ -74,7 +74,7 @@ void login::logged_in(QByteArray session, bool value) {
   if( value ) {
     ui->label_download->setVisible(true);
     ui->label_download->setText("Log-In Successful");
-    //while(!clearDir("VirtualConcierge"));
+    while(!clearDir("VirtualConcierge"));
   } else {
     ui->label_download->setVisible(true);
     ui->label_download->setText("Log-In Fail Username of Password incorrect");
