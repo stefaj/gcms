@@ -3,6 +3,7 @@
 #include "./mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "./userinterfacecreator.h"
+#include "./config_editor.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -76,7 +77,20 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->pushButton_wizard, SIGNAL(clicked()));
   connect(this, SIGNAL(edit_node_access(bool, bool, bool, bool)),
           ui->openGLWidget, SLOT(edit_node_access(bool, bool, bool, bool)));
-  emit
+  connect(this->ui->actionEdit_Virtual_Concierge_Config, SIGNAL(triggered()),
+          this, SLOT(open_config_editor()));
+
+}
+
+void MainWindow::open_config_editor() {
+    Config_Editor *editor = new Config_Editor();
+    connect(editor, SIGNAL(accepted()),
+            ui->openGLWidget, SLOT(receive_config()));
+    editor->show();
+}
+
+void MainWindow::send_config() {
+    //emit send_config_data();
 }
 
 MainWindow::~MainWindow() {delete ui;}
@@ -258,6 +272,8 @@ void MainWindow::on_checkbox_significant_clicked(bool checked) {
 
 void MainWindow::load_virtual_concierge_interface() {
     UserInterfaceCreator *v = new UserInterfaceCreator();
+    connect(v, SIGNAL(accepted()),
+            ui->openGLWidget, SLOT(receive_directories()));
     v->show();
 }
 

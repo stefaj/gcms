@@ -52,16 +52,13 @@ class MainWindow : public QMainWindow {
     void on_doubleSpinBox_floor_y_valueChanged(double arg1);
     void receive_session(QByteArray session, bool logged);
     void error_message(QString error);
-
     void on_pushButton_wizard_clicked();
-
     void on_checkBox_wheelchair_clicked();
-
     void on_checkBox_feet_clicked();
-
     void on_checkBox_bicycle_clicked();
-
     void on_checkBox_vehicle_clicked();
+    void open_config_editor();
+    void send_config();
 
 private:
     Ui::MainWindow *ui;
@@ -101,6 +98,7 @@ private:
     void notify_session(QByteArray); // sends the current session to renderstate
     // sends the node's new values
     void edit_node_access(bool walk, bool wheelchair, bool vehicle, bool bicycle);
+    void send_config_data(QString data);
 };
 
 #endif  // VIRTUAL_CREATOR_MAINWINDOW_H_
