@@ -59,6 +59,7 @@ class MainWindow : public QMainWindow {
     void on_checkBox_vehicle_clicked();
     void open_config_editor();
     void send_config();
+    void new_premises();
 
 private:
     Ui::MainWindow *ui;
@@ -99,6 +100,7 @@ private:
     // sends the node's new values
     void edit_node_access(bool walk, bool wheelchair, bool vehicle, bool bicycle);
     void send_config_data(QString data);
+    void clear_premises(); // sends clear signal to renderstate
 };
 
 #endif  // VIRTUAL_CREATOR_MAINWINDOW_H_

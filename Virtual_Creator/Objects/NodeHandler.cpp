@@ -151,8 +151,8 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
                                getConnectedIndex(p))->
                 Position().distanceToPoint(point);
 
-          // replace the node's shortest current path if needed.
-          // (dist(v,u) + g(v)< g(u))
+        // replace the node's shortest current path if needed.
+        // (dist(v,u) + g(v)< g(u))
         // update the g value and shortest path of the neighbor
         Node *node_access = this->premises.value(this->premises.value(current_index)->
                                                  getConnectedIndex(p));
@@ -163,7 +163,6 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
             nodedist = inf;
 
         if ( nodedist + this->premises.value(current_index)->getG() <= node_access->getG() ) {
-
             this->premises.value(this->premises.value(current_index)->
                                  getConnectedIndex(p))->
                                  setG(nodedist + this->
@@ -172,13 +171,11 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
             this->premises.value(this->premises.value(current_index)->
                                  getConnectedIndex(p))->
                                  setShortest(current_index);
-
           }
        }
     } else {
         break;
     }
-
   }
 
   // list path

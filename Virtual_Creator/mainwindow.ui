@@ -692,7 +692,7 @@ QComboBox QAbstractItemView {
       <x>-1302</x>
       <y>116</y>
       <width>177</width>
-      <height>117</height>
+      <height>145</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -720,6 +720,7 @@ QComboBox QAbstractItemView {
     <property name="separatorsCollapsible">
      <bool>false</bool>
     </property>
+    <addaction name="actionNew"/>
     <addaction name="actionOpen_Premises_File"/>
     <addaction name="actionEdit_User_Interface"/>
    </widget>
@@ -1001,6 +1002,15 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="text">
     <string>Edit Virtual Concierge Config</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="icon">
+    <iconset resource="content.qrc">
+     <normaloff>:/Content/new_white_image.png</normaloff>:/Content/new_white_image.png</iconset>
+   </property>
+   <property name="text">
+    <string>New</string>
    </property>
   </action>
   <zorder>dockWidget_configuration</zorder>

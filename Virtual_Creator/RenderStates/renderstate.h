@@ -138,6 +138,8 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     void edit_node_access(bool walk, bool wheelchair, bool vehicle, bool bicycle);
     void receive_config();
     void receive_directories();
+    void clear_premises();
+
   signals:
     void opengl_initialised(bool);
     void send_edit_node(QString name,

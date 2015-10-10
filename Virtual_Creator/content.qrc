@@ -33,5 +33,6 @@
         <file>Content/arrow.obj</file>
         <file>Content/youarehere.obj</file>
         <file>Content/destination.obj</file>
+        <file>Content/new_white_image.png</file>
     </qresource>
 </RCC>

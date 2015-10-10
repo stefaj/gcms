@@ -79,7 +79,10 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->openGLWidget, SLOT(edit_node_access(bool, bool, bool, bool)));
   connect(this->ui->actionEdit_Virtual_Concierge_Config, SIGNAL(triggered()),
           this, SLOT(open_config_editor()));
-
+  connect(this->ui->actionNew, SIGNAL(triggered()),
+          this, SLOT(new_premises()));
+  connect(this, SIGNAL(clear_premises()),
+          ui->openGLWidget, SLOT(clear_premises()));
 }
 
 void MainWindow::open_config_editor() {
@@ -225,6 +228,37 @@ void MainWindow::send_loaded_premises() {
 
 void MainWindow::on_spin_rotationY_valueChanged(double arg1) {
   change_rotationY(arg1);
+}
+
+void MainWindow::new_premises() {
+    QString path = "VirtualConcierge/";
+    QDir dir( path );
+
+    dir.setFilter( QDir::NoDotAndDotDot | QDir::Files );
+    foreach( QString dirItem, dir.entryList() )
+    {
+        if( dir.remove( dirItem ) )
+        {
+            qDebug() << "Deleted - " + path + QDir::separator() + dirItem ;
+        }
+        else
+        {
+            qDebug() << "Fail to delete - " + path+ QDir::separator() + dirItem;
+        }
+    }
+
+
+    dir.setFilter( QDir::NoDotAndDotDot | QDir::Dirs );
+    foreach( QString dirItem, dir.entryList() ) {
+        QDir subDir( dir.absoluteFilePath( dirItem ) );
+        if( subDir.removeRecursively() ) {
+            qDebug() << "Deleted - All files under " + dirItem ;
+        }
+        else {
+            qDebug() << "Fail to delete - Files under " + dirItem;
+        }
+    }
+  emit clear_premises();
 }
 
 void MainWindow::on_checkBox_inversemouse_y_clicked(bool checked) {

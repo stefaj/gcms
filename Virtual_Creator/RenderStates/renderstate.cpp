@@ -1347,6 +1347,18 @@ void RenderState::DrawNodes() {
   }
 }
 
+void RenderState::clear_premises() {
+  // clear the nodes
+  this->nodes.clear();
+
+  // clear visual objects
+  this->models.clear();
+
+  // clear the textures
+  for ( int l = 1; l < this->textures.count(); l++ )
+   this->textures.removeAt(l);
+}
+
 void RenderState::DrawNodeLines(QVector3D Pos) {
     if ( this->node_index_selected != -1 &&
          this->node_index_selected < nodes.count()) {
