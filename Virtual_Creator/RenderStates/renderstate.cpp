@@ -920,6 +920,14 @@ void RenderState::LoadContent() {
     this->program->link();
 }
 
+void RenderState::receive_config() {
+    user_client->send_file(*(this->session_logged), "VirtualConcierge/config.config");
+}
+
+void RenderState::receive_directories() {
+    user_client->send_file(*(this->session_logged), "VirtualConcierge/directories.dir");
+}
+
 void RenderState::paintGL() {
   // initialise the view matrix
   this->vMatrix.setToIdentity();

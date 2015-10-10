@@ -35,9 +35,12 @@ class VirtualConciergeRenderstate :
     QVector<QOpenGLTexture *> textures, textures_predefined;
     QVector<VisualObject *> objects;
     int start, end, movement_index;
-    QSurfaceFormat format;
+
     QTimer *frame_update;
     QOpenGLTexture *texture_you_are_here;
+    float dt_counter;
+    bool access_wheelchair, access_feet, access_bicycle, access_vehicle;
+    QSurfaceFormat format;
 
  protected:
     void initializeGL();
@@ -47,6 +50,7 @@ class VirtualConciergeRenderstate :
  private slots:
     void find_path(int start, int end);
     void update_frame();
+    void receive_access(bool wheelchair, bool feet, bool bicycle, bool vehicle);
 };
 
 #endif  // VIRTUAL_CREATOR_RENDERSTATES_VIRTUALCONCIERGERENDERSTATE_H_
