@@ -250,14 +250,28 @@ void NodeHandler::ReadFilePVC(QString filename) {
       /* n-> node
          j-> join */
       if ( list[0] == "n" ) {
-        // this is only x,y,z coordinates for the node
-        float vertex[3];
-        // populate the vertices
-        for ( int i = 0; i < 3; i++ )
-          QTextStream(&list[i+2]) >> vertex[i];
-          // add the node to the premises
-          Node * current_node = new Node(new QVector3D(vertex[0], vertex[1], vertex[2]));
-          AddNode(current_node);
+          // this is only x, y, z coordinates for the node
+          float vertex[3];
+          int signi = 0;
+          QString display_name ="";
+          // populate the vertices
+          for ( int i = 0; i < 3; i++ )
+               QTextStream(&list[i+2]) >> vertex[i];
+
+          // get node significance
+          QTextStream(&list[6]) >> signi;
+          // get the node's name
+          display_name = list[5];
+          Node* n = new Node(new QVector3D(vertex[0],
+                                           vertex[1],
+                                           vertex[2]));
+          // set node's significance
+          n->setSignificant((signi == 1));
+
+          // set node's name
+          n->setName(display_name);
+
+          AddNode(n);
       } else if ( list[0] == "j" ) {
                 // this is only the indices that should be join
                 int uv[2];
