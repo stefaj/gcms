@@ -36,9 +36,6 @@ QVector<int> NodeHandler::error_nodes_indices() {
         list_of_error_nodes.push_back(error);
         }
     }
-    if ( list_of_error_nodes.count() == 0) {
-        list_of_error_nodes.clear();
-    }
     return list_of_error_nodes;
 }
 
@@ -49,7 +46,6 @@ void NodeHandler::AddNodes(QVector<Node*> nodes) {
     *node = *nodes.value(l);
     this->premises.push_back(node);
   }
-
 }
 
 void NodeHandler::AddNode(Node* node) {
@@ -217,8 +213,6 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
                }
                if ( _back_node == loop_var) {
                    return loop_var;      }
-             }else {
-                 return -1;
              }
              }
            }
