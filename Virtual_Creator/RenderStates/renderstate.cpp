@@ -584,8 +584,7 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
 }
 
 void RenderState::remove_link() {
-  // do remove node code here
-
+  // remove link
   for ( int k = 0; k < this->nodes.count(); k++ ) {
     const unsigned int count_connected =
             this->nodes.value(k)->countConnected();
@@ -600,7 +599,7 @@ void RenderState::remove_link() {
                                   QVector3D(this->current_position->x(),
                                             this->current_position->y(),
                                             this->current_position->z()),
-                                  0.5) ) {
+                                  0.25) ) {
         this->nodes.value(k)->RemoveLinkedFromIndex(z);
       }
     }
