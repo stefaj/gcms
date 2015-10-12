@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QVector>
 #include <QPushButton>
+#include <QTimer>
 #include "Objects/nodebutton.h"
 #include "RenderStates/virtualconciergerenderstate.h"
 
@@ -37,6 +38,8 @@ class VirtualConcierge : public QWidget {
     display_vehicle,
     display_wheelchair,
     display_bicycle;
+    QTimer *reset_timer;
+    int max_waiting, reset_counter;
 
  private slots:
     void get_button_value(int index, bool significant);
@@ -46,11 +49,13 @@ class VirtualConcierge : public QWidget {
     void on_button_feet_clicked();
     void on_button_bicycle_clicked();
     void on_button_other_vehicle_clicked();
+    void reset_timer_count();
 
 signals:
     void send_access(bool wheelchair, bool feet, bool bicycle, bool vehicle);
     void find_path(int start, int goal);
     void disable_antialiasing(bool value);
+    void reset_everything();
 };
 
 #endif  // VIRTUAL_CREATOR_VIRTUALCONCIERGE_H_

@@ -20,21 +20,52 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
     display_feet(false),
     display_vehicle(false),
     display_wheelchair(false),
-    display_bicycle(false){
+    display_bicycle(false),
+    max_waiting(0),
+    reset_counter(300){
     ui->setupUi(this);
     QPalette* palette = new QPalette();
     palette->setBrush(QPalette::Background,*(new QBrush(*(new QPixmap(":/BackGround_Virtual_Concierge")))));
     setPalette(*palette);
     load_interface("VirtualConcierge/nodes.pvc",
                    "VirtualConcierge/directories.dir");
+    reset_timer = new QTimer(this);
     connect(this, SIGNAL(find_path(int, int)),
             ui->openGLWidget, SLOT(find_path(int, int)));
     connect(this, SIGNAL(send_access(bool, bool, bool, bool)),
             ui->openGLWidget, SLOT(receive_access(bool, bool, bool, bool)));
     connect(this, SIGNAL(disable_antialiasing(bool)),
             ui->openGLWidget, SLOT(antialiasing(bool)));
+    connect(this->reset_timer, SIGNAL(timeout()),
+            this, SLOT(reset_timer_count()));
+    connect(this, SIGNAL(reset_everything()),
+            this->ui->openGLWidget, SLOT(reset_everything()));
     create_interface();
     load_config("config.config");
+    reset_timer->start(1000);
+}
+
+void VirtualConcierge::reset_timer_count() {
+  max_waiting++;
+  if ( max_waiting > reset_counter ) {
+    emit reset_everything();
+      // resizes temp array, but does not release memory!!
+     this->temp.resize(0);
+
+      // hide the buttons from the first page
+      foreach(NodeButton* button, this->catagory_)
+          button->hide();
+      foreach(NodeButton* button, this->buttons_)
+          button->hide();
+      foreach(NodeButton* button, this->directories_)
+          button->hide();
+
+
+      load_interface("VirtualConcierge/nodes.pvc",
+                     "VirtualConcierge/directories.dir");
+      create_interface();
+      max_waiting = 0;
+  }
 }
 
 void VirtualConcierge::load_config(QString file_name) {
@@ -152,6 +183,13 @@ void VirtualConcierge::load_config(QString file_name) {
               if ( result == "yes") {
                 display_feet = true;
               }
+          } else if (list[0] == "reset_timer") {
+              if ( list.count() > 1 ) {
+                  if ( list[1].toInt() > 0 )
+                    reset_counter = list[1].toInt();
+                  else
+                      reset_counter = 1e+10;
+              }
           }
 
         // read next line
@@ -192,12 +230,14 @@ void VirtualConcierge::load_config(QString file_name) {
           ui->button_wheelchair->show();
     }
     // set the access paths from the config file
-    emit send_access(this->enable_wheelchair, this->enable_feet, this->enable_bicycle, this->enable_vehicle);
-
-
+    emit send_access(this->enable_wheelchair,
+                     this->enable_feet,
+                     this->enable_bicycle,
+                     this->enable_vehicle);
 }
 
 void VirtualConcierge::get_button_value(int value, bool findvalue) {
+    this->max_waiting = 0;
     // 0 is the starting position
     if ( !findvalue )
         emit find_path(0, value);
@@ -322,6 +362,9 @@ void VirtualConcierge::load_interface(QString filename,
                                     button->hide() : button->show();
                         connect(button, SIGNAL(clicked_index(int, bool)),
                                 this, SLOT(get_button_value(int, bool)));
+                        QFont font = button->font();
+                        font.setPointSize(12);
+                        button->setFont(font);
                        this->buttons_.push_back(button);
                     }
                 }
@@ -369,6 +412,10 @@ void VirtualConcierge::load_interface(QString filename,
                                     (button->height() + 1),
                                     button->width(),
                                     button->height());
+                        QFont font = button->font();
+                        font.setPointSize(12);
+                        button->setFont(font);
+                        button->show();
                        connect(button, SIGNAL(clicked_index(int, bool)),
                                this, SLOT(get_button_value(int, bool)));
                        this->catagory_.push_back(button);
@@ -392,6 +439,9 @@ void VirtualConcierge::load_interface(QString filename,
                                     button->height());
                         connect(button, SIGNAL(clicked_index(int, bool)),
                                 this, SLOT(get_button_value(int, bool)));
+                        QFont font = button->font();
+                        font.setPointSize(12);
+                        button->setFont(font);
                         button->hide();
                        this->directories_.push_back(button);
                         count_top++;
@@ -426,6 +476,7 @@ void VirtualConcierge::on_pushButton_send_mail_clicked() {
 
 VirtualConcierge::~VirtualConcierge() {
     delete ui;
+    delete reset_timer;
 }
 
 void VirtualConcierge::on_button_wheelchair_clicked() {

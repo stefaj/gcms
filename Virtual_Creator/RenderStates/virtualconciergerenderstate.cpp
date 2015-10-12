@@ -49,6 +49,10 @@ void VirtualConciergeRenderstate::antialiasing(bool value) {
     }
 }
 
+void VirtualConciergeRenderstate::reset_everything() {
+this->handler->CalculateShortest(0, 0, true, true, true, true);
+}
+
 void VirtualConciergeRenderstate::update_frame() {
 
     if ( (this->handler->pathcount() > 0) && (this->handler->pathcount() > movement_index) && (movement_index > - 1) ) {
