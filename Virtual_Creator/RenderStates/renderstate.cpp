@@ -716,22 +716,21 @@ void RenderState::wheelEvent(QWheelEvent* event) {
 
 void RenderState::update_node_errors() {
     // add nodes for debugging
+    error_nodes.clear();
     handler.AddNodes(this->nodes);
     // displayed debugged nodes
-    if( handler.count() > 0 ) {
+    if ( handler.count() > 0 ) {
       QString error_msg = handler.DisplayError();
       if ( !error_msg.isEmpty() && (error_msg[0] != ' ') ) {
       emit debug_results(error_msg);
-      error_nodes.clear();
       error_nodes = handler.error_nodes_indices();
       }
     }
     for ( int i = 0; i < error_nodes.count(); i++ ) {
-        if (error_nodes.value(i) < 0 && error_nodes.value(i) > this->nodes.count() - 1) {
+        if (error_nodes.value(i) < 0 && error_nodes.value(i) > this->nodes.count()) {
             error_nodes.remove(i);
         }
     }
-
 }
 
 void RenderState::add_node(QString* name) {

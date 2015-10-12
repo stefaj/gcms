@@ -26,17 +26,17 @@ QString NodeHandler::DisplayError() {
 }
 
 QVector<int> NodeHandler::error_nodes_indices() {
-    // list of all the error indices
-    QVector<int> list_of_error_nodes;
-    list_of_error_nodes.clear();
-    for ( int k = 0; k < premises.count(); k++ ) {
-        if ( this->premises.value(k)->getSignificant() ) {
-        int error = CalculateShortest(0, k, true, true, true, true);
-        if ( error > -1 )
+  // list of all the error indices
+  QVector<int> list_of_error_nodes;
+  list_of_error_nodes.clear();
+  for ( int k = 0; k < premises.count(); k++ ) {
+    if ( this->premises.value(k)->getSignificant() ) {
+      int error = CalculateShortest(0, k, true, true, true, true);
+      if ( error > -1 )
         list_of_error_nodes.push_back(error);
-        }
+      }
     }
-    return list_of_error_nodes;
+  return list_of_error_nodes;
 }
 
 void NodeHandler::AddNodes(QVector<Node*> nodes) {
@@ -193,15 +193,15 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
                this->shortest.push_back(_back_node);
            }
            while ( _back_node != start ) {
-               step_counter ++;
-               if ( step_counter > this->premises.count()) {
-                   break;
-               }
+             step_counter ++;
+             if ( step_counter > this->premises.count()) {
+               break;
+             }
              int error = _back_node;
-             if ( _back_node > 0 && _back_node < this->premises.count()) {
+             if ( _back_node > -1 && _back_node < this->premises.count()) {
                // backwards trace the shortest path
                _back_node = this->premises.value(_back_node)->getShortestIndex();
-               if ( _back_node > -1 ) {
+               if ( _back_node > -1 && _back_node < this->premises.count() ) {
                    if ( this->shortest.count() > 0 && this->shortest.count() - 1 < this->premises.count()) {
                    if ( this->shortest.value(this->shortest.count() - 1 ) != _back_node) {
                        this->shortest.push_back(_back_node);
@@ -211,12 +211,17 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
                } else {
                    return error;
                }
+
                if ( _back_node == loop_var) {
-                   return loop_var;      }
-             }
+                   return loop_var;
+               }
+               } else {
+                 return error;
+               }
+             } else {
+                 return error;
              }
            }
-
        }
    }
    if ( _back_node == start )
