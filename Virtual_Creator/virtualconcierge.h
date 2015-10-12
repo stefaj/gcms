@@ -37,7 +37,8 @@ class VirtualConcierge : public QWidget {
     display_feet,
     display_vehicle,
     display_wheelchair,
-    display_bicycle;
+    display_bicycle,
+    display_pause_play;
     QTimer *reset_timer;
     int max_waiting, reset_counter;
 
@@ -50,12 +51,14 @@ class VirtualConcierge : public QWidget {
     void on_button_bicycle_clicked();
     void on_button_other_vehicle_clicked();
     void reset_timer_count();
+    void on_button_play_pause_clicked(bool checked);
 
 signals:
     void send_access(bool wheelchair, bool feet, bool bicycle, bool vehicle);
     void find_path(int start, int goal);
     void disable_antialiasing(bool value);
     void reset_everything();
+    void pause(bool value);
 };
 
 #endif  // VIRTUAL_CREATOR_VIRTUALCONCIERGE_H_

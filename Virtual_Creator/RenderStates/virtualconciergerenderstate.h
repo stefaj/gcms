@@ -53,6 +53,7 @@ class VirtualConciergeRenderstate :
     void receive_access(bool wheelchair, bool feet, bool bicycle, bool vehicle);
     void antialiasing(bool value);
     void reset_everything();
+    void pause(bool value);
 };
 
 #endif  // VIRTUAL_CREATOR_RENDERSTATES_VIRTUALCONCIERGERENDERSTATE_H_

@@ -21,9 +21,11 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
     display_vehicle(false),
     display_wheelchair(false),
     display_bicycle(false),
+    display_pause_play(false),
     max_waiting(0),
     reset_counter(300){
     ui->setupUi(this);
+    ui->button_play_pause->hide();
     QPalette* palette = new QPalette();
     palette->setBrush(QPalette::Background,*(new QBrush(*(new QPixmap(":/BackGround_Virtual_Concierge")))));
     setPalette(*palette);
@@ -40,6 +42,8 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
             this, SLOT(reset_timer_count()));
     connect(this, SIGNAL(reset_everything()),
             this->ui->openGLWidget, SLOT(reset_everything()));
+    connect(this, SIGNAL(pause(bool)),
+            ui->openGLWidget, SLOT(pause(bool)));
     create_interface();
     load_config("config.config");
     reset_timer->start(1000);
@@ -48,6 +52,9 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
 void VirtualConcierge::reset_timer_count() {
   max_waiting++;
   if ( max_waiting > reset_counter ) {
+    ui->button_play_pause->setChecked(false);
+    ui->button_play_pause->setText("Playing");
+    emit pause(false);
     emit reset_everything();
       // resizes temp array, but does not release memory!!
      this->temp.resize(0);
@@ -59,7 +66,6 @@ void VirtualConcierge::reset_timer_count() {
           button->hide();
       foreach(NodeButton* button, this->directories_)
           button->hide();
-
 
       load_interface("VirtualConcierge/nodes.pvc",
                      "VirtualConcierge/directories.dir");
@@ -188,7 +194,15 @@ void VirtualConcierge::load_config(QString file_name) {
                   if ( list[1].toInt() > 0 )
                     reset_counter = list[1].toInt();
                   else
-                      reset_counter = 1e+10;
+                      reset_counter = 999999;
+              }
+          } else if (list[0] == "pause_play") {
+              QString result = "no";
+              // add email access
+              if ( list.count() > 1 )
+              result = list[1];
+              if ( result == "yes") {
+                display_pause_play = true;
               }
           }
 
@@ -229,6 +243,8 @@ void VirtualConcierge::load_config(QString file_name) {
         if ( this->display_wheelchair )
           ui->button_wheelchair->show();
     }
+    if ( this->display_pause_play )
+      ui->button_play_pause->show();
     // set the access paths from the config file
     emit send_access(this->enable_wheelchair,
                      this->enable_feet,
@@ -505,4 +521,14 @@ void VirtualConcierge::on_button_other_vehicle_clicked() {
                      ui->button_feet->isChecked(),
                      ui->button_bicycle->isChecked(),
                      ui->button_other_vehicle->isChecked());
+}
+
+void VirtualConcierge::on_button_play_pause_clicked(bool checked) {
+  // change text according to the checked value
+  if ( checked ) {
+      ui->button_play_pause->setText("Paused");
+  } else {
+      ui->button_play_pause->setText("Playing");
+  }
+  emit pause(checked);
 }

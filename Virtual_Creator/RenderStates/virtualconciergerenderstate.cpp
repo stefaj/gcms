@@ -49,6 +49,14 @@ void VirtualConciergeRenderstate::antialiasing(bool value) {
     }
 }
 
+void VirtualConciergeRenderstate::pause(bool value) {
+  if ( value ) {
+      frame_update->stop();
+  } else {
+      frame_update->start(5);
+  }
+}
+
 void VirtualConciergeRenderstate::reset_everything() {
 this->handler->CalculateShortest(0, 0, true, true, true, true);
 }

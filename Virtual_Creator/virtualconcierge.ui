@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>844</width>
+    <width>966</width>
     <height>731</height>
    </rect>
   </property>
@@ -350,6 +350,49 @@ QLineEdit:pressed
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QPushButton" name="button_play_pause">
+     <property name="minimumSize">
+      <size>
+       <width>256</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <italic>false</italic>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">/* Button Styles*/
+QPushButton {
+  background: rgba(45, 46, 48, 25%);
+  color: white;
+  font: bold;
+  border-radius: 4px;
+}
+QPushButton:hover:!pressed { 
+  border: 0px solid  rgba(0, 115, 199, 25%);
+  background: rgba(0, 115, 199, 25%);
+  border-radius: 4px;
+}
+QPushButton:checked { 
+  border: 0px solid  rgba(0, 115, 199, 25%);
+  background:  rgba(0, 115, 199, 25%);
+    border-radius: 4px;
+}</string>
+     </property>
+     <property name="text">
+      <string>Playing</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
