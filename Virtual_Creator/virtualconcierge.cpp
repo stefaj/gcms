@@ -29,11 +29,11 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
                    "VirtualConcierge/directories.dir");
     connect(this, SIGNAL(find_path(int, int)),
             ui->openGLWidget, SLOT(find_path(int, int)));
-    connect(this, SIGNAL(send_access(bool,bool,bool,bool)),
-            ui->openGLWidget, SLOT(receive_access(bool,bool,bool,bool)));
+    connect(this, SIGNAL(send_access(bool, bool, bool, bool)),
+            ui->openGLWidget, SLOT(receive_access(bool, bool, bool, bool)));
+    connect(this, SIGNAL(disable_antialiasing(bool)),
+            ui->openGLWidget, SLOT(antialiasing(bool)));
     create_interface();
-
-
     load_config("config.config");
 }
 
@@ -63,6 +63,7 @@ void VirtualConcierge::load_config(QString file_name) {
             if ( result == "yes") {
               show_email = true;
             }
+            emit disable_antialiasing(show_email);
           } else if ( list[0] == "accessibility" ) {
               QString result = "no";
 

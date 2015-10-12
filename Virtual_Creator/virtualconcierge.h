@@ -42,18 +42,15 @@ class VirtualConcierge : public QWidget {
     void get_button_value(int index, bool significant);
     void on_pushButton_send_mail_clicked();
     void show_new_interface(int selected_node);
-
     void on_button_wheelchair_clicked();
-
     void on_button_feet_clicked();
-
     void on_button_bicycle_clicked();
-
     void on_button_other_vehicle_clicked();
 
 signals:
     void send_access(bool wheelchair, bool feet, bool bicycle, bool vehicle);
     void find_path(int start, int goal);
+    void disable_antialiasing(bool value);
 };
 
 #endif  // VIRTUAL_CREATOR_VIRTUALCONCIERGE_H_

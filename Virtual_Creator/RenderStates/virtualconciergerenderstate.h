@@ -39,7 +39,7 @@ class VirtualConciergeRenderstate :
     QTimer *frame_update;
     QOpenGLTexture *texture_you_are_here;
     float dt_counter;
-    bool access_wheelchair, access_feet, access_bicycle, access_vehicle;
+    bool access_wheelchair, access_feet, access_bicycle, access_vehicle, disable_antialiasing;
     QSurfaceFormat format;
 
  protected:
@@ -51,6 +51,7 @@ class VirtualConciergeRenderstate :
     void find_path(int start, int end);
     void update_frame();
     void receive_access(bool wheelchair, bool feet, bool bicycle, bool vehicle);
+    void antialiasing(bool value);
 };
 
 #endif  // VIRTUAL_CREATOR_RENDERSTATES_VIRTUALCONCIERGERENDERSTATE_H_

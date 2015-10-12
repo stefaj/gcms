@@ -18,11 +18,11 @@ VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent):
     access_wheelchair(false),
     access_feet(false),
     access_bicycle(false),
-    access_vehicle(false){
+    access_vehicle(false),
+    disable_antialiasing(false){
 
     // enable antialiasing (set the format of the widget)
     format.setSamples(4);
-    this->setFormat(format);
 
     // clear the textures
     this->textures.clear();
@@ -40,6 +40,13 @@ VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent):
     connect(frame_update, SIGNAL(timeout()),
             this, SLOT(update_frame()));
     frame_update->start(5);
+}
+
+void VirtualConciergeRenderstate::antialiasing(bool value) {
+    this->disable_antialiasing = value;
+    if ( !this->disable_antialiasing ) {
+        this->setFormat(format);
+    }
 }
 
 void VirtualConciergeRenderstate::update_frame() {
@@ -409,8 +416,10 @@ void VirtualConciergeRenderstate::paintGL() {
   painter.setPen(Qt::white);
   QFont serifFont("Arial", 10, QFont::Bold);
   painter.setFont(serifFont);
-  painter.setRenderHints(QPainter::Antialiasing |
+  if ( !this->disable_antialiasing ) {
+    painter.setRenderHints(QPainter::Antialiasing |
                           QPainter::SmoothPixmapTransform);
+  }
   // draw all the node text here
   for ( int l = 0; l < this->handler->count(); l++) {
     QPoint pos_x_y =
