@@ -30,8 +30,11 @@ VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent):
     this->position = new QVector3D(0, 0, 0);
     this->handler = new NodeHandler();
 
-    if ( PremisesExporter::fileExists("VirtualConcierge/nodes.pvc") )
+    if ( PremisesExporter::fileExists("VirtualConcierge/nodes.pvc") ) {
         this->handler->ReadFilePVC("VirtualConcierge/nodes.pvc");
+        if ( this->handler->count() > 0 )
+          movement_position = this->handler->NodeFromIndex(0).Position();
+    }
     frame_update = new QTimer(this);
 
     connect(frame_update, SIGNAL(timeout()),
@@ -352,7 +355,7 @@ void VirtualConciergeRenderstate::paintGL() {
                     QVector2D(1, 1),
                     this->program, pMatrix, movement_position.y());
   QMatrix4x4 translation_destination;
-  if ( this->handler->pathcount() > 0 )
+  if ( this->handler->pathcount() > 0 ) {
   translation_destination.translate(this->handler->NodeFromIndex(this->handler->pathindex(0)).Position() + QVector3D(0, 0.2, 0));
   QMatrix4x4 rotation_destination;
   rotation_destination.rotate(0, 0, 1, 0);
@@ -365,6 +368,7 @@ void VirtualConciergeRenderstate::paintGL() {
                     QVector3D(0, 0, 0),
                     QVector2D(1, 1),
                     this->program, pMatrix, movement_position.y());
+  }
   // draw other objects first
 
     foreach(VisualObject *object, this->objects) {
@@ -418,7 +422,7 @@ void VirtualConciergeRenderstate::paintGL() {
     if ( this->handler->NodeFromIndex(l).getSignificant() &&
          ( this->handler->NodeFromIndex(l).Position().y() < this->movement_position.y() + 0.5 ) &&
          ( this->handler->NodeFromIndex(l).Position().y() > this->movement_position.y() - 0.5 ) ) {
-      painter.drawText(pos_x_y.x() - (this->handler->NodeFromIndex(l).getName().length() * 4), pos_x_y.y() + 5, this->handler->NodeFromIndex(l).getName());
+     // painter.drawText(pos_x_y.x() - (this->handler->NodeFromIndex(l).getName().length() * 4), pos_x_y.y() + 5, this->handler->NodeFromIndex(l).getName());
     }
   }
 

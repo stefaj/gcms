@@ -429,16 +429,6 @@ QComboBox QAbstractItemView {
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QCheckBox" name="checkbox_significant">
-              <property name="text">
-               <string>Add Button</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="0">
              <widget class="QLabel" name="label_4">
               <property name="text">
@@ -458,6 +448,16 @@ QComboBox QAbstractItemView {
                <set>Qt::AlignCenter</set>
               </property>
               <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1" colspan="2">
+             <widget class="QCheckBox" name="checkbox_significant">
+              <property name="text">
+               <string>Add Button</string>
+              </property>
+              <property name="checked">
                <bool>true</bool>
               </property>
              </widget>
