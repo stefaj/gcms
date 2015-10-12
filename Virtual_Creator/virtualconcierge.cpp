@@ -44,6 +44,8 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
             this->ui->openGLWidget, SLOT(reset_everything()));
     connect(this, SIGNAL(pause(bool)),
             ui->openGLWidget, SLOT(pause(bool)));
+    connect(this, SIGNAL(change_movement_speed(float)),
+            ui->openGLWidget, SLOT(change_speed(float)));
     create_interface();
     load_config("config.config");
     reset_timer->start(1000);
@@ -203,6 +205,13 @@ void VirtualConcierge::load_config(QString file_name) {
               result = list[1];
               if ( result == "yes") {
                 display_pause_play = true;
+              }
+          } else if (list[0] == "movement_speed") {
+              if ( list.count() > 1 ) {
+                  if ( list[1].toInt() > 0 )
+                    change_movement_speed(list[1].toFloat());
+                  else
+                    change_movement_speed(1.0f);
               }
           }
 

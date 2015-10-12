@@ -59,6 +59,7 @@ signals:
     void disable_antialiasing(bool value);
     void reset_everything();
     void pause(bool value);
+    void change_movement_speed(float speed);
 };
 
 #endif  // VIRTUAL_CREATOR_VIRTUALCONCIERGE_H_

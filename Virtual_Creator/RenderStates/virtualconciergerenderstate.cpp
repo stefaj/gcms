@@ -15,6 +15,7 @@ VirtualConciergeRenderstate::VirtualConciergeRenderstate(QWidget *parent):
     movement_index(-1),
     movement_position(QVector3D(0, 0, 0)),
     dt_counter(0.0f),
+    movement_speed(1.0f),
     access_wheelchair(false),
     access_feet(false),
     access_bicycle(false),
@@ -49,6 +50,10 @@ void VirtualConciergeRenderstate::antialiasing(bool value) {
     }
 }
 
+void VirtualConciergeRenderstate::change_speed(float speed) {
+  movement_speed = speed;
+}
+
 void VirtualConciergeRenderstate::pause(bool value) {
   if ( value ) {
       frame_update->stop();
@@ -67,7 +72,7 @@ void VirtualConciergeRenderstate::update_frame() {
       QVector3D temp = this->handler->NodeFromIndex(this->handler->pathindex(movement_index)).Position() - movement_position;
       temp.normalize();
 
-      movement_position += temp * 0.025f;
+      movement_position += movement_speed * temp * 0.025f;
       if (movement_position.distanceToPoint(this->handler->NodeFromIndex(this->handler->pathindex(movement_index)).Position()) < 0.5f)
       movement_index--;
     }

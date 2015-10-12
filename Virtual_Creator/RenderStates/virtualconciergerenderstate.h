@@ -38,7 +38,7 @@ class VirtualConciergeRenderstate :
 
     QTimer *frame_update;
     QOpenGLTexture *texture_you_are_here;
-    float dt_counter;
+    float dt_counter, movement_speed;
     bool access_wheelchair, access_feet, access_bicycle, access_vehicle, disable_antialiasing;
     QSurfaceFormat format;
 
@@ -54,6 +54,7 @@ class VirtualConciergeRenderstate :
     void antialiasing(bool value);
     void reset_everything();
     void pause(bool value);
+    void change_speed(float speed);
 };
 
 #endif  // VIRTUAL_CREATOR_RENDERSTATES_VIRTUALCONCIERGERENDERSTATE_H_
