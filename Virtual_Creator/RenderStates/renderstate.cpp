@@ -1741,11 +1741,11 @@ void RenderState::CopyConfig(QString value) {
     QString val_new = "VirtualConcierge/config.config";
 
     QDir dir;
-    // try to copy the texture to the drive
+    // try to copy the config to the drive
     if ( QString::compare(dir.absolutePath() + "/" + val_new,
                           value,
                           Qt::CaseInsensitive) != 0 ) {
-      if ( QFile::exists(val_new) ) {
+      if ( QFile::exists(val_new) && !start_up_load_tex ) {
        if ( !QFile::remove(val_new) ) {
 
        }
