@@ -85,6 +85,19 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->openGLWidget, SLOT(clear_premises()));
   connect(ui->actionSave_Premises, SIGNAL(triggered()),
           this, SLOT(save_premises()));
+  connect(ui->actionSet_Virtual_Concierge_Background, SIGNAL(triggered()),
+          this, SLOT(create_background()));
+}
+
+void MainWindow::create_background() {
+  QString file_name = QFileDialog::getOpenFileName(this,
+                                                   tr("Open Image"),
+                                                   "/home/image_file",
+                                                   tr("Image Files (*.png *.jpg *.bmp)"));
+  if ( PremisesExporter::fileExists(file_name) ) {
+    QImage img(file_name);
+    img.save("VirtualConcierge/background.png");
+  }
 }
 
 void MainWindow::open_config_editor() {
@@ -219,7 +232,7 @@ void MainWindow::drop_down_emit() {
 }
 
 void MainWindow::send_loaded_premises() {
-    QString file_name = QFileDialog::getOpenFileName(this,
+  QString file_name = QFileDialog::getOpenFileName(this,
                                      tr("Open Environment File"),
                                      "/home/environment",
                                      tr("Environment Files (*.env)"));

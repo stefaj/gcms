@@ -691,8 +691,8 @@ QComboBox QAbstractItemView {
      <rect>
       <x>-1302</x>
       <y>116</y>
-      <width>177</width>
-      <height>173</height>
+      <width>248</width>
+      <height>201</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -724,6 +724,7 @@ QComboBox QAbstractItemView {
     <addaction name="actionSave_Premises"/>
     <addaction name="actionOpen_Premises_File"/>
     <addaction name="actionEdit_User_Interface"/>
+    <addaction name="actionSet_Virtual_Concierge_Background"/>
    </widget>
    <widget class="QMenu" name="menuBuild">
     <property name="minimumSize">
@@ -1021,6 +1022,15 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="text">
     <string>Save Premises</string>
+   </property>
+  </action>
+  <action name="actionSet_Virtual_Concierge_Background">
+   <property name="icon">
+    <iconset resource="content.qrc">
+     <normaloff>:/Content/background_icon_white.png</normaloff>:/Content/background_icon_white.png</iconset>
+   </property>
+   <property name="text">
+    <string>Set Virtual Concierge Background</string>
    </property>
   </action>
   <zorder>dockWidget_configuration</zorder>

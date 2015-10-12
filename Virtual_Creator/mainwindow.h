@@ -60,6 +60,7 @@ class MainWindow : public QMainWindow {
     void send_config();
     void new_premises();
     void save_premises(); // saves the premises to a directory
+    void create_background();
 
 private:
     Ui::MainWindow *ui;

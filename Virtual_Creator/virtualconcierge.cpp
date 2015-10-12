@@ -27,7 +27,10 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
     ui->setupUi(this);
     ui->button_play_pause->hide();
     QPalette* palette = new QPalette();
-    palette->setBrush(QPalette::Background,*(new QBrush(*(new QPixmap(":/BackGround_Virtual_Concierge")))));
+    if (PremisesExporter::fileExists("VirtualConcierge/background.png"))
+      palette->setBrush(QPalette::Background,*(new QBrush(*(new QPixmap("VirtualConcierge/background.png")))));
+    else
+      palette->setBrush(QPalette::Background,*(new QBrush(*(new QPixmap(":/BackGround_Virtual_Concierge")))));
     setPalette(*palette);
     load_interface("VirtualConcierge/nodes.pvc",
                    "VirtualConcierge/directories.dir");
