@@ -240,6 +240,8 @@ bool Mathematics::detect_point_near_line(QVector3D point_a,
         if ( abs(z - position.z()) < threshhold &&
              large_x > position.x() &&
              small_x < position.x() ) {
+            if ( abs(( position.y() - point_a.y() < threshhold )) ||
+                 abs(( position.y() - point_b.y() < threshhold )) )
             return true;
         }
     }
