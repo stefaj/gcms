@@ -16,12 +16,31 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
     <widget class="QStackedWidget" name="stackedWidget">
+     <property name="styleSheet">
+      <string notr="true">/* Button Styles*/
+QPushButton {
+  background: rgba(45, 46, 48, 50%);
+  color: white;
+  font: bold;
+  border-radius: 4px;
+}
+QPushButton:hover:!pressed { 
+  border: 0px solid  rgba(0, 115, 199, 50%);
+  background: rgba(0, 115, 199, 50%);
+  border-radius: 4px;
+}
+QPushButton:checked { 
+  border: 0px solid  rgba(0, 115, 199, 50%);
+  background:  rgba(0, 115, 199, 50%);
+    border-radius: 4px;
+}</string>
+     </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page_3">
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0" colspan="6">
+       <item row="0" column="0" colspan="14">
         <widget class="QLabel" name="label_name">
          <property name="maximumSize">
           <size>
@@ -51,7 +70,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0" colspan="6">
+       <item row="3" column="0" colspan="14">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QWidget" name="widget_directory" native="true">
@@ -78,23 +97,7 @@
             <bool>false</bool>
            </property>
            <property name="styleSheet">
-            <string notr="true">/* Button Styles*/
-QPushButton {
-  background: rgba(45, 46, 48, 25%);
-  color: white;
-  font: bold;
-  border-radius: 4px;
-}
-QPushButton:hover:!pressed { 
-  border: 0px solid  rgba(0, 115, 199, 25%);
-  background: rgba(0, 115, 199, 25%);
-  border-radius: 4px;
-}
-QPushButton:checked { 
-  border: 0px solid  rgba(0, 115, 199, 25%);
-  background:  rgba(0, 115, 199, 25%);
-    border-radius: 4px;
-}</string>
+            <string notr="true"/>
            </property>
           </widget>
          </item>
@@ -103,39 +106,54 @@ QPushButton:checked {
          </item>
         </layout>
        </item>
-       <item row="4" column="0">
-        <widget class="QPushButton" name="pushButton_send_mail">
+       <item row="2" column="6">
+        <widget class="QPushButton" name="button_play_pause">
          <property name="minimumSize">
           <size>
-           <width>150</width>
+           <width>256</width>
            <height>32</height>
           </size>
          </property>
-         <property name="styleSheet">
-          <string notr="true">/* Button Styles*/
-QPushButton {
-  background: rgba(45, 46, 48, 50%);
-  color: white;
-  font: bold;
-  border-radius: 4px;
-}
-QPushButton:hover:!pressed { 
-  border: 0px solid  rgba(0, 115, 199, 50%);
-  background: rgba(0, 115, 199, 50%);
-  border-radius: 4px;
-}
-QPushButton:checked { 
-  border: 0px solid  rgba(0, 115, 199, 50%);
-  background:  rgba(0, 115, 199, 50%);
-    border-radius: 4px;
-}</string>
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
          </property>
          <property name="text">
-          <string>Mail</string>
+          <string>Playing</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="2" column="12" colspan="2">
+        <widget class="QLabel" name="label_2">
+         <property name="maximumSize">
+          <size>
+           <width>1024</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Monotype Corsiva</family>
+           <pointsize>24</pointsize>
+           <italic>true</italic>
+          </font>
+         </property>
+         <property name="text">
+          <string>Virtual Concierge </string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="5" colspan="2">
         <widget class="QLineEdit" name="lineEdit_email">
          <property name="minimumSize">
           <size>
@@ -167,89 +185,28 @@ QLineEdit:pressed
          </property>
         </widget>
        </item>
-       <item row="4" column="3">
-        <widget class="QPushButton" name="button_feet">
+       <item row="4" column="0" colspan="2">
+        <widget class="QPushButton" name="pushButton_send_mail">
          <property name="minimumSize">
           <size>
-           <width>100</width>
-           <height>32</height>
+           <width>150</width>
+           <height>38</height>
           </size>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">/* Button Styles*/
-QPushButton {
-  background: rgba(45, 46, 48, 50%);
-  color: white;
-  font: bold;
-  border-radius: 4px;
-}
-QPushButton:hover:!pressed { 
-  border: 0px solid  rgba(0, 115, 199, 50%);
-  background: rgba(0, 115, 199, 50%);
-  border-radius: 4px;
-}
-QPushButton:checked { 
-  border: 0px solid  rgba(0, 115, 199, 50%);
-  background:  rgba(0, 115, 199, 50%);
-    border-radius: 4px;
-}</string>
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
          </property>
          <property name="text">
-          <string>Feet</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
+          <string>Mail</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
-        <widget class="QPushButton" name="button_wheelchair">
-         <property name="minimumSize">
-          <size>
-           <width>128</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>128</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">/* Button Styles*/
-QPushButton {
-  background: rgba(45, 46, 48, 50%);
-  color: white;
-  font: bold;
-  border-radius: 4px;
-}
-QPushButton:hover:!pressed { 
-  border: 0px solid  rgba(0, 115, 199, 50%);
-  background: rgba(0, 115, 199, 50%);
-  border-radius: 4px;
-}
-QPushButton:checked { 
-  border: 0px solid  rgba(0, 115, 199, 50%);
-  background:  rgba(0, 115, 199, 50%);
-    border-radius: 4px;
-}</string>
-         </property>
-         <property name="text">
-          <string>Wheelchair</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="5">
+       <item row="4" column="13">
         <widget class="QPushButton" name="button_other_vehicle">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -260,111 +217,12 @@ QPushButton:checked {
          <property name="minimumSize">
           <size>
            <width>128</width>
-           <height>32</height>
+           <height>38</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>128</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">/* Button Styles*/
-QPushButton {
-  background: rgba(45, 46, 48, 50%);
-  color: white;
-  font: bold;
-  border-radius: 4px;
-}
-QPushButton:hover:!pressed { 
-  border: 0px solid  rgba(0, 115, 199, 50%);
-  background: rgba(0, 115, 199, 50%);
-  border-radius: 4px;
-}
-QPushButton:checked { 
-  border: 0px solid  rgba(0, 115, 199, 50%);
-  background:  rgba(0, 115, 199, 50%);
-    border-radius: 4px;
-}</string>
-         </property>
-         <property name="text">
-          <string>Other Vehicle</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="4">
-        <widget class="QPushButton" name="button_bicycle">
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">/* Button Styles*/
-QPushButton {
-  background: rgba(45, 46, 48, 50%);
-  color: white;
-  font: bold;
-  border-radius: 4px;
-}
-QPushButton:hover:!pressed { 
-  border: 0px solid  rgba(0, 115, 199, 50%);
-  background: rgba(0, 115, 199, 50%);
-  border-radius: 4px;
-}
-QPushButton:checked { 
-  border: 0px solid  rgba(0, 115, 199, 50%);
-  background:  rgba(0, 115, 199, 50%);
-    border-radius: 4px;
-}</string>
-         </property>
-         <property name="text">
-          <string>Bicycle</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="4" colspan="2">
-        <widget class="QLabel" name="label_2">
-         <property name="maximumSize">
-          <size>
-           <width>1024</width>
-           <height>50</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Monotype Corsiva</family>
-           <pointsize>24</pointsize>
-           <italic>true</italic>
-          </font>
-         </property>
-         <property name="text">
-          <string>Virtual Concierge </string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3">
-        <widget class="QPushButton" name="button_play_pause">
-         <property name="minimumSize">
-          <size>
-           <width>256</width>
            <height>32</height>
           </size>
          </property>
@@ -376,27 +234,98 @@ QPushButton:checked {
            <bold>true</bold>
           </font>
          </property>
-         <property name="styleSheet">
-          <string notr="true">/* Button Styles*/
-QPushButton {
-  background: rgba(45, 46, 48, 25%);
-  color: white;
-  font: bold;
-  border-radius: 4px;
-}
-QPushButton:hover:!pressed { 
-  border: 0px solid  rgba(0, 115, 199, 25%);
-  background: rgba(0, 115, 199, 25%);
-  border-radius: 4px;
-}
-QPushButton:checked { 
-  border: 0px solid  rgba(0, 115, 199, 25%);
-  background:  rgba(0, 115, 199, 25%);
-    border-radius: 4px;
-}</string>
+         <property name="text">
+          <string>Other Vehicle</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="12">
+        <widget class="QPushButton" name="button_bicycle">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
          </property>
          <property name="text">
-          <string>Playing</string>
+          <string>Bicycle</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="10">
+        <widget class="QPushButton" name="button_feet">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Feet</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="9">
+        <widget class="QPushButton" name="button_wheelchair">
+         <property name="minimumSize">
+          <size>
+           <width>128</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>128</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Wheelchair</string>
          </property>
          <property name="checkable">
           <bool>true</bool>

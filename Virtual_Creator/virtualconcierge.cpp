@@ -224,7 +224,15 @@ void VirtualConcierge::load_config(QString file_name) {
                   else
                     change_movement_speed(1.0f);
               }
-          }
+          } else if ( list[0] == "font_color") {
+              if ( list.count() > 1 ) {
+                 qApp->setStyleSheet("QLabel { color:"+ list[1]+"; };\n");
+               }
+          } else if ( list[0] == "button_font_color") {
+              if ( list.count() > 1 ) {
+                ui->stackedWidget->widget(0)->setStyleSheet( "QPushButton{ color:" + list[1] + "; };");
+              }
+         }
 
         // read next line
         line = ascread.readLine();
@@ -270,7 +278,6 @@ void VirtualConcierge::load_config(QString file_name) {
                      this->enable_feet,
                      this->enable_bicycle,
                      this->enable_vehicle);
-    qApp->setStyleSheet("QLabel { color: white }");
 }
 
 void VirtualConcierge::get_button_value(int value, bool findvalue) {
