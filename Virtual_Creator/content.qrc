@@ -36,5 +36,7 @@
         <file>Content/new_white_image.png</file>
         <file>Content/save_icon_white.png</file>
         <file>Content/background_icon_white.png</file>
+        <file>Content/arrow_you_here.png</file>
+        <file>Content/arrow_start_how.png</file>
     </qresource>
 </RCC>

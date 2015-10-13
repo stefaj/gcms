@@ -54,6 +54,13 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
     reset_timer->start(1000);
 }
 
+void VirtualConcierge::mousePressEvent ( QMouseEvent * ) {
+  // change the index of the stacked widget
+  if (ui->stackedWidget->currentIndex() == 1 ) {
+    this->ui->stackedWidget->setCurrentIndex(0);
+  }
+}
+
 void VirtualConcierge::reset_timer_count() {
   max_waiting++;
   if ( max_waiting > reset_counter ) {
@@ -75,6 +82,7 @@ void VirtualConcierge::reset_timer_count() {
       load_interface("VirtualConcierge/nodes.pvc",
                      "VirtualConcierge/directories.dir");
       create_interface();
+      this->ui->stackedWidget->setCurrentIndex(1);
       max_waiting = 0;
   }
 }
@@ -262,6 +270,7 @@ void VirtualConcierge::load_config(QString file_name) {
                      this->enable_feet,
                      this->enable_bicycle,
                      this->enable_vehicle);
+    qApp->setStyleSheet("QLabel { color: white }");
 }
 
 void VirtualConcierge::get_button_value(int value, bool findvalue) {

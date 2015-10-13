@@ -42,6 +42,9 @@ class VirtualConcierge : public QWidget {
     QTimer *reset_timer;
     int max_waiting, reset_counter;
 
+protected:
+void mousePressEvent ( QMouseEvent * event );
+
  private slots:
     void get_button_value(int index, bool significant);
     void on_pushButton_send_mail_clicked();
