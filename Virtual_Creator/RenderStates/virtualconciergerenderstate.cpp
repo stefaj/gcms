@@ -218,6 +218,27 @@ void VirtualConciergeRenderstate::LoadObjects(QString path) {
   }
 }
 
+void VirtualConciergeRenderstate::reload_everything() {
+    // clear the textures
+    this->textures.clear();
+    this->textures_predefined.clear();
+    this->position = new QVector3D(0, 0, 0);
+    this->handler = new NodeHandler();
+
+    if ( PremisesExporter::fileExists("VirtualConcierge/nodes.pvc") ) {
+        this->handler->ReadFilePVC("VirtualConcierge/nodes.pvc");
+        if ( this->handler->count() > 0 )
+          movement_position = this->handler->NodeFromIndex(0).Position();
+    }
+
+    // load environment and textures
+    if ( PremisesExporter::fileExists("VirtualConcierge/textures.tl"))
+      LoadTextures("VirtualConcierge/textures.tl");
+    if ( PremisesExporter::fileExists("VirtualConcierge/environment.env"))
+      LoadObjects("VirtualConcierge/environment.env");
+
+}
+
 void VirtualConciergeRenderstate::LoadContent() {
   // this initializes all the opengl functions
   initializeOpenGLFunctions();

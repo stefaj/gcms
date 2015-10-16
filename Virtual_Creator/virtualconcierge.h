@@ -41,8 +41,11 @@ class VirtualConcierge : public QWidget {
     display_wheelchair,
     display_bicycle,
     display_pause_play;
-    QTimer *reset_timer;
+    QTimer *reset_timer, *sync_with_server;
     int max_waiting, reset_counter;
+    QByteArray session_;
+    bool clearDir( const QString path );
+    int reset_frequency;
 
 protected:
 void mousePressEvent ( QMouseEvent * event );
@@ -57,7 +60,8 @@ void mousePressEvent ( QMouseEvent * event );
     void on_button_other_vehicle_clicked();
     void reset_timer_count();
     void on_button_play_pause_clicked(bool checked);
-
+    void logged_in ( QByteArray session, bool value );
+    void reload_interface();
 
 signals:
     void send_access(bool wheelchair, bool feet, bool bicycle, bool vehicle);
@@ -66,6 +70,7 @@ signals:
     void reset_everything();
     void pause(bool value);
     void change_movement_speed(float speed);
+    void reload_everything();
 };
 
 #endif  // VIRTUAL_CREATOR_VIRTUALCONCIERGE_H_

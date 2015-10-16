@@ -55,6 +55,7 @@ class VirtualConciergeRenderstate :
     void reset_everything();
     void pause(bool value);
     void change_speed(float speed);
+    void reload_everything();
 };
 
 #endif  // VIRTUAL_CREATOR_RENDERSTATES_VIRTUALCONCIERGERENDERSTATE_H_

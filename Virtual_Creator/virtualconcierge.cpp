@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QStringList>
 #include <QSurfaceFormat>
+#include "./Network/client.h"
 #include "./virtualconcierge.h"
 #include "./ui_virtualconcierge.h"
 #include "./SMTP/smtp.h"
@@ -23,6 +24,7 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
     display_bicycle(false),
     display_pause_play(false),
     max_waiting(0),
+    reset_frequency(0),
     reset_counter(300){
     ui->setupUi(this);
     ui->button_play_pause->hide();
@@ -35,6 +37,7 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
     load_interface("VirtualConcierge/nodes.pvc",
                    "VirtualConcierge/directories.dir");
     reset_timer = new QTimer(this);
+    sync_with_server = new QTimer(this);
     connect(this, SIGNAL(find_path(int, int)),
             ui->openGLWidget, SLOT(find_path(int, int)));
     connect(this, SIGNAL(send_access(bool, bool, bool, bool)),
@@ -49,9 +52,18 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
             ui->openGLWidget, SLOT(pause(bool)));
     connect(this, SIGNAL(change_movement_speed(float)),
             ui->openGLWidget, SLOT(change_speed(float)));
+    connect(this, SIGNAL(reload_everything()),
+            ui->openGLWidget, SLOT(reload_everything()));
+    connect(this->sync_with_server, SIGNAL(timeout()),
+            ui->openGLWidget, SLOT(reload_everything()));
+    connect(this->sync_with_server, SIGNAL(timeout()),
+            this, SLOT(reload_interface()));
     create_interface();
     load_config("config.config");
     reset_timer->start(1000);
+    //if ( reset_frequency != 0)
+    //  sync_with_server->start(reset_frequency);
+
 }
 
 void VirtualConcierge::mousePressEvent ( QMouseEvent * ) {
@@ -111,6 +123,61 @@ void VirtualConcierge::reset_timer_count() {
       this->ui->stackedWidget->setCurrentIndex(1);
       max_waiting = 0;
   }
+}
+
+void VirtualConcierge::reload_interface(){
+    ui->button_play_pause->setChecked(false);
+    ui->button_play_pause->setText("Playing");
+    emit pause(false);
+    emit reset_everything();
+      // resizes temp array, but does not release memory!!
+     this->temp.resize(0);
+
+      // hide the buttons from the first page
+      foreach(NodeButton* button, this->catagory_)
+          button->hide();
+      foreach(NodeButton* button, this->buttons_)
+          button->hide();
+      foreach(NodeButton* button, this->directories_)
+          button->hide();
+
+      load_interface("VirtualConcierge/nodes.pvc",
+                     "VirtualConcierge/directories.dir");
+      create_interface();
+}
+
+void VirtualConcierge::logged_in(QByteArray session, bool value) {
+  this->session_ = session;
+  if( value ) {
+    while(!clearDir("VirtualConcierge"));
+  }
+}
+
+bool VirtualConcierge::clearDir( const QString path ) {
+    QDir dir( path );
+    dir.setFilter( QDir::NoDotAndDotDot | QDir::Files );
+    foreach( QString dirItem, dir.entryList() )
+    {
+        if( dir.remove( dirItem ) )
+        {
+            qDebug() << "Deleted - " + path + QDir::separator() + dirItem ;
+        }
+        else
+        {
+            qDebug() << "Fail to delete - " + path+ QDir::separator() + dirItem;
+        }
+    }
+    dir.setFilter( QDir::NoDotAndDotDot | QDir::Dirs );
+    foreach( QString dirItem, dir.entryList() ) {
+        QDir subDir( dir.absoluteFilePath( dirItem ) );
+        if( subDir.removeRecursively() ) {
+            qDebug() << "Deleted - All files under " + dirItem ;
+        }
+        else {
+            qDebug() << "Fail to delete - Files under " + dirItem;
+        }
+    }
+    return true;
 }
 
 void VirtualConcierge::load_config(QString file_name) {
@@ -258,7 +325,29 @@ void VirtualConcierge::load_config(QString file_name) {
               if ( list.count() > 1 ) {
                 ui->stackedWidget->widget(0)->setStyleSheet( "QPushButton{ color:" + list[1] + "; };");
               }
-         }
+          } else if ( list[0] == "login") {
+              if ( list.count() > 1 ) {
+                QStringList ls = list[1].split(",");
+                if ( ls.count() > 1 ) {
+                  Client *client_logging = new Client();
+                  client_logging->Login(ls[0],ls[1]);
+                  connect(client_logging, SIGNAL(logged_in(QByteArray, bool)),
+                          this, SLOT(logged_in(QByteArray, bool)));
+                  emit reload_everything();
+                }
+              }
+          } else if (list[0] == "reset_frequency") {
+              if ( list.count() > 1 ) {
+                  if ( list[1].toInt() > 0 ) {
+                      reset_frequency=list[1].toInt();
+                  if ( reset_frequency != 0)
+                    sync_with_server->start(reset_frequency);
+                    qDebug() << "asdasdasd";
+                  } else {
+                    sync_with_server->stop();
+                  }
+              }
+          }
 
         // read next line
         line = ascread.readLine();

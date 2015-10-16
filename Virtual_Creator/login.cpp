@@ -36,6 +36,7 @@ void login::on_pushButton_login_clicked() {
     //client_logging->send_file("session", "VirtualConcierge/TEX0");
     spinner->start(); // starts spinning
 }
+
 bool login::clearDir( const QString path )
 {
     QDir dir( path );
@@ -67,6 +68,7 @@ bool login::clearDir( const QString path )
 
     return true;
 }
+
 void login::logged_in(QByteArray session, bool value) {
   this->logged_in_ = value;
   this->session_ = session;
