@@ -61,6 +61,32 @@ void VirtualConcierge::mousePressEvent ( QMouseEvent * ) {
   }
 }
 
+bool VirtualConcierge::copyRecursively(const QString &srcFilePath,
+                            const QString &tgtFilePath)
+{
+    QFileInfo srcFileInfo(srcFilePath);
+    if (srcFileInfo.isDir()) {
+        QDir targetDir(tgtFilePath);
+        targetDir.cdUp();
+        if (!targetDir.mkdir(QFileInfo(tgtFilePath).fileName()))
+            return false;
+        QDir sourceDir(srcFilePath);
+        QStringList fileNames = sourceDir.entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System);
+        foreach (const QString &fileName, fileNames) {
+            const QString newSrcFilePath
+                    = srcFilePath + QLatin1Char('/') + fileName;
+            const QString newTgtFilePath
+                    = tgtFilePath + QLatin1Char('/') + fileName;
+            if (!copyRecursively(newSrcFilePath, newTgtFilePath))
+                return false;
+        }
+    } else {
+        if (!QFile::copy(srcFilePath, tgtFilePath))
+            return false;
+    }
+    return true;
+}
+
 void VirtualConcierge::reset_timer_count() {
   max_waiting++;
   if ( max_waiting > reset_counter ) {
@@ -396,12 +422,13 @@ void VirtualConcierge::load_interface(QString filename,
                                 new NodeButton(ui->widget_directory);
                         button->setText(name);
                         button->setIndex(index);
+                        const int width = 256, height = 48;
                         button->setGeometry(
                                     1,
                                     this->buttons_.count() *
-                                    (button->height() + 1),
-                                    button->width(),
-                                    button->height());
+                                    (height + 5),
+                                    width,
+                                    height);
                         PremisesExporter::fileExists(filename_directories_) ?
                                     button->hide() : button->show();
                         connect(button, SIGNAL(clicked_index(int, bool)),
@@ -445,6 +472,7 @@ void VirtualConcierge::load_interface(QString filename,
                         QStringList dir = list[1].split(":");
                         QString name = dir.count() > 1 ? dir[1] : list[1];
                         int index = list[2].toInt();
+                        const int width = 256, height = 48;
                         NodeButton *button =
                                 new NodeButton(ui->widget_directory);
                         button->setText(name);
@@ -453,9 +481,9 @@ void VirtualConcierge::load_interface(QString filename,
                         button->setGeometry(
                                     1,
                                     this->catagory_.count() *
-                                    (button->height() + 1),
-                                    button->width(),
-                                    button->height());
+                                    (height + 5),
+                                    width,
+                                    height);
                         QFont font = button->font();
                         font.setPointSize(12);
                         button->setFont(font);

@@ -25,6 +25,8 @@ class VirtualConcierge : public QWidget {
     void create_interface();
     void load_interface(QString path_nodes, QString path_directories);
     int get_index_from_index(QVector<NodeButton* > node_list, int index);
+    bool copyRecursively(const QString &srcFilePath,
+                                const QString &tgtFilePath);
     QVector<NodeButton *> buttons_, directories_, catagory_, temp;
     QVector<QString> directory_list_, node_list_;
     void load_config(QString file_name);
@@ -55,6 +57,7 @@ void mousePressEvent ( QMouseEvent * event );
     void on_button_other_vehicle_clicked();
     void reset_timer_count();
     void on_button_play_pause_clicked(bool checked);
+
 
 signals:
     void send_access(bool wheelchair, bool feet, bool bicycle, bool vehicle);

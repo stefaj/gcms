@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>978</width>
-    <height>731</height>
+    <width>786</width>
+    <height>810</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>768</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Virtual Concierge</string>
@@ -16,6 +28,18 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
     <widget class="QStackedWidget" name="stackedWidget">
+     <property name="minimumSize">
+      <size>
+       <width>768</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16111111</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="styleSheet">
       <string notr="true">/* Button Styles*/
 QPushButton {
@@ -36,41 +60,11 @@ QPushButton:checked {
 }</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_3">
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0" colspan="14">
-        <widget class="QLabel" name="label_name">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>100</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <family>Arial Narrow</family>
-           <pointsize>48</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Faculty of Engineering</string>
-         </property>
-         <property name="scaledContents">
-          <bool>false</bool>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0" colspan="14">
+       <item row="3" column="0" colspan="15">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QWidget" name="widget_directory" native="true">
@@ -130,7 +124,64 @@ QPushButton:checked {
          </property>
         </widget>
        </item>
-       <item row="2" column="12" colspan="2">
+       <item row="4" column="0" colspan="2">
+        <widget class="QPushButton" name="pushButton_send_mail">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Mail</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="15">
+        <widget class="QLabel" name="label_name">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Arial Narrow</family>
+           <pointsize>48</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Faculty of Engineering</string>
+         </property>
+         <property name="scaledContents">
+          <bool>false</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="12" colspan="3">
         <widget class="QLabel" name="label_2">
          <property name="maximumSize">
           <size>
@@ -153,44 +204,18 @@ QPushButton:checked {
          </property>
         </widget>
        </item>
-       <item row="4" column="5" colspan="2">
-        <widget class="QLineEdit" name="lineEdit_email">
+       <item row="4" column="6">
+        <widget class="QPushButton" name="button_wheelchair">
          <property name="minimumSize">
           <size>
-           <width>150</width>
-           <height>32</height>
+           <width>100</width>
+           <height>38</height>
           </size>
          </property>
-         <property name="styleSheet">
-          <string notr="true">QLineEdit {
-  background: rgba(45, 46, 48, 50%);
-  color: white;
-  font: bold;
-  border-radius: 4px;
-}
-
-QLineEdit:hover {
-  border: 0px solid  rgba(0, 115, 199, 50%);
-  background: rgba(0, 115, 199, 50%);
-  border-radius: 4px;
-}
-
-QLineEdit:pressed
-{
-  border: 0px solid  rgba(0, 115, 199, 50%);
-  background: rgba(0, 115, 199, 50%);
-  border-radius: 4px;
-}
-</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0" colspan="2">
-        <widget class="QPushButton" name="pushButton_send_mail">
-         <property name="minimumSize">
+         <property name="maximumSize">
           <size>
-           <width>150</width>
-           <height>38</height>
+           <width>128</width>
+           <height>32</height>
           </size>
          </property>
          <property name="font">
@@ -202,11 +227,74 @@ QLineEdit:pressed
           </font>
          </property>
          <property name="text">
-          <string>Mail</string>
+          <string>Wheelchair</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="4" column="13">
+       <item row="4" column="7">
+        <widget class="QPushButton" name="button_feet">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Feet</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="8">
+        <widget class="QPushButton" name="button_bicycle">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Bicycle</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="12">
         <widget class="QPushButton" name="button_other_vehicle">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -242,93 +330,35 @@ QLineEdit:pressed
          </property>
         </widget>
        </item>
-       <item row="4" column="12">
-        <widget class="QPushButton" name="button_bicycle">
+       <item row="4" column="4" colspan="2">
+        <widget class="QLineEdit" name="lineEdit_email">
          <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="maximumSize">
           <size>
            <width>100</width>
            <height>32</height>
           </size>
          </property>
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-           <weight>75</weight>
-           <italic>false</italic>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Bicycle</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="10">
-        <widget class="QPushButton" name="button_feet">
-         <property name="minimumSize">
-          <size>
-           <width>100</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>100</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-           <weight>75</weight>
-           <italic>false</italic>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Feet</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="9">
-        <widget class="QPushButton" name="button_wheelchair">
-         <property name="minimumSize">
-          <size>
-           <width>128</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>128</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-           <weight>75</weight>
-           <italic>false</italic>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Wheelchair</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+  background: rgba(45, 46, 48, 50%);
+  color: white;
+  font: bold;
+  border-radius: 4px;
+}
+
+QLineEdit:hover {
+  border: 0px solid  rgba(0, 115, 199, 50%);
+  background: rgba(0, 115, 199, 50%);
+  border-radius: 4px;
+}
+
+QLineEdit:pressed
+{
+  border: 0px solid  rgba(0, 115, 199, 50%);
+  background: rgba(0, 115, 199, 50%);
+  border-radius: 4px;
+}
+</string>
          </property>
         </widget>
        </item>
@@ -346,7 +376,7 @@ QLineEdit:pressed
               <widget class="QLabel" name="label_name_2">
                <property name="maximumSize">
                 <size>
-                 <width>16777215</width>
+                 <width>768</width>
                  <height>100</height>
                 </size>
                </property>
@@ -376,7 +406,7 @@ QLineEdit:pressed
               <widget class="QLabel" name="label_4">
                <property name="maximumSize">
                 <size>
-                 <width>1024</width>
+                 <width>768</width>
                  <height>50</height>
                 </size>
                </property>
@@ -404,7 +434,7 @@ QLineEdit:pressed
                <property name="font">
                 <font>
                  <family>Arial Narrow</family>
-                 <pointsize>24</pointsize>
+                 <pointsize>18</pointsize>
                  <weight>75</weight>
                  <bold>true</bold>
                 </font>
@@ -422,7 +452,7 @@ QLineEdit:pressed
                <property name="font">
                 <font>
                  <family>Arial Narrow</family>
-                 <pointsize>24</pointsize>
+                 <pointsize>18</pointsize>
                  <weight>75</weight>
                  <bold>true</bold>
                 </font>
@@ -465,7 +495,7 @@ QLineEdit:pressed
          <property name="font">
           <font>
            <family>Arial Narrow</family>
-           <pointsize>48</pointsize>
+           <pointsize>32</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
