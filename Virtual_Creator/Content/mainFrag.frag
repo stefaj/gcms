@@ -57,9 +57,9 @@ void main()
         gl_FragColor = vec4(texturecol.xyz, 0.075)*ndotl + vec4(col, 0.075);
     } else if (posi.y > y_clipping + 0.5) {
       discard;
-    } else if ((texturecol.x >0.99) && (texturecol.y > 0.99) && (texturecol.z > 0.99))
+    } else /*if ((texturecol.x >0.99) && (texturecol.y > 0.99) && (texturecol.z > 0.99))
       discard;
-     else
+     else*/
     // set the active colour with a ambiet colour
     gl_FragColor = ndotl*texturecol + vec4(col, 1);
 
