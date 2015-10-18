@@ -43,19 +43,19 @@
      <property name="styleSheet">
       <string notr="true">/* Button Styles*/
 QPushButton {
-  background: rgba(45, 46, 48, 50%);
+  background: rgba(45, 46, 48, 75%);
   color: white;
   font: bold;
   border-radius: 4px;
 }
 QPushButton:hover:!pressed { 
-  border: 0px solid  rgba(0, 115, 199, 50%);
-  background: rgba(0, 115, 199, 50%);
+  border: 0px solid  rgba(0, 115, 199, 75%);
+  background: rgba(0, 115, 199, 75%);
   border-radius: 4px;
 }
 QPushButton:checked { 
-  border: 0px solid  rgba(0, 115, 199, 50%);
-  background:  rgba(0, 115, 199, 50%);
+  border: 0px solid  rgba(0, 115, 199, 75%);
+  background:  rgba(0, 115, 199, 75%);
     border-radius: 4px;
 }</string>
      </property>
@@ -340,22 +340,22 @@ QPushButton:checked {
          </property>
          <property name="styleSheet">
           <string notr="true">QLineEdit {
-  background: rgba(45, 46, 48, 50%);
+  background: rgba(45, 46, 48, 75%);
   color: white;
   font: bold;
   border-radius: 4px;
 }
 
 QLineEdit:hover {
-  border: 0px solid  rgba(0, 115, 199, 50%);
-  background: rgba(0, 115, 199, 50%);
+  border: 0px solid  rgba(0, 115, 199, 75%);
+  background: rgba(0, 115, 199, 75%);
   border-radius: 4px;
 }
 
 QLineEdit:pressed
 {
-  border: 0px solid  rgba(0, 115, 199, 50%);
-  background: rgba(0, 115, 199, 50%);
+  border: 0px solid  rgba(0, 115, 199, 75%);
+  background: rgba(0, 115, 199, 75%);
   border-radius: 4px;
 }
 </string>

@@ -60,7 +60,7 @@ VirtualConcierge::VirtualConcierge(QWidget *parent) :
             this, SLOT(reload_interface()));
     create_interface();
     load_config("config.config");
-    reset_timer->start(1000);
+    //reset_timer->start(1000);
     //if ( reset_frequency != 0)
     //  sync_with_server->start(reset_frequency);
 
@@ -297,8 +297,10 @@ void VirtualConcierge::load_config(QString file_name) {
               }
           } else if (list[0] == "reset_timer") {
               if ( list.count() > 1 ) {
-                  if ( list[1].toInt() > 0 )
+                  if ( list[1].toInt() > 0 ) {
                     reset_counter = list[1].toInt();
+                    reset_timer->start(1000);
+                  }
                   else
                       reset_counter = 999999;
               }
@@ -342,7 +344,6 @@ void VirtualConcierge::load_config(QString file_name) {
                       reset_frequency=list[1].toInt();
                   if ( reset_frequency != 0)
                     sync_with_server->start(reset_frequency);
-                    qDebug() << "asdasdasd";
                   } else {
                     sync_with_server->stop();
                   }
