@@ -41,6 +41,7 @@ private:
     void load_directories(QString filename);
     void save_to_file(QString filename);
     QVector<QString> directories, directorylist, display, nodes;
+
 };
 
 #endif  // VIRTUAL_CREATOR_USERINTERFACECREATOR_H_

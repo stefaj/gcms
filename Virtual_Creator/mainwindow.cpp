@@ -3,6 +3,7 @@
 #include "./mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "./userinterfacecreator.h"
+#include "./config_editor.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -76,7 +77,38 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->pushButton_wizard, SIGNAL(clicked()));
   connect(this, SIGNAL(edit_node_access(bool, bool, bool, bool)),
           ui->openGLWidget, SLOT(edit_node_access(bool, bool, bool, bool)));
-  emit
+  connect(this->ui->actionEdit_Virtual_Concierge_Config, SIGNAL(triggered()),
+          this, SLOT(open_config_editor()));
+  connect(this->ui->actionNew, SIGNAL(triggered()),
+          this, SLOT(new_premises()));
+  connect(this, SIGNAL(clear_premises()),
+          ui->openGLWidget, SLOT(clear_premises()));
+  connect(ui->actionSave_Premises, SIGNAL(triggered()),
+          this, SLOT(save_premises()));
+  connect(ui->actionSet_Virtual_Concierge_Background, SIGNAL(triggered()),
+          this, SLOT(create_background()));
+}
+
+void MainWindow::create_background() {
+  QString file_name = QFileDialog::getOpenFileName(this,
+                                                   tr("Open Image"),
+                                                   "/home/image_file",
+                                                   tr("Image Files (*.png *.jpg *.bmp)"));
+  if ( PremisesExporter::fileExists(file_name) ) {
+    QImage img(file_name);
+    img.save("VirtualConcierge/background.png");
+  }
+}
+
+void MainWindow::open_config_editor() {
+    Config_Editor *editor = new Config_Editor();
+    connect(editor, SIGNAL(accepted()),
+            ui->openGLWidget, SLOT(receive_config()));
+    editor->show();
+}
+
+void MainWindow::send_config() {
+    //emit send_config_data();
 }
 
 MainWindow::~MainWindow() {delete ui;}
@@ -200,7 +232,7 @@ void MainWindow::drop_down_emit() {
 }
 
 void MainWindow::send_loaded_premises() {
-    QString file_name = QFileDialog::getOpenFileName(this,
+  QString file_name = QFileDialog::getOpenFileName(this,
                                      tr("Open Environment File"),
                                      "/home/environment",
                                      tr("Environment Files (*.env)"));
@@ -211,6 +243,37 @@ void MainWindow::send_loaded_premises() {
 
 void MainWindow::on_spin_rotationY_valueChanged(double arg1) {
   change_rotationY(arg1);
+}
+
+void MainWindow::new_premises() {
+    QString path = "VirtualConcierge";
+    QDir dir( path );
+
+    dir.setFilter( QDir::NoDotAndDotDot | QDir::Files );
+    foreach( QString dirItem, dir.entryList() )
+    {
+        if( dir.remove( dirItem ) )
+        {
+            qDebug() << "Deleted - " + path + QDir::separator() + dirItem ;
+        }
+        else
+        {
+            qDebug() << "Fail to delete - " + path+ QDir::separator() + dirItem;
+        }
+    }
+
+
+    dir.setFilter( QDir::NoDotAndDotDot | QDir::Dirs );
+    foreach( QString dirItem, dir.entryList() ) {
+        QDir subDir( dir.absoluteFilePath( dirItem ) );
+        if( subDir.removeRecursively() ) {
+            qDebug() << "Deleted - All files under " + dirItem ;
+        }
+        else {
+            qDebug() << "Fail to delete - Files under " + dirItem;
+        }
+    }
+  emit clear_premises();
 }
 
 void MainWindow::on_checkBox_inversemouse_y_clicked(bool checked) {
@@ -258,6 +321,8 @@ void MainWindow::on_checkbox_significant_clicked(bool checked) {
 
 void MainWindow::load_virtual_concierge_interface() {
     UserInterfaceCreator *v = new UserInterfaceCreator();
+    connect(v, SIGNAL(accepted()),
+            ui->openGLWidget, SLOT(receive_directories()));
     v->show();
 }
 
@@ -293,6 +358,30 @@ void MainWindow::on_doubleSpinBox_node_y_valueChanged(double arg1) {
 
 void MainWindow::on_doubleSpinBox_floor_x_valueChanged(double arg1) {
   emit edit_floorplan_position(QVector2D(arg1, ui->doubleSpinBox_floor_y->value()));
+}
+
+void MainWindow::copyPath(QString src, QString dst) {
+    QDir dir(src);
+    if (! dir.exists())
+        return;
+
+    foreach (QString d, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+        QString dst_path = dst + QDir::separator() + d;
+        dir.mkpath(dst_path);
+        copyPath(src+ QDir::separator() + d, dst_path);
+    }
+
+    foreach (QString f, dir.entryList(QDir::Files)) {
+        QFile::copy(src + QDir::separator() + f, dst + QDir::separator() + f);
+    }
+}
+
+void MainWindow::save_premises() {
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                                 "/home",
+                                                 QFileDialog::ShowDirsOnly
+                                                 | QFileDialog::DontResolveSymlinks);
+    copyPath("VirtualConcierge/", dir);
 }
 
 void MainWindow::on_doubleSpinBox_floor_y_valueChanged(double arg1) {

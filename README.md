@@ -12,3 +12,10 @@ The current problem is not the inherent idea of virtual concierges, but rather t
 There is a need for maintainable, manageable and expandable virtual concierges.
 From the administrator's side, it can be difficult and time-consuming to change destination names on the virtual concierge.
 
+# How to Compile and execute
+## Linux
+Install QT 5.2 or newer<br>
+cd to Virtual_Creator<br>
+qmake<br>
+make<br>
+./Virtual_Creator<br>

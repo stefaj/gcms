@@ -139,14 +139,14 @@ void RenderState::load_premises(QString value) {
 
   // create new file path from previous
   for ( int k = 0; k < append-1; k++ ) {
-    directory_path += ls[k]+"/";
+    directory_path += ls[k] + "/";
   }
   // load textures and objects
   LoadNodes(directory_path);
   LoadTextures(directory_path);
   LoadObjects(directory_path);
   CopyDirectories(directory_path + "/directories.dir");
-
+  CopyConfig(directory_path + "/config.config");
   // exort the files afterwards
   PremisesExporter::export_environment(this->models,
                                        "environment.env");
@@ -577,14 +577,14 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
                        this->nodes.value(l)->getWheelChair(),
                        this->nodes.value(l)->getBike(),
                        this->nodes.value(l)->getVehicle());
+        emit debug_results("Selected node index:" + QString::number(l));
       }
     }
   }
 }
 
 void RenderState::remove_link() {
-  // do remove node code here
-
+  // remove link
   for ( int k = 0; k < this->nodes.count(); k++ ) {
     const unsigned int count_connected =
             this->nodes.value(k)->countConnected();
@@ -599,7 +599,7 @@ void RenderState::remove_link() {
                                   QVector3D(this->current_position->x(),
                                             this->current_position->y(),
                                             this->current_position->z()),
-                                  0.5) ) {
+                                  0.25) ) {
         this->nodes.value(k)->RemoveLinkedFromIndex(z);
       }
     }
@@ -716,22 +716,21 @@ void RenderState::wheelEvent(QWheelEvent* event) {
 
 void RenderState::update_node_errors() {
     // add nodes for debugging
+    error_nodes.clear();
     handler.AddNodes(this->nodes);
     // displayed debugged nodes
-    if( handler.count() > 0 ) {
+    if ( handler.count() > 0 ) {
       QString error_msg = handler.DisplayError();
       if ( !error_msg.isEmpty() && (error_msg[0] != ' ') ) {
       emit debug_results(error_msg);
-      error_nodes.clear();
       error_nodes = handler.error_nodes_indices();
       }
     }
     for ( int i = 0; i < error_nodes.count(); i++ ) {
-        if (error_nodes.value(i) < 0 || error_nodes.value(i) > this->nodes.count() - 1) {
+        if (error_nodes.value(i) < 0 && error_nodes.value(i) > this->nodes.count()) {
             error_nodes.remove(i);
         }
     }
-
 }
 
 void RenderState::add_node(QString* name) {
@@ -918,6 +917,14 @@ void RenderState::LoadContent() {
 
     // link the shaders
     this->program->link();
+}
+
+void RenderState::receive_config() {
+    user_client->send_file(*(this->session_logged), "VirtualConcierge/config.config");
+}
+
+void RenderState::receive_directories() {
+    user_client->send_file(*(this->session_logged), "VirtualConcierge/directories.dir");
 }
 
 void RenderState::paintGL() {
@@ -1338,6 +1345,18 @@ void RenderState::DrawNodes() {
   }
 }
 
+void RenderState::clear_premises() {
+  // clear the nodes
+  this->nodes.clear();
+
+  // clear visual objects
+  this->models.clear();
+
+  // clear the textures
+  for ( int l = 1; l < this->textures.count(); l++ )
+   this->textures.removeAt(l);
+}
+
 void RenderState::DrawNodeLines(QVector3D Pos) {
     if ( this->node_index_selected != -1 &&
          this->node_index_selected < nodes.count()) {
@@ -1347,7 +1366,8 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
     }
     // draw a list of all the indices that error
     for ( int k = 0; k < error_nodes.count(); k++ ) {
-
+        if (error_nodes.value(k) > -1 &&
+                error_nodes.value(k) < this->nodes.count()) {
         draw_circle_flat(this->nodes.value(error_nodes.value(k))->Position(),
                          this->vMatrix,
                          QVector3D(1, 0, 0), 1.15 / 2.0);
@@ -1357,6 +1377,7 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
         draw_circle_flat(this->nodes.value(error_nodes.value(k))->Position(),
                          this->vMatrix,
                          QVector3D(1, 0, 0), 1.45 / 2.0);
+        }
     }
 
 
@@ -1422,8 +1443,8 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
                               0);
 
             aux_45.rotate(90, 0, 1, 0);
-            aux_calc_one = aux_rotate * (QVector3D(0, 0, 1));
-            aux_calc_two = aux_45 * aux_rotate * (QVector3D(0, 0, 1));
+            aux_calc_one = aux_rotate * (QVector3D(0, 0, 0.25));
+            aux_calc_two = aux_45 * aux_rotate * (QVector3D(0, 0, 0.25));
 
             DrawGL::DrawLine(n->Position(),
                              this->nodes.value(
@@ -1606,7 +1627,11 @@ void RenderState::LoadObjects(QString path) {
 }
 
 void RenderState::LoadNodes(QString filename) {
-    QVector<int> walk, wheelchair, vehice, bicycle;
+    QVector<int> walk, wheelchair, vehicle, bicycle;
+    walk.clear();
+    wheelchair.clear();
+    vehicle.clear();
+    bicycle.clear();
     // clear the premises when not empty
     if ( this->nodes.count() > 0 )
         this->nodes.clear();
@@ -1648,14 +1673,17 @@ void RenderState::LoadNodes(QString filename) {
                 Node* n = new Node(new QVector3D(vertex[0],
                                                  vertex[1],
                                                  vertex[2]));
+                // initialize node paths
+                n->setWheelChair(false);
+                n->setBike(false);
+                n->setWalk(false);
+                n->setVehicle(false);
                 // set node's significance
                 n->setSignificant((signi == 1));
-
                 // set node's name
                 n->setName(display_name);
                 // add the node to the premises
                 this->nodes.push_back(n);
-
             } else if ( list[0] == "j" ) {
                    // this is only the indices that should be join
                     int uv[2];
@@ -1667,12 +1695,13 @@ void RenderState::LoadNodes(QString filename) {
                     QString p = this->nodes.value(uv[1])->getName();
                     // add the links
                     this->nodes.value(uv[0])->AddLink(&p, uv[1]);
+
              } else if ( list[0] == "wc" ) {
                 if(list.count() > 1)
                 wheelchair.append(list[1].toInt());
             } else if ( list[0] == "vi" ) {
                 if(list.count() > 1)
-                vehice.append(list[1].toInt());
+                vehicle.append(list[1].toInt());
             } else if ( list[0] == "ft" ) {
                 if(list.count() > 1)
                 walk.append(list[1].toInt());
@@ -1696,8 +1725,8 @@ void RenderState::LoadNodes(QString filename) {
         this->nodes.value(wheelchair.value(i))->setWheelChair(true);
     }
     // add vehicle nodes
-    for ( int i = 0; i < vehice.count(); i++) {
-        this->nodes.value(vehice.value(i))->setVehicle(true);
+    for ( int i = 0; i < vehicle.count(); i++) {
+        this->nodes.value(vehicle.value(i))->setVehicle(true);
     }
     // add bicycle nodes
     for ( int i = 0; i < bicycle.count(); i++) {
@@ -1707,8 +1736,34 @@ void RenderState::LoadNodes(QString filename) {
   update_node_errors();
 }
 
+void RenderState::CopyConfig(QString value) {
+    QString val_new = "VirtualConcierge/config.config";
+
+    QDir dir;
+    // try to copy the config to the drive
+    if ( QString::compare(dir.absolutePath() + "/" + val_new,
+                          value,
+                          Qt::CaseInsensitive) != 0 ) {
+      if ( QFile::exists(val_new) && !start_up_load_tex ) {
+       if ( !QFile::remove(val_new) ) {
+
+       }
+      }
+      if ( QFile::exists(value) )
+      if ( !QFile::copy(value, val_new) ) {
+        if ( !QFile::exists(val_new) ) {
+          QMessageBox::warning(this,
+                               tr("Error file copying"),
+                               tr("Texture file could not"
+                                  " be copied to the drive."));
+        }
+      }
+    }
+}
+
 void RenderState::CopyDirectories(QString value) {
     QString val_new = "VirtualConcierge/directories.dir";
+
     QDir dir;
     // try to copy the texture to the drive
     if ( QString::compare(dir.absolutePath() + "/" + val_new,

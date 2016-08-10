@@ -124,7 +124,7 @@ void DrawGL::DrawLine(QVector3D point1,
     glDepthFunc(GL_ALWAYS);
     glDrawArrays(GL_LINES, 0, temp_vertices.size());
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+    glDepthFunc(GL_LEQUAL);
     // disable the vertex attributes
     shader_program->disableAttributeArray("vertex");
     // disable the normal attributes

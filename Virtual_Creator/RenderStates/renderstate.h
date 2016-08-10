@@ -98,6 +98,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     void LoadTextures(QString filename);
     void LoadNodes(QString filename);
     void CopyDirectories(QString filename);
+    void CopyConfig(QString filename);
     void RemoveNodes();
     void DrawNodes();
     void DrawNodeNames();
@@ -136,6 +137,9 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     void edit_floorplan_position(QVector2D);
     void receive_session(QByteArray session);
     void edit_node_access(bool walk, bool wheelchair, bool vehicle, bool bicycle);
+    void receive_config();
+    void receive_directories();
+    void clear_premises();
 
   signals:
     void opengl_initialised(bool);
@@ -150,6 +154,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
                              float rotation,
                              QVector2D scale);
     void debug_results(QString message);
+
 };
 
 #endif  // VIRTUAL_CREATOR_RENDERSTATES_RENDERSTATE_H_

@@ -26,17 +26,17 @@ QString NodeHandler::DisplayError() {
 }
 
 QVector<int> NodeHandler::error_nodes_indices() {
-    // list of all the error indices
-    QVector<int> list_of_error_nodes;
-    list_of_error_nodes.clear();
-    for ( int k = 0; k < premises.count(); k++ ) {
-        if ( this->premises.value(k)->getSignificant() ) {
-        int error = CalculateShortest(0, k, true, true, true, true);
-        if ( error > -1 )
+  // list of all the error indices
+  QVector<int> list_of_error_nodes;
+  list_of_error_nodes.clear();
+  for ( int k = 0; k < premises.count(); k++ ) {
+    if ( this->premises.value(k)->getSignificant() ) {
+      int error = CalculateShortest(0, k, true, true, true, true);
+      if ( error > -1 )
         list_of_error_nodes.push_back(error);
-        }
+      }
     }
-    return list_of_error_nodes;
+  return list_of_error_nodes;
 }
 
 void NodeHandler::AddNodes(QVector<Node*> nodes) {
@@ -46,7 +46,6 @@ void NodeHandler::AddNodes(QVector<Node*> nodes) {
     *node = *nodes.value(l);
     this->premises.push_back(node);
   }
-
 }
 
 void NodeHandler::AddNode(Node* node) {
@@ -98,6 +97,7 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
   // set all distances to inf
   foreach(Node *n, this->premises) {
       n->setG(inf);
+      n->setShortest(-1);
   }
   // set start G value to  0.0
   this->premises.value(start)->setG(0.0);
@@ -107,11 +107,6 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
 
   // fill que
   for ( int k = 0; k < this->premises.count(); k++ ) {
-    Node *node_access = this->premises.value(k);
-    if ((node_access->getWalk() && walk) ||
-        (node_access->getVehicle() && vehicle) ||
-        (node_access->getWheelChair() && wheelchair) ||
-        (node_access->getBike() && bicycle) )
         que.push_back(k);
   }
   // wait while the whole que is empty ( this may be ineffective )
@@ -150,20 +145,23 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
                            premises.value(current_index)->
                            Position();
         double nodedist = this->
-                          premises.value(this->
+                premises.value(this->
                                premises.value(current_index)->
                                getConnectedIndex(p))->
-                               Position().distanceToPoint(point);
+                Position().distanceToPoint(point);
 
-          // replace the node's shortest current path if needed.
-          // (dist(v,u) + g(v)< g(u))
-          if ( nodedist + this->premises.value(current_index)->getG()
-             <= this->premises.value(this->
-                              premises.value(current_index)->
-                              getConnectedIndex(p))->
-                              getG() ) {
-            // update the g value and shortest path of the neighbor
+        // replace the node's shortest current path if needed.
+        // (dist(v,u) + g(v)< g(u))
+        // update the g value and shortest path of the neighbor
+        Node *node_access = this->premises.value(this->premises.value(current_index)->
+                                                 getConnectedIndex(p));
+        if (!((node_access->getWalk() && walk) ||
+              (node_access->getVehicle() && vehicle) ||
+              (node_access->getWheelChair() && wheelchair) ||
+              (node_access->getBike() && bicycle) ) )
+            nodedist = inf;
 
+        if ( nodedist + this->premises.value(current_index)->getG() <= node_access->getG() ) {
             this->premises.value(this->premises.value(current_index)->
                                  getConnectedIndex(p))->
                                  setG(nodedist + this->
@@ -177,45 +175,62 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
     } else {
         break;
     }
-
   }
 
   // list path
   int _back_node = goal;
-  if ( this->premises.value(_back_node)->getShortestIndex() > -1 ) {
-    // add the first node to the list
-    this->shortest.push_back(_back_node);
-    // assign the loop control variable.
-    // this variable checks for loops within the mesh
-    _back_node = this->premises.value(_back_node)->getShortestIndex();
-    int loop_var = _back_node;
-    if ( _back_node > -1 ) {
-      // add another index
-      this->shortest.push_back(_back_node);
-    }
-    while ( _back_node != start ) {
-      int error = _back_node;
-      // backwards trace the shortest path
-      _back_node = this->premises.value(_back_node)->getShortestIndex();
-      if ( _back_node > -1 ) {
-        if ( this->shortest.value(this->shortest.count() - 1 ) != _back_node) {
-          this->shortest.push_back(_back_node);
-        } else {
-          return -1;
-        }
-      } else {
-        return error;
-      }
-      if ( _back_node == loop_var) {
-          return loop_var;      }
-    }
+  int step_counter = 0;
+  if ( _back_node > 0 && _back_node < this->premises.count()) {
+       if ( this->premises.value(_back_node)->getShortestIndex() > -1 ) {
+           // add the first node to the list
+           this->shortest.push_back(_back_node);
+           // assign the loop control variable.
+           // this variable checks for loops within the mesh
+           _back_node = this->premises.value(_back_node)->getShortestIndex();
+           int loop_var = _back_node;
+           if ( _back_node > -1 ) {
+               // add another index
+               this->shortest.push_back(_back_node);
+           }
+           while ( _back_node != start ) {
+             step_counter ++;
+             if ( step_counter > this->premises.count()) {
+               break;
+             }
+             int error = _back_node;
+             if ( _back_node > -1 && _back_node < this->premises.count()) {
+               // backwards trace the shortest path
+               _back_node = this->premises.value(_back_node)->getShortestIndex();
+               if ( _back_node > -1 && _back_node < this->premises.count() ) {
+                   if ( this->shortest.count() > 0 && this->shortest.count() - 1 < this->premises.count()) {
+                   if ( this->shortest.value(this->shortest.count() - 1 ) != _back_node) {
+                       this->shortest.push_back(_back_node);
+                   } else {
+                       return -1;
+                   }
+               } else {
+                   return error;
+               }
 
-  }
-  if ( _back_node == start )
-   return -1;
-  else {
-   return _back_node;
-  }
+               if ( _back_node == loop_var) {
+                   return loop_var;
+               }
+               } else {
+                 return error;
+               }
+             } else {
+                 return error;
+             }
+           }
+       }
+   }
+   if ( _back_node == start )
+    return -1;
+   else {
+     if (_back_node < this->premises.count())
+        return _back_node;
+     else return -1;
+   }
 }
 
 int NodeHandler::pathcount() {
@@ -250,14 +265,28 @@ void NodeHandler::ReadFilePVC(QString filename) {
       /* n-> node
          j-> join */
       if ( list[0] == "n" ) {
-        // this is only x,y,z coordinates for the node
-        float vertex[3];
-        // populate the vertices
-        for ( int i = 0; i < 3; i++ )
-          QTextStream(&list[i+2]) >> vertex[i];
-          // add the node to the premises
-          Node * current_node = new Node(new QVector3D(vertex[0], vertex[1], vertex[2]));
-          AddNode(current_node);
+          // this is only x, y, z coordinates for the node
+          float vertex[3];
+          int signi = 0;
+          QString display_name ="";
+          // populate the vertices
+          for ( int i = 0; i < 3; i++ )
+               QTextStream(&list[i+2]) >> vertex[i];
+
+          // get node significance
+          QTextStream(&list[6]) >> signi;
+          // get the node's name
+          display_name = list[5];
+          Node* n = new Node(new QVector3D(vertex[0],
+                                           vertex[1],
+                                           vertex[2]));
+          // set node's significance
+          n->setSignificant((signi == 1));
+
+          // set node's name
+          n->setName(display_name);
+
+          AddNode(n);
       } else if ( list[0] == "j" ) {
                 // this is only the indices that should be join
                 int uv[2];

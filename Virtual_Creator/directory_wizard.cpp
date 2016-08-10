@@ -29,11 +29,12 @@ void Directory_Wizard::add_this_directory_to_other() {
      QStringList list = ui->listWidget_diretories_that_include->item(z)->text().split(",");
      if (list.count() > 1) {
        int index = list[1].toInt();
+
        if (index > -1 && index < directories.count()) {
          if ( directorylist.value(index).at(directorylist.value(index).count() - 1) != ',')
-           directorylist.insert(index, directorylist.value(index) + ";" + QString::number(directories.count() - 1 ));
+           directorylist.replace(index, directorylist.value(index) + ";" + QString::number(directories.count() - 1 ));
          else
-           directorylist.insert(index, directorylist.value(index) + QString::number(directories.count() - 1 ));
+           directorylist.replace(index, directorylist.value(index) + QString::number(directories.count() - 1 ));
        }
      }
  }
@@ -50,7 +51,7 @@ void Directory_Wizard::add_directory_list() {
       QString check;
       if ( index.count() > 1) {
         if(ui->listWidget_nodes_directories_cate->item(k)->text().length() > 3)
-          check = ui->listWidget_nodes_directories_cate->item(k)->text().mid(0,4);
+          check = ui->listWidget_nodes_directories_cate->item(k)->text().mid(0, 4);
         if(check == "DIR:") {
           directories += index[1] + ";";
         } else {

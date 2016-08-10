@@ -316,6 +316,13 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit_username</tabstop>
+  <tabstop>lineEdit_password</tabstop>
+  <tabstop>pushButton_login</tabstop>
+  <tabstop>pushButton_close</tabstop>
+  <tabstop>pushButton_terminate</tabstop>
+ </tabstops>
  <resources>
   <include location="content.qrc"/>
  </resources>

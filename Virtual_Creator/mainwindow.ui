@@ -27,6 +27,10 @@
   <property name="windowTitle">
    <string>Virtual Concierge Creator</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="content.qrc">
+    <normaloff>:/Icon</normaloff>:/Icon</iconset>
+  </property>
   <property name="windowOpacity">
    <double>1.000000000000000</double>
   </property>
@@ -429,16 +433,6 @@ QComboBox QAbstractItemView {
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QCheckBox" name="checkbox_significant">
-              <property name="text">
-               <string>Add Button</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="0">
              <widget class="QLabel" name="label_4">
               <property name="text">
@@ -458,6 +452,16 @@ QComboBox QAbstractItemView {
                <set>Qt::AlignCenter</set>
               </property>
               <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1" colspan="2">
+             <widget class="QCheckBox" name="checkbox_significant">
+              <property name="text">
+               <string>Add Button</string>
+              </property>
+              <property name="checked">
                <bool>true</bool>
               </property>
              </widget>
@@ -691,8 +695,8 @@ QComboBox QAbstractItemView {
      <rect>
       <x>-1302</x>
       <y>116</y>
-      <width>177</width>
-      <height>117</height>
+      <width>248</width>
+      <height>201</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -720,8 +724,11 @@ QComboBox QAbstractItemView {
     <property name="separatorsCollapsible">
      <bool>false</bool>
     </property>
+    <addaction name="actionNew"/>
+    <addaction name="actionSave_Premises"/>
     <addaction name="actionOpen_Premises_File"/>
     <addaction name="actionEdit_User_Interface"/>
+    <addaction name="actionSet_Virtual_Concierge_Background"/>
    </widget>
    <widget class="QMenu" name="menuBuild">
     <property name="minimumSize">
@@ -749,6 +756,7 @@ QComboBox QAbstractItemView {
     </property>
     <addaction name="actionInvert_Mouse_Y"/>
     <addaction name="actionDirectory_Wizard"/>
+    <addaction name="actionEdit_Virtual_Concierge_Config"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuBuild"/>
@@ -991,6 +999,42 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="text">
     <string>Directory Wizard</string>
+   </property>
+  </action>
+  <action name="actionEdit_Virtual_Concierge_Config">
+   <property name="icon">
+    <iconset resource="content.qrc">
+     <normaloff>:/Content/config_icon_white.png</normaloff>:/Content/config_icon_white.png</iconset>
+   </property>
+   <property name="text">
+    <string>Edit Virtual Concierge Config</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="icon">
+    <iconset resource="content.qrc">
+     <normaloff>:/Content/new_white_image.png</normaloff>:/Content/new_white_image.png</iconset>
+   </property>
+   <property name="text">
+    <string>New</string>
+   </property>
+  </action>
+  <action name="actionSave_Premises">
+   <property name="icon">
+    <iconset resource="content.qrc">
+     <normaloff>:/Content/save_icon_white.png</normaloff>:/Content/save_icon_white.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save Premises</string>
+   </property>
+  </action>
+  <action name="actionSet_Virtual_Concierge_Background">
+   <property name="icon">
+    <iconset resource="content.qrc">
+     <normaloff>:/Content/background_icon_white.png</normaloff>:/Content/background_icon_white.png</iconset>
+   </property>
+   <property name="text">
+    <string>Set Virtual Concierge Background</string>
    </property>
   </action>
   <zorder>dockWidget_configuration</zorder>
