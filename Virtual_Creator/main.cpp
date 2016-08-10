@@ -10,7 +10,7 @@ bool copyRecursively(const QString &srcFilePath,
                             const QString &tgtFilePath);
 int main(int argc, char *argv[]) {
   QApplication a(argc, argv);
-  login login_;
+  MainWindow login_;
   login_.show();
 
     /*  QDir dir("VirtualConcierge");

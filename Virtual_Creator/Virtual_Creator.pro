@@ -19,7 +19,6 @@ SOURCES += main.cpp\
     Objects/Node.cpp \
     Objects/visualobject.cpp \
     Functions/mathematics.cpp \
-    virtualconcierge.cpp \
     Functions/premises_exporter.cpp \
     Objects/NodeHandler.cpp \
     RenderStates/renderstate.cpp \
@@ -28,7 +27,6 @@ SOURCES += main.cpp\
     Objects/nodebutton.cpp \
     SMTP/smtp.cpp \
     userinterfacecreator.cpp \
-    login.cpp \
     Network/client.cpp \
     LoadingBar/waitingspinnerwidget.cpp \
     directory_wizard.cpp \
@@ -39,7 +37,6 @@ HEADERS  += mainwindow.h \
     Objects/Node.h \
     Objects/visualobject.h \
     Functions/mathematics.h \
-    virtualconcierge.h \
     Functions/premises_exporter.h \
     Objects/NodeHandler.h \
     RenderStates/renderstate.h \
@@ -49,16 +46,13 @@ HEADERS  += mainwindow.h \
     SMTP/smtp.h \
     userinterfacecreator.h \
     main.h \
-    login.h \
     Network/client.h \
     LoadingBar/waitingspinnerwidget.h \
     directory_wizard.h \
     config_editor.h
 
 FORMS    += mainwindow.ui \
-    virtualconcierge.ui \
     userinterfacecreator.ui \
-    login.ui \
     directory_wizard.ui \
     config_editor.ui
 

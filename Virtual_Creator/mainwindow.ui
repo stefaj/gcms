@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1024</width>
-    <height>701</height>
+    <height>704</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -356,30 +356,6 @@ QComboBox QAbstractItemView {
               </property>
              </widget>
             </item>
-            <item row="5" column="0">
-             <widget class="QCheckBox" name="checkBox_wheelchair">
-              <property name="text">
-               <string>WheelChair</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="2">
-             <widget class="QCheckBox" name="checkBox_feet">
-              <property name="text">
-               <string>Feet</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="0">
-             <widget class="QCheckBox" name="checkBox_bicycle">
-              <property name="text">
-               <string>Bicycle</string>
-              </property>
-             </widget>
-            </item>
             <item row="2" column="0">
              <widget class="QLabel" name="label_node_pos_x">
               <property name="text">
@@ -426,33 +402,10 @@ QComboBox QAbstractItemView {
               </property>
              </widget>
             </item>
-            <item row="6" column="2">
-             <widget class="QCheckBox" name="checkBox_vehicle">
-              <property name="text">
-               <string>Vehicle</string>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="0">
              <widget class="QLabel" name="label_4">
               <property name="text">
                <string>Significance</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0" colspan="3">
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>Accessibiliy</string>
-              </property>
-              <property name="scaledContents">
-               <bool>false</bool>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <property name="wordWrap">
-               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -648,11 +601,6 @@ QComboBox QAbstractItemView {
        </property>
        <item>
         <property name="text">
-         <string>Floor Plan</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
          <string>Node</string>
         </property>
        </item>
@@ -672,7 +620,7 @@ QComboBox QAbstractItemView {
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>37</height>
+     <height>36</height>
     </rect>
    </property>
    <property name="minimumSize">
@@ -695,8 +643,8 @@ QComboBox QAbstractItemView {
      <rect>
       <x>-1302</x>
       <y>116</y>
-      <width>248</width>
-      <height>201</height>
+      <width>281</width>
+      <height>192</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -857,29 +805,6 @@ QComboBox QAbstractItemView {
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QPushButton" name="button_execute_virtual_concierge">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>24</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Show Virtual Conciege</string>
-         </property>
-         <property name="icon">
-          <iconset resource="content.qrc">
-           <normaloff>:/Content/run_icon_white.png</normaloff>:/Content/run_icon_white.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="0">
         <widget class="QPushButton" name="pushButton_wizard">
          <property name="minimumSize">
@@ -927,8 +852,8 @@ QComboBox QAbstractItemView {
         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:12px; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12px;&quot;&gt;----Debug----&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:12px; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:12px;&quot;&gt;----Debug----&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -1065,22 +990,6 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>129</x>
      <y>541</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionRun</sender>
-   <signal>triggered()</signal>
-   <receiver>button_execute_virtual_concierge</receiver>
-   <slot>click()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>120</x>
-     <y>576</y>
     </hint>
    </hints>
   </connection>

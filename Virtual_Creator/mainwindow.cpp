@@ -121,10 +121,6 @@ void MainWindow::edit_node_settings(QString name,
                                     bool bicycle,
                                     bool vehicle) {
   ui->checkbox_significant->setChecked(isbutton);
-  ui->checkBox_bicycle->setChecked(bicycle);
-  ui->checkBox_feet->setChecked(walk);
-  ui->checkBox_vehicle->setChecked(vehicle);
-  ui->checkBox_wheelchair->setChecked(wheelchair);
   ui->lineEdit_node_name->setText(name);
   ui->doubleSpinBox_node_x->setValue(position.x());
   ui->doubleSpinBox_node_y->setValue(position.y());
@@ -200,10 +196,6 @@ void MainWindow::drop_down_emit() {
      emit remove_link(false);
      emit change_node_name(ui->lineEdit_node_name->text());
      emit set_node_significant(ui->checkbox_significant->isChecked());
-     emit edit_node_access(ui->checkBox_feet->isChecked(),
-                           ui->checkBox_wheelchair->isChecked(),
-                           ui->checkBox_vehicle->isChecked(),
-                           ui->checkBox_bicycle->isChecked());
      if ( ui->button_add_basic->isChecked() ||
           ui->button_edit_basic->isChecked() ) {
        ui->stackedWidget_side_add->setCurrentIndex(0);
@@ -281,9 +273,7 @@ void MainWindow::on_checkBox_inversemouse_y_clicked(bool checked) {
 }
 
 void MainWindow::on_button_execute_virtual_concierge_clicked() {
-  VirtualConcierge *co = new VirtualConcierge();
-  co->show();
-  ui->textBrowser->append("Virtual Concierge Executed");
+
 }
 
 void MainWindow::on_doubleSpinBox_floor_plan_width_valueChanged(double arg1) {
@@ -411,29 +401,17 @@ void MainWindow::on_pushButton_wizard_clicked() {
 }
 
 void MainWindow::on_checkBox_wheelchair_clicked() {
-  emit edit_node_access(ui->checkBox_feet->isChecked(),
-                        ui->checkBox_wheelchair->isChecked(),
-                        ui->checkBox_vehicle->isChecked(),
-                        ui->checkBox_bicycle->isChecked());
+
 }
 
 void MainWindow::on_checkBox_feet_clicked() {
-    emit edit_node_access(ui->checkBox_feet->isChecked(),
-                          ui->checkBox_wheelchair->isChecked(),
-                          ui->checkBox_vehicle->isChecked(),
-                          ui->checkBox_bicycle->isChecked());
+
 }
 
 void MainWindow::on_checkBox_bicycle_clicked() {
-    emit edit_node_access(ui->checkBox_feet->isChecked(),
-                          ui->checkBox_wheelchair->isChecked(),
-                          ui->checkBox_vehicle->isChecked(),
-                          ui->checkBox_bicycle->isChecked());
+
 }
 
 void MainWindow::on_checkBox_vehicle_clicked() {
-    emit edit_node_access(ui->checkBox_feet->isChecked(),
-                          ui->checkBox_wheelchair->isChecked(),
-                          ui->checkBox_vehicle->isChecked(),
-                          ui->checkBox_bicycle->isChecked());
+
 }
