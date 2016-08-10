@@ -1304,34 +1304,11 @@ void RenderState::DrawNodeNames() {
 }
 
 void RenderState::DrawNodes() {
-  // draw the first node (this is the virtual concierge)
-    if ( this->nodes.count() > 0 ) {
-      QMatrix4x4 translate_first;
 
-      translate_first.translate(this->nodes.value(0)->Position());
-      translate_first.scale(1.01);
-      DrawGL::DrawModel(this->node, this->vMatrix,
-                        translate_first, QMatrix4x4(),
-                        this->textures.value(0),
-                        QVector3D(0, 1, 0), QVector2D(1, 1),
-                        this->program, this->pMatrix,
-                        this->current_floor_height);
-    }
   // draw all the nodes here
   foreach(Node *n, this->nodes) {
     QMatrix4x4 translation;
 
-
-    if ( n->getSignificant() ) {
-      translation.translate(n->Position());
-      DrawGL::DrawModel(this->node, this->vMatrix,
-                        translation, QMatrix4x4(),
-                        this->textures.value(0),
-                        QVector3D(0.25, 0.5, 0.74),
-                        QVector2D(1, 1),
-                        this->program, this->pMatrix,
-                        this->current_floor_height);
-    } else {
 
         translation.translate(n->Position());
         translation.scale(0.5);
@@ -1341,7 +1318,7 @@ void RenderState::DrawNodes() {
                         QVector3D(), QVector2D(1, 1),
                         this->program, this->pMatrix,
                           this->current_floor_height);
-    }
+
   }
 }
 
@@ -1358,29 +1335,6 @@ void RenderState::clear_premises() {
 }
 
 void RenderState::DrawNodeLines(QVector3D Pos) {
-    if ( this->node_index_selected != -1 &&
-         this->node_index_selected < nodes.count()) {
-        draw_circle_flat(nodes.value(this->node_index_selected)->Position(),
-                         this->vMatrix, QVector3D(1, 1, 1), 0.7f);
-
-    }
-    // draw a list of all the indices that error
-    for ( int k = 0; k < error_nodes.count(); k++ ) {
-        if (error_nodes.value(k) > -1 &&
-                error_nodes.value(k) < this->nodes.count()) {
-        draw_circle_flat(this->nodes.value(error_nodes.value(k))->Position(),
-                         this->vMatrix,
-                         QVector3D(1, 0, 0), 1.15 / 2.0);
-        draw_circle_flat(this->nodes.value(error_nodes.value(k))->Position(),
-                         this->vMatrix,
-                         QVector3D(1, 0, 0), 1.3 / 2.0);
-        draw_circle_flat(this->nodes.value(error_nodes.value(k))->Position(),
-                         this->vMatrix,
-                         QVector3D(1, 0, 0), 1.45 / 2.0);
-        }
-    }
-
-
   // draw all the node lines here
   foreach(Node *n, this->nodes) {
     if ( n->Position().distanceToPoint(Pos) < 0.5 ) {

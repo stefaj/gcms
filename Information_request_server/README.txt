@@ -1,1 +1,0 @@
-include libmysql.dll and libmysqld.dll in the build directory.

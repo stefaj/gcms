@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
   // connections to all the slots of the opengl widget
   connect(this, SIGNAL(place_node(bool)),
           ui->openGLWidget, SLOT(allow_node(bool)));
+
   connect(this, SIGNAL(remove_nodes(bool)),
           ui->openGLWidget, SLOT(allow_remove_node(bool)));
   connect(this, SIGNAL(remove_trees(bool)),
