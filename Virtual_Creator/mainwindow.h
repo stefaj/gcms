@@ -66,10 +66,6 @@ private:
     void place_node(bool placable);  // allows a node to be placed
     void node_links(bool linkable);  // allow nodes to be linkeds
     void remove_nodes(bool removable);  // allow nodes to be destroyed
-    void remove_trees(bool removable);  // allow trees to be destroyed
-    void place_pavement(bool placable);  // allow the placement of a node
-    void place_wall(bool placable);  // allows the placement of a wall
-    void place_door(bool placable);  // allows the placement of a wall
     void change_rotationY(double angle);  // changes the rotation in Y direction
     void place_tree(bool placable);  // allows the placement of a basic tree
     void invert_mouseY(bool invert_mouse);  // invert the y of the mouse in 3D
