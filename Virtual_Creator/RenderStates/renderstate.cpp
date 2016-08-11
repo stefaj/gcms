@@ -75,9 +75,6 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     // set mouse tracking
     setMouseTracking(true);
 
-    // create directory
-    PremisesExporter::create_director();
-
     // initialise the session
     session_logged = new QByteArray("");
 
@@ -140,17 +137,11 @@ void RenderState::load_premises(QString value) {
   }
   // load textures and objects
   LoadNodes(directory_path);
-  LoadTextures(directory_path);
   LoadObjects(directory_path);
   CopyDirectories(directory_path + "/directories.dir");
   CopyConfig(directory_path + "/config.config");
   // exort the files afterwards
-  PremisesExporter::export_environment(this->models,
-                                       "environment.env");
-  PremisesExporter::export_texture(this->texture_paths,
-                                   "textures.tl");
-  PremisesExporter::export_nodes(this->nodes,
-                                 "nodes.pvc");
+
   // set startup load
   start_up_load_tex = false;
 }
@@ -161,8 +152,7 @@ void RenderState::set_next_node_name(QString value) {
        this->node_index_selected > -1 )
     nodes.value(this->node_index_selected)->setName(value);
   // exort nodes
-  PremisesExporter::export_nodes(this->nodes,
-                                 "nodes.pvc");
+
 }
 
 void RenderState::set_next_node_significant(bool value) {
@@ -172,8 +162,7 @@ void RenderState::set_next_node_significant(bool value) {
        this->node_index_selected < this->nodes.count() )
     nodes.value(this->node_index_selected)->setSignificant(value);
   // exort nodes
-  PremisesExporter::export_nodes(this->nodes,
-                                 "nodes.pvc");
+
 }
 
 void RenderState::allow_remove_node(bool value) {
@@ -215,8 +204,7 @@ void RenderState::change_rotY(double value) {
        this->selected_floor_plan > -1 )
       this->models.value(this->selected_floor_plan)->setRotation(
               QVector3D(0, value, 0));
-  PremisesExporter::export_environment(this->models,
-                                         "environment.env");
+
 
 }
 
@@ -226,8 +214,7 @@ void RenderState::set_object_scale(QVector3D value) {
          this->selected_floor_plan < this->models.count() &&
          this->selected_floor_plan > -1)
       this->models.value(this->selected_floor_plan)->setScaling(value);
-    PremisesExporter::export_environment(this->models,
-                                         "environment.env");
+
 }
 
 void RenderState::change_current_floor_height(float value) {
@@ -363,8 +350,7 @@ void RenderState::mouseReleaseEvent(QMouseEvent * /*event*/) {
                                 linkindex);
             }
             // export to temp nodes
-            PremisesExporter::export_nodes(this->nodes,
-                                           "nodes.pvc");
+
 
             // update errors
             update_node_errors();
@@ -389,8 +375,7 @@ void RenderState::edit_node_position(QVector2D position) {
                             nodes.value(this->node_index_selected)->Position().y(),
                             position.y()));
     // exort nodes
-    PremisesExporter::export_nodes(this->nodes,
-                                   "nodes.pvc");
+
 
 
 }
@@ -401,8 +386,6 @@ void RenderState::edit_node_access(bool walk, bool wheelchair, bool vehicle, boo
     this->node_vehicle = vehicle;
     this->node_bicycle = bicycle;
     // exort nodes
-    PremisesExporter::export_nodes(this->nodes,
-                                   "nodes.pvc");
 
 
     //LoadNodes("VirtualConcierge/");
@@ -418,8 +401,7 @@ void RenderState::edit_floorplan_position(QVector2D position) {
       QVector3D(position.x(),
                 models.value(this->selected_floor_plan)->getTranslation().y(),
                 position.y()));
-    PremisesExporter::export_environment(this->models,
-                                         "environment.env");
+
 
 }
 
@@ -438,7 +420,7 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
     // left click to add the node
     if ( (event->button() == Qt::LeftButton) && (this->node_placable) ) {
         add_node(new QString(this->next_node_name));
-        PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
+
 
     }
 
@@ -532,7 +514,7 @@ void RenderState::remove_link() {
   // update errors
   update_node_errors();
   // update the working files
-  PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
+
 
 }
 
@@ -567,7 +549,7 @@ void RenderState::RemoveNodes() {
   }
 
   // update the temp nodelist
-  PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
+
   //handler.AddNodes(this->nodes);
 
   // show node errors
@@ -614,7 +596,7 @@ void RenderState::add_node(QString* name) {
     update_node_errors();
 
     // update the working files
-    PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
+
 
 
 }
@@ -1198,52 +1180,6 @@ void RenderState::draw_circle_flat(QVector3D center,
     }
 }
 
-void RenderState::LoadTextures(QString path) {
-  // clear the premises when not empty
-  if ( this->textures_from_files.count() > 0 ) {
-    this->textures_from_files.clear();
-    this->texture_paths.clear();
-  }
-  /* populate the textures from the text file */
-  if ( PremisesExporter::fileExists(path + "textures.tl") ) {
-
-    // load the text file
-    QFile textfile(path + QString("textures.tl"));
-    // open the text file
-    textfile.open(QIODevice::ReadOnly | QIODevice::Text);
-    QTextStream ascread(&textfile);
-
-    if ( textfile.isOpen() ) {
-      // read each line of the file
-      QString line = ascread.readLine();
-      while ( !line.isNull() ) {
-        // break the line up in usable parts
-        QStringList list = line.split(",");
-
-        // check the type of line
-        if ( list[0] == "t" ) {
-          int texture_index = 0;
-          QString texture_path = "";
-
-          // texture type
-          texture_path = list[2];
-          QStringList ls = texture_path.split("/");
-
-          // texture index
-          QTextStream(&list[1]) >> texture_index;
-          QString new_path = path + ls[ls.count() - 1];
-          load_texture_from_file(new_path);
-        }
-
-      // read next line
-      line = ascread.readLine();
-      }
-
-      // close the textfile
-      textfile.close();
-    }
-  }
-}
 
 void RenderState::LoadObjects(QString path) {
     // clear the premises when not empty

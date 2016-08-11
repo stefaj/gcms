@@ -4,7 +4,6 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
-#include "Functions/premises_exporter.h"
 #include <QVector2D>
 namespace Ui {
 class MainWindow;
@@ -75,10 +74,6 @@ private:
     void place_tree(bool placable);  // allows the placement of a basic tree
     void invert_mouseY(bool invert_mouse);  // invert the y of the mouse in 3D
     void place_floor_plan(bool placable);  // allows a floorplan to bew placed
-    // adds new usable texture to the list
-    void add_new_texture(QString file_name);
-    // set the current scale of the object active
-    void set_object_scale(QVector3D scale);
     void change_floor_selected(float height);  // sets the current floor used
     void change_node_name(QString name);  // changes the name of the next node
     // set whether the node should be a button or not

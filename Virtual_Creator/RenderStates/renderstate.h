@@ -17,7 +17,7 @@
 #include "./Objects/ModelMesh.h"
 #include "./Objects/Node.h"
 #include "./Objects/visualobject.h"
-#include "./Functions/premises_exporter.h"
+
 #include "./Functions/drawgl.h"
 
 
