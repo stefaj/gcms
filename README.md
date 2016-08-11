@@ -1,6 +1,5 @@
 # GCMS
 Graph creator and management system
-~~Virtual Concierge Creator and Management System~~
 
 ## Features
 * Create nodes
