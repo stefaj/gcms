@@ -6,7 +6,7 @@
 #include <QFileDialog>
 #include "./virtualconcierge.h"
 #include "Functions/premises_exporter.h"
-
+#include <QVector2D>
 namespace Ui {
 class MainWindow;
 }
