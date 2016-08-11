@@ -412,14 +412,6 @@ void RenderState::edit_node_access(bool walk, bool wheelchair, bool vehicle, boo
     this->node_wheelchair = wheelchair;
     this->node_vehicle = vehicle;
     this->node_bicycle = bicycle;
-    if ( this->node_index_selected > -1 &&
-         this->edit_node &&
-         this->node_index_selected < this->nodes.count() ) {
-      nodes.value(this->node_index_selected)->setWalk(walk);
-      nodes.value(this->node_index_selected)->setBike(bicycle);
-      nodes.value(this->node_index_selected)->setWheelChair(wheelchair);
-      nodes.value(this->node_index_selected)->setVehicle(vehicle);
-    }
     // exort nodes
     PremisesExporter::export_nodes(this->nodes,
                                    "nodes.pvc");
@@ -548,12 +540,7 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
         this->node_index_selected = l;
         send_edit_node(this->nodes.value(l)->getName(),
                        QVector2D(this->nodes.value(l)->Position().x(),
-                                 this->nodes.value(l)->Position().z()),
-                       this->nodes.value(l)->getSignificant(),
-                       this->nodes.value(l)->getWalk(),
-                       this->nodes.value(l)->getWheelChair(),
-                       this->nodes.value(l)->getBike(),
-                       this->nodes.value(l)->getVehicle());
+                                 this->nodes.value(l)->Position().z()));
         emit debug_results("Selected node index:" + QString::number(l));
       }
     }
@@ -706,12 +693,6 @@ void RenderState::add_node(QString* name) {
                                            name);
     // set significance
     newnode->setSignificant(this->node_significant);
-
-    // accessibility
-    newnode->setWalk(this->node_walk);
-    newnode->setWheelChair(this->node_wheelchair);
-    newnode->setVehicle(this->node_vehicle);
-    newnode->setBike(this->node_bicycle);
 
     // add new node to vector
     this->nodes.push_back(newnode);
@@ -1578,11 +1559,6 @@ void RenderState::LoadNodes(QString filename) {
                 Node* n = new Node(new QVector3D(vertex[0],
                                                  vertex[1],
                                                  vertex[2]));
-                // initialize node paths
-                n->setWheelChair(false);
-                n->setBike(false);
-                n->setWalk(false);
-                n->setVehicle(false);
                 // set node's significance
                 n->setSignificant((signi == 1));
                 // set node's name
@@ -1620,22 +1596,6 @@ void RenderState::LoadNodes(QString filename) {
 
         // close the textfile
         textfile.close();
-    }
-    // add walkable nodes
-    for ( int i = 0; i < walk.count(); i++) {
-        this->nodes.value(walk.value(i))->setWalk(true);
-    }
-    // add wheelchair nodes
-    for ( int i = 0; i < wheelchair.count(); i++) {
-        this->nodes.value(wheelchair.value(i))->setWheelChair(true);
-    }
-    // add vehicle nodes
-    for ( int i = 0; i < vehicle.count(); i++) {
-        this->nodes.value(vehicle.value(i))->setVehicle(true);
-    }
-    // add bicycle nodes
-    for ( int i = 0; i < bicycle.count(); i++) {
-        this->nodes.value(bicycle.value(i))->setBike(true);
     }
   // show node errors
   update_node_errors();

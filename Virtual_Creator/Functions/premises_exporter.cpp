@@ -116,30 +116,6 @@ QFile file("VirtualConcierge/" + name);
           }
         }
     }
-    // write walking access
-    for ( int l = 0; l < nodes.count(); l++ ) {
-        if ( nodes.value(l)->getWalk() ) {
-            out << "ft," << l << "\n";
-        }
-    }
-    // write bicycle access
-    for ( int l = 0; l < nodes.count(); l++ ) {
-        if ( nodes.value(l)->getBike() ) {
-            out << "by," << l << "\n";
-        }
-    }
-    // write vehicle access
-    for ( int l = 0; l < nodes.count(); l++ ) {
-        if ( nodes.value(l)->getVehicle() ) {
-            out << "vi," << l << "\n";
-        }
-    }
-    // write wheelchair access
-    for ( int l = 0; l < nodes.count(); l++ ) {
-        if ( nodes.value(l)->getWheelChair() ) {
-            out << "wc," << l << "\n";
-        }
-    }
     // optional, as QFile destructor will already do it:
     file.close();
 }

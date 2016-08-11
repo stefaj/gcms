@@ -28,16 +28,8 @@ class Node {
     void setG(double g);
     void setName(QString);
     void setShortest(int index);
-    void setWalk(bool can_walk);
-    void setWheelChair(bool can_use_wheelchair);
-    void setVehicle(bool can_use_vehicle);
-    void setBike(bool can_use_bike);
     void setSignificant(bool is_significant);
     void setPosition(QVector3D position);
-    bool getWalk();
-    bool getWheelChair();
-    bool getVehicle();
-    bool getBike();
     bool getSignificant();
     int getShortestIndex();
     double getG();
@@ -52,7 +44,7 @@ class Node {
     QVector<int> shortest;
     int nshortest;
     double g;
-    bool links, walk, wheelchair, vehicle, bike, significant;
+    bool links, significant;
     int lastindex;
 };
 

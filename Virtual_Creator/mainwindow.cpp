@@ -61,8 +61,8 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->openGLWidget, SLOT(allow_edit_floor(bool)));
   connect(this, SIGNAL(edit_node(bool)),
           ui->openGLWidget, SLOT(allow_edit_node(bool)));
-  connect(ui->openGLWidget, SIGNAL(send_edit_node(QString, QVector2D, bool, bool, bool, bool, bool)),
-          this, SLOT(edit_node_settings(QString, QVector2D, bool, bool, bool, bool, bool)));
+  connect(ui->openGLWidget, SIGNAL(send_edit_node(QString, QVector2D)),
+          this, SLOT(edit_node_settings(QString, QVector2D)));
   connect(this, SIGNAL(edit_node_position(QVector2D)),
           ui->openGLWidget, SLOT(edit_node_position(QVector2D)));
   connect(ui->openGLWidget, SIGNAL(send_edit_floorplan(QVector2D,float,QVector2D)),
@@ -110,13 +110,7 @@ void MainWindow::send_config() {
 MainWindow::~MainWindow() {delete ui;}
 
 void MainWindow::edit_node_settings(QString name,
-                                    QVector2D position,
-                                    bool isbutton,
-                                    bool walk,
-                                    bool wheelchair,
-                                    bool bicycle,
-                                    bool vehicle) {
-  ui->checkbox_significant->setChecked(isbutton);
+                                    QVector2D position) {
   ui->lineEdit_node_name->setText(name);
   ui->doubleSpinBox_node_x->setValue(position.x());
   ui->doubleSpinBox_node_y->setValue(position.y());
