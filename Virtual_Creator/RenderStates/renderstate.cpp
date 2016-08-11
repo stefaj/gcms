@@ -466,15 +466,7 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
     RemoveNodes();
   }
 
-  // left click to remove the node
-  if ( (event->button() == Qt::LeftButton) && (this->edit_floorplan) ) {
-    remove_select_floorplan();
-  }
 
-  // left click to remove the node
-  if ( (event->button() == Qt::LeftButton) && (this->floor_plan_removable) ) {
-    remove_select_floorplan();
-  }
 
   // left click to remove the link
   if ( (event->button() == Qt::LeftButton) && (this->link_removable) ) {
@@ -544,55 +536,7 @@ void RenderState::remove_link() {
 
 }
 
-void RenderState::remove_select_floorplan() {
-  /* floor plans are 2d rectangulars
-   * that can be rotated only about the y-axis.
-   * thus the rotation along with the scale of
-   * the floor plan can be used to detect
-   * the intersection of a point or a ray
-   */
-  for ( int l = 0; l < this->models.count(); l++ ) {
-      if ( Mathematics::detect_point_in_plan_on_y(
-               this->models.value(l)->getTranslation(),
-               this->models.value(l)->getScaling(),
-               this->models.value(l)->getRotation().y(),
-               QVector3D(this->current_position->x(),
-                         this->current_position->y(),
-                         this->current_position->z()))) {
-          if ( this->models.value(l)->getType() == "FloorPlan") {
-              if ( this->floor_plan_removable ) {
-                this->models.removeAt(l);
-              } else {
-                  if ( this->edit_floorplan ) {
-                    this->selected_floor_plan = l;
-                    if ( this->selected_floor_plan != -1 &&
-                      this->selected_floor_plan < this->models.count() ) {
-                      // get the translation of the
-                      QVector2D pos_floor =
-                      QVector2D(this->models.value(this->selected_floor_plan)->
-                                getTranslation().x(),
-                                this->models.value(this->selected_floor_plan)->
-                                getTranslation().z());
-                      QVector2D scale_floor =
-                      QVector2D(this-> models.value(this->selected_floor_plan)->
-                                getScaling().x(),
-                                this->models.value(this->selected_floor_plan)->
-                                getScaling().z());
-                          emit send_edit_floorplan(
-                                  pos_floor,
-                                  this->models.value(this->selected_floor_plan)->
-                                  getRotation().y(),
-                                  scale_floor);
-                    }
-                  }
-              }
-          }
-      }
-  }
-  PremisesExporter::export_environment(this->models, "environment.env");
-  PremisesExporter::export_texture(this->texture_paths, "textures.tl");
 
-}
 
 void RenderState::RemoveNodes() {
   for ( int l = 0; l < this->nodes.count(); l++ ) {
