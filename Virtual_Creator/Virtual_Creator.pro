@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     Objects/Node.cpp \
     Functions/mathematics.cpp \
     RenderStates/renderstate.cpp \
-    Functions/drawgl.cpp
+    Functions/drawgl.cpp \
+    Objects/camera.cpp
 
 HEADERS  += mainwindow.h \
     Objects/ModelMesh.h \
@@ -27,7 +28,8 @@ HEADERS  += mainwindow.h \
     Functions/mathematics.h \
     RenderStates/renderstate.h \
     Functions/drawgl.h \
-    main.h
+    main.h \
+    Objects/camera.h
 
 FORMS    += mainwindow.ui
 
