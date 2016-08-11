@@ -90,10 +90,6 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::create_background() {
-  QString file_name = QFileDialog::getOpenFileName(this,
-                                                   tr("Open Image"),
-                                                   "/home/image_file",
-                                                   tr("Image Files (*.png *.jpg *.bmp)"));
 
 }
 
@@ -115,11 +111,7 @@ void MainWindow::edit_node_settings(QString name,
 
 void MainWindow::is_opengl_valid_context(bool is_valid_context) {
   opengl_initialised = is_valid_context;
-  if ( opengl_initialised ) {
-    // load temporary stored environment
-    QString temp_directory = "VirtualConcierge/environment.env";
 
-  }
 }
 
 void MainWindow::EmitSignals() {
@@ -147,9 +139,6 @@ void MainWindow::drop_down_emit() {
          ui->button_edit_basic->isChecked() )
       ui->stackedWidget_side_add->setCurrentIndex(1);
 
-
-
-    ui->button_edit_basic->setEnabled(true);
  }
  if ( QString::compare(ui->comboBox_basic_adds->currentText(),
                        "Node",

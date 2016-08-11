@@ -5,5 +5,4 @@
 #include <QApplication>
 #include "./mainwindow.h"
 
-
 #endif  // VIRTUAL_CREATOR_MAIN_H_

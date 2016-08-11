@@ -17,7 +17,6 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     Objects/ModelMesh.cpp \
     Objects/Node.cpp \
-    Objects/visualobject.cpp \
     Functions/mathematics.cpp \
     RenderStates/renderstate.cpp \
     Functions/drawgl.cpp
@@ -25,7 +24,6 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     Objects/ModelMesh.h \
     Objects/Node.h \
-    Objects/visualobject.h \
     Functions/mathematics.h \
     RenderStates/renderstate.h \
     Functions/drawgl.h \

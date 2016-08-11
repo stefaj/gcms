@@ -74,6 +74,7 @@ private:
     void place_tree(bool placable);  // allows the placement of a basic tree
     void invert_mouseY(bool invert_mouse);  // invert the y of the mouse in 3D
     void place_floor_plan(bool placable);  // allows a floorplan to bew placed
+
     void change_floor_selected(float height);  // sets the current floor used
     void change_node_name(QString name);  // changes the name of the next node
     // set whether the node should be a button or not

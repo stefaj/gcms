@@ -69,11 +69,9 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     // clear the nodes
     this->nodes.clear();
 
-    // clear visual objects
-    this->models.clear();
-
     // set mouse tracking
     setMouseTracking(true);
+
 
     // initialise the session
     session_logged = new QByteArray("");
@@ -140,7 +138,7 @@ void RenderState::load_premises(QString value) {
   LoadObjects(directory_path);
   CopyDirectories(directory_path + "/directories.dir");
   CopyConfig(directory_path + "/config.config");
-  // exort the files afterwards
+
 
   // set startup load
   start_up_load_tex = false;
@@ -151,7 +149,6 @@ void RenderState::set_next_node_name(QString value) {
   if ( this->node_index_selected < this->nodes.count() &&
        this->node_index_selected > -1 )
     nodes.value(this->node_index_selected)->setName(value);
-  // exort nodes
 
 }
 
@@ -161,7 +158,6 @@ void RenderState::set_next_node_significant(bool value) {
        this->edit_node &&
        this->node_index_selected < this->nodes.count() )
     nodes.value(this->node_index_selected)->setSignificant(value);
-  // exort nodes
 
 }
 
@@ -198,22 +194,11 @@ void RenderState::allow_floor_plan(bool value) {
 }
 
 void RenderState::change_rotY(double value) {
-  this->rotation.setY(value);
-  if ( this->edit_floorplan &&
-       this->selected_floor_plan < this->models.count() &&
-       this->selected_floor_plan > -1 )
-      this->models.value(this->selected_floor_plan)->setRotation(
-              QVector3D(0, value, 0));
 
 
 }
 
 void RenderState::set_object_scale(QVector3D value) {
-    this->currentscale = value;
-    if ( this->edit_floorplan &&
-         this->selected_floor_plan < this->models.count() &&
-         this->selected_floor_plan > -1)
-      this->models.value(this->selected_floor_plan)->setScaling(value);
 
 }
 
@@ -349,8 +334,6 @@ void RenderState::mouseReleaseEvent(QMouseEvent * /*event*/) {
                                             QString::number(countConnected)),
                                 linkindex);
             }
-            // export to temp nodes
-
 
             // update errors
             update_node_errors();
@@ -374,7 +357,6 @@ void RenderState::edit_node_position(QVector2D position) {
                   QVector3D(position.x(),
                             nodes.value(this->node_index_selected)->Position().y(),
                             position.y()));
-    // exort nodes
 
 
 
@@ -385,7 +367,7 @@ void RenderState::edit_node_access(bool walk, bool wheelchair, bool vehicle, boo
     this->node_wheelchair = wheelchair;
     this->node_vehicle = vehicle;
     this->node_bicycle = bicycle;
-    // exort nodes
+
 
 
     //LoadNodes("VirtualConcierge/");
@@ -394,13 +376,6 @@ void RenderState::edit_node_access(bool walk, bool wheelchair, bool vehicle, boo
 }
 
 void RenderState::edit_floorplan_position(QVector2D position) {
-    if ( this->edit_floorplan &&
-         this->selected_floor_plan < this->models.count() &&
-         this->selected_floor_plan > -1)
-      this->models.value(this->selected_floor_plan)->setTranslation(
-      QVector3D(position.x(),
-                models.value(this->selected_floor_plan)->getTranslation().y(),
-                position.y()));
 
 
 }
@@ -421,7 +396,6 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
     if ( (event->button() == Qt::LeftButton) && (this->node_placable) ) {
         add_node(new QString(this->next_node_name));
 
-
     }
 
 
@@ -429,19 +403,6 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
     this->clicked_position = new QVector3D(this->current_position->x(),
                                            this->current_position->y(),
                                            this->current_position->z());
-
-    if ( (event->button() == Qt::LeftButton) && (this->tree_removable) ) {
-        for ( int k = 0 ; k < this->models.count(); k++ ) {
-            if ( (this->models.value(k)->
-                  getType().compare("Tree",
-                                    Qt::CaseInsensitive) == 0) &&
-                 (this->models.value(k)->
-                  getTranslation().distanceToPoint(*this->current_position) <
-                  tree_radius) ) {
-                this->models.removeAt(k);
-            }
-        }
-    }
 
   // left click to remove the node
   if ( (event->button() == Qt::LeftButton) && (this->node_removable) ) {
@@ -513,11 +474,10 @@ void RenderState::remove_link() {
   }
   // update errors
   update_node_errors();
-  // update the working files
+
 
 
 }
-
 
 
 void RenderState::RemoveNodes() {
@@ -548,9 +508,6 @@ void RenderState::RemoveNodes() {
     }
   }
 
-  // update the temp nodelist
-
-  //handler.AddNodes(this->nodes);
 
   // show node errors
   update_node_errors();
@@ -594,10 +551,6 @@ void RenderState::add_node(QString* name) {
 
     // show node errors
     update_node_errors();
-
-    // update the working files
-
-
 
 }
 
@@ -712,63 +665,6 @@ void RenderState::paintGL() {
   this->current_position->setZ(Pos.z());
   this->current_position->setY(Pos.y());
 
-  // draw other objects first
-  foreach(VisualObject *object, this->models) {
-    QVector3D color = QVector3D();
-    QMatrix4x4 translation;
-    translation.translate(object->getTranslation());
-    QMatrix4x4 rotation;
-    rotation.rotate(object->getRotation().y(), 0, 1, 0);
-    rotation.scale(object->getScaling());
-    if ( object->getType().compare("FloorPlan") != 0 ) {
-      DrawGL::DrawModel(object->getModelMesh(),
-                        this->vMatrix, translation,
-                        rotation, object->getTexture(),
-                        QVector3D(),
-                        QVector2D(object->getScaling().z(),
-                                  object->getScaling().x()),
-                        this->program,
-                        pMatrix,
-                        this->current_floor_height);
-    } else {
-
-      if ( Mathematics::detect_point_in_plan_on_y(
-               object->getTranslation(),
-               object->getScaling(),
-                     object->getRotation().y(),
-                     QVector3D(this->current_position->x(),
-                               this->current_position->y(),
-                               this->current_position->z())) ) {
-          if ( this->floor_plan_removable )
-            color = QVector3D(1, 0, 0);
-          if ( this->edit_floorplan )
-            color = QVector3D(1, 0.5, 0.25);
-
-      } else {
-          if ( this->selected_floor_plan > -1 &&
-               this->selected_floor_plan < this->models.count() &&
-               this->edit_floorplan &&
-              (this->models.value(this->selected_floor_plan) ==
-               object) )
-              color = QVector3D(1, 0.5, 0.25);
-          else
-          color = QVector3D();
-      }
-      DrawGL::DrawModel(object->getModelMesh(),
-                        this->vMatrix, translation,
-                        rotation, object->getTexture(),
-                        color, QVector2D(1, 1),
-                        this->program, pMatrix,
-                        this->current_floor_height);
-    }
-      if ( this->wall_placable ) {
-        if ( object->getLMidHorisontal().distanceToPoint(Pos) < 0.25f )
-          *this->current_position = object->getLMidHorisontal();
-        if ( object->getUMidHorisontal().distanceToPoint(Pos) < 0.25f )
-          *this->current_position = object->getUMidHorisontal();
-      }
-  }
-
   // draw placable objects here
   DrawPlacableItems(Pos);
   // draw all the nodes here
@@ -837,30 +733,7 @@ void RenderState::paintGL() {
 }
 
 void RenderState::DrawObjectLines(QVector3D Pos) {
-  // draw circles around selected objects
-  foreach(VisualObject *object, this->models) {
-      if ( (this->tree_removable)
-           && (object->getType().compare("Tree", Qt::CaseInsensitive) == 0)
-           && (object->getTranslation().distanceToPoint(Pos) < 4.0) ) {
-          // draw a circle here
-          draw_circle_flat(object->getTranslation(),
-                           this->vMatrix,
-                           QVector3D(1, 0, 0),
-                           4.0f);
-      }
-      if ( this->wall_placable ) {
-          if ( object->getLMidHorisontal().distanceToPoint(Pos) < 0.25f )
-              draw_circle_flat(object->getLMidHorisontal(),
-                               this->vMatrix,
-                               QVector3D(0, 1, 0),
-                               0.25f);
-          if ( object->getUMidHorisontal().distanceToPoint(Pos) < 0.25f )
-              draw_circle_flat(object->getUMidHorisontal(),
-                               this->vMatrix,
-                               QVector3D(0, 1, 0),
-                               0.25f);
-     }
-  }
+
 }
 
 void RenderState::DrawPlacableItems(QVector3D Pos) {
@@ -1053,9 +926,6 @@ void RenderState::clear_premises() {
   // clear the nodes
   this->nodes.clear();
 
-  // clear visual objects
-  this->models.clear();
-
   // clear the textures
   for ( int l = 1; l < this->textures.count(); l++ )
    this->textures.removeAt(l);
@@ -1181,84 +1051,9 @@ void RenderState::draw_circle_flat(QVector3D center,
 }
 
 
+
 void RenderState::LoadObjects(QString path) {
-    // clear the premises when not empty
-    if ( this->models.count() > 0)
-        this->models.clear();
 
-    /* populate the premisis from the text file */
-
-    // load the text file
-    QFile textfile(path + QString("environment.env"));
-
-    // open the text file
-    textfile.open(QIODevice::ReadOnly | QIODevice::Text);
-    QTextStream ascread(&textfile);
-
-    if ( textfile.isOpen() ) {
-        // read each line of the file
-        QString line = ascread.readLine();
-
-        while ( !line.isNull() ) {
-            // break the line up in usable parts
-            QStringList list = line.split(",");
-
-            // check the type of line
-            /* n-> node
-             * j-> join
-             */
-            if ( list[0] == "o" ) {
-                // this is only x, y, z coordinates for the node
-                float matrix[9];
-                int texture_index = 0;
-                QString Type ="";
-
-                // populate the vertices
-                for ( int i = 0; i < 9; i++ )
-                     QTextStream(&list[i+3]) >> matrix[i];
-
-                // texture index
-                QTextStream(&list[12]) >> texture_index;
-
-                // object type
-                QTextStream(&list[2]) >> Type;
-                // add floorplan
-                if ( Type.compare("FloorPlan", Qt::CaseInsensitive) == 0 ) {
-                    if ( texture_index < this->textures_from_files.count() ) {
-                      VisualObject *object =
-                        new VisualObject(this->plane,
-                                         this->
-                                         textures_from_files[texture_index],
-                                         QVector3D(matrix[0],
-                                                   matrix[1],
-                                                   matrix[2]),
-                                         QVector3D(matrix[3],
-                                                   matrix[4],
-                                                   matrix[5]),
-                                         "FloorPlan");
-                    object->setScaling(QVector3D(matrix[6],
-                                                 matrix[7],
-                                                 matrix[8]));
-                    object->setTextureID(texture_index);
-                    this->models.push_back(object);
-                    } else {
-                      QMessageBox::warning(
-                                  this,
-                                  tr("Texture file error"),
-                                  tr("The texture file may be corrupted\n"
-                                  "or the textures are not located in the "
-                                  "same folder as the environment file."));
-                    }
-                }
-            }
-
-            // read next line
-           line = ascread.readLine();
-        }
-
-        // close the textfile
-        textfile.close();
-    }
 }
 
 void RenderState::LoadNodes(QString filename) {
