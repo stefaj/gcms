@@ -3,7 +3,6 @@
 #include "./mainwindow.h"
 #include "./ui_mainwindow.h"
 
-#include "./config_editor.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -102,10 +101,6 @@ void MainWindow::create_background() {
 }
 
 void MainWindow::open_config_editor() {
-    Config_Editor *editor = new Config_Editor();
-    connect(editor, SIGNAL(accepted()),
-            ui->openGLWidget, SLOT(receive_config()));
-    editor->show();
 }
 
 void MainWindow::send_config() {
@@ -394,8 +389,7 @@ void MainWindow::receive_session(QByteArray session, bool logged) {
 }
 
 void MainWindow::on_pushButton_wizard_clicked() {
- Directory_Wizard *wizard = new Directory_Wizard();
- wizard->show();
+
 }
 
 void MainWindow::on_checkBox_wheelchair_clicked() {

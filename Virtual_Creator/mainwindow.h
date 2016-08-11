@@ -6,7 +6,6 @@
 #include <QFileDialog>
 #include "./virtualconcierge.h"
 #include "Functions/premises_exporter.h"
-#include "./directory_wizard.h"
 
 namespace Ui {
 class MainWindow;
