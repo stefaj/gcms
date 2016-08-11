@@ -402,15 +402,7 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
     RemoveNodes();
   }
 
-  // left click to remove the node
-  if ( (event->button() == Qt::LeftButton) && (this->edit_floorplan) ) {
-    remove_select_floorplan();
-  }
 
-  // left click to remove the node
-  if ( (event->button() == Qt::LeftButton) && (this->floor_plan_removable) ) {
-    remove_select_floorplan();
-  }
 
   // left click to remove the link
   if ( (event->button() == Qt::LeftButton) && (this->link_removable) ) {
@@ -479,9 +471,6 @@ void RenderState::remove_link() {
 
 }
 
-void RenderState::remove_select_floorplan() {
-
-}
 
 void RenderState::RemoveNodes() {
   for ( int l = 0; l < this->nodes.count(); l++ ) {
