@@ -25,7 +25,6 @@ SOURCES += main.cpp\
     Functions/drawgl.cpp \
     Objects/nodebutton.cpp \
     LoadingBar/waitingspinnerwidget.cpp \
-    directory_wizard.cpp \
     config_editor.cpp
 
 HEADERS  += mainwindow.h \
@@ -40,7 +39,6 @@ HEADERS  += mainwindow.h \
     Objects/nodebutton.h \
     main.h \
     LoadingBar/waitingspinnerwidget.h \
-    directory_wizard.h \
     config_editor.h
 
 FORMS    += mainwindow.ui
