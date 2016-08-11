@@ -17,14 +17,9 @@ class MainWindow : public QMainWindow {
     ~MainWindow();
 
  private slots:
-    void on_spin_rotationY_valueChanged(double arg1);
     void on_checkBox_inversemouse_y_clicked(bool checked);
-    void on_button_execute_virtual_concierge_clicked();
-    void on_doubleSpinBox_floor_plan_width_valueChanged(double arg1);
-    void on_doubleSpinBox_floor_plan_height_valueChanged(double arg1);
     void on_spinBox_floor_level_valueChanged(int arg1);
     void on_lineEdit_node_name_textChanged(const QString &arg1);
-    void on_checkbox_significant_clicked(bool checked);
     void send_loaded_premises();
     void load_virtual_concierge_interface();
     void is_opengl_valid_context(bool);

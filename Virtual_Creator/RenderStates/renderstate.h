@@ -102,10 +102,8 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     void allow_wall(bool allow);
     void allow_tree(bool allow);
     void allow_floor_plan(bool allow);
-    void change_rotY(double degrees);
     void invert_mouseY(bool invert_mouse);
     void load_texture_from_file(QString filename);
-    void set_object_scale(QVector3D scale);
     void change_current_floor_height(float y_height);
     void set_next_node_name(QString name);
     void set_next_node_significant(bool is_significant);

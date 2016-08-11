@@ -193,15 +193,6 @@ void RenderState::allow_floor_plan(bool value) {
   this->placable_floor_plan = value;
 }
 
-void RenderState::change_rotY(double value) {
-
-
-}
-
-void RenderState::set_object_scale(QVector3D value) {
-
-}
-
 void RenderState::change_current_floor_height(float value) {
     this->current_floor_height = value;
     // update the opengl widget
@@ -672,8 +663,6 @@ void RenderState::paintGL() {
   // draw all the lines connected to nodes with directional arrows
   DrawNodeLines(Pos);
 
-  // draw lines last
-  DrawObjectLines(Pos);
   // draw left clicked line(s)
   if ( (this->node_linkable) &&
        (this->mousedown_left) &&
@@ -730,10 +719,6 @@ void RenderState::paintGL() {
 
   // draw the node text to the scene
   DrawNodeNames();
-}
-
-void RenderState::DrawObjectLines(QVector3D Pos) {
-
 }
 
 void RenderState::DrawPlacableItems(QVector3D Pos) {

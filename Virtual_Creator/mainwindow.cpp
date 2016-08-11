@@ -16,28 +16,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
   connect(this, SIGNAL(remove_nodes(bool)),
           ui->openGLWidget, SLOT(allow_remove_node(bool)));
-  connect(this, SIGNAL(remove_trees(bool)),
-          ui->openGLWidget, SLOT(allow_remove_tree(bool)));
   connect(this, SIGNAL(node_links(bool)),
           ui->openGLWidget, SLOT(allow_link(bool)));
-  connect(this, SIGNAL(place_pavement(bool)),
-          ui->openGLWidget, SLOT(allow_pavement(bool)));
-  connect(this, SIGNAL(place_wall(bool)),
-          ui->openGLWidget, SLOT(allow_wall(bool)));
-  connect(this, SIGNAL(place_door(bool)),
-          ui->openGLWidget, SLOT(allow_door(bool)));
-  connect(this, SIGNAL(change_rotationY(double)),
-          ui->openGLWidget, SLOT(change_rotY(double)));
   connect(this, SIGNAL(invert_mouseY(bool)),
           ui->openGLWidget, SLOT(invert_mouseY(bool)));
   connect(this, SIGNAL(place_tree(bool)),
           ui->openGLWidget, SLOT(allow_tree(bool)));
   connect(this, SIGNAL(place_floor_plan(bool)),
           ui->openGLWidget, SLOT(allow_floor_plan(bool)));
-  connect(this, SIGNAL(add_new_texture(QString)),
-          ui->openGLWidget, SLOT(load_texture_from_file(QString)));
-  connect(this, SIGNAL(set_object_scale(QVector3D)),
-          ui->openGLWidget, SLOT(set_object_scale(QVector3D)));
   connect(this, SIGNAL(change_floor_selected(float)),
           ui->openGLWidget, SLOT(change_current_floor_height(float)));
   connect(this, SIGNAL(change_node_name(QString)),
@@ -64,8 +50,6 @@ MainWindow::MainWindow(QWidget *parent) :
           this, SLOT(edit_node_settings(QString, QVector2D)));
   connect(this, SIGNAL(edit_node_position(QVector2D)),
           ui->openGLWidget, SLOT(edit_node_position(QVector2D)));
-  connect(ui->openGLWidget, SIGNAL(send_edit_floorplan(QVector2D,float,QVector2D)),
-          this, SLOT(receive_edit_floorplan(QVector2D, float, QVector2D)));
   connect(this, SIGNAL(edit_floorplan_position(QVector2D)),
           ui->openGLWidget, SLOT(edit_floorplan_position(QVector2D)));
   connect(this, SIGNAL(notify_session(QByteArray)),
@@ -80,8 +64,6 @@ MainWindow::MainWindow(QWidget *parent) :
           this, SLOT(new_premises()));
   connect(this, SIGNAL(clear_premises()),
           ui->openGLWidget, SLOT(clear_premises()));
-  connect(ui->actionSave_Premises, SIGNAL(triggered()),
-          this, SLOT(save_premises()));
   connect(ui->actionSet_Virtual_Concierge_Background, SIGNAL(triggered()),
           this, SLOT(create_background()));
 }
@@ -176,10 +158,6 @@ void MainWindow::send_loaded_premises() {
 
 }
 
-void MainWindow::on_spin_rotationY_valueChanged(double arg1) {
-  change_rotationY(arg1);
-}
-
 void MainWindow::new_premises() {
     QString path = "VirtualConcierge";
     QDir dir( path );
@@ -215,18 +193,6 @@ void MainWindow::on_checkBox_inversemouse_y_clicked(bool checked) {
   emit invert_mouseY(checked);
 }
 
-void MainWindow::on_button_execute_virtual_concierge_clicked() {
-
-}
-
-void MainWindow::on_doubleSpinBox_floor_plan_width_valueChanged(double arg1) {
-
-}
-
-void MainWindow::on_doubleSpinBox_floor_plan_height_valueChanged(double arg1) {
-
-}
-
 void MainWindow::on_spinBox_floor_level_valueChanged(int arg1) {
     // show whenever the ground floor is active
     // sends the current floor to the opengl window
@@ -235,10 +201,6 @@ void MainWindow::on_spinBox_floor_level_valueChanged(int arg1) {
 
 void MainWindow::on_lineEdit_node_name_textChanged(const QString &arg1) {
   emit change_node_name(arg1);
-}
-
-void MainWindow::on_checkbox_significant_clicked(bool checked) {
-  emit set_node_significant(checked);
 }
 
 void MainWindow::load_virtual_concierge_interface() {
