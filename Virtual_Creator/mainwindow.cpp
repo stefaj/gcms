@@ -73,8 +73,6 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->openGLWidget, SLOT(receive_session(QByteArray)));
   connect(ui->openGLWidget, SIGNAL(debug_results(QString)),
           this, SLOT(error_message(QString)));
-  connect(ui->actionDirectory_Wizard, SIGNAL(triggered()),
-          ui->pushButton_wizard, SIGNAL(clicked()));
   connect(this, SIGNAL(edit_node_access(bool, bool, bool, bool)),
           ui->openGLWidget, SLOT(edit_node_access(bool, bool, bool, bool)));
   connect(this->ui->actionEdit_Virtual_Concierge_Config, SIGNAL(triggered()),
@@ -149,7 +147,6 @@ void MainWindow::drop_down_emit() {
      emit node_links(false);
      emit remove_link(false);
      emit change_node_name(ui->lineEdit_node_name->text());
-     emit set_node_significant(ui->checkbox_significant->isChecked());
      if ( ui->button_add_basic->isChecked() ||
           ui->button_edit_basic->isChecked() ) {
        ui->stackedWidget_side_add->setCurrentIndex(0);
@@ -233,11 +230,6 @@ void MainWindow::on_doubleSpinBox_floor_plan_height_valueChanged(double arg1) {
 
 void MainWindow::on_spinBox_floor_level_valueChanged(int arg1) {
     // show whenever the ground floor is active
-  if ( arg1 == 0 ) {
-      ui->label_ground_floor->setVisible(true);
-    } else {
-      ui->label_ground_floor->setVisible(false);
-    }
     // sends the current floor to the opengl window
   emit change_floor_selected(static_cast<float>(arg1));
 }
