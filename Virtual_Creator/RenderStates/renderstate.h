@@ -73,21 +73,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     QVector<QOpenGLTexture *> textures_from_files;
     QByteArray *session_logged;
 
-    void add_pavement(QVector3D rotation,
-                      QVector3D position,
-                      QVector3D scale);
-    void add_door(QVector3D rotation,
-                  QVector3D position,
-                  QVector3D scale);
-    void add_wall(QVector3D rotation,
-                  QVector3D position,
-                  QVector3D scale);
-    void add_tree(QVector3D rotation,
-                  QVector3D position,
-                  QVector3D scale);
-    void add_floor_plan(QVector3D rotation,
-                        QVector3D position,
-                        QVector3D scale);
+
     void draw_circle_flat(QVector3D position,
                           QMatrix4x4 view_matrix,
                           QVector3D color,

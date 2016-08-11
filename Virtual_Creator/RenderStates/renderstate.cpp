@@ -370,19 +370,7 @@ void RenderState::mouseReleaseEvent(QMouseEvent * /*event*/) {
             update_node_errors();
         }
 
-        if ( this->wall_placable ) {
-            // place wall
-             add_wall(this->rotation,
-                      this->drag_middle_position,
-                      QVector3D(1, 1, this->currentscale.z()));
-        }
 
-        if ( this->pavement_placable ) {
-            // place pavement
-            add_pavement(this->rotation,
-                         *this->clicked_position,
-                         this->currentscale);
-        }
     }
 
     this->clicked_position = new QVector3D(0, -1000, 0);
@@ -454,25 +442,6 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
 
     }
 
-    // left click to add door
-    if ( (event->button() == Qt::LeftButton) && (this->door_placeable) )
-        add_door(this->rotation, *this->current_position, this->currentscale);
-
-    // add floor plan
-    if ( (event->button() == Qt::LeftButton) && (this->placable_floor_plan) )
-        add_floor_plan(this->rotation,
-                       *this->current_position,
-                       this->currentscale);
-
-    // left click to add wall
-    if ( (event->button() == Qt::LeftButton) && (this->wall_placable) )
-        this->clicked_position = new QVector3D(this->current_position->x(),
-                                               this->current_position->y(),
-                                               this->current_position->z());
-
-    // left click to add tree
-    if ( (event->button() == Qt::LeftButton) && (this->tree_placable) )
-        add_tree(this->rotation, *this->current_position, this->currentscale);
 
     // set current clicked position
     this->clicked_position = new QVector3D(this->current_position->x(),
@@ -706,106 +675,6 @@ void RenderState::add_node(QString* name) {
 
 }
 
-void RenderState::add_pavement(QVector3D rotation,
-                               QVector3D translation,
-                               QVector3D scaling) {
-    // texture index 1 is the tile
-    VisualObject * object = new VisualObject(this->plane,
-                                             this->textures.value(1),
-                                             translation,
-                                             rotation,
-                                             "Pavement");
-    object->setScaling(scaling);
-    this->models.push_back(object);
-    PremisesExporter::export_environment(this->models, "environment.env");
-    PremisesExporter::export_texture(this->texture_paths, "textures.tl");
-    object->setTextureID(701);
-    object->setTexturePath("://Texture1");
-
-}
-
-void RenderState::add_tree(QVector3D rotation,
-                           QVector3D translation,
-                           QVector3D scaling) {
-    // texture index 1 is the tile
-    VisualObject * object = new VisualObject(this->tree,
-                                             this->textures.value(2),
-                                             translation,
-                                             rotation,
-                                             "Tree");
-    object->setScaling(scaling);
-    this->models.push_back(object);
-    PremisesExporter::export_environment(this->models, "environment.env");
-    PremisesExporter::export_texture(this->texture_paths, "textures.tl");
-    object->setTextureID(702);
-    object->setTexturePath("://Texture2");
-
-}
-
-void RenderState::add_wall(QVector3D rotation,
-                           QVector3D translation,
-                           QVector3D scaling) {
-    // texture index 1 is the tile
-    VisualObject * object = new VisualObject(this->wall,
-                                             this->textures.value(4),
-                                             translation, rotation,
-                                             "Wall");
-    object->setScaling(scaling);
-    // set horizontal centers
-    object->setLMidHorisontal(this->center_h_1);
-    object->setUMidHorisontal(this->center_h_2);
-    this->models.push_back(object);
-    object->setTextureID(704);
-    object->setTexturePath("://Texture4");
-    PremisesExporter::export_environment(this->models, "environment.env");
-    PremisesExporter::export_texture(this->texture_paths, "textures.tl");
-
-}
-
-void RenderState::add_door(QVector3D rotation,
-                           QVector3D translation,
-                           QVector3D scaling) {
-    // texture index 1 is the tile
-    VisualObject * object = new VisualObject(this->door,
-                                             this->textures.value(2),
-                                             translation,
-                                             rotation,
-                                             "Door");
-    object->setScaling(scaling);
-    object->setTextureID(702);
-    object->setTexturePath("://Texture2");
-    this->models.push_back(object);
-    PremisesExporter::export_environment(this->models, "environment.env");
-    PremisesExporter::export_texture(this->texture_paths, "textures.tl");
-
-}
-
-void RenderState::add_floor_plan(QVector3D rotation,
-                                 QVector3D translation,
-                                 QVector3D scaling) {
-    // texture index 1 is the tile
-    VisualObject * object =
-            new VisualObject(this->plane,
-                             this->
-                             textures_from_files.
-                             value(this->
-                                   textures_from_files.count() -
-                                   1),
-                             translation,
-                             rotation,
-                             "FloorPlan");
-    object->setScaling(scaling);
-    object->setTextureID(this->textures_from_files.count() - 1);
-    object->setTexturePath(this->
-                           texture_paths.value(this->
-                                               textures_from_files.count() -
-                                               1));
-    this->models.push_back(object);
-    PremisesExporter::export_environment(this->models, "environment.env");
-    PremisesExporter::export_texture(this->texture_paths, "textures.tl");
-
-
-}
 
 void RenderState::resizeGL(int w, int h) {
     // setup the viewport for opengl
