@@ -36,15 +36,17 @@ bool ModelMesh::LoadOBJ(QString file) {
         } else if ( list[0] == "vt" ) {
                 float *uv = (float*)malloc(sizeof(float) * ListCount);
                 //float uv[ListCount];
-                for ( unsigned int i = 0; i < ListCount - 1; i++ )
+                for ( unsigned int i = 0; i < ListCount - 1; i++ ) {
                   QTextStream(&list[i+1]) >> uv[i];
+                }
                   temp_uvs.push_back(QVector2D(uv[0], uv[1]));
                 free(uv);
         } else if ( list[0] == "vn" ) {
                 //float vertexnormal[ListCount];
                 float *vertexnormal = (float*)malloc(sizeof(float) * ListCount);
-                for ( unsigned int i = 0; i < ListCount - 1; i++ )
+                for ( unsigned int i = 0; i < ListCount - 1; i++ ) {
                   QTextStream(&list[i+1]) >> vertexnormal[i];
+                }
                   temp_normals.push_back(QVector3D(vertexnormal[0],
                                                    vertexnormal[1],
                                                    vertexnormal[2]));

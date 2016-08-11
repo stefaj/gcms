@@ -1,6 +1,6 @@
 /* Copyright 2015 Ruan Luies */
-#ifndef VIRTUAL_CREATOR_OBJECTS_MODELMESH_H_
-#define VIRTUAL_CREATOR_OBJECTS_MODELMESH_H_
+#ifndef MODELMESH_H_
+#define MODELMESH_H_
 
 #include <QVector>
 
@@ -20,4 +20,4 @@ class ModelMesh {
     bool LoadOBJ(QString filename);
 };
 
-#endif  // VIRTUAL_CREATOR_OBJECTS_MODELMESH_H_
+#endif  // MODELMESH_H_
