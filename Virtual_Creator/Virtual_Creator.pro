@@ -23,8 +23,7 @@ SOURCES += main.cpp\
     Objects/NodeHandler.cpp \
     RenderStates/renderstate.cpp \
     Functions/drawgl.cpp \
-    Objects/nodebutton.cpp \
-    LoadingBar/waitingspinnerwidget.cpp
+    Objects/nodebutton.cpp
 
 HEADERS  += mainwindow.h \
     Objects/ModelMesh.h \
@@ -36,8 +35,7 @@ HEADERS  += mainwindow.h \
     RenderStates/renderstate.h \
     Functions/drawgl.h \
     Objects/nodebutton.h \
-    main.h \
-    LoadingBar/waitingspinnerwidget.h
+    main.h
 
 FORMS    += mainwindow.ui
 
