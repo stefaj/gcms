@@ -17,18 +17,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     Objects/ModelMesh.cpp \
     Objects/Node.cpp \
-    Objects/visualobject.cpp \
     Functions/mathematics.cpp \
-    Functions/premises_exporter.cpp \
     RenderStates/renderstate.cpp \
     Functions/drawgl.cpp
 
 HEADERS  += mainwindow.h \
     Objects/ModelMesh.h \
     Objects/Node.h \
-    Objects/visualobject.h \
     Functions/mathematics.h \
-    Functions/premises_exporter.h \
     RenderStates/renderstate.h \
     Functions/drawgl.h \
     main.h

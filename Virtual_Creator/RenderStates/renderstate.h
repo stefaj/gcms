@@ -16,8 +16,6 @@
 #include <QPainter>
 #include "./Objects/ModelMesh.h"
 #include "./Objects/Node.h"
-#include "./Objects/visualobject.h"
-#include "./Functions/premises_exporter.h"
 #include "./Functions/drawgl.h"
 
 
@@ -44,7 +42,6 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     QVector3D *position, *clicked_position;
     QVector<QOpenGLTexture *> textures;
     QVector<Node *> nodes;
-    QVector<VisualObject *> models;
     QVector<QString> texture_paths;
     ModelMesh *node, *plane, *wall, *door, *tree;
 

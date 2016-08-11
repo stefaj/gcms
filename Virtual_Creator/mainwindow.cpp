@@ -90,14 +90,6 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::create_background() {
-  QString file_name = QFileDialog::getOpenFileName(this,
-                                                   tr("Open Image"),
-                                                   "/home/image_file",
-                                                   tr("Image Files (*.png *.jpg *.bmp)"));
-  if ( PremisesExporter::fileExists(file_name) ) {
-    QImage img(file_name);
-    img.save("VirtualConcierge/background.png");
-  }
 }
 
 void MainWindow::open_config_editor() {
@@ -118,13 +110,6 @@ void MainWindow::edit_node_settings(QString name,
 
 void MainWindow::is_opengl_valid_context(bool is_valid_context) {
   opengl_initialised = is_valid_context;
-  if ( opengl_initialised ) {
-    // load temporary stored environment
-    QString temp_directory = "VirtualConcierge/environment.env";
-    if ( PremisesExporter::fileExists(temp_directory) ) {
-      emit load_premises(temp_directory);
-    }
-  }
 }
 
 void MainWindow::EmitSignals() {
@@ -156,24 +141,6 @@ void MainWindow::drop_down_emit() {
     if ( ui->button_add_basic->isChecked() ||
          ui->button_edit_basic->isChecked() )
       ui->stackedWidget_side_add->setCurrentIndex(1);
-    // emit new scale for the floor plan
-    emit set_object_scale(QVector3D(
-                              ui->doubleSpinBox_floor_plan_width->value(),
-                              1,
-                              ui->doubleSpinBox_floor_plan_height->value()));
-
-    if ( ui->button_add_basic->isChecked() ) {
-         QString file_name = QFileDialog::getOpenFileName(this,
-                                        tr("Open Image"),
-                                         "/home/image_file",
-                                        tr("Image Files (*.png *.jpg *.bmp)"));
-      if ( PremisesExporter::fileExists(file_name) ) {
-       emit add_new_texture(file_name);
-      } else {
-         emit add_new_texture("://Texture0");
-      }
-    }
-    ui->button_edit_basic->setEnabled(true);
  }
  if ( QString::compare(ui->comboBox_basic_adds->currentText(),
                        "Node",
@@ -214,13 +181,6 @@ void MainWindow::drop_down_emit() {
 }
 
 void MainWindow::send_loaded_premises() {
-  QString file_name = QFileDialog::getOpenFileName(this,
-                                     tr("Open Environment File"),
-                                     "/home/environment",
-                                     tr("Environment Files (*.env)"));
-  if ( PremisesExporter::fileExists(file_name) ) {
-      emit load_premises(file_name);
-    }
 }
 
 void MainWindow::on_spin_rotationY_valueChanged(double arg1) {
@@ -267,17 +227,10 @@ void MainWindow::on_button_execute_virtual_concierge_clicked() {
 }
 
 void MainWindow::on_doubleSpinBox_floor_plan_width_valueChanged(double arg1) {
-  emit set_object_scale(QVector3D(
-                              arg1,
-                              1,
-                            ui->doubleSpinBox_floor_plan_height->value()));
 }
 
 void MainWindow::on_doubleSpinBox_floor_plan_height_valueChanged(double arg1) {
-  emit set_object_scale(QVector3D(
-                            ui->doubleSpinBox_floor_plan_width->value(),
-                            1,
-                            arg1));
+
 }
 
 void MainWindow::on_spinBox_floor_level_valueChanged(int arg1) {

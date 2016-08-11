@@ -4,7 +4,6 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
-#include "Functions/premises_exporter.h"
 #include <QVector2D>
 namespace Ui {
 class MainWindow;
@@ -78,7 +77,6 @@ private:
     // adds new usable texture to the list
     void add_new_texture(QString file_name);
     // set the current scale of the object active
-    void set_object_scale(QVector3D scale);
     void change_floor_selected(float height);  // sets the current floor used
     void change_node_name(QString name);  // changes the name of the next node
     // set whether the node should be a button or not
