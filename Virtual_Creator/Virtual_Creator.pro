@@ -20,10 +20,8 @@ SOURCES += main.cpp\
     Objects/visualobject.cpp \
     Functions/mathematics.cpp \
     Functions/premises_exporter.cpp \
-    Objects/NodeHandler.cpp \
     RenderStates/renderstate.cpp \
-    Functions/drawgl.cpp \
-    Objects/nodebutton.cpp
+    Functions/drawgl.cpp
 
 HEADERS  += mainwindow.h \
     Objects/ModelMesh.h \
@@ -31,10 +29,8 @@ HEADERS  += mainwindow.h \
     Objects/visualobject.h \
     Functions/mathematics.h \
     Functions/premises_exporter.h \
-    Objects/NodeHandler.h \
     RenderStates/renderstate.h \
     Functions/drawgl.h \
-    Objects/nodebutton.h \
     main.h
 
 FORMS    += mainwindow.ui

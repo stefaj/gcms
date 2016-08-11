@@ -42,8 +42,8 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     node_vehicle(false),
     node_bicycle(false),
     tree_radius(4.0f),
-    infinte_lenght_lines(100.0f),
-    handler(){
+    infinte_lenght_lines(100.0f)
+    {
     this->door_placeable = false;
     this->wall_placable = false;
     this->floor_plan_removable = false;
@@ -689,15 +689,8 @@ void RenderState::wheelEvent(QWheelEvent* event) {
 void RenderState::update_node_errors() {
     // add nodes for debugging
     error_nodes.clear();
-    handler.AddNodes(this->nodes);
-    // displayed debugged nodes
-    if ( handler.count() > 0 ) {
-      QString error_msg = handler.DisplayError();
-      if ( !error_msg.isEmpty() && (error_msg[0] != ' ') ) {
-      emit debug_results(error_msg);
-      error_nodes = handler.error_nodes_indices();
-      }
-    }
+
+
     for ( int i = 0; i < error_nodes.count(); i++ ) {
         if (error_nodes.value(i) < 0 && error_nodes.value(i) > this->nodes.count()) {
             error_nodes.remove(i);
@@ -921,6 +914,7 @@ void RenderState::paintGL() {
                     this->mouse_zoom +
                     this->current_floor_height);
   // define the direction of the camera's up vector
+
   QVector3D cameraUpDirection = cameraTransformation *
           QVector3D(0, 1, 0);
   // implement and transform the camera
@@ -1005,6 +999,7 @@ void RenderState::paintGL() {
   DrawNodes();
   // draw all the lines connected to nodes with directional arrows
   DrawNodeLines(Pos);
+
   // draw lines last
   DrawObjectLines(Pos);
   // draw left clicked line(s)

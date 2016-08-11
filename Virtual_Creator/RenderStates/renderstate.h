@@ -19,7 +19,7 @@
 #include "./Objects/visualobject.h"
 #include "./Functions/premises_exporter.h"
 #include "./Functions/drawgl.h"
-#include "./Objects/NodeHandler.h"
+
 
 class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
      Q_OBJECT
@@ -72,7 +72,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     QString floor_plan_path, next_node_name;
     QVector<QOpenGLTexture *> textures_from_files;
     QByteArray *session_logged;
-    NodeHandler handler;
+
     void add_pavement(QVector3D rotation,
                       QVector3D position,
                       QVector3D scale);
