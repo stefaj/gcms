@@ -45,9 +45,7 @@ HEADERS  += mainwindow.h \
     directory_wizard.h \
     config_editor.h
 
-FORMS    += mainwindow.ui \
-    directory_wizard.ui \
-    config_editor.ui
+FORMS    += mainwindow.ui
 
 RESOURCES += \
     content.qrc
