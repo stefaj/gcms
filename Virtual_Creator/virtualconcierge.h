@@ -7,7 +7,6 @@
 #include <QPushButton>
 #include <QTimer>
 #include "Objects/nodebutton.h"
-#include "RenderStates/virtualconciergerenderstate.h"
 
 namespace Ui {
 class VirtualConcierge;
