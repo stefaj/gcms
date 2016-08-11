@@ -8,7 +8,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
   ui(new Ui::MainWindow) {
   ui->setupUi(this);
-  network_session = new QByteArray("");
   // set current page to floor plan
   ui->stackedWidget_side_add->setCurrentIndex(2);
   // connections to all the slots of the opengl widget
@@ -276,9 +275,6 @@ void MainWindow::on_doubleSpinBox_node_y_valueChanged(double arg1) {
   emit edit_node_position(QVector2D(this->ui->doubleSpinBox_node_x->value(), arg1));
 }
 
-void MainWindow::on_doubleSpinBox_floor_x_valueChanged(double arg1) {
-  emit edit_floorplan_position(QVector2D(arg1, ui->doubleSpinBox_floor_y->value()));
-}
 
 void MainWindow::copyPath(QString src, QString dst) {
     QDir dir(src);
@@ -296,51 +292,3 @@ void MainWindow::copyPath(QString src, QString dst) {
     }
 }
 
-void MainWindow::save_premises() {
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                 "/home",
-                                                 QFileDialog::ShowDirsOnly
-                                                 | QFileDialog::DontResolveSymlinks);
-    copyPath("VirtualConcierge/", dir);
-}
-
-void MainWindow::on_doubleSpinBox_floor_y_valueChanged(double arg1) {
-  emit edit_floorplan_position(QVector2D(ui->doubleSpinBox_floor_x->value(), arg1));
-}
-
-void MainWindow::receive_edit_floorplan(QVector2D position,
-                                        float rotation,
-                                        QVector2D scale) {
-  ui->doubleSpinBox_floor_x->setValue(position.x());
-  ui->doubleSpinBox_floor_y->setValue(position.y());
-  ui->doubleSpinBox_floor_plan_height->setValue(scale.y());
-  ui->doubleSpinBox_floor_plan_width->setValue(scale.x());
-  ui->spin_rotationY->setValue(rotation);
-}
-
-void MainWindow::receive_session(QByteArray session, bool logged) {
-  if ( logged ) {
-    *network_session = session;
-    emit notify_session(session);
-  }
-}
-
-void MainWindow::on_pushButton_wizard_clicked() {
-
-}
-
-void MainWindow::on_checkBox_wheelchair_clicked() {
-
-}
-
-void MainWindow::on_checkBox_feet_clicked() {
-
-}
-
-void MainWindow::on_checkBox_bicycle_clicked() {
-
-}
-
-void MainWindow::on_checkBox_vehicle_clicked() {
-
-}

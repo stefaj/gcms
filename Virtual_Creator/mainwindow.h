@@ -34,24 +34,13 @@ class MainWindow : public QMainWindow {
     void on_button_edit_basic_clicked();
     void edit_node_settings(QString name,
                             QVector2D position);
-    void receive_edit_floorplan(QVector2D position,
-                             float rotation,
-                             QVector2D scale);
+
     void on_doubleSpinBox_node_x_valueChanged(double arg1);
     void on_doubleSpinBox_node_y_valueChanged(double arg1);
-    void on_doubleSpinBox_floor_x_valueChanged(double arg1);
-    void on_doubleSpinBox_floor_y_valueChanged(double arg1);
-    void receive_session(QByteArray session, bool logged);
     void error_message(QString error);
-    void on_pushButton_wizard_clicked();
-    void on_checkBox_wheelchair_clicked();
-    void on_checkBox_feet_clicked();
-    void on_checkBox_bicycle_clicked();
-    void on_checkBox_vehicle_clicked();
     void open_config_editor();
     void send_config();
     void new_premises();
-    void save_premises(); // saves the premises to a directory
     void create_background();
 
 private:
@@ -60,7 +49,6 @@ private:
     void drop_down_emit();
     void copyPath(QString src, QString dst);
     bool opengl_initialised;
-    QByteArray *network_session;
 
  signals:
     void place_node(bool placable);  // allows a node to be placed
