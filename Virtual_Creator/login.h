@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QProgressBar>
-#include "./Network/client.h"
+
 #include "./mainwindow.h"
 #include "./LoadingBar/waitingspinnerwidget.h"
 namespace Ui {
@@ -32,7 +32,6 @@ private:
   bool logged_in_;
   QByteArray session_;
   Ui::login *ui;
-  Client *client_logging;
   WaitingSpinnerWidget* spinner;
   MainWindow *main_program;
 

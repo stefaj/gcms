@@ -81,9 +81,6 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     // initialise the session
     session_logged = new QByteArray("");
 
-    //connect to the server
-    user_client = new Client();
-
     // initialized successfully
     emit debug_results("Premises Visualizer Initialized");
 
@@ -166,8 +163,6 @@ void RenderState::set_next_node_name(QString value) {
   // exort nodes
   PremisesExporter::export_nodes(this->nodes,
                                  "nodes.pvc");
-  if( !session_logged->isNull() )
-    user_client->send_file(*session_logged, "VirtualConcierge/nodes.pvc");
 }
 
 void RenderState::set_next_node_significant(bool value) {
@@ -179,8 +174,6 @@ void RenderState::set_next_node_significant(bool value) {
   // exort nodes
   PremisesExporter::export_nodes(this->nodes,
                                  "nodes.pvc");
-  if( !session_logged->isNull() )
-    user_client->send_file(*session_logged, "VirtualConcierge/nodes.pvc");
 }
 
 void RenderState::allow_remove_node(bool value) {
@@ -224,10 +217,7 @@ void RenderState::change_rotY(double value) {
               QVector3D(0, value, 0));
   PremisesExporter::export_environment(this->models,
                                          "environment.env");
-  if( !session_logged->isNull() ) {
-    user_client->send_file(*session_logged, "VirtualConcierge/environment.env");
-    user_client->send_file(*session_logged, "VirtualConcierge/textures.tl");
-  }
+
 }
 
 void RenderState::set_object_scale(QVector3D value) {
@@ -238,10 +228,6 @@ void RenderState::set_object_scale(QVector3D value) {
       this->models.value(this->selected_floor_plan)->setScaling(value);
     PremisesExporter::export_environment(this->models,
                                          "environment.env");
-    if( !session_logged->isNull() ) {
-      user_client->send_file(*session_logged, "VirtualConcierge/environment.env");
-      user_client->send_file(*session_logged, "VirtualConcierge/textures.tl");
-    }
 }
 
 void RenderState::change_current_floor_height(float value) {
@@ -282,9 +268,7 @@ void RenderState::load_texture_from_file(QString value) {
 
   this->textures_from_files.push_back(texture);
   this->texture_paths.push_back(val_new);
-  if( !session_logged->isNull() ) {
-    user_client->send_file(*this->session_logged, val_new);
-  }
+
 }
 
 void RenderState::initializeGL() {
@@ -381,8 +365,7 @@ void RenderState::mouseReleaseEvent(QMouseEvent * /*event*/) {
             // export to temp nodes
             PremisesExporter::export_nodes(this->nodes,
                                            "nodes.pvc");
-            if( !session_logged->isNull() )
-              user_client->send_file(*session_logged, "VirtualConcierge/nodes.pvc");
+
             // update errors
             update_node_errors();
         }
@@ -420,8 +403,7 @@ void RenderState::edit_node_position(QVector2D position) {
     // exort nodes
     PremisesExporter::export_nodes(this->nodes,
                                    "nodes.pvc");
-    if( !session_logged->isNull() )
-      user_client->send_file(*session_logged, "VirtualConcierge/nodes.pvc");
+
 
 }
 
@@ -441,8 +423,7 @@ void RenderState::edit_node_access(bool walk, bool wheelchair, bool vehicle, boo
     // exort nodes
     PremisesExporter::export_nodes(this->nodes,
                                    "nodes.pvc");
-    if( !session_logged->isNull() )
-      user_client->send_file(*session_logged, "VirtualConcierge/nodes.pvc");
+
 
     //LoadNodes("VirtualConcierge/");
     // update errors
@@ -459,10 +440,7 @@ void RenderState::edit_floorplan_position(QVector2D position) {
                 position.y()));
     PremisesExporter::export_environment(this->models,
                                          "environment.env");
-    if( !session_logged->isNull() ) {
-      user_client->send_file(*session_logged, "VirtualConcierge/environment.env");
-      user_client->send_file(*session_logged, "VirtualConcierge/textures.tl");
-    }
+
 }
 
 void RenderState::mousePressEvent(QMouseEvent* event) {
@@ -481,8 +459,7 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
     if ( (event->button() == Qt::LeftButton) && (this->node_placable) ) {
         add_node(new QString(this->next_node_name));
         PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
-        if( !session_logged->isNull() )
-          user_client->send_file(*session_logged, "VirtualConcierge/nodes.pvc");
+
     }
 
     // left click to add door
@@ -608,8 +585,7 @@ void RenderState::remove_link() {
   update_node_errors();
   // update the working files
   PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
-  if( !session_logged->isNull() )
-    user_client->send_file(*session_logged, "VirtualConcierge/nodes.pvc");
+
 }
 
 void RenderState::remove_select_floorplan() {
@@ -659,10 +635,7 @@ void RenderState::remove_select_floorplan() {
   }
   PremisesExporter::export_environment(this->models, "environment.env");
   PremisesExporter::export_texture(this->texture_paths, "textures.tl");
-  if( !session_logged->isNull() ) {
-    user_client->send_file(*session_logged, "VirtualConcierge/environment.env");
-    user_client->send_file(*session_logged, "VirtualConcierge/textures.tl");
-  }
+
 }
 
 void RenderState::RemoveNodes() {
@@ -696,8 +669,7 @@ void RenderState::RemoveNodes() {
   // update the temp nodelist
   PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
   //handler.AddNodes(this->nodes);
-  if( !session_logged->isNull() )
-    user_client->send_file(*session_logged, "VirtualConcierge/nodes.pvc");
+
   // show node errors
   update_node_errors();
 }
@@ -757,8 +729,7 @@ void RenderState::add_node(QString* name) {
     // update the working files
     PremisesExporter::export_nodes(this->nodes, "nodes.pvc");
 
-    if( !session_logged->isNull() )
-      user_client->send_file(*session_logged, "VirtualConcierge/nodes.pvc");
+
 }
 
 void RenderState::add_pavement(QVector3D rotation,
@@ -776,10 +747,7 @@ void RenderState::add_pavement(QVector3D rotation,
     PremisesExporter::export_texture(this->texture_paths, "textures.tl");
     object->setTextureID(701);
     object->setTexturePath("://Texture1");
-    if( !session_logged->isNull() ) {
-      user_client->send_file(*session_logged, "VirtualConcierge/environment.env");
-      user_client->send_file(*session_logged, "VirtualConcierge/textures.tl");
-    }
+
 }
 
 void RenderState::add_tree(QVector3D rotation,
@@ -797,10 +765,7 @@ void RenderState::add_tree(QVector3D rotation,
     PremisesExporter::export_texture(this->texture_paths, "textures.tl");
     object->setTextureID(702);
     object->setTexturePath("://Texture2");
-    if( !session_logged->isNull() ) {
-      user_client->send_file(*session_logged, "VirtualConcierge/environment.env");
-      user_client->send_file(*session_logged, "VirtualConcierge/textures.tl");
-    }
+
 }
 
 void RenderState::add_wall(QVector3D rotation,
@@ -820,10 +785,7 @@ void RenderState::add_wall(QVector3D rotation,
     object->setTexturePath("://Texture4");
     PremisesExporter::export_environment(this->models, "environment.env");
     PremisesExporter::export_texture(this->texture_paths, "textures.tl");
-    if( !session_logged->isNull() ) {
-      user_client->send_file(*session_logged, "VirtualConcierge/environment.env");
-      user_client->send_file(*session_logged, "VirtualConcierge/textures.tl");
-    }
+
 }
 
 void RenderState::add_door(QVector3D rotation,
@@ -841,10 +803,7 @@ void RenderState::add_door(QVector3D rotation,
     this->models.push_back(object);
     PremisesExporter::export_environment(this->models, "environment.env");
     PremisesExporter::export_texture(this->texture_paths, "textures.tl");
-    if( !session_logged->isNull() ) {
-      user_client->send_file(*session_logged, "VirtualConcierge/environment.env");
-      user_client->send_file(*session_logged, "VirtualConcierge/textures.tl");
-    }
+
 }
 
 void RenderState::add_floor_plan(QVector3D rotation,
@@ -871,10 +830,7 @@ void RenderState::add_floor_plan(QVector3D rotation,
     PremisesExporter::export_environment(this->models, "environment.env");
     PremisesExporter::export_texture(this->texture_paths, "textures.tl");
 
-    if( !session_logged->isNull() ) {
-      user_client->send_file(*session_logged, "VirtualConcierge/environment.env");
-      user_client->send_file(*session_logged, "VirtualConcierge/textures.tl");
-    }
+
 }
 
 void RenderState::resizeGL(int w, int h) {
@@ -920,11 +876,11 @@ void RenderState::LoadContent() {
 }
 
 void RenderState::receive_config() {
-    user_client->send_file(*(this->session_logged), "VirtualConcierge/config.config");
+
 }
 
 void RenderState::receive_directories() {
-    user_client->send_file(*(this->session_logged), "VirtualConcierge/directories.dir");
+
 }
 
 void RenderState::paintGL() {

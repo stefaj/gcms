@@ -19,7 +19,6 @@
 #include "./Objects/visualobject.h"
 #include "./Functions/premises_exporter.h"
 #include "./Functions/drawgl.h"
-#include "./Network/client.h"
 #include "./Objects/NodeHandler.h"
 
 class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
@@ -48,7 +47,6 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     QVector<VisualObject *> models;
     QVector<QString> texture_paths;
     ModelMesh *node, *plane, *wall, *door, *tree;
-    Client *user_client;
 
     // internal integers used for mousemovement, counters etc.
     int mouse_x, mouse_y, dmouse_x, dmouse_y, node_index_selected, selected_floor_plan;

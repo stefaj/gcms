@@ -2,7 +2,7 @@
 
 #include "./mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "./userinterfacecreator.h"
+
 #include "./config_editor.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -311,10 +311,7 @@ void MainWindow::on_checkbox_significant_clicked(bool checked) {
 }
 
 void MainWindow::load_virtual_concierge_interface() {
-    UserInterfaceCreator *v = new UserInterfaceCreator();
-    connect(v, SIGNAL(accepted()),
-            ui->openGLWidget, SLOT(receive_directories()));
-    v->show();
+
 }
 
 void MainWindow::on_button_add_basic_clicked(bool /*checked*/) {

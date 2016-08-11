@@ -25,9 +25,6 @@ SOURCES += main.cpp\
     RenderStates/virtualconciergerenderstate.cpp \
     Functions/drawgl.cpp \
     Objects/nodebutton.cpp \
-    SMTP/smtp.cpp \
-    userinterfacecreator.cpp \
-    Network/client.cpp \
     LoadingBar/waitingspinnerwidget.cpp \
     directory_wizard.cpp \
     config_editor.cpp
@@ -43,16 +40,12 @@ HEADERS  += mainwindow.h \
     RenderStates/virtualconciergerenderstate.h \
     Functions/drawgl.h \
     Objects/nodebutton.h \
-    SMTP/smtp.h \
-    userinterfacecreator.h \
     main.h \
-    Network/client.h \
     LoadingBar/waitingspinnerwidget.h \
     directory_wizard.h \
     config_editor.h
 
 FORMS    += mainwindow.ui \
-    userinterfacecreator.ui \
     directory_wizard.ui \
     config_editor.ui
 
