@@ -330,14 +330,14 @@ QComboBox QAbstractItemView {
             <string>Node Settings</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_2">
-            <item row="1" column="0">
+            <item row="0" column="0">
              <widget class="QLabel" name="label">
               <property name="text">
                <string>Node Name</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1" colspan="2">
+            <item row="2" column="1" colspan="2">
              <widget class="QDoubleSpinBox" name="doubleSpinBox_node_y">
               <property name="minimumSize">
                <size>
@@ -356,14 +356,14 @@ QComboBox QAbstractItemView {
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
+            <item row="1" column="0">
              <widget class="QLabel" name="label_node_pos_x">
               <property name="text">
                <string>X Position</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="1" colspan="2">
+            <item row="1" column="1" colspan="2">
              <widget class="QDoubleSpinBox" name="doubleSpinBox_node_x">
               <property name="minimumSize">
                <size>
@@ -382,7 +382,7 @@ QComboBox QAbstractItemView {
               </property>
              </widget>
             </item>
-            <item row="1" column="1" colspan="2">
+            <item row="0" column="1" colspan="2">
              <widget class="QLineEdit" name="lineEdit_node_name">
               <property name="minimumSize">
                <size>
@@ -395,27 +395,10 @@ QComboBox QAbstractItemView {
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
+            <item row="2" column="0">
              <widget class="QLabel" name="label_node_pos_y">
               <property name="text">
                <string>Y Position</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>Significance</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1" colspan="2">
-             <widget class="QCheckBox" name="checkbox_significant">
-              <property name="text">
-               <string>Add Button</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -595,7 +578,7 @@ QComboBox QAbstractItemView {
       <widget class="QComboBox" name="comboBox_basic_adds">
        <property name="minimumSize">
         <size>
-         <width>107</width>
+         <width>101</width>
          <height>32</height>
         </size>
        </property>
@@ -643,8 +626,8 @@ QComboBox QAbstractItemView {
      <rect>
       <x>-1302</x>
       <y>116</y>
-      <width>281</width>
-      <height>192</height>
+      <width>233</width>
+      <height>190</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -753,7 +736,7 @@ QComboBox QAbstractItemView {
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Floor Level</string>
+            <string>Layer</string>
            </property>
           </widget>
          </item>
@@ -770,13 +753,6 @@ QComboBox QAbstractItemView {
              <width>0</width>
              <height>32</height>
             </size>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="label_ground_floor">
-           <property name="text">
-            <string>(Ground Floor)</string>
            </property>
           </widget>
          </item>
@@ -802,23 +778,6 @@ QComboBox QAbstractItemView {
          <property name="icon">
           <iconset resource="content.qrc">
            <normaloff>:/Content/invert_icon_white.png</normaloff>:/Content/invert_icon_white.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QPushButton" name="pushButton_wizard">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>24</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Directory Wizard</string>
-         </property>
-         <property name="icon">
-          <iconset resource="content.qrc">
-           <normaloff>:/Content/wizard_white.png</normaloff>:/Content/wizard_white.png</iconset>
          </property>
         </widget>
        </item>
