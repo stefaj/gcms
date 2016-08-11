@@ -10,9 +10,9 @@
 
 bool ModelMesh::LoadOBJ(QString file) {
   this->vertices.clear();
-  this->textureCoordinates.clear();
+  this->texture_coordinates.clear();
   this->normals.clear();
-  this->vertexIndices.clear();
+  this->vertex_indices.clear();
   QVector< QVector3D > temp_vertices;
   QVector< QVector2D > temp_uvs;
   QVector< QVector3D > temp_normals;
@@ -60,9 +60,9 @@ bool ModelMesh::LoadOBJ(QString file) {
                   QTextStream(&facelist[2]) >> normalIndex[i];
                 }
                 for ( int j = 0; j < 3; j++ ) {
-                  this->vertexIndices.push_back(vertexIndex[j]);
-                  this->uvIndices.push_back(uvIndex[j]);
-                  this->normalIndices.push_back(normalIndex[j]);
+                  this->vertex_indices.push_back(vertexIndex[j]);
+                  this->uv_indices.push_back(uvIndex[j]);
+                  this->normal_indices.push_back(normalIndex[j]);
                 }
         }
         line = ascread.readLine();
@@ -70,20 +70,20 @@ bool ModelMesh::LoadOBJ(QString file) {
     textfile.close();
   }
     // For each vertex of each triangle
-    for ( int i = 0; i < this->vertexIndices.size(); i++ ) {
-      int vertexIndex = this->vertexIndices[i];
+    for ( int i = 0; i < this->vertex_indices.size(); i++ ) {
+      int vertexIndex = this->vertex_indices[i];
       QVector3D vertex = temp_vertices[ vertexIndex-1 ];
       this->vertices.push_back(vertex);
     }
     // For each vertex of each triangle
-    for ( int i = 0; i < this->uvIndices.size(); i++ ) {
-      int uvIndex = this->uvIndices[i];
+    for ( int i = 0; i < this->uv_indices.size(); i++ ) {
+      int uvIndex = this->uv_indices[i];
       QVector2D uvs = temp_uvs[ uvIndex-1 ];
-      this->textureCoordinates.push_back(uvs);
+      this->texture_coordinates.push_back(uvs);
     }
     // For each vertex of each triangle
-    for ( int k = 0; k < this->normalIndices.size(); k++ ) {
-      int normalIndex = this->normalIndices[k] - 1;
+    for ( int k = 0; k < this->normal_indices.size(); k++ ) {
+      int normalIndex = this->normal_indices[k] - 1;
       QVector3D normal = temp_normals[normalIndex];
       this->normals.push_back(normal);
     }
@@ -91,12 +91,12 @@ bool ModelMesh::LoadOBJ(QString file) {
 }
 
 ModelMesh::~ModelMesh() {
-  this->textureCoordinates.detach();
+  this->texture_coordinates.detach();
   this->vertices.detach();
   this->normals.detach();
-  this->vertexIndices.detach();
-  this->uvIndices.detach();
-  this->normalIndices.detach();
+  this->vertex_indices.detach();
+  this->uv_indices.detach();
+  this->normal_indices.detach();
 }
 
 ModelMesh::ModelMesh(QString file) {LoadOBJ(file);}

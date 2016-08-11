@@ -77,7 +77,7 @@ void DrawGL::ShaderDraw(ModelMesh* box,
   shader_program->enableAttributeArray("normal");
   // load the texture coordinates to the shaders
   shader_program->setAttributeArray("textureCoordinate",
-                                    box->textureCoordinates.constData());
+                                    box->texture_coordinates.constData());
   // enable the texture attribute
   shader_program->enableAttributeArray("textureCoordinate");
     // draw the opengl vertices
