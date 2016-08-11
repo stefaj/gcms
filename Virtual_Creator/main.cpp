@@ -1,6 +1,5 @@
 /* Copyright 2015 Ruan Luies */
 #include "./main.h"
-#include "./login.h"
 
 #include "./virtualconcierge.h"
 #include <QDebug>
