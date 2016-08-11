@@ -841,7 +841,7 @@ void RenderState::resizeGL(int w, int h) {
     pMatrix.setToIdentity();
 
     // set the projection matrix
-    pMatrix.perspective(45,
+    pMatrix.perspective(10,
                         static_cast<float>(w) /
                         static_cast<float>(h),
                         1.0f,
@@ -1096,7 +1096,7 @@ void RenderState::DrawPlacableItems(QVector3D Pos) {
     // draw placable node
     DrawGL::draw_if_true(this->node, this->vMatrix,
                          Pos, this->rotation,
-                         QVector3D(1, 1, 1),
+                         QVector3D(0.51,0.51,0.51),
                          this->textures.value(0),
                          QVector3D(1, 0, 0),
                          QVector2D(1, 1),
