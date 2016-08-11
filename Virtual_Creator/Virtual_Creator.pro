@@ -22,7 +22,6 @@ SOURCES += main.cpp\
     Functions/premises_exporter.cpp \
     Objects/NodeHandler.cpp \
     RenderStates/renderstate.cpp \
-    RenderStates/virtualconciergerenderstate.cpp \
     Functions/drawgl.cpp \
     Objects/nodebutton.cpp \
     LoadingBar/waitingspinnerwidget.cpp \
@@ -37,7 +36,6 @@ HEADERS  += mainwindow.h \
     Functions/premises_exporter.h \
     Objects/NodeHandler.h \
     RenderStates/renderstate.h \
-    RenderStates/virtualconciergerenderstate.h \
     Functions/drawgl.h \
     Objects/nodebutton.h \
     main.h \
