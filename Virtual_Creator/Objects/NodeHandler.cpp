@@ -155,11 +155,6 @@ int NodeHandler::CalculateShortest(int start, int goal, bool walk, bool wheelcha
         // update the g value and shortest path of the neighbor
         Node *node_access = this->premises.value(this->premises.value(current_index)->
                                                  getConnectedIndex(p));
-        if (!((node_access->getWalk() && walk) ||
-              (node_access->getVehicle() && vehicle) ||
-              (node_access->getWheelChair() && wheelchair) ||
-              (node_access->getBike() && bicycle) ) )
-            nodedist = inf;
 
         if ( nodedist + this->premises.value(current_index)->getG() <= node_access->getG() ) {
             this->premises.value(this->premises.value(current_index)->
@@ -313,21 +308,5 @@ void NodeHandler::ReadFilePVC(QString filename) {
     }
     // close the textfile
     textfile.close();
-  }
-  // add walkable nodes
-  for ( int i = 0; i < walk.count(); i++) {
-      this->premises.value(walk.value(i))->setWalk(true);
-  }
-  // add wheelchair nodes
-  for ( int i = 0; i < wheelchair.count(); i++) {
-      this->premises.value(wheelchair.value(i))->setWheelChair(true);
-  }
-  // add vehicle nodes
-  for ( int i = 0; i < vehice.count(); i++) {
-      this->premises.value(vehice.value(i))->setVehicle(true);
-  }
-  // add bicycle nodes
-  for ( int i = 0; i < bicycle.count(); i++) {
-      this->premises.value(bicycle.value(i))->setBike(true);
   }
 }

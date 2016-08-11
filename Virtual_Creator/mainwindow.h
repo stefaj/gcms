@@ -35,12 +35,7 @@ class MainWindow : public QMainWindow {
     void on_comboBox_basic_adds_activated(const QString &arg1);
     void on_button_edit_basic_clicked();
     void edit_node_settings(QString name,
-                            QVector2D position,
-                            bool isbutton,
-                            bool walk,
-                            bool wheelchair,
-                            bool bicycle,
-                            bool vehicle);
+                            QVector2D position);
     void receive_edit_floorplan(QVector2D position,
                              float rotation,
                              QVector2D scale);

@@ -142,12 +142,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
   signals:
     void opengl_initialised(bool);
     void send_edit_node(QString name,
-                        QVector2D position,
-                        bool button,
-                        bool walk,
-                        bool wheelchair,
-                        bool bicycle,
-                        bool vehicle);
+                        QVector2D position);
     void send_edit_floorplan(QVector2D position,
                              float rotation,
                              QVector2D scale);

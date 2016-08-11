@@ -13,11 +13,6 @@ Node::Node() {
     this->connected.clear();
     this->connectedindex.clear();
     this->shortest.clear();
-    this->links = false;
-    this->walk = false;
-    this->bike = false;
-    this->vehicle = false;
-    this->wheelchair = false;
     this->significant = true;
     this->nshortest = -1;
     this->g = 99999999999999.0;
@@ -122,23 +117,7 @@ void Node::setShortest(int index) {this->nshortest = index;}
 
 int Node::getShortestIndex() {return this->nshortest;}
 
-void Node::setWalk(bool value) {this->walk = value;}
-
-void Node::setWheelChair(bool value) {this->wheelchair = value;}
-
-void Node::setVehicle(bool value) {this->vehicle = value;}
-
-void Node::setBike(bool value) {this->bike = value;}
-
 void Node::setSignificant(bool value) {this->significant = value;}
-
-bool Node::getWalk() {return this->walk;}
-
-bool Node::getWheelChair() {return this->wheelchair;}
-
-bool Node::getVehicle() {return this->vehicle;}
-
-bool Node::getBike() {return this->bike;}
 
 bool Node::getSignificant() {return this->significant;}
 
