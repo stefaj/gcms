@@ -81,9 +81,6 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
 
 }
 
-void RenderState::load_new_graph(QString) {
-
-}
 
 void RenderState::allow_edit_node(bool allow) {
   edit_node = allow;
@@ -836,8 +833,7 @@ void RenderState::DrawNodes() {
 void RenderState::clear_premises() {
   // clear the nodes
   this->nodes.clear();
-
-  // clear the textures
+   // clear the textures
   for ( int l = 1; l < this->textures.count(); l++ )
    this->textures.removeAt(l);
 }
@@ -888,14 +884,14 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
         aux_angle.setY(0);
 
         // get the angle from the arccos function
-        if ( aux_angle.z() > 0 )
+        if ( aux_angle.z() > 0 ) {
           aux_rotate.rotate(45 - 180 *
                             acos(aux_angle.x() / aux_angle.length()) /
                             (3.141592),
                             0,
                             1,
                             0);
-        else
+        } else {
             aux_rotate.rotate(45 +
                               180 *
                               acos(aux_angle.x() / aux_angle.length()) /
@@ -903,6 +899,7 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
                               0,
                               1,
                               0);
+        }
 
             aux_45.rotate(90, 0, 1, 0);
             aux_calc_one = aux_rotate * (QVector3D(0, 0, 0.25));
@@ -961,152 +958,54 @@ void RenderState::draw_circle_flat(QVector3D center,
     }
 }
 
+void RenderState::load_new_graph(QString filename) {
+  this->nodes.clear();
 
 
-void RenderState::LoadObjects(QString path) {
+  QFile file(filename);
+  if(!file.open(QIODevice::ReadOnly)) {
+    QMessageBox::information(0, "error", file.errorString());
+  }
 
-}
+  QTextStream in(&file);
+  bool graph_found = false;
+  bool graph_closed = false;
+  bool nodes_found = false;
+  bool nodes_closed = false;
+  bool edges_closed = false;
+  bool edges_found = false;
 
-void RenderState::LoadNodes(QString filename) {
-    QVector<int> walk, wheelchair, vehicle, bicycle;
-    walk.clear();
-    wheelchair.clear();
-    vehicle.clear();
-    bicycle.clear();
-    // clear the premises when not empty
-    if ( this->nodes.count() > 0 )
-        this->nodes.clear();
+  while(!in.atEnd()) {
+    QString line = in.readLine();
+   // QStringList fields = line.split(",");
 
-    /* populate the premisis from the text file */
-
-    // load the text file
-    QFile textfile(filename + QString("nodes.pvc"));
-
-    // open the text file
-    textfile.open(QIODevice::ReadOnly | QIODevice::Text);
-    QTextStream ascread(&textfile);
-
-    if ( textfile.isOpen() ) {
-        // read each line of the file
-        QString line = ascread.readLine();
-
-        while ( !line.isNull() ) {
-            // break the line up in usable parts
-            QStringList list = line.split(",");
-
-            // check the type of line
-            /* n-> node
-             * j-> join
-             */
-            if ( list[0] == "n" ) {
-                // this is only x, y, z coordinates for the node
-                float vertex[3];
-                int signi = 0;
-                QString display_name ="";
-                // populate the vertices
-                for ( int i = 0; i < 3; i++ )
-                     QTextStream(&list[i+2]) >> vertex[i];
-
-                // get node significance
-                QTextStream(&list[6]) >> signi;
-                // get the node's name
-                display_name = list[5];
-                Node* n = new Node(new QVector3D(vertex[0],
-                                                 vertex[1],
-                                                 vertex[2]));
-                // set node's significance
-                n->setSignificant((signi == 1));
-                // set node's name
-                n->setName(display_name);
-                // add the node to the premises
-                this->nodes.push_back(n);
-            } else if ( list[0] == "j" ) {
-                   // this is only the indices that should be join
-                    int uv[2];
-
-                    // populate the indices
-                    for ( int i = 0; i < 2; i++ )
-                         QTextStream(&list[i+1]) >> uv[i];
-
-                    QString p = this->nodes.value(uv[1])->getName();
-                    // add the links
-                    this->nodes.value(uv[0])->AddLink(&p, uv[1]);
-
-             } else if ( list[0] == "wc" ) {
-                if(list.count() > 1)
-                wheelchair.append(list[1].toInt());
-            } else if ( list[0] == "vi" ) {
-                if(list.count() > 1)
-                vehicle.append(list[1].toInt());
-            } else if ( list[0] == "ft" ) {
-                if(list.count() > 1)
-                walk.append(list[1].toInt());
-            } else if ( list[0] == "by" ) {
-                if(list.count() > 1)
-                bicycle.append(list[1].toInt());
-            }
-            // read next line
-           line = ascread.readLine();
-        }
-
-        // close the textfile
-        textfile.close();
+    if (!graph_found && line.contains("graph", Qt::CaseInsensitive)) {
+      graph_found = true;
+      qDebug() << "pewpew";
     }
-  // show node errors
-  update_node_errors();
-}
-
-void RenderState::CopyConfig(QString value) {
-    QString val_new = "VirtualConcierge/config.config";
-
-    QDir dir;
-    // try to copy the config to the drive
-    if ( QString::compare(dir.absolutePath() + "/" + val_new,
-                          value,
-                          Qt::CaseInsensitive) != 0 ) {
-      if ( QFile::exists(val_new) && !start_up_load_tex ) {
-       if ( !QFile::remove(val_new) ) {
-
-       }
-      }
-      if ( QFile::exists(value) )
-      if ( !QFile::copy(value, val_new) ) {
-        if ( !QFile::exists(val_new) ) {
-          QMessageBox::warning(this,
-                               tr("Error file copying"),
-                               tr("Texture file could not"
-                                  " be copied to the drive."));
+    if (graph_found && !graph_closed) {
+        // read random nodes and stuff here
+        if (line.contains("<nodes>", Qt::CaseInsensitive)) {
+          nodes_found = true;
         }
-      }
-    }
-}
-
-void RenderState::CopyDirectories(QString value) {
-    QString val_new = "VirtualConcierge/directories.dir";
-
-    QDir dir;
-    // try to copy the texture to the drive
-    if ( QString::compare(dir.absolutePath() + "/" + val_new,
-                          value,
-                          Qt::CaseInsensitive) != 0 ) {
-      if ( QFile::exists(val_new) && !start_up_load_tex ) {
-       if ( !QFile::remove(val_new) ) {
-          // QMessageBox::warning(this,
-          //                      tr("Error file deleting"),
-          //                      tr("Texture file could not"
-          //                        " be deleted from the drive."));
-       }
-      }
-      if ( QFile::exists(value) )
-      if ( !QFile::copy(value, val_new) ) {
-        if ( !QFile::exists(val_new) ) {
-          QMessageBox::warning(this,
-                               tr("Error file copying"),
-                               tr("Texture file could not"
-                                  " be copied to the drive."));
+        if (nodes_found && !nodes_closed) {
+          if(line.contains("<node ", Qt::CaseInsensitive)) {
+            int pos_id = line.indexOf("id",0, Qt::CaseInsensitive);
+            int pos_id_1 = line.indexOf("\"",pos_id, Qt::CaseInsensitive);
+            int pos_id_2 = line.indexOf("\"",pos_id_1 + 1, Qt::CaseInsensitive);
+            QString id_value = line.mid(pos_id_1 + 1, pos_id_2 - pos_id_1 - 1);
+            int pos_label = line.indexOf("label",pos_id, Qt::CaseInsensitive);
+            int pos_label_1 = line.indexOf("\"",pos_label, Qt::CaseInsensitive);
+            int pos_label_2 = line.indexOf("\"",pos_label_1 + 1, Qt::CaseInsensitive);
+            QString label_value = line.mid(pos_label_1 + 1, pos_label_2 - pos_label_1 - 1);
+            this->current_position = new QVector3D(0,0,0);
+            add_node(new QString(label_value));
+          }
         }
-      }
     }
+  }
+
+  file.close();
 }
 
 RenderState::~RenderState() {

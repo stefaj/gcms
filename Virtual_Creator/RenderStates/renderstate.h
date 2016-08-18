@@ -76,11 +76,6 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
                           QMatrix4x4 view_matrix,
                           QVector3D color,
                           float radius);
-    void LoadObjects(QString filename);
-    void LoadTextures(QString filename);
-    void LoadNodes(QString filename);
-    void CopyDirectories(QString filename);
-    void CopyConfig(QString filename);
     void RemoveNodes();
     void DrawNodes();
     void DrawNodeNames();
