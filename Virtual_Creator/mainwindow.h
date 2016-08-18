@@ -37,11 +37,13 @@ class MainWindow : public QMainWindow {
     void send_config();
     void new_premises();
     void create_background();
+    void open_file(bool triggered);
 
 private:
     Ui::MainWindow *ui;
     void EmitSignals();
     void drop_down_emit();
+
     void copyPath(QString src, QString dst);
     bool opengl_initialised;
 
@@ -71,6 +73,7 @@ private:
     void edit_node_access(bool walk, bool wheelchair, bool vehicle, bool bicycle);
     void send_config_data(QString data);
     void clear_premises(); // sends clear signal to renderstate
+    void send_open_graph(QString filename);
 
 };
 

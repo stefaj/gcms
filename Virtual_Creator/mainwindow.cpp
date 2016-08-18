@@ -13,7 +13,9 @@ MainWindow::MainWindow(QWidget *parent) :
   // connections to all the slots of the opengl widget
   connect(this, SIGNAL(place_node(bool)),
           ui->openGLWidget, SLOT(allow_node(bool)));
-
+  // trigger open GEXF file
+  connect(this->ui->actionGEXF, SIGNAL(triggered(bool)),
+          this, SLOT(open_file(bool)));
   connect(this, SIGNAL(remove_nodes(bool)),
           ui->openGLWidget, SLOT(allow_remove_node(bool)));
   connect(this, SIGNAL(node_links(bool)),
@@ -32,8 +34,6 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->openGLWidget, SLOT(set_next_node_significant(bool)));
   connect(this, SIGNAL(load_premises(QString)),
           ui->openGLWidget, SLOT(load_premises(QString)));
-  connect(ui->actionOpen_Premises_File, SIGNAL(triggered()),
-          this, SLOT(send_loaded_premises()));
   connect(ui->actionEdit_User_Interface, SIGNAL(triggered()),
           this, SLOT(load_virtual_concierge_interface()));
   connect(ui->openGLWidget, SIGNAL(opengl_initialised(bool)),
@@ -66,6 +66,14 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->openGLWidget, SLOT(clear_premises()));
   connect(ui->actionSet_Virtual_Concierge_Background, SIGNAL(triggered()),
           this, SLOT(create_background()));
+}
+
+void MainWindow::open_file(bool triggered) {
+  QString file_name = QFileDialog::getOpenFileName(this,
+                                                   tr("Open Graph"),
+                                                   "/home/jana",
+                                                   tr("Graph Files (*.gexf)"));
+  emit send_open_graph(file_name);
 }
 
 void MainWindow::create_background() {

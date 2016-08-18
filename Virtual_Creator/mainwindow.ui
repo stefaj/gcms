@@ -417,7 +417,7 @@ QComboBox QAbstractItemView {
       <widget class="QComboBox" name="comboBox_basic_adds">
        <property name="minimumSize">
         <size>
-         <width>101</width>
+         <width>107</width>
          <height>32</height>
         </size>
        </property>
@@ -463,10 +463,10 @@ QComboBox QAbstractItemView {
    <widget class="QMenu" name="menu_File">
     <property name="geometry">
      <rect>
-      <x>-1302</x>
-      <y>116</y>
-      <width>233</width>
-      <height>190</height>
+      <x>2263</x>
+      <y>87</y>
+      <width>281</width>
+      <height>192</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -494,9 +494,15 @@ QComboBox QAbstractItemView {
     <property name="separatorsCollapsible">
      <bool>false</bool>
     </property>
+    <widget class="QMenu" name="menuOpen_Premises_File">
+     <property name="title">
+      <string>Open Premises File</string>
+     </property>
+     <addaction name="actionGEXF"/>
+    </widget>
     <addaction name="actionNew"/>
     <addaction name="actionSave_Premises"/>
-    <addaction name="actionOpen_Premises_File"/>
+    <addaction name="menuOpen_Premises_File"/>
     <addaction name="actionEdit_User_Interface"/>
     <addaction name="actionSet_Virtual_Concierge_Background"/>
    </widget>
@@ -687,20 +693,6 @@ p, li { white-space: pre-wrap; }
     <bool>true</bool>
    </property>
   </action>
-  <action name="actionOpen_Premises_File">
-   <property name="icon">
-    <iconset resource="content.qrc">
-     <normaloff>:/Content/open_icon_white.png</normaloff>:/Content/open_icon_white.png</iconset>
-   </property>
-   <property name="text">
-    <string>Open Premises File</string>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-  </action>
   <action name="actionEdit_User_Interface">
    <property name="icon">
     <iconset resource="content.qrc">
@@ -758,6 +750,11 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="text">
     <string>Set Virtual Concierge Background</string>
+   </property>
+  </action>
+  <action name="actionGEXF">
+   <property name="text">
+    <string>GEXF</string>
    </property>
   </action>
   <zorder>dockWidget_configuration</zorder>
