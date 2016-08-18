@@ -16,7 +16,9 @@ MainWindow::MainWindow(QWidget *parent) :
   // trigger open GEXF file
   connect(this->ui->actionGEXF, SIGNAL(triggered(bool)),
           this, SLOT(open_file(bool)));
- // connect(this->ui->openGLWidget, SLOT()
+  // send GEXF filename to RenderState to open and render
+  connect(this->ui->openGLWidget, SLOT(load_new_graph(QString)),
+          this, SIGNAL(send_open_graph(QString)));
   connect(this, SIGNAL(remove_nodes(bool)),
           ui->openGLWidget, SLOT(allow_remove_node(bool)));
   connect(this, SIGNAL(node_links(bool)),
