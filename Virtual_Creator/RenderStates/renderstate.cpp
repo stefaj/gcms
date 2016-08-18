@@ -81,19 +81,8 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
 
 }
 
-void RenderState::receive_session(QByteArray session) {
-  *session_logged = session;
-}
+void RenderState::load_new_graph(QString) {
 
-void RenderState::allow_edit_floor(bool allow) {
-  edit_floorplan = allow;
-  // display debugging message
-  /*QString floor_plan = "Edit Floor Plans: ";
-  if ( allow )
-    floor_plan += "true";
-  else
-    floor_plan += "false";
-  emit debug_results(floor_plan);*/
 }
 
 void RenderState::allow_edit_node(bool allow) {
@@ -117,33 +106,6 @@ void RenderState::invert_mouseY(bool value) {
     this->mouse_y_inverted = 1.0f;
 }
 
-void RenderState::allow_remove_floor_plan(bool allow) {
-    floor_plan_removable = allow;
-}
-
-void RenderState::load_premises(QString value) {
-  // get the path of each subdirectory
-  QStringList ls = value.split("/");
-
-  // count the subdirectories
-  int append = ls.count();
-  QString directory_path = "";
-
-  // create new file path from previous
-  for ( int k = 0; k < append-1; k++ ) {
-    directory_path += ls[k] + "/";
-  }
-  // load textures and objects
-  LoadNodes(directory_path);
-  LoadObjects(directory_path);
-  CopyDirectories(directory_path + "/directories.dir");
-  CopyConfig(directory_path + "/config.config");
-
-
-  // set startup load
-  start_up_load_tex = false;
-}
-
 void RenderState::set_next_node_name(QString value) {
   this->next_node_name = value;
   if ( this->node_index_selected < this->nodes.count() &&
@@ -165,32 +127,8 @@ void RenderState::allow_remove_node(bool value) {
   this->node_removable = value;
 }
 
-void RenderState::allow_remove_tree(bool value) {
-  this->tree_removable = value;
-}
-
 void RenderState::allow_link(bool value) {
   this->node_linkable = value;
-}
-
-void RenderState::allow_pavement(bool value) {
-  this->pavement_placable = value;
-}
-
-void RenderState::allow_door(bool value) {
-  this->door_placeable = value;
-}
-
-void RenderState::allow_wall(bool value) {
-  this->wall_placable = value;
-}
-
-void RenderState::allow_tree(bool value) {
-  this->tree_placable = value;
-}
-
-void RenderState::allow_floor_plan(bool value) {
-  this->placable_floor_plan = value;
 }
 
 void RenderState::change_current_floor_height(float value) {
@@ -364,11 +302,6 @@ void RenderState::edit_node_access(bool walk, bool wheelchair, bool vehicle, boo
     //LoadNodes("VirtualConcierge/");
     // update errors
     update_node_errors();
-}
-
-void RenderState::edit_floorplan_position(QVector2D position) {
-
-
 }
 
 void RenderState::mousePressEvent(QMouseEvent* event) {
@@ -588,13 +521,6 @@ void RenderState::LoadContent() {
     this->program->link();
 }
 
-void RenderState::receive_config() {
-
-}
-
-void RenderState::receive_directories() {
-
-}
 
 void RenderState::paintGL() {
   // initialise the view matrix

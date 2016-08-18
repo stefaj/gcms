@@ -16,16 +16,13 @@ MainWindow::MainWindow(QWidget *parent) :
   // trigger open GEXF file
   connect(this->ui->actionGEXF, SIGNAL(triggered(bool)),
           this, SLOT(open_file(bool)));
+ // connect(this->ui->openGLWidget, SLOT()
   connect(this, SIGNAL(remove_nodes(bool)),
           ui->openGLWidget, SLOT(allow_remove_node(bool)));
   connect(this, SIGNAL(node_links(bool)),
           ui->openGLWidget, SLOT(allow_link(bool)));
   connect(this, SIGNAL(invert_mouseY(bool)),
           ui->openGLWidget, SLOT(invert_mouseY(bool)));
-  connect(this, SIGNAL(place_tree(bool)),
-          ui->openGLWidget, SLOT(allow_tree(bool)));
-  connect(this, SIGNAL(place_floor_plan(bool)),
-          ui->openGLWidget, SLOT(allow_floor_plan(bool)));
   connect(this, SIGNAL(change_floor_selected(float)),
           ui->openGLWidget, SLOT(change_current_floor_height(float)));
   connect(this, SIGNAL(change_node_name(QString)),

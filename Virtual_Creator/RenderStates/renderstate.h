@@ -95,29 +95,17 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     void add_node(QString* name);
     void allow_node(bool allow);
     void allow_remove_node(bool allow);
-    void allow_remove_tree(bool allow);
     void allow_link(bool allow);
-    void allow_pavement(bool allow);
-    void allow_door(bool allow);
-    void allow_wall(bool allow);
-    void allow_tree(bool allow);
-    void allow_floor_plan(bool allow);
+    void load_new_graph(QString);
     void invert_mouseY(bool invert_mouse);
     void load_texture_from_file(QString filename);
     void change_current_floor_height(float y_height);
     void set_next_node_name(QString name);
     void set_next_node_significant(bool is_significant);
-    void load_premises(QString filename);
-    void allow_remove_floor_plan(bool allow);
     void allow_remove_link(bool allow);
-    void allow_edit_floor(bool allow);
     void allow_edit_node(bool allow);
     void edit_node_position(QVector2D);
-    void edit_floorplan_position(QVector2D);
-    void receive_session(QByteArray session);
     void edit_node_access(bool walk, bool wheelchair, bool vehicle, bool bicycle);
-    void receive_config();
-    void receive_directories();
     void clear_premises();
 
   signals:

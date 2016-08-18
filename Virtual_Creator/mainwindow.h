@@ -29,7 +29,6 @@ class MainWindow : public QMainWindow {
     void on_button_edit_basic_clicked();
     void edit_node_settings(QString name,
                             QVector2D position);
-
     void on_doubleSpinBox_node_x_valueChanged(double arg1);
     void on_doubleSpinBox_node_y_valueChanged(double arg1);
     void error_message(QString error);
@@ -43,7 +42,6 @@ private:
     Ui::MainWindow *ui;
     void EmitSignals();
     void drop_down_emit();
-
     void copyPath(QString src, QString dst);
     bool opengl_initialised;
 
@@ -55,7 +53,6 @@ private:
     void place_tree(bool placable);  // allows the placement of a basic tree
     void invert_mouseY(bool invert_mouse);  // invert the y of the mouse in 3D
     void place_floor_plan(bool placable);  // allows a floorplan to bew placed
-
     void change_floor_selected(float height);  // sets the current floor used
     void change_node_name(QString name);  // changes the name of the next node
     // set whether the node should be a button or not
