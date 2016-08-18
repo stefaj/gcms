@@ -84,6 +84,8 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     void DrawObjectLines(QVector3D Pos);
     void remove_link();
     void update_node_errors();
+    void add_edge(int source, int target, double weight);
+    QString read_string_from_line(QString name, QString string, int start);
     const float tree_radius, infinte_lenght_lines;
     QVector<int> error_nodes;
  private slots:

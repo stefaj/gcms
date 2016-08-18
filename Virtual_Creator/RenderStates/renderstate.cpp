@@ -936,6 +936,10 @@ void RenderState::DrawNodeLines(QVector3D Pos) {
   }
 }
 
+void RenderState::add_edge(int source, int target, double weight) {
+  nodes.value(source)->AddLink(new QString("s"), target);
+}
+
 void RenderState::draw_circle_flat(QVector3D center,
                                    QMatrix4x4 wvp,
                                    QVector3D color,
@@ -956,6 +960,12 @@ void RenderState::draw_circle_flat(QVector3D center,
                     this->program,
                     pMatrix, this->current_floor_height);
     }
+}
+QString RenderState::read_string_from_line(QString name, QString string, int start) {
+  int pos_id = string.indexOf(name, start, Qt::CaseInsensitive);
+  int pos_id_1 = string.indexOf("\"", pos_id, Qt::CaseInsensitive);
+  int pos_id_2 = string.indexOf("\"", pos_id_1 + 1, Qt::CaseInsensitive);
+  return string.mid(pos_id_1 + 1, pos_id_2 - pos_id_1 - 1);
 }
 
 void RenderState::load_new_graph(QString filename) {
@@ -988,20 +998,36 @@ void RenderState::load_new_graph(QString filename) {
         if (line.contains("<nodes>", Qt::CaseInsensitive)) {
           nodes_found = true;
         }
+        if (!edges_found && line.contains("<edges>", Qt::CaseInsensitive)) {
+          edges_found = true;
+        }
+        if (line.contains("</nodes>", Qt::CaseInsensitive)) {
+          nodes_closed = true;
+        }
+        if (line.contains("</edges>", Qt::CaseInsensitive)) {
+          edges_closed = true;
+        }
         if (nodes_found && !nodes_closed) {
           if(line.contains("<node ", Qt::CaseInsensitive)) {
-            int pos_id = line.indexOf("id",0, Qt::CaseInsensitive);
-            int pos_id_1 = line.indexOf("\"",pos_id, Qt::CaseInsensitive);
-            int pos_id_2 = line.indexOf("\"",pos_id_1 + 1, Qt::CaseInsensitive);
-            QString id_value = line.mid(pos_id_1 + 1, pos_id_2 - pos_id_1 - 1);
-            int pos_label = line.indexOf("label",pos_id, Qt::CaseInsensitive);
-            int pos_label_1 = line.indexOf("\"",pos_label, Qt::CaseInsensitive);
-            int pos_label_2 = line.indexOf("\"",pos_label_1 + 1, Qt::CaseInsensitive);
-            QString label_value = line.mid(pos_label_1 + 1, pos_label_2 - pos_label_1 - 1);
-            this->current_position = new QVector3D(0,0,0);
+            QString id_value = read_string_from_line("id", line, 0);
+            QString label_value = read_string_from_line("label", line, 0);
+            this->current_position = new QVector3D(rand() % (5 * (id_value.toInt() + 1)),
+                                                   0, rand() % (5 * (id_value.toInt() +1)));
             add_node(new QString(label_value));
           }
         }
+
+        if (edges_found && !edges_closed) {
+          if(line.contains("<edge ", Qt::CaseInsensitive)) {
+            QString id_value =  read_string_from_line("id", line, 0);
+            QString source_value =  read_string_from_line("source", line, 0);
+            QString target_value = read_string_from_line("target", line, 0);
+            qDebug() << id_value << source_value << target_value;
+            add_edge(source_value.toInt(), target_value.toInt(), 0.0);
+
+
+          }
+      }
     }
   }
 
