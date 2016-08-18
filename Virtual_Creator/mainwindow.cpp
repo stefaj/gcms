@@ -29,28 +29,16 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->openGLWidget, SLOT(set_next_node_name(QString)));
   connect(this, SIGNAL(set_node_significant(bool)),
           ui->openGLWidget, SLOT(set_next_node_significant(bool)));
-  connect(this, SIGNAL(load_premises(QString)),
-          ui->openGLWidget, SLOT(load_premises(QString)));
   connect(ui->actionEdit_User_Interface, SIGNAL(triggered()),
           this, SLOT(load_virtual_concierge_interface()));
   connect(ui->openGLWidget, SIGNAL(opengl_initialised(bool)),
           this, SLOT(is_opengl_valid_context(bool)));
-  connect(this, SIGNAL(remove_floorplan(bool)),
-          ui->openGLWidget, SLOT(allow_remove_floor_plan(bool)));
-  connect(this, SIGNAL(remove_link(bool)),
-          ui->openGLWidget, SLOT(allow_remove_link(bool)));
-  connect(this, SIGNAL(edit_floorplan(bool)),
-          ui->openGLWidget, SLOT(allow_edit_floor(bool)));
   connect(this, SIGNAL(edit_node(bool)),
           ui->openGLWidget, SLOT(allow_edit_node(bool)));
   connect(ui->openGLWidget, SIGNAL(send_edit_node(QString, QVector2D)),
           this, SLOT(edit_node_settings(QString, QVector2D)));
   connect(this, SIGNAL(edit_node_position(QVector2D)),
           ui->openGLWidget, SLOT(edit_node_position(QVector2D)));
-  connect(this, SIGNAL(edit_floorplan_position(QVector2D)),
-          ui->openGLWidget, SLOT(edit_floorplan_position(QVector2D)));
-  connect(this, SIGNAL(notify_session(QByteArray)),
-          ui->openGLWidget, SLOT(receive_session(QByteArray)));
   connect(ui->openGLWidget, SIGNAL(debug_results(QString)),
           this, SLOT(error_message(QString)));
   connect(this, SIGNAL(edit_node_access(bool, bool, bool, bool)),
