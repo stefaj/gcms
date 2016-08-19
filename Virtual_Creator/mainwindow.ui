@@ -803,8 +803,8 @@ p, li { white-space: pre-wrap; }
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>Content/snap_grid_icon.png</normaloff>Content/snap_grid_icon.png</iconset>
+    <iconset resource="content.qrc">
+     <normaloff>:/Content/snap_grid_icon.png</normaloff>:/Content/snap_grid_icon.png</iconset>
    </property>
    <property name="text">
     <string>Snap to Grid</string>
