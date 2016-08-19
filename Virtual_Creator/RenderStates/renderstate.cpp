@@ -996,7 +996,6 @@ void RenderState::load_new_graph(QString filename) {
         if(token == QXmlStreamReader::EndElement) {
             if(xml_reader.name() == "node") {
                 add_node(new QString(name), position, rgb);
-                qDebug() << name << position << rgb;
                 name ="";
                 position = QVector3D(0, 0, 0);
                 rgb = QVector3D(0, 0, 0);
