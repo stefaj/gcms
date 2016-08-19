@@ -57,13 +57,10 @@ private:
   currentscale,
   drag_middle_position;
   bool mousedown_right, mousedown_left, node_placable,
-  node_removable, tree_removable, node_linkable, pavement_placable,
-  door_placeable, wall_placable, tree_placable, placable_floor_plan,
-  node_significant, floor_plan_removable, link_removable, start_up_load_tex,
-  edit_floorplan, edit_node, node_walk, node_wheelchair, node_vehicle, node_bicycle;
-  QString floor_plan_path, next_node_name;
+  node_removable, node_linkable,
+  node_significant, link_removable, edit_node;
+  QString next_node_name;
   QVector<QOpenGLTexture *> textures_from_files;
-  QByteArray *session_logged;
 
 
   void draw_circle_flat(QVector3D position,
@@ -89,14 +86,12 @@ private slots:
   void allow_link(bool allow);
   void load_new_graph(QString);
   void invert_mouseY(bool invert_mouse);
-  void load_texture_from_file(QString filename);
   void change_current_floor_height(float y_height);
   void set_next_node_name(QString name);
   void set_next_node_significant(bool is_significant);
   void allow_remove_link(bool allow);
   void allow_edit_node(bool allow);
   void edit_node_position(QVector2D);
-  void edit_node_access(bool walk, bool wheelchair, bool vehicle, bool bicycle);
   void clear_premises();
 
 signals:

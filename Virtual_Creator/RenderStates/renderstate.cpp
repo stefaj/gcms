@@ -25,23 +25,10 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
   mousedown_right(false),
   mousedown_left(false),
   node_placable(false),
-  pavement_placable(false),
-  tree_placable(false),
-  placable_floor_plan(false),
   node_significant(true),
-  start_up_load_tex(true),
-  edit_floorplan(false),
   edit_node(false),
-  node_walk(false),
-  node_wheelchair(false),
-  node_vehicle(false),
-  node_bicycle(false),
   tree_radius(4.0f),
-  infinte_lenght_lines(100.0f)
-{
-  this->door_placeable = false;
-  this->wall_placable = false;
-  this->floor_plan_removable = false;
+  infinte_lenght_lines(100.0f) {
   this->link_removable = false;
   this->node_removable = false;
   // enable antialiasing (set the format of the widget)
@@ -66,10 +53,6 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
 
   // set mouse tracking
   setMouseTracking(true);
-
-
-  // initialise the session
-  session_logged = new QByteArray("");
 
   // initialized successfully
   emit debug_results("Premises Visualizer Initialized");
@@ -127,41 +110,6 @@ void RenderState::change_current_floor_height(float value) {
   this->current_floor_height = value;
   // update the opengl widget
   update();
-}
-
-void RenderState::load_texture_from_file(QString value) {
-  QString val_new = "VirtualConcierge/" +
-                    QString("TEX") +
-                    QString::number(this->texture_paths.count());
-  QDir dir;
-  // try to copy the texture to the drive
-  if ( QString::compare(dir.absolutePath() + "/" + val_new, value, Qt::CaseInsensitive) != 0 ) {
-    if ( QFile::exists(val_new) && !start_up_load_tex ) {
-      if ( !QFile::remove(val_new) ) {
-        // QMessageBox::warning(this,
-        //                      tr("Error file deleting"),
-        //                      tr("Texture file could not"
-        //                        " be deleted from the drive."));
-      }
-    }
-    if ( !QFile::copy(value, val_new) ) {
-      if ( !QFile::exists(val_new) ) {
-        QMessageBox::warning(this,
-                             tr("Error file copying"),
-                             tr("Texture file could not"
-                                " be copied to the drive."));
-      }
-    }
-  }
-
-  // add texture to the lists
-  QOpenGLTexture* texture= new QOpenGLTexture(QImage(value).mirrored());
-  texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
-  texture->setMagnificationFilter(QOpenGLTexture::Linear);
-
-  this->textures_from_files.push_back(texture);
-  this->texture_paths.push_back(val_new);
-
 }
 
 void RenderState::initializeGL() {
@@ -281,19 +229,6 @@ void RenderState::edit_node_position(QVector2D position) {
 
 
 
-}
-
-void RenderState::edit_node_access(bool walk, bool wheelchair, bool vehicle, bool bicycle) {
-  this->node_walk = walk;
-  this->node_wheelchair = wheelchair;
-  this->node_vehicle = vehicle;
-  this->node_bicycle = bicycle;
-
-
-
-  //LoadNodes("VirtualConcierge/");
-  // update errors
-  update_node_errors();
 }
 
 void RenderState::mousePressEvent(QMouseEvent* event) {
@@ -665,75 +600,8 @@ void RenderState::DrawPlacableItems(QVector3D Pos) {
                        && !this->node_significant,
                        this->current_floor_height);
 
-  // draw placable tile draggable mouse
-  DrawGL::draw_if_true(this->plane, this->vMatrix,
-                       Pos, this->rotation,
-                       QVector3D(1, 1, 1),
-                       this->textures.value(1),
-                       QVector3D(),
-                       QVector2D(this->currentscale.z(),
-                                 this->currentscale.x()),
-                       pMatrix, this->program,
-                       this->pavement_placable
-                       && (!this->mousedown_left),
-                       this->current_floor_height);
-  // draw placable tile clicked
-  if ( this->mousedown_left && this->pavement_placable ) {
-    this->currentscale.setZ(pow(pow((this->clicked_position->z() -
-                                     this->current_position->z()), 2),
-                                0.5) * 2.0);
-    this->currentscale.setY(1);
-    this->currentscale.setX(pow(pow((this->clicked_position->x() -
-                                     this->current_position->x()), 2),
-                                0.5) * 2.0);
-  }
-  // draw pavement
-  DrawGL::draw_if_true(this->plane, this->vMatrix,
-                       *this->clicked_position,
-                       this->rotation, this->currentscale,
-                       this->textures.value(1), QVector3D(),
-                       QVector2D(this->currentscale.z(),
-                                 this->currentscale.x()),
-                       pMatrix, this->program,
-                       this->pavement_placable
-                       && (this->mousedown_left),
-                       this->current_floor_height);
 
-  // draw placable door
-  DrawGL::draw_if_true(this->door, this->vMatrix,
-                       Pos, this->rotation,
-                       QVector3D(1, 1, 1),
-                       this->textures.value(2),
-                       QVector3D(), QVector2D(1, 1),
-                       pMatrix, this->program,
-                       this->door_placeable,
-                       this->current_floor_height);
 
-  // draw placable wall
-  if ( (this->mousedown_left) && (this->wall_placable) ) {
-    this->drag_middle_position = (*this->clicked_position +
-                                  *this->current_position) / 2.0;
-    this->rotation.setY(Mathematics::flat_angle_from_vectors(
-                          *this->clicked_position,
-                          *this->current_position) + 90);
-    // clamp to 0 and 180 degrees
-    if ( (Mathematics::return_near_degree(this->rotation.y()) == 0.0)
-         || (Mathematics::return_near_degree(this->rotation.y()) == 180) ) {
-      // set fixed rotation for the rotation
-      this->rotation.setY(Mathematics::return_near_degree(this->rotation.y()));
-
-      // set fixed position for the  x - axis
-      this->drag_middle_position.setX(this->clicked_position->x());
-      this->current_position->setX(this->clicked_position->x());
-
-      DrawGL::DrawLine(*this->clicked_position +
-                       QVector3D(0, 0, -infinte_lenght_lines),
-                       *this->current_position +
-                       QVector3D(0, 0, infinte_lenght_lines),
-                       this->vMatrix, QMatrix4x4(), QMatrix4x4(),
-                       QVector3D(1, 1, 1), this->program, pMatrix,
-                       this->current_floor_height);
-    }
 
     // clamp to 270 and 90 degrees
     if ( (Mathematics::return_near_degree(this->rotation.y()) == 270)
@@ -751,36 +619,9 @@ void RenderState::DrawPlacableItems(QVector3D Pos) {
                        QVector3D(1, 1, 1), this->program, pMatrix,
                        this->current_floor_height);
     }
-
     this->currentscale.setZ(this->clicked_position->
                             distanceToPoint(*this->current_position));
-    DrawGL::draw_if_true(this->wall,  this->vMatrix,
-                         this->drag_middle_position, this->rotation,
-                         QVector3D(1, 1, this->currentscale.z()),
-                         this->textures.value(4), QVector3D(),
-                         QVector2D(this->currentscale.z(), 1.0),
-                         pMatrix, this->program, this->wall_placable,
-                         this->current_floor_height);
-  }
 
-  // draw placable tree
-  DrawGL::draw_if_true(this->tree, this->vMatrix, Pos,
-                       this->rotation, QVector3D(1, 1, 1),
-                       this->textures.value(3),
-                       QVector3D(), QVector2D(1, 1),
-                       pMatrix, this->program,
-                       this->tree_placable,
-                       this->current_floor_height);
-
-  // draw placable floorplan
-  DrawGL::draw_if_true(this->plane, this->vMatrix, Pos,
-                       this->rotation, this->currentscale,
-                       this->textures_from_files.
-                       value(this->textures_from_files.count() - 1),
-                       QVector3D(), QVector2D(1, 1), pMatrix,
-                       this->program, this->placable_floor_plan
-                       && (this->textures_from_files.count() > 0),
-                       this->current_floor_height);
 }
 
 void RenderState::DrawNodeNames() {
