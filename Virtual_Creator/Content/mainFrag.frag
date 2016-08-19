@@ -50,8 +50,8 @@ void main()
 
     // set texture value
     vec4 texturecol = vec4(0,0,0,1);
-    texturecol = texture2D(texture, vec2(varyingTextureCoordinate.x*texture_coordinates.x,
-                                             varyingTextureCoordinate.y* texture_coordinates.y)).rgba;
+    texturecol = vec4(0.5, 0.5, 0.5, 1);//texture2D(texture, vec2(varyingTextureCoordinate.x*texture_coordinates.x,
+                                           //  varyingTextureCoordinate.y* texture_coordinates.y)).rgba;
 
     if (posi.y < y_clipping - 0.5 ) {
         gl_FragColor = vec4(texturecol.xyz, 0.075)*ndotl + vec4(col, 0.075);

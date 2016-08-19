@@ -6,8 +6,9 @@
                         </meta>
                             <graph mode="static" defaultedgetype="directed">
                                     <nodes>
-                                                <node id="0" label="Hello" />
-                        <node id="1" label="Word" />
+
+                                                <node id="0" label="Hello" x="5" y="5" z="0" r="255" b="0" g="0"/>
+                                                <node id="1" label="world" x="0" y="5" z="0" r="0" b="255" g="0"/>
                                                                     </nodes>
                                                                             <edges>
      <edge id="0" source="0" target="1"             />

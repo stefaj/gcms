@@ -89,7 +89,7 @@ class RenderState : public QOpenGLWidget, protected QOpenGLFunctions {
     const float tree_radius, infinte_lenght_lines;
     QVector<int> error_nodes;
  private slots:
-    void add_node(QString* name);
+    void add_node(QString* name, QVector3D positon, QVector3D colour);
     void allow_node(bool allow);
     void allow_remove_node(bool allow);
     void allow_link(bool allow);

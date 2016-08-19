@@ -316,7 +316,7 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
 
     // left click to add the node
     if ( (event->button() == Qt::LeftButton) && (this->node_placable) ) {
-        add_node(new QString(this->next_node_name));
+        add_node(new QString(this->next_node_name), *this->current_position, QVector3D(0, 0, 0));
 
     }
 
@@ -459,15 +459,17 @@ void RenderState::update_node_errors() {
     }
 }
 
-void RenderState::add_node(QString* name) {
+void RenderState::add_node(QString* name, QVector3D positon, QVector3D colour) {
     // create new nodes
-    Node *newnode = new Node(new QVector3D(this->current_position->x(),
-                                           this->current_position->y(),
-                                           this->current_position->z()),
+    Node *newnode = new Node(new QVector3D(positon.x(),
+                                           positon.y(),
+                                           positon.z()),
                                            name);
     // set significance
     newnode->setSignificant(this->node_significant);
 
+    // set colour
+    newnode->setColor(new QVector3D(colour));
     // add new node to vector
     this->nodes.push_back(newnode);
 
@@ -824,7 +826,7 @@ void RenderState::DrawNodes() {
         DrawGL::DrawModel(this->node, this->vMatrix,
                         translation, QMatrix4x4(),
                         this->textures.value(0),
-                        QVector3D(), QVector2D(1, 1),
+                        n->getColor(), QVector2D(1, 1),
                         this->program, this->pMatrix,
                           this->current_floor_height);
 
@@ -991,14 +993,61 @@ void RenderState::load_new_graph(QString filename) {
       if(xml_reader.name() == "nodes") {
         continue;
       }
-
       if(xml_reader.name() == "node") {
         QString name ="";
+        QVector3D position(0, 0, 0);
+        QVector3D rgb(0, 0, 0);
 
         foreach (QXmlStreamAttribute a, xml_reader.attributes().toList()) {
-            qDebug() << a.value() << a.name();
+            if (a.name() == "label") {
+              name = a.value().toString();
+            }
+            if (a.name() == "x") {
+              position.setX(a.value().toFloat());
+            }
+            if (a.name() == "y") {
+              position.setZ(a.value().toFloat());
+            }
+            if (a.name() == "z") {
+              position.setY(a.value().toFloat());
+            }
+            if (a.name() == "r") {
+              rgb.setX(a.value().toFloat() / 255.0);
+            }
+            if (a.name() == "g") {
+              rgb.setY(a.value().toFloat() / 255.0);
+            }
+            if (a.name() == "b") {
+              rgb.setZ(a.value().toFloat() / 255.0);
+            }
         }
+        add_node(new QString(name), position, rgb);
 
+      }
+      if(xml_reader.name() == "edges") {
+        continue;
+      }
+      if(xml_reader.name() == "edge") {
+        QString name ="";
+        int source = 0;
+        int target = 0;
+        double weight = 0.0;
+
+        foreach (QXmlStreamAttribute a, xml_reader.attributes().toList()) {
+            if (a.name() == "label") {
+              name = a.value().toString();
+            }
+            if (a.name() == "target") {
+              source = a.value().toInt();
+            }
+            if (a.name() == "source") {
+              target = a.value().toInt();
+            }
+            if (a.name() == "weight") {
+              weight = a.value().toDouble();
+            }
+        }
+        add_edge(source, target, weight);
       }
     }
   }
