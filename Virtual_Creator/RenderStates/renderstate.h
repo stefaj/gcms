@@ -46,7 +46,7 @@ private:
     ModelMesh *node;
 
     // internal integers used for mousemovement, counters etc.
-    int mouse_x, mouse_y, dmouse_x, dmouse_y, node_index_selected, selected_floor_plan;
+    int mouse_x, mouse_y, dmouse_x, dmouse_y, node_index_selected;
     float mouse_zoom, noderadius, mouse_y_inverted, current_floor_height;
     QVector3D *current_position;
     QVector3D position_camera,
@@ -97,9 +97,6 @@ signals:
     void opengl_initialised(bool);
     void send_edit_node(QString name,
                         QVector2D position);
-    void send_edit_floorplan(QVector2D position,
-                             float rotation,
-                             QVector2D scale);
     void debug_results(QString message);
 
 };

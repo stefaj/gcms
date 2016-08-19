@@ -11,7 +11,6 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
     mouse_x(0),
     mouse_y(0),
     node_index_selected(-1),
-    selected_floor_plan(-1),
     mouse_zoom(60.0f),
     noderadius(0.5f),
     mouse_y_inverted(1.0f),
@@ -910,5 +909,6 @@ RenderState::~RenderState() {
     delete this->position;
     delete this->clicked_position;
     delete this->node;
+    delete this->texture;
     delete this->current_position;
 }
