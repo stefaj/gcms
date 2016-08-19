@@ -172,6 +172,10 @@ void RenderState::mouseMoveEvent(QMouseEvent* event) {
   if (this->mousedown_right && this->edit_node &&
       !(this->edit_edge || this->link_removable || this->node_linkable)) {
       edit_node_position(QVector2D(this->current_position->x(), this->current_position->z()));
+      if (this->node_index_selected > 0 && this->node_index_selected < this->nodes.count())
+        send_edit_node(this->nodes.value(this->node_index_selected)->getName(),
+                       QVector2D(this->nodes.value(this->node_index_selected)->Position().x(),
+                                 this->nodes.value(this->node_index_selected)->Position().z()));
     }
 
   // update openGL widget
