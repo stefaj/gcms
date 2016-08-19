@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <QDir>
+#include <QtXml>
 #include "./renderstate.h"
 #include "Functions/mathematics.h"
 
@@ -970,68 +971,48 @@ QString RenderState::read_string_from_line(QString name, QString string, int sta
 
 void RenderState::load_new_graph(QString filename) {
   this->nodes.clear();
-
-
-  QFile file(filename);
-  if(!file.open(QIODevice::ReadOnly)) {
-    QMessageBox::information(0, "error", file.errorString());
+  QFile xml_file(filename);
+  if(!xml_file.open(QIODevice::ReadOnly)) {
+    QMessageBox::information(0, "error", xml_file.errorString());
   }
+  QXmlStreamReader xml_reader(&xml_file);
 
-  QTextStream in(&file);
-  bool graph_found = false;
-  bool graph_closed = false;
-  bool nodes_found = false;
-  bool nodes_closed = false;
-  bool edges_closed = false;
-  bool edges_found = false;
 
-  while(!in.atEnd()) {
-    QString line = in.readLine();
-   // QStringList fields = line.split(",");
-
-    if (!graph_found && line.contains("graph", Qt::CaseInsensitive)) {
-      graph_found = true;
-      qDebug() << "pewpew";
+  //Parse the XML until we reach end of it
+  while(!xml_reader.atEnd() && !xml_reader.hasError()) {
+    // Read next element
+    QXmlStreamReader::TokenType token = xml_reader.readNext();
+    //If token is just StartDocument - go to next
+    if(token == QXmlStreamReader::StartDocument) {
+      continue;
     }
-    if (graph_found && !graph_closed) {
-        // read random nodes and stuff here
-        if (line.contains("<nodes>", Qt::CaseInsensitive)) {
-          nodes_found = true;
-        }
-        if (!edges_found && line.contains("<edges>", Qt::CaseInsensitive)) {
-          edges_found = true;
-        }
-        if (line.contains("</nodes>", Qt::CaseInsensitive)) {
-          nodes_closed = true;
-        }
-        if (line.contains("</edges>", Qt::CaseInsensitive)) {
-          edges_closed = true;
-        }
-        if (nodes_found && !nodes_closed) {
-          if(line.contains("<node ", Qt::CaseInsensitive)) {
-            QString id_value = read_string_from_line("id", line, 0);
-            QString label_value = read_string_from_line("label", line, 0);
-            this->current_position = new QVector3D(rand() % (5 * (id_value.toInt() + 1)),
-                                                   0, rand() % (5 * (id_value.toInt() +1)));
-            add_node(new QString(label_value));
-          }
+    //If token is StartElement - read it
+    if(token == QXmlStreamReader::StartElement) {
+      if(xml_reader.name() == "nodes") {
+        continue;
+      }
+
+      if(xml_reader.name() == "node") {
+        QString name ="";
+
+        foreach (QXmlStreamAttribute a, xml_reader.attributes().toList()) {
+            qDebug() << a.value() << a.name();
         }
 
-        if (edges_found && !edges_closed) {
-          if(line.contains("<edge ", Qt::CaseInsensitive)) {
-            QString id_value =  read_string_from_line("id", line, 0);
-            QString source_value =  read_string_from_line("source", line, 0);
-            QString target_value = read_string_from_line("target", line, 0);
-            qDebug() << id_value << source_value << target_value;
-            add_edge(source_value.toInt(), target_value.toInt(), 0.0);
-
-
-          }
       }
     }
   }
 
-  file.close();
+  if(xml_reader.hasError()) {
+    QMessageBox::critical(this,
+    ".xml Parse Error", xml_reader.errorString(),
+    QMessageBox::Ok);
+    return;
+  }
+
+  //close reader and flush file
+  xml_reader.clear();
+  xml_file.close();
 }
 
 RenderState::~RenderState() {
