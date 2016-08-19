@@ -151,6 +151,10 @@ void RenderState::mouseMoveEvent(QMouseEvent* event) {
       remove_nodes();
     }
 
+  if (this->mousedown_right && this->edit_node) {
+      edit_node_position(QVector2D(this->current_position->x(), this->current_position->z()));
+    }
+
   // update openGL widget
   update();
 }
