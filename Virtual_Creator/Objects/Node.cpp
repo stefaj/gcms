@@ -69,17 +69,17 @@ void Node::setDestinationNode() {
 
 void Node::AddLink(QString *Name, int index) {
   if ( !this->connectedindex.contains(index) ) {
-    this->connected.push_back(Name);
-    this->connectedindex.push_back(index);
-    this->links = true;
-  }
+      this->connected.push_back(Name);
+      this->connectedindex.push_back(index);
+      this->links = true;
+    }
 }
 
 void Node::RemoveLinkedFromIndex(int index) {
   if ( index < this->connected.count() ) {
-    this->connected.removeAt(index);
-    this->connectedindex.removeAt(index);
-  }
+      this->connected.removeAt(index);
+      this->connectedindex.removeAt(index);
+    }
   if ( this->connected.count() < 1 )
     this->links = false;
 }

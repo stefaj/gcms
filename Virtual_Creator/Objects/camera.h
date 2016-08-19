@@ -7,13 +7,13 @@
 class Camera
 {
 public:
-  Camera();
+    Camera();
 
 private:
-  QVector3D position ;
-  QMatrix4x4 transformation;
-  QVector3D center;
-  QVector3D up;
+    QVector3D position ;
+    QMatrix4x4 transformation;
+    QVector3D center;
+    QVector3D up;
 };
 
 #endif // CAMERA_H

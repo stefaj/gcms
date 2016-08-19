@@ -100,51 +100,51 @@ void MainWindow::drop_down_emit() {
                         "Floor Plan",
                         Qt::CaseInsensitive) == 0 ) {
 
-    emit place_node(false);
-    emit remove_nodes(false);
-    emit node_links(false);
-    emit remove_link(false);
-    emit edit_node(false);
-    if ( ui->button_remove_basic->isChecked() )
-      ui->stackedWidget_side_add->setCurrentIndex(2);
-    if ( ui->button_add_basic->isChecked() ||
-         ui->button_edit_basic->isChecked() )
-      ui->stackedWidget_side_add->setCurrentIndex(1);
+      emit place_node(false);
+      emit remove_nodes(false);
+      emit node_links(false);
+      emit remove_link(false);
+      emit edit_node(false);
+      if ( ui->button_remove_basic->isChecked() )
+        ui->stackedWidget_side_add->setCurrentIndex(2);
+      if ( ui->button_add_basic->isChecked() ||
+           ui->button_edit_basic->isChecked() )
+        ui->stackedWidget_side_add->setCurrentIndex(1);
 
-  }
+    }
   if ( QString::compare(ui->comboBox_basic_adds->currentText(),
                         "Node",
                         Qt::CaseInsensitive) == 0 ) {
 
-    emit place_node(ui->button_add_basic->isChecked());
-    emit remove_nodes(ui->button_remove_basic->isChecked());
-    emit node_links(false);
-    emit remove_link(false);
-    emit change_node_name(ui->lineEdit_node_name->text());
-    if ( ui->button_add_basic->isChecked() ||
-         ui->button_edit_basic->isChecked() ) {
-      ui->stackedWidget_side_add->setCurrentIndex(0);
-    } else {
-      ui->stackedWidget_side_add->setCurrentIndex(2);
-    }
-    emit edit_node(ui->button_edit_basic->isChecked());
+      emit place_node(ui->button_add_basic->isChecked());
+      emit remove_nodes(ui->button_remove_basic->isChecked());
+      emit node_links(false);
+      emit remove_link(false);
+      emit change_node_name(ui->lineEdit_node_name->text());
+      if ( ui->button_add_basic->isChecked() ||
+           ui->button_edit_basic->isChecked() ) {
+          ui->stackedWidget_side_add->setCurrentIndex(0);
+        } else {
+          ui->stackedWidget_side_add->setCurrentIndex(2);
+        }
+      emit edit_node(ui->button_edit_basic->isChecked());
 
-    ui->button_edit_basic->setEnabled(true);
-  }
+      ui->button_edit_basic->setEnabled(true);
+    }
   if ( QString::compare(ui->comboBox_basic_adds->currentText(),
                         "Link",
                         Qt::CaseInsensitive) == 0 ) {
 
-    emit place_node(false);
-    emit remove_nodes(false);
-    emit node_links(ui->button_add_basic->isChecked());
-    emit remove_link(ui->button_remove_basic->isChecked());
-    ui->stackedWidget_side_add->setCurrentIndex(2);
-    emit edit_node(false);
+      emit place_node(false);
+      emit remove_nodes(false);
+      emit node_links(ui->button_add_basic->isChecked());
+      emit remove_link(ui->button_remove_basic->isChecked());
+      ui->stackedWidget_side_add->setCurrentIndex(2);
+      emit edit_node(false);
 
-    ui->button_edit_basic->setEnabled(false);
-    ui->button_edit_basic->setChecked(false);
-  }
+      ui->button_edit_basic->setEnabled(false);
+      ui->button_edit_basic->setChecked(false);
+    }
 }
 
 void MainWindow::send_loaded_premises() {
@@ -157,28 +157,28 @@ void MainWindow::new_premises() {
 
   dir.setFilter( QDir::NoDotAndDotDot | QDir::Files );
   foreach( QString dirItem, dir.entryList() )
-  {
-    if( dir.remove( dirItem ) )
     {
-      qDebug() << "Deleted - " + path + QDir::separator() + dirItem ;
+      if( dir.remove( dirItem ) )
+        {
+          qDebug() << "Deleted - " + path + QDir::separator() + dirItem ;
+        }
+      else
+        {
+          qDebug() << "Fail to delete - " + path+ QDir::separator() + dirItem;
+        }
     }
-    else
-    {
-      qDebug() << "Fail to delete - " + path+ QDir::separator() + dirItem;
-    }
-  }
 
 
   dir.setFilter( QDir::NoDotAndDotDot | QDir::Dirs );
   foreach( QString dirItem, dir.entryList() ) {
-    QDir subDir( dir.absoluteFilePath( dirItem ) );
-    if( subDir.removeRecursively() ) {
-      qDebug() << "Deleted - All files under " + dirItem ;
+      QDir subDir( dir.absoluteFilePath( dirItem ) );
+      if( subDir.removeRecursively() ) {
+          qDebug() << "Deleted - All files under " + dirItem ;
+        }
+      else {
+          qDebug() << "Fail to delete - Files under " + dirItem;
+        }
     }
-    else {
-      qDebug() << "Fail to delete - Files under " + dirItem;
-    }
-  }
   emit clear_premises();
 }
 
@@ -237,13 +237,13 @@ void MainWindow::copyPath(QString src, QString dst) {
     return;
 
   foreach (QString d, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-    QString dst_path = dst + QDir::separator() + d;
-    dir.mkpath(dst_path);
-    copyPath(src+ QDir::separator() + d, dst_path);
-  }
+      QString dst_path = dst + QDir::separator() + d;
+      dir.mkpath(dst_path);
+      copyPath(src+ QDir::separator() + d, dst_path);
+    }
 
   foreach (QString f, dir.entryList(QDir::Files)) {
-    QFile::copy(src + QDir::separator() + f, dst + QDir::separator() + f);
-  }
+      QFile::copy(src + QDir::separator() + f, dst + QDir::separator() + f);
+    }
 }
 
