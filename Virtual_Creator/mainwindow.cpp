@@ -43,8 +43,6 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->openGLWidget, SLOT(edit_node_position(QVector2D)));
   connect(ui->openGLWidget, SIGNAL(debug_results(QString)),
           this, SLOT(error_message(QString)));
-  connect(this, SIGNAL(edit_node_access(bool, bool, bool, bool)),
-          ui->openGLWidget, SLOT(edit_node_access(bool, bool, bool, bool)));
   connect(this->ui->actionEdit_Virtual_Concierge_Config, SIGNAL(triggered()),
           this, SLOT(open_config_editor()));
   connect(this->ui->actionNew, SIGNAL(triggered()),
