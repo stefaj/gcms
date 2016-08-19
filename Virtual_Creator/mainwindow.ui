@@ -317,7 +317,7 @@ QComboBox QAbstractItemView {
         <number>0</number>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="page_add_node">
         <layout class="QGridLayout" name="gridLayout_3">
@@ -407,8 +407,48 @@ QComboBox QAbstractItemView {
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="page_floor_plan">
-        <layout class="QGridLayout" name="gridLayout_4"/>
+       <widget class="QWidget" name="page_edit_link">
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="0" column="0">
+          <widget class="QGroupBox" name="groupBox_edit_edge">
+           <property name="title">
+            <string>Edit Edge</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_6">
+            <item row="0" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <widget class="QLabel" name="label_edge_weight">
+                <property name="text">
+                 <string>Edge Weight</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="doubleSpinBox_edge_weight">
+                <property name="minimumSize">
+                 <size>
+                  <width>32</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="minimum">
+                 <double>-9999.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>9999.989999999999782</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
        </widget>
        <widget class="QWidget" name="page_empty"/>
       </widget>
@@ -466,7 +506,7 @@ QComboBox QAbstractItemView {
       <x>2263</x>
       <y>87</y>
       <width>281</width>
-      <height>192</height>
+      <height>190</height>
      </rect>
     </property>
     <property name="sizePolicy">

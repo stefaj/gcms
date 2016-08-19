@@ -51,6 +51,8 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->openGLWidget, SLOT(clear_premises()));
   connect(ui->actionSet_Virtual_Concierge_Background, SIGNAL(triggered()),
           this, SLOT(create_background()));
+  connect(this, SIGNAL(remove_link(bool)),
+          this->ui->openGLWidget, SLOT(allow_remove_link(bool)));
 }
 
 void MainWindow::open_file(bool triggered) {
@@ -97,22 +99,6 @@ void MainWindow::error_message(QString error) {
 void MainWindow::drop_down_emit() {
 
   if ( QString::compare(ui->comboBox_basic_adds->currentText(),
-                        "Floor Plan",
-                        Qt::CaseInsensitive) == 0 ) {
-
-      emit place_node(false);
-      emit remove_nodes(false);
-      emit node_links(false);
-      emit remove_link(false);
-      emit edit_node(false);
-      if ( ui->button_remove_basic->isChecked() )
-        ui->stackedWidget_side_add->setCurrentIndex(2);
-      if ( ui->button_add_basic->isChecked() ||
-           ui->button_edit_basic->isChecked() )
-        ui->stackedWidget_side_add->setCurrentIndex(1);
-
-    }
-  if ( QString::compare(ui->comboBox_basic_adds->currentText(),
                         "Node",
                         Qt::CaseInsensitive) == 0 ) {
 
@@ -139,11 +125,10 @@ void MainWindow::drop_down_emit() {
       emit remove_nodes(false);
       emit node_links(ui->button_add_basic->isChecked());
       emit remove_link(ui->button_remove_basic->isChecked());
-      ui->stackedWidget_side_add->setCurrentIndex(2);
-      emit edit_node(false);
+      ui->stackedWidget_side_add->setCurrentIndex(1);
+      emit edit_node(true);
 
-      ui->button_edit_basic->setEnabled(false);
-      ui->button_edit_basic->setChecked(false);
+      ui->button_edit_basic->setEnabled(true);
     }
 }
 

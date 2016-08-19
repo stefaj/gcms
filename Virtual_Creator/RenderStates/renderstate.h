@@ -53,7 +53,9 @@ private:
   raycast,
   rotation,
   currentscale,
-  drag_middle_position;
+  drag_middle_position,
+  center_h_1,
+  center_h_2;
   bool mousedown_right, mousedown_left, node_placable,
   node_removable, node_linkable,
   node_significant, link_removable, edit_node;
