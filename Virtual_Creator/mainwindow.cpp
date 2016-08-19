@@ -5,7 +5,7 @@
 
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
+  QMainWindow(parent),
   ui(new Ui::MainWindow) {
   ui->setupUi(this);
   // set current page to floor plan
@@ -71,7 +71,7 @@ void MainWindow::open_config_editor() {
 }
 
 void MainWindow::send_config() {
-    //emit send_config_data();
+  //emit send_config_data();
 }
 
 MainWindow::~MainWindow() {delete ui;}
@@ -92,15 +92,15 @@ void MainWindow::EmitSignals() {
 }
 
 void MainWindow::error_message(QString error) {
-    // show error message
-    ui->textBrowser->append(error);
+  // show error message
+  ui->textBrowser->append(error);
 }
 
 void MainWindow::drop_down_emit() {
 
- if ( QString::compare(ui->comboBox_basic_adds->currentText(),
-                       "Floor Plan",
-                       Qt::CaseInsensitive) == 0 ) {
+  if ( QString::compare(ui->comboBox_basic_adds->currentText(),
+                        "Floor Plan",
+                        Qt::CaseInsensitive) == 0 ) {
 
     emit place_node(false);
     emit remove_nodes(false);
@@ -113,40 +113,40 @@ void MainWindow::drop_down_emit() {
          ui->button_edit_basic->isChecked() )
       ui->stackedWidget_side_add->setCurrentIndex(1);
 
- }
- if ( QString::compare(ui->comboBox_basic_adds->currentText(),
-                       "Node",
-                       Qt::CaseInsensitive) == 0 ) {
+  }
+  if ( QString::compare(ui->comboBox_basic_adds->currentText(),
+                        "Node",
+                        Qt::CaseInsensitive) == 0 ) {
 
-     emit place_node(ui->button_add_basic->isChecked());
-     emit remove_nodes(ui->button_remove_basic->isChecked());
-     emit node_links(false);
-     emit remove_link(false);
-     emit change_node_name(ui->lineEdit_node_name->text());
-     if ( ui->button_add_basic->isChecked() ||
-          ui->button_edit_basic->isChecked() ) {
-       ui->stackedWidget_side_add->setCurrentIndex(0);
-     } else {
-       ui->stackedWidget_side_add->setCurrentIndex(2);
-     }
-     emit edit_node(ui->button_edit_basic->isChecked());
+    emit place_node(ui->button_add_basic->isChecked());
+    emit remove_nodes(ui->button_remove_basic->isChecked());
+    emit node_links(false);
+    emit remove_link(false);
+    emit change_node_name(ui->lineEdit_node_name->text());
+    if ( ui->button_add_basic->isChecked() ||
+         ui->button_edit_basic->isChecked() ) {
+      ui->stackedWidget_side_add->setCurrentIndex(0);
+    } else {
+      ui->stackedWidget_side_add->setCurrentIndex(2);
+    }
+    emit edit_node(ui->button_edit_basic->isChecked());
 
-     ui->button_edit_basic->setEnabled(true);
- }
- if ( QString::compare(ui->comboBox_basic_adds->currentText(),
-                       "Link",
-                       Qt::CaseInsensitive) == 0 ) {
+    ui->button_edit_basic->setEnabled(true);
+  }
+  if ( QString::compare(ui->comboBox_basic_adds->currentText(),
+                        "Link",
+                        Qt::CaseInsensitive) == 0 ) {
 
-     emit place_node(false);
-     emit remove_nodes(false);
-     emit node_links(ui->button_add_basic->isChecked());
-     emit remove_link(ui->button_remove_basic->isChecked());
-     ui->stackedWidget_side_add->setCurrentIndex(2);
-     emit edit_node(false);
+    emit place_node(false);
+    emit remove_nodes(false);
+    emit node_links(ui->button_add_basic->isChecked());
+    emit remove_link(ui->button_remove_basic->isChecked());
+    ui->stackedWidget_side_add->setCurrentIndex(2);
+    emit edit_node(false);
 
-     ui->button_edit_basic->setEnabled(false);
-     ui->button_edit_basic->setChecked(false);
- }
+    ui->button_edit_basic->setEnabled(false);
+    ui->button_edit_basic->setChecked(false);
+  }
 }
 
 void MainWindow::send_loaded_premises() {
@@ -154,33 +154,33 @@ void MainWindow::send_loaded_premises() {
 }
 
 void MainWindow::new_premises() {
-    QString path = "VirtualConcierge";
-    QDir dir( path );
+  QString path = "VirtualConcierge";
+  QDir dir( path );
 
-    dir.setFilter( QDir::NoDotAndDotDot | QDir::Files );
-    foreach( QString dirItem, dir.entryList() )
+  dir.setFilter( QDir::NoDotAndDotDot | QDir::Files );
+  foreach( QString dirItem, dir.entryList() )
+  {
+    if( dir.remove( dirItem ) )
     {
-        if( dir.remove( dirItem ) )
-        {
-            qDebug() << "Deleted - " + path + QDir::separator() + dirItem ;
-        }
-        else
-        {
-            qDebug() << "Fail to delete - " + path+ QDir::separator() + dirItem;
-        }
+      qDebug() << "Deleted - " + path + QDir::separator() + dirItem ;
     }
+    else
+    {
+      qDebug() << "Fail to delete - " + path+ QDir::separator() + dirItem;
+    }
+  }
 
 
-    dir.setFilter( QDir::NoDotAndDotDot | QDir::Dirs );
-    foreach( QString dirItem, dir.entryList() ) {
-        QDir subDir( dir.absoluteFilePath( dirItem ) );
-        if( subDir.removeRecursively() ) {
-            qDebug() << "Deleted - All files under " + dirItem ;
-        }
-        else {
-            qDebug() << "Fail to delete - Files under " + dirItem;
-        }
+  dir.setFilter( QDir::NoDotAndDotDot | QDir::Dirs );
+  foreach( QString dirItem, dir.entryList() ) {
+    QDir subDir( dir.absoluteFilePath( dirItem ) );
+    if( subDir.removeRecursively() ) {
+      qDebug() << "Deleted - All files under " + dirItem ;
     }
+    else {
+      qDebug() << "Fail to delete - Files under " + dirItem;
+    }
+  }
   emit clear_premises();
 }
 
@@ -189,8 +189,8 @@ void MainWindow::on_checkBox_inversemouse_y_clicked(bool checked) {
 }
 
 void MainWindow::on_spinBox_floor_level_valueChanged(int arg1) {
-    // show whenever the ground floor is active
-    // sends the current floor to the opengl window
+  // show whenever the ground floor is active
+  // sends the current floor to the opengl window
   emit change_floor_selected(static_cast<float>(arg1));
 }
 
@@ -234,18 +234,18 @@ void MainWindow::on_doubleSpinBox_node_y_valueChanged(double arg1) {
 
 
 void MainWindow::copyPath(QString src, QString dst) {
-    QDir dir(src);
-    if (! dir.exists())
-        return;
+  QDir dir(src);
+  if (! dir.exists())
+    return;
 
-    foreach (QString d, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-        QString dst_path = dst + QDir::separator() + d;
-        dir.mkpath(dst_path);
-        copyPath(src+ QDir::separator() + d, dst_path);
-    }
+  foreach (QString d, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+    QString dst_path = dst + QDir::separator() + d;
+    dir.mkpath(dst_path);
+    copyPath(src+ QDir::separator() + d, dst_path);
+  }
 
-    foreach (QString f, dir.entryList(QDir::Files)) {
-        QFile::copy(src + QDir::separator() + f, dst + QDir::separator() + f);
-    }
+  foreach (QString f, dir.entryList(QDir::Files)) {
+    QFile::copy(src + QDir::separator() + f, dst + QDir::separator() + f);
+  }
 }
 
