@@ -46,7 +46,7 @@ private:
   QVector<Node *> nodes;
   ModelMesh *node;
 
-  bool key_ctl;
+  bool key_ctl, snap_grid;
   // internal integers used for mousemovement, counters etc.
   int mouse_x, mouse_y, dmouse_x, dmouse_y, node_index_selected;
   float mouse_zoom, noderadius, mouse_y_inverted, current_floor_height;
@@ -94,6 +94,7 @@ private slots:
   void clear_premises();
   void receive_edge_weight(double w_edge);
   void receive_edit_edge(bool edit);
+  void receive_snap_to_grid(bool snap);
 
 signals:
   void opengl_initialised(bool);

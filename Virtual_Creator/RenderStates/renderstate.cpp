@@ -63,6 +63,10 @@ void RenderState::receive_edit_edge(bool edit) {
   this->edit_edge = edit;
 }
 
+void RenderState::receive_snap_to_grid(bool snap) {
+  this->snap_grid = snap;
+}
+
 void RenderState::allow_edit_node(bool allow) {
   this->edit_node = allow;
 }
@@ -528,9 +532,13 @@ void RenderState::paintGL() {
   this->current_position->setX(Pos.x());
   this->current_position->setZ(Pos.z());
   this->current_position->setY(Pos.y());
+  if (this->snap_grid) {
+      this->current_position->setX(qRound(this->current_position->x()));
+      this->current_position->setZ(qRound(this->current_position->z()));
+    }
 
   // draw placable objects here
-  draw_placable_items(Pos);
+  draw_placable_items(*this->current_position);
   // draw all the nodes here
   draw_nodes();
   // draw all the lines connected to nodes with directional arrows

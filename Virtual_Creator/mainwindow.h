@@ -32,11 +32,9 @@ class MainWindow : public QMainWindow {
     void on_doubleSpinBox_node_x_valueChanged(double arg1);
     void on_doubleSpinBox_node_y_valueChanged(double arg1);
     void error_message(QString error);
-    void open_config_editor();
-    void send_config();
     void new_premises();
-    void create_background();
     void open_file(bool triggered);
+    void snap_to_grid();
 
 private:
     Ui::MainWindow *ui;
@@ -68,12 +66,11 @@ private:
     void notify_session(QByteArray); // sends the current session to renderstate
     // sends the node's new values
     void edit_node_access(bool walk, bool wheelchair, bool vehicle, bool bicycle);
-    void send_config_data(QString data);
     void clear_premises(); // sends clear signal to renderstate
     void send_open_graph(QString filename);
     void send_edge_weight(double w_edge);
     void send_edit_edge(bool edit);
-
+    void send_snap_to_grid(bool);
 };
 
 #endif  // VIRTUAL_CREATOR_MAINWINDOW_H_

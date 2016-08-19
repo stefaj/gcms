@@ -317,7 +317,7 @@ QComboBox QAbstractItemView {
         <number>0</number>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="page_add_node">
         <layout class="QGridLayout" name="gridLayout_3">
@@ -503,8 +503,8 @@ QComboBox QAbstractItemView {
    <widget class="QMenu" name="menu_File">
     <property name="geometry">
      <rect>
-      <x>2263</x>
-      <y>87</y>
+      <x>1244</x>
+      <y>580</y>
       <width>281</width>
       <height>190</height>
      </rect>
@@ -573,6 +573,7 @@ QComboBox QAbstractItemView {
     <addaction name="actionInvert_Mouse_Y"/>
     <addaction name="actionDirectory_Wizard"/>
     <addaction name="actionEdit_Virtual_Concierge_Config"/>
+    <addaction name="actionGrid"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menuBuild"/>
@@ -795,6 +796,14 @@ p, li { white-space: pre-wrap; }
   <action name="actionGEXF">
    <property name="text">
     <string>GEXF</string>
+   </property>
+  </action>
+  <action name="actionGrid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Snap to Grid</string>
    </property>
   </action>
   <zorder>dockWidget_configuration</zorder>

@@ -43,20 +43,24 @@ MainWindow::MainWindow(QWidget *parent) :
           ui->openGLWidget, SLOT(edit_node_position(QVector2D)));
   connect(ui->openGLWidget, SIGNAL(debug_results(QString)),
           this, SLOT(error_message(QString)));
-  connect(this->ui->actionEdit_Virtual_Concierge_Config, SIGNAL(triggered()),
-          this, SLOT(open_config_editor()));
   connect(this->ui->actionNew, SIGNAL(triggered()),
           this, SLOT(new_premises()));
   connect(this, SIGNAL(clear_premises()),
           ui->openGLWidget, SLOT(clear_premises()));
-  connect(ui->actionSet_Virtual_Concierge_Background, SIGNAL(triggered()),
-          this, SLOT(create_background()));
   connect(this, SIGNAL(remove_link(bool)),
           this->ui->openGLWidget, SLOT(allow_remove_link(bool)));
   connect(this, SIGNAL(send_edge_weight(double)),
           this->ui->openGLWidget, SLOT(receive_edge_weight(double)));
   connect(this, SIGNAL(send_edit_edge(bool)),
           this->ui->openGLWidget, SLOT(receive_edit_edge(bool)));
+  connect(this, SIGNAL(send_snap_to_grid(bool)),
+          this->ui->openGLWidget, SLOT(receive_snap_to_grid(bool)));
+  connect(this->ui->actionGrid, SIGNAL(changed()),
+          this, SLOT(snap_to_grid()));
+}
+
+void MainWindow::snap_to_grid() {
+  emit send_snap_to_grid(this->ui->actionGrid->isChecked());
 }
 
 void MainWindow::open_file(bool triggered) {
@@ -65,17 +69,6 @@ void MainWindow::open_file(bool triggered) {
                                                    "/home/jana",
                                                    tr("Graph Files (*.gexf)"));
   emit send_open_graph(file_name);
-}
-
-void MainWindow::create_background() {
-
-}
-
-void MainWindow::open_config_editor() {
-}
-
-void MainWindow::send_config() {
-  //emit send_config_data();
 }
 
 MainWindow::~MainWindow() {delete ui;}
