@@ -34,6 +34,8 @@ protected:
   void mousePressEvent(QMouseEvent* event);
   void wheelEvent(QWheelEvent* event);
   void mouseReleaseEvent(QMouseEvent* event);
+  void keyPressEvent(QKeyEvent* event);
+  void keyReleaseEvent(QKeyEvent* event);
 
 private:
   QMatrix4x4 pMatrix, vMatrix;
@@ -44,6 +46,7 @@ private:
   QVector<Node *> nodes;
   ModelMesh *node;
 
+  bool key_ctl;
   // internal integers used for mousemovement, counters etc.
   int mouse_x, mouse_y, dmouse_x, dmouse_y, node_index_selected;
   float mouse_zoom, noderadius, mouse_y_inverted, current_floor_height;
@@ -53,12 +56,10 @@ private:
   raycast,
   rotation,
   currentscale,
-  drag_middle_position,
-  center_h_1,
-  center_h_2;
+  drag_middle_position;
   bool mousedown_right, mousedown_left, node_placable,
   node_removable, node_linkable,
-  node_significant, link_removable, edit_node;
+  node_significant, link_removable, edit_node, edit_edge;
   QString next_node_name;
   QVector<QOpenGLTexture *> textures_from_files;
   void draw_circle_flat(QVector3D position,
@@ -76,6 +77,7 @@ private:
   QString read_string_from_line(QString name, QString string, int start);
   const float tree_radius, infinte_lenght_lines;
   QVector<int> error_nodes;
+  double w_edge;
 private slots:
   void add_node(QString* name, QVector3D positon, QVector3D colour);
   void allow_node(bool allow);
@@ -90,6 +92,8 @@ private slots:
   void allow_edit_node(bool allow);
   void edit_node_position(QVector2D);
   void clear_premises();
+  void receive_edge_weight(double w_edge);
+  void receive_edit_edge(bool edit);
 
 signals:
   void opengl_initialised(bool);

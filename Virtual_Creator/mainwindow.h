@@ -71,6 +71,8 @@ private:
     void send_config_data(QString data);
     void clear_premises(); // sends clear signal to renderstate
     void send_open_graph(QString filename);
+    void send_edge_weight(double w_edge);
+    void send_edit_edge(bool edit);
 
 };
 

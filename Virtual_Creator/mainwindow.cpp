@@ -53,6 +53,10 @@ MainWindow::MainWindow(QWidget *parent) :
           this, SLOT(create_background()));
   connect(this, SIGNAL(remove_link(bool)),
           this->ui->openGLWidget, SLOT(allow_remove_link(bool)));
+  connect(this, SIGNAL(send_edge_weight(double)),
+          this->ui->openGLWidget, SLOT(receive_edge_weight(double)));
+  connect(this, SIGNAL(send_edit_edge(bool)),
+          this->ui->openGLWidget, SLOT(receive_edit_edge(bool)));
 }
 
 void MainWindow::open_file(bool triggered) {
@@ -104,8 +108,10 @@ void MainWindow::drop_down_emit() {
 
       emit place_node(ui->button_add_basic->isChecked());
       emit remove_nodes(ui->button_remove_basic->isChecked());
+      emit send_edit_edge(false);
       emit node_links(false);
       emit remove_link(false);
+      emit send_edit_edge(false);
       emit change_node_name(ui->lineEdit_node_name->text());
       if ( ui->button_add_basic->isChecked() ||
            ui->button_edit_basic->isChecked() ) {
@@ -114,8 +120,6 @@ void MainWindow::drop_down_emit() {
           ui->stackedWidget_side_add->setCurrentIndex(2);
         }
       emit edit_node(ui->button_edit_basic->isChecked());
-
-      ui->button_edit_basic->setEnabled(true);
     }
   if ( QString::compare(ui->comboBox_basic_adds->currentText(),
                         "Link",
@@ -124,11 +128,12 @@ void MainWindow::drop_down_emit() {
       emit place_node(false);
       emit remove_nodes(false);
       emit node_links(ui->button_add_basic->isChecked());
+      emit send_edit_edge(ui->button_edit_basic->isChecked());
+      // send spinbox value of the edge weight to the RenderState
+      emit send_edge_weight(this->ui->doubleSpinBox_edge_weight->value());
       emit remove_link(ui->button_remove_basic->isChecked());
       ui->stackedWidget_side_add->setCurrentIndex(1);
-      emit edit_node(true);
-
-      ui->button_edit_basic->setEnabled(true);
+      emit edit_node(ui->button_add_basic->isChecked());
     }
 }
 

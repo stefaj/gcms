@@ -27,7 +27,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
   node_significant(true),
   edit_node(false),
   tree_radius(4.0f),
-  infinte_lenght_lines(100.0f) {
+  infinte_lenght_lines(100.0f), w_edge(0.0) {
   this->link_removable = false;
   this->node_removable = false;
   // enable antialiasing (set the format of the widget)
@@ -51,14 +51,20 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
   // set mouse tracking
   setMouseTracking(true);
 
+  // add focus for the keyboard
+  setFocusPolicy(Qt::StrongFocus);
+
   // initialized successfully
   emit debug_results("Premises Visualizer Initialized");
 
 }
 
+void RenderState::receive_edit_edge(bool edit) {
+  this->edit_edge = edit;
+}
 
 void RenderState::allow_edit_node(bool allow) {
-  edit_node = allow;
+  this->edit_node = allow;
 }
 
 void RenderState::allow_node(bool value) {
@@ -68,7 +74,7 @@ void RenderState::allow_node(bool value) {
 }
 
 void RenderState::allow_remove_link(bool allow) {
-  link_removable = allow;
+  this->link_removable = allow;
 }
 
 void RenderState::invert_mouseY(bool value) {
@@ -112,6 +118,17 @@ void RenderState::change_current_floor_height(float value) {
 void RenderState::initializeGL() {
   initializeOpenGLFunctions();
 }
+void RenderState::keyPressEvent(QKeyEvent* event) {
+  if(event->key() == Qt::Key_Control) {
+      this->key_ctl = true;
+    }
+}
+
+void RenderState::keyReleaseEvent(QKeyEvent* event) {
+  if(event->key() == Qt::Key_Control) {
+      this->key_ctl = false;
+    }
+}
 
 void RenderState::mouseMoveEvent(QMouseEvent* event) {
   // alert mouse event's position (x)
@@ -128,7 +145,7 @@ void RenderState::mouseMoveEvent(QMouseEvent* event) {
                                              this->mouse_y_inverted,
                                              this->vMatrix, pMatrix);
 
-  if ( this->mousedown_right ) {
+  if ( this->mousedown_right && this->key_ctl) {
       this->position_camera.setX(this->clicked_position->x() -
                                  this->current_position->x());
       this->position_camera.setY(this->clicked_position->y() -
@@ -151,7 +168,9 @@ void RenderState::mouseMoveEvent(QMouseEvent* event) {
       remove_nodes();
     }
 
-  if (this->mousedown_right && this->edit_node) {
+  // when node can be edited, allow movement
+  if (this->mousedown_right && this->edit_node &&
+      !(this->edit_edge || this->link_removable || this->node_linkable)) {
       edit_node_position(QVector2D(this->current_position->x(), this->current_position->z()));
     }
 
@@ -221,6 +240,9 @@ void RenderState::edit_node_position(QVector2D position) {
 
 
 
+}
+void RenderState::receive_edge_weight(double w_edge) {
+  this->w_edge = w_edge;
 }
 
 void RenderState::mousePressEvent(QMouseEvent* event) {
