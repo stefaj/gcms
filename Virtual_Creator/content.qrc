@@ -29,5 +29,6 @@
         <file>Content/save_icon_white.png</file>
         <file>Content/background_icon_white.png</file>
         <file>Content/arrow_you_here.png</file>
+        <file>Content/snap_grid_icon.png</file>
     </qresource>
 </RCC>

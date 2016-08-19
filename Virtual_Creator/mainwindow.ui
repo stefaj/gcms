@@ -802,6 +802,10 @@ p, li { white-space: pre-wrap; }
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>Content/snap_grid_icon.png</normaloff>Content/snap_grid_icon.png</iconset>
+   </property>
    <property name="text">
     <string>Snap to Grid</string>
    </property>
