@@ -267,7 +267,12 @@ void RenderState::mousePressEvent(QMouseEvent* event) {
 
   // left click to add the node
   if ( (event->button() == Qt::LeftButton) && (this->node_placable) ) {
-      add_node(new QString(this->next_node_name), *this->current_position, QVector3D(0, 0, 0));
+      QVector3D Pos = *this->current_position;
+      if (this->snap_grid) {
+          Pos.setX(qRound(Pos.x()));
+          Pos.setZ(qRound(Pos.z()));
+        }
+      add_node(new QString(this->next_node_name), Pos, QVector3D(0, 0, 0));
 
     }
 
@@ -533,12 +538,12 @@ void RenderState::paintGL() {
   this->current_position->setZ(Pos.z());
   this->current_position->setY(Pos.y());
   if (this->snap_grid) {
-      this->current_position->setX(qRound(this->current_position->x()));
-      this->current_position->setZ(qRound(this->current_position->z()));
+      Pos.setX(qRound(Pos.x()));
+      Pos.setZ(qRound(Pos.z()));
     }
 
   // draw placable objects here
-  draw_placable_items(*this->current_position);
+  draw_placable_items(Pos);
   // draw all the nodes here
   draw_nodes();
   // draw all the lines connected to nodes with directional arrows
