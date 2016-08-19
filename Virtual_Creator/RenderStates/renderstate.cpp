@@ -22,12 +22,6 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
   rotation(QVector3D()),
   currentscale(QVector3D(1, 1, 1)),
   drag_middle_position(QVector3D()),
-  corner_1(QVector3D()),
-  corner_2(QVector3D()),
-  corner_3(QVector3D()),
-  corner_4(QVector3D()),
-  center_h_1(QVector3D()),
-  center_h_2(QVector3D()),
   mousedown_right(false),
   mousedown_left(false),
   node_placable(false),
@@ -757,9 +751,6 @@ void RenderState::DrawPlacableItems(QVector3D Pos) {
                        QVector3D(1, 1, 1), this->program, pMatrix,
                        this->current_floor_height);
     }
-    // set clickable centers
-    this->center_h_1 = *this->current_position;
-    this->center_h_2 = *this->clicked_position;
 
     this->currentscale.setZ(this->clicked_position->
                             distanceToPoint(*this->current_position));

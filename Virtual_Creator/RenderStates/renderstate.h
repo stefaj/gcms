@@ -55,13 +55,7 @@ private:
   raycast,
   rotation,
   currentscale,
-  drag_middle_position,
-  corner_1,
-  corner_2,
-  corner_3,
-  corner_4,
-  center_h_1,
-  center_h_2;
+  drag_middle_position;
   bool mousedown_right, mousedown_left, node_placable,
   node_removable, tree_removable, node_linkable, pavement_placable,
   door_placeable, wall_placable, tree_placable, placable_floor_plan,
