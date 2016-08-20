@@ -485,22 +485,7 @@ void RenderState::paintGL() {
       // checkout opengl context
       emit opengl_initialised(this->context()->isValid());
     }
-  // enable the scene's depth mask
-  glDepthMask(GL_TRUE);
-  // clear the depth z = 0.0f -> 1.0f
-  glClearDepth(1.0f);
-  // enable the scene's depth test
-  glEnable(GL_DEPTH_TEST);
-  // enable cullmode CCW (counter clockwise)
-  glEnable(GL_CULL_FACE);
-  // enable transparency
-  glEnable (GL_BLEND);
-  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  // clear the background color for rendering
-  // cornflower blue 659CEF
-  glClearColor(210.0/255.0, 210.0/255.0, 210.0/255.0, 1);
-  // clear the color and depth buffer
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+DrawGL::setup_frame();
   // setup camera
   QMatrix4x4 cameraTransformation;
   // rotation in the y - axis

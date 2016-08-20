@@ -66,6 +66,7 @@ public:
                            QMatrix4x4,
                            QOpenGLShaderProgram*,
                            bool, float);
+  static void setup_frame();
 };
 
 #endif  // VIRTUAL_CREATOR_FUNCTIONS_DRAWGL_H_
