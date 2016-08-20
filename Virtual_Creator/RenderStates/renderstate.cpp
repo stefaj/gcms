@@ -218,7 +218,7 @@ void RenderState::mouseReleaseEvent(QMouseEvent * /*event*/) {
               this->nodes.value(this->node_index_selected)->
                   AddLink(new QString("Link" +
                                       QString::number(countConnected)),
-                          linkindex);
+                          linkindex, this->w_edge);
             }
 
           // update errors
@@ -796,7 +796,7 @@ void RenderState::draw_node_lnes(QVector3D Pos) {
 }
 
 void RenderState::add_edge(int source, int target, double weight) {
-  nodes.value(source)->AddLink(new QString("s"), target);
+  nodes.value(source)->AddLink(new QString("s"), target, weight);
 }
 
 void RenderState::draw_circle_flat(QVector3D center,

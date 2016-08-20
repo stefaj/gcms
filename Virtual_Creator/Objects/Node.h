@@ -12,7 +12,7 @@ public:
   explicit Node(QVector3D * position);
   Node(QVector3D* position, QString* name);
   // index from other node
-  void AddLink(QString* name, int index);
+  void AddLink(QString* name, int index, double w_edge);
   QVector3D Position();
   QVector3D getColor();
   void setSourceNode();
@@ -41,6 +41,7 @@ private:
   QVector3D *color;
   QVector<QString*> connected;
   QVector<int> connectedindex;
+  QVector<double> edge_weight;
   QVector<int> shortest;
   int nshortest;
   double g;

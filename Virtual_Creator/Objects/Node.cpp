@@ -67,11 +67,12 @@ void Node::setDestinationNode() {
   this->color->setZ(0.0f);
 }
 
-void Node::AddLink(QString *Name, int index) {
+void Node::AddLink(QString *Name, int index, double w_edge) {
   if ( !this->connectedindex.contains(index) ) {
       this->connected.push_back(Name);
       this->connectedindex.push_back(index);
       this->links = true;
+      this->edge_weight.push_back(w_edge);
     }
 }
 
