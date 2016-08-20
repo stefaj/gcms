@@ -46,7 +46,7 @@ private:
   QVector<Node *> nodes;
   ModelMesh *node;
 
-  bool key_ctl, snap_grid;
+
   // internal integers used for mousemovement, counters etc.
   int mouse_x, mouse_y, dmouse_x, dmouse_y, node_index_selected;
   float mouse_zoom, noderadius, mouse_y_inverted, current_floor_height;
@@ -78,6 +78,7 @@ private:
   const float tree_radius, infinte_lenght_lines;
   QVector<int> error_nodes;
   double w_edge;
+  bool key_ctl, snap_grid;
 private slots:
   void add_node(QString* name, QVector3D positon, QVector3D colour);
   void allow_node(bool allow);

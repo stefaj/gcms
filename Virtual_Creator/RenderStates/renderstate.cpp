@@ -7,27 +7,16 @@
 #include "Functions/mathematics.h"
 
 RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
-  program(0),
-  mouse_x(0),
-  mouse_y(0),
-  node_index_selected(-1),
-  mouse_zoom(60.0f),
-  noderadius(0.5f),
-  mouse_y_inverted(1.0f),
-  current_floor_height(0.0f),
-  position_camera(QVector3D()),
-  camera_prev(QVector3D()),
-  raycast(QVector3D()),
-  rotation(QVector3D()),
-  currentscale(QVector3D(1, 1, 1)),
-  drag_middle_position(QVector3D()),
-  mousedown_right(false),
-  mousedown_left(false),
-  node_placable(false),
-  node_significant(true),
-  edit_node(false),
-  tree_radius(4.0f),
-  infinte_lenght_lines(100.0f), w_edge(0.0) {
+  program(0),mouse_x(0),
+  mouse_y(0),node_index_selected(-1),
+  mouse_zoom(60.0f),noderadius(0.5f),
+  mouse_y_inverted(1.0f),current_floor_height(0.0f),
+  position_camera(QVector3D()),camera_prev(QVector3D()),
+  raycast(QVector3D()),rotation(QVector3D()),
+  currentscale(QVector3D(1, 1, 1)),drag_middle_position(QVector3D()),
+  mousedown_right(false),mousedown_left(false),node_placable(false),
+  node_significant(true),edit_node(false),tree_radius(4.0f),
+  infinte_lenght_lines(100.0f), w_edge(0.0),key_ctl(false), snap_grid(false){
   this->link_removable = false;
   this->node_removable = false;
   // enable antialiasing (set the format of the widget)
