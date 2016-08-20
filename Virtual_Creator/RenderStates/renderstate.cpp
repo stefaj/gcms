@@ -15,7 +15,7 @@ RenderState::RenderState(QWidget *parent): QOpenGLWidget(parent),
   raycast(QVector3D()),rotation(QVector3D()),
   currentscale(QVector3D(1, 1, 1)),drag_middle_position(QVector3D()),
   mousedown_right(false),mousedown_left(false),node_placable(false),
-  node_significant(true),edit_node(false),tree_radius(4.0f),
+  node_significant(true),edit_node(false),edit_edge(false) ,tree_radius(4.0f),
   infinte_lenght_lines(100.0f), w_edge(0.0),key_ctl(false), snap_grid(false){
   this->link_removable = false;
   this->node_removable = false;
@@ -164,11 +164,20 @@ void RenderState::mouseMoveEvent(QMouseEvent* event) {
   // when node can be edited, allow movement
   if (this->mousedown_right && this->edit_node &&
       !(this->edit_edge || this->link_removable || this->node_linkable)) {
-      edit_node_position(QVector2D(this->current_position->x(), this->current_position->z()));
-      if (this->node_index_selected > 0 && this->node_index_selected < this->nodes.count())
-        send_edit_node(this->nodes.value(this->node_index_selected)->getName(),
-                       QVector2D(this->nodes.value(this->node_index_selected)->Position().x(),
-                                 this->nodes.value(this->node_index_selected)->Position().z()));
+      if (this->node_index_selected > -1 && this->node_index_selected < this->nodes.count()) {
+          if (!this->snap_grid) {
+              send_edit_node(this->nodes.value(this->node_index_selected)->getName(),
+                             QVector2D(this->nodes.value(this->node_index_selected)->Position().x(),
+                                       this->nodes.value(this->node_index_selected)->Position().z()));
+              edit_node_position(QVector2D(this->current_position->x(), this->current_position->z()));
+            } else {
+              send_edit_node(this->nodes.value(this->node_index_selected)->getName(),
+                             QVector2D(qRound(this->nodes.value(this->node_index_selected)->Position().x()),
+                                       qRound(this->nodes.value(this->node_index_selected)->Position().z())));
+              edit_node_position(QVector2D(qRound(this->current_position->x()),qRound(this->current_position->z())));
+            }
+
+        }
     }
 
   // update openGL widget
